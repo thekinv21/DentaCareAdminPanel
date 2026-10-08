@@ -1,0 +1,15 @@
+if git diff --cached --name-only | grep -q '^frontend/'; then
+  echo "frontend checks"
+  (
+    cd frontend || exit 1
+
+    bun run lint || {
+      echo "Frontend lint failed. Fix the errors above."
+      exit 1
+    }
+  ) || exit 1
+fi
+
+if [ -z "$HUSKY_SIBLING" ] && [ -f backend/.husky/pre-commit ]; then
+  HUSKY_SIBLING=1 sh backend/.husky/pre-commit "$@" || exit 1
+fi
