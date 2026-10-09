@@ -17,7 +17,7 @@ export function PhoneInput({ className, ...props }: PhoneInputProps) {
 			<input
 				type='tel'
 				inputMode='tel'
-				className={cn(inputLgClass, 'pl-[62px] font-mono', className)}
+				className={cn(inputLgClass, 'pl-15.5 font-mono', className)}
 				{...props}
 			/>
 		</div>

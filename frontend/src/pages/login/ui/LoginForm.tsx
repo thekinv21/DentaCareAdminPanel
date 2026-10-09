@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 
+import { useTranslations } from 'next-intl'
+
 import { AuthField } from '@/widgets/auth-panel'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
@@ -12,26 +13,26 @@ import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 import { Segmented } from '@/shared/ui/segmented'
 
-import { useLoginForm } from '../model/use-login-form'
+import { useLoginForm } from '../model/useLoginForm'
 
 export function LoginForm() {
-	const { t } = useI18n()
+	const t = useTranslations('Login')
 	const form = useLoginForm()
 
 	return (
 		<form noValidate onSubmit={form.onSubmit} className='flex flex-col gap-4'>
 			<Segmented
-				aria-label={t('Способ входа')}
+				aria-label={t('signInMethod')}
 				options={form.methods}
 				value={form.method}
 				onChange={form.setMethod}
-				className='[&>button]:min-h-[38px] [&>button]:flex-1 [&>button]:justify-center [&>button]:text-sm'
+				className='[&>button]:min-h-9.5 [&>button]:flex-1 [&>button]:justify-center [&>button]:text-sm'
 			/>
 
 			{form.method === 'phone' ? (
 				<AuthField
 					id='phone'
-					label={t('Номер телефона')}
+					label={t('phoneNumber')}
 					error={form.errorOf('phone')}
 				>
 					<PhoneInput
@@ -44,7 +45,7 @@ export function LoginForm() {
 			) : (
 				<AuthField
 					id='email'
-					label={t('Рабочий email')}
+					label={t('workEmail')}
 					error={form.errorOf('email')}
 				>
 					<input
@@ -60,21 +61,21 @@ export function LoginForm() {
 
 			<AuthField
 				id='password'
-				label={t('Пароль')}
+				label={t('password')}
 				error={form.errorOf('password')}
 				aside={
 					<Link
 						href={ROUTES.forgotPassword}
 						className='text-[13px] font-semibold text-brand no-underline hover:underline'
 					>
-						{t('Забыли пароль?')}
+						{t('forgotPassword')}
 					</Link>
 				}
 			>
 				<PasswordInput
 					id='password'
 					autoComplete='current-password'
-					placeholder={t('Ваш пароль')}
+					placeholder={t('yourPassword')}
 					{...form.fieldProps('password')}
 				/>
 			</AuthField>
@@ -82,10 +83,10 @@ export function LoginForm() {
 			<label className='inline-flex min-h-6 cursor-pointer items-start gap-2.5 text-sm leading-5'>
 				<input
 					type='checkbox'
-					className='mt-px size-[18px] shrink-0 accent-brand'
+					className='mt-px size-4.5 shrink-0 accent-brand'
 					{...form.rememberProps}
 				/>
-				{t('Запомнить это устройство на 30 дней')}
+				{t('rememberThisDeviceFor')}
 			</label>
 
 			<Button
@@ -95,7 +96,7 @@ export function LoginForm() {
 				block
 				disabled={form.submitting}
 			>
-				{t('Войти')}
+				{t('signIn')}
 			</Button>
 		</form>
 	)

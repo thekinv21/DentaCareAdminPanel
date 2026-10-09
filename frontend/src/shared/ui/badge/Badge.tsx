@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-import { type Tone, TONE_CLASS } from './tone'
+import { type Tone, TONE_CLASS } from './Tone'
 
 interface BadgeProps {
 	tone?: Tone
@@ -20,7 +20,7 @@ export function Badge({
 	return (
 		<span
 			className={cn(
-				'inline-flex items-center gap-[5px] whitespace-nowrap rounded-full px-[9px] text-xs leading-5 font-semibold',
+				'inline-flex items-center gap-1.25 whitespace-nowrap rounded-full px-2.25 text-xs leading-5 font-semibold',
 				TONE_CLASS[tone],
 				className,
 			)}

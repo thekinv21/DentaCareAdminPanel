@@ -5,15 +5,15 @@ import { use } from 'react'
 import Link from 'next/link'
 
 import { Play } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { DentalChart } from '@/widgets/dental-chart'
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 
-import { useProfileTabs } from '../model/use-profile-tabs'
+import { useProfileTabs } from '../model/useProfileTabs'
 import { PatientSummaryCard } from './PatientSummaryCard'
 import { PaymentsSection } from './PaymentsSection'
 import { TreatmentPlanSection } from './TreatmentPlanSection'
@@ -25,7 +25,7 @@ export function PatientProfilePage({
 	params: Promise<{ id: string }>
 }) {
 	const { id } = use(params)
-	const { t } = useI18n()
+	const t = useTranslations('PatientProfile')
 	const tabs = useProfileTabs()
 
 	return (
@@ -37,7 +37,7 @@ export function PatientProfilePage({
 							href={ROUTES.patients}
 							className='text-inherit no-underline hover:text-ink'
 						>
-							{t('Пациенты')}
+							{t('patients')}
 						</Link>
 						<span aria-hidden='true' className='px-1.5'>
 							/
@@ -45,11 +45,11 @@ export function PatientProfilePage({
 						<span className='font-mono'>{decodeURIComponent(id)}</span>
 					</nav>
 				}
-				title={t('Карта пациента')}
+				title={t('patientRecord')}
 				actions={
 					<Button variant='primary'>
 						<Play size={15} fill='currentColor' aria-hidden='true' />
-						{t('Начать приём')}
+						{t('startVisit')}
 					</Button>
 				}
 			/>

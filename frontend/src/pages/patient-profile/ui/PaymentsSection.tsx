@@ -2,39 +2,42 @@
 
 import Link from 'next/link'
 
+import { useTranslations } from 'next-intl'
+
 import { PaymentMethodTile } from '@/entities/invoice'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Badge } from '@/shared/ui/badge'
 import { buttonClass } from '@/shared/ui/button'
 import { Card, CardHeader } from '@/shared/ui/card'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { PAYMENTS } from '../model/profile'
+import { PAYMENTS } from '../model/Profile'
 
 export function PaymentsSection() {
-	const { t, format } = useI18n()
+	const t = useTranslations('PatientProfile')
+	const format = useFormat()
 	return (
 		<Card as='section' className='animate-fade'>
 			<CardHeader
-				title={t('Оплаты')}
-				description={t('Долг 6 400 сом · последний платёж 12.09.2026')}
+				title={t('billing')}
+				description={t('balanceDueLastPayment')}
 				actions={
 					<Link href={ROUTES.billing} className={buttonClass({ size: 'sm' })}>
-						{t('Принять оплату')}
+						{t('acceptPayment')}
 					</Link>
 				}
 			/>
 			<TableScroll>
-				<Table className='min-w-[560px]'>
+				<Table className='min-w-140'>
 					<thead>
 						<tr>
-							<Th>{t('Дата')}</Th>
-							<Th>{t('Счёт')}</Th>
-							<Th>{t('Способ')}</Th>
-							<Th align='right'>{t('Сумма')}</Th>
-							<Th>{t('Статус')}</Th>
+							<Th>{t('date')}</Th>
+							<Th>{t('invoice')}</Th>
+							<Th>{t('method')}</Th>
+							<Th align='right'>{t('amount')}</Th>
+							<Th>{t('status')}</Th>
 						</tr>
 					</thead>
 					<tbody>
@@ -45,14 +48,14 @@ export function PaymentsSection() {
 								<Td>
 									<span className='inline-flex items-center gap-2'>
 										<PaymentMethodTile method={payment.method} size='sm' />
-										{t(payment.methodLabel)}
+										{translateOptional(t, payment.methodLabel)}
 									</span>
 								</Td>
 								<Td mono align='right'>
 									{format.som(payment.amount)}
 								</Td>
 								<Td>
-									<Badge tone='ok'>{t('Оплачено')}</Badge>
+									<Badge tone='ok'>{t('paid')}</Badge>
 								</Td>
 							</tr>
 						))}

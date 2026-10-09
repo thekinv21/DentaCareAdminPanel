@@ -29,37 +29,37 @@ export interface NavGroup {
 
 export const NAVIGATION: NavGroup[] = [
 	{
-		label: 'Клиника',
+		label: 'clinic',
 		items: [
-			{ href: ROUTES.dashboard, label: 'Главная', icon: LayoutDashboard },
+			{ href: ROUTES.dashboard, label: 'dashboard', icon: LayoutDashboard },
 			{
 				href: ROUTES.appointments,
-				label: 'Записи',
+				label: 'appointments',
 				icon: CalendarDays,
 				count: { value: 28 },
 			},
-			{ href: ROUTES.patients, label: 'Пациенты', icon: Users },
-			{ href: ROUTES.treatmentPlans, label: 'Планы лечения', icon: ToothIcon },
+			{ href: ROUTES.patients, label: 'patients', icon: Users },
+			{ href: ROUTES.treatmentPlans, label: 'treatmentPlans', icon: ToothIcon },
 		],
 	},
 	{
-		label: 'Финансы',
+		label: 'finance',
 		items: [
-			{ href: ROUTES.billing, label: 'Оплаты', icon: CreditCard },
+			{ href: ROUTES.billing, label: 'billing', icon: CreditCard },
 			{
 				href: ROUTES.inventory,
-				label: 'Склад',
+				label: 'inventory',
 				icon: Package,
 				count: { value: 7, warning: true },
 			},
-			{ href: ROUTES.reports, label: 'Отчёты', icon: ChartColumn },
+			{ href: ROUTES.reports, label: 'reports', icon: ChartColumn },
 		],
 	},
 	{
-		label: 'Управление',
+		label: 'admin',
 		items: [
-			{ href: ROUTES.staff, label: 'Сотрудники', icon: IdCard },
-			{ href: ROUTES.settings, label: 'Настройки', icon: Settings },
+			{ href: ROUTES.staff, label: 'staff', icon: IdCard },
+			{ href: ROUTES.settings, label: 'settings', icon: Settings },
 		],
 	},
 ]

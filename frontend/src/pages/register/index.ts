@@ -1,2 +1,2 @@
 export { RegisterPage } from './ui/RegisterPage'
-export { generateMetadata } from './ui/metadata'
+export { generateMetadata } from './ui/Metadata'

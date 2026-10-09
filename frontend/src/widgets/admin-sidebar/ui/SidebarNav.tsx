@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { cn } from '@/shared/lib/cn'
 
-import type { useSidebarNav } from '../model/use-sidebar-nav'
+import type { useSidebarNav } from '../model/useSidebarNav'
 
 type Groups = ReturnType<typeof useSidebarNav>['groups']
 
@@ -16,11 +16,11 @@ export function SidebarNav({
 	return (
 		<nav
 			aria-label={label}
-			className='flex flex-grow flex-col gap-0.5 max-[720px]:flex-grow-0 max-[720px]:flex-row'
+			className='flex grow flex-col gap-0.5 max-[720px]:grow-0 max-[720px]:flex-row'
 		>
 			{groups.map(group => (
 				<div key={group.label} className='contents'>
-					<div className='px-2.5 pt-3.5 pb-1.5 text-[11px] leading-[14px] font-semibold tracking-[0.06em] text-ink-subtle uppercase max-[1100px]:hidden'>
+					<div className='px-2.5 pt-3.5 pb-1.5 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-subtle uppercase max-[1100px]:hidden'>
 						{group.label}
 					</div>
 					{group.items.map(item => {
@@ -39,13 +39,13 @@ export function SidebarNav({
 								)}
 							>
 								<Icon size={19} aria-hidden='true' />
-								<span className='flex-grow truncate max-[1100px]:sr-only'>
+								<span className='grow truncate max-[1100px]:sr-only'>
 									{item.label}
 								</span>
 								{item.count && (
 									<span
 										className={cn(
-											'rounded-full px-[7px] font-mono text-[11px] leading-[18px] max-[1100px]:hidden',
+											'rounded-full px-1.75 font-mono text-[11px] leading-4.5 max-[1100px]:hidden',
 											item.count.warning
 												? 'bg-warning-soft text-warning'
 												: 'bg-sunken text-ink',

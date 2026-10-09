@@ -7,12 +7,12 @@ export const SHIFT: Record<ShiftKey, { label: string; tone: Tone }> = {
 	s2: { label: '09:00–18:00', tone: 'brand' },
 	s3: { label: '08:00–16:00', tone: 'brand' },
 	s4: { label: '13:00–18:00', tone: 'brand' },
-	off: { label: 'Выходной', tone: 'neutral' },
-	leave: { label: 'Отпуск', tone: 'accent' },
-	open: { label: 'Замена', tone: 'warning' },
+	off: { label: 'dayOff', tone: 'neutral' },
+	leave: { label: 'leave', tone: 'accent' },
+	open: { label: 'replacement', tone: 'warning' },
 }
 
-export const WEEK_DAYS = ['Пн 5', 'Вт 6', 'Ср 7', 'Чт 8', 'Пт 9', 'Сб 10']
+export const WEEK_DAYS = ['mon5', 'tue6', 'wed7', 'thu8', 'fri9', 'sat10']
 export const TODAY_COLUMN = 4
 
 /**

@@ -1,12 +1,12 @@
 import type { Tone } from '@/shared/ui/badge'
 
-import type { PatientFlag } from './types'
+import type { PatientFlag } from './Types'
 
 export const PATIENT_FLAG: Record<PatientFlag, { label: string; tone: Tone }> =
 	{
-		allergy: { label: 'Аллергия', tone: 'danger' },
-		recall: { label: 'Повторный осмотр', tone: 'warning' },
-		plan: { label: 'Есть план', tone: 'accent' },
-		foms: { label: 'ФОМС', tone: 'info' },
-		new: { label: 'Новый', tone: 'brand' },
+		allergy: { label: 'allergy', tone: 'danger' },
+		recall: { label: 'followUpExam', tone: 'warning' },
+		plan: { label: 'hasPlan', tone: 'accent' },
+		foms: { label: 'mhif', tone: 'info' },
+		new: { label: 'new', tone: 'brand' },
 	}

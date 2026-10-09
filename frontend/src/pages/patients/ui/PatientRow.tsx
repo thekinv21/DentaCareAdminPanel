@@ -3,19 +3,19 @@
 import Link from 'next/link'
 
 import { Ellipsis } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { PatientFlagBadge } from '@/entities/patient'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Td } from '@/shared/ui/table'
 
-import type { PatientRowView } from '../model/use-patients-table'
+import type { PatientRowView } from '../model/usePatientsTable'
 
-export const checkboxClass = 'size-[17px] cursor-pointer accent-brand'
+export const checkboxClass = 'size-4.25 cursor-pointer accent-brand'
 
 export function PatientRow({
 	row,
@@ -24,7 +24,7 @@ export function PatientRow({
 	row: PatientRowView
 	onToggle: () => void
 }) {
-	const { t } = useI18n()
+	const t = useTranslations('Patients')
 	const cell = row.isSelected ? 'bg-brand-soft' : undefined
 
 	return (
@@ -33,7 +33,7 @@ export function PatientRow({
 				<input
 					type='checkbox'
 					className={checkboxClass}
-					aria-label={`${t('Выбрать:')} ${row.fullName}`}
+					aria-label={`${t('select')} ${row.fullName}`}
 					checked={row.isSelected}
 					onChange={onToggle}
 				/>
@@ -95,7 +95,7 @@ export function PatientRow({
 				<IconButton
 					quiet
 					size='sm'
-					aria-label={`${t('Действия:')} ${row.fullName}`}
+					aria-label={`${t('actionsFor')} ${row.fullName}`}
 				>
 					<Ellipsis size={16} aria-hidden='true' />
 				</IconButton>

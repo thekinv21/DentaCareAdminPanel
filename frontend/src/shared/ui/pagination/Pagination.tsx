@@ -1,9 +1,9 @@
 'use client'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { IconButton } from '@/shared/ui/icon-button'
 
 interface PaginationProps {
@@ -16,14 +16,14 @@ interface PaginationProps {
 }
 
 export function Pagination({ current, pages, onChange }: PaginationProps) {
-	const { t } = useI18n()
+	const t = useTranslations('Common')
 	const last = Math.max(...pages.filter((p): p is number => p !== null))
 
 	return (
-		<nav aria-label={t('Страницы')} className='flex items-center gap-1'>
+		<nav aria-label={t('pages')} className='flex items-center gap-1'>
 			<IconButton
 				size='sm'
-				aria-label={t('Назад')}
+				aria-label={t('back')}
 				disabled={current <= 1}
 				onClick={() => onChange?.(current - 1)}
 			>
@@ -53,7 +53,7 @@ export function Pagination({ current, pages, onChange }: PaginationProps) {
 			)}
 			<IconButton
 				size='sm'
-				aria-label={t('Вперёд')}
+				aria-label={t('forward')}
 				disabled={current >= last}
 				onClick={() => onChange?.(current + 1)}
 			>

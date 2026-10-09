@@ -3,32 +3,32 @@
 import Link from 'next/link'
 
 import { Check, LockKeyhole } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { AuthField, AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Alert } from '@/shared/ui/alert'
 import { Button, buttonClass } from '@/shared/ui/button'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import { useForgotPassword } from '../model/use-forgot-password'
+import { useForgotPassword } from '../model/useForgotPassword'
 
 export function ForgotPasswordPage() {
-	const { t } = useI18n()
+	const t = useTranslations('ForgotPassword')
 	const flow = useForgotPassword()
 
 	return (
 		<AuthStack>
 			{flow.sent ? (
-				<div className='flex animate-fade flex-col gap-[22px]'>
+				<div className='flex animate-fade flex-col gap-5.5'>
 					<AuthHeading
 						icon={<Check size={26} aria-hidden='true' />}
 						iconTone='ok'
-						title={t('Проверьте SMS')}
+						title={t('checkYourSms')}
 						subtitle={
 							<>
-								{t('Мы отправили ссылку для сброса пароля на номер')}{' '}
+								{t('weSentAPassword')}{' '}
 								<span className='font-mono font-semibold text-ink'>
 									{flow.maskedPhone}
 								</span>
@@ -36,11 +36,7 @@ export function ForgotPasswordPage() {
 							</>
 						}
 					/>
-					<Alert tone='info'>
-						{t(
-							'Ссылка действует 30 минут. Не пришло SMS? Повторная отправка через 0:42.',
-						)}
-					</Alert>
+					<Alert tone='info'>{t('theLinkIsValid')}</Alert>
 					<Link
 						href={ROUTES.resetPassword}
 						className={buttonClass({
@@ -49,20 +45,18 @@ export function ForgotPasswordPage() {
 							block: true,
 						})}
 					>
-						{t('Открыть ссылку')}
+						{t('openLink')}
 					</Link>
 					<Button size='lg' block onClick={flow.changeNumber}>
-						{t('Указать другой номер')}
+						{t('useADifferentNumber')}
 					</Button>
 				</div>
 			) : (
-				<div className='flex animate-fade flex-col gap-[22px]'>
+				<div className='flex animate-fade flex-col gap-5.5'>
 					<AuthHeading
 						icon={<LockKeyhole size={26} aria-hidden='true' />}
-						title={t('Восстановить пароль')}
-						subtitle={t(
-							'Укажите номер, привязанный к аккаунту. Мы пришлём ссылку для сброса пароля.',
-						)}
+						title={t('resetYourPassword')}
+						subtitle={t('enterThePhoneNumber')}
 					/>
 					<form
 						noValidate
@@ -71,9 +65,9 @@ export function ForgotPasswordPage() {
 					>
 						<AuthField
 							id='phone'
-							label={t('Номер телефона')}
+							label={t('phoneNumber')}
 							error={flow.phoneError}
-							hint={t('Если вы входите по email, ссылка придёт и на него.')}
+							hint={t('ifYouSignIn')}
 						>
 							<PhoneInput
 								id='phone'
@@ -83,18 +77,18 @@ export function ForgotPasswordPage() {
 							/>
 						</AuthField>
 						<Button type='submit' variant='primary' size='lg' block>
-							{t('Отправить ссылку')}
+							{t('sendResetLink')}
 						</Button>
 					</form>
 				</div>
 			)}
-			<p className='text-center text-sm leading-[22px] text-ink-muted'>
-				{t('Вспомнили пароль?')}{' '}
+			<p className='text-center text-sm leading-5.5 text-ink-muted'>
+				{t('rememberedIt')}{' '}
 				<Link
 					href={ROUTES.login}
 					className='font-semibold text-brand no-underline hover:underline'
 				>
-					{t('Войти')}
+					{t('signIn')}
 				</Link>
 			</p>
 		</AuthStack>

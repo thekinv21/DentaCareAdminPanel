@@ -1,11 +1,11 @@
 export type ServiceCategory = 'diag' | 'ther' | 'hyg' | 'surg' | 'orth'
 
 export const SERVICE_CATEGORY: Record<ServiceCategory, string> = {
-	diag: 'Диагностика',
-	ther: 'Терапия',
-	hyg: 'Гигиена',
-	surg: 'Хирургия',
-	orth: 'Ортопедия',
+	diag: 'diagnostics',
+	ther: 'restorativeDentistry',
+	hyg: 'hygiene',
+	surg: 'surgery',
+	orth: 'prosthodontics',
 }
 
 export const SERVICES: {
@@ -18,7 +18,7 @@ export const SERVICES: {
 }[] = [
 	{
 		code: 'T-01',
-		name: 'Консультация и осмотр',
+		name: 'consultationAndExam',
 		category: 'diag',
 		minutes: 20,
 		price: 1500,
@@ -26,7 +26,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'D-02',
-		name: 'Прицельный снимок (RVG)',
+		name: 'periapicalXRayRvg',
 		category: 'diag',
 		minutes: 10,
 		price: 600,
@@ -34,7 +34,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'D-05',
-		name: 'КТ одной челюсти',
+		name: 'singleJawCt',
 		category: 'diag',
 		minutes: 20,
 		price: 3500,
@@ -42,7 +42,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'T-11',
-		name: 'Пломба светоотверждаемая',
+		name: 'lightCuredFilling',
 		category: 'ther',
 		minutes: 60,
 		price: 6000,
@@ -50,7 +50,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'T-14',
-		name: 'Лечение каналов (1 канал)',
+		name: 'rootCanal1Canal',
 		category: 'ther',
 		minutes: 60,
 		price: 7500,
@@ -58,7 +58,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'T-15',
-		name: 'Лечение каналов (3 канала)',
+		name: 'rootCanal3Canals',
 		category: 'ther',
 		minutes: 120,
 		price: 18000,
@@ -66,7 +66,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'H-01',
-		name: 'Профгигиена Air Flow + ультразвук',
+		name: 'professionalCleaningAirFlow',
 		category: 'hyg',
 		minutes: 60,
 		price: 4500,
@@ -74,7 +74,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'S-03',
-		name: 'Удаление зуба простое',
+		name: 'simpleToothExtraction',
 		category: 'surg',
 		minutes: 30,
 		price: 3000,
@@ -82,7 +82,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'S-07',
-		name: 'Удаление зуба мудрости',
+		name: 'wisdomToothExtraction',
 		category: 'surg',
 		minutes: 60,
 		price: 9000,
@@ -90,7 +90,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'S-12',
-		name: 'Имплант Osstem (установка)',
+		name: 'osstemImplantPlacement',
 		category: 'surg',
 		minutes: 90,
 		price: 55000,
@@ -98,7 +98,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'O-04',
-		name: 'Коронка металлокерамика',
+		name: 'porcelainFusedToMetal',
 		category: 'orth',
 		minutes: 60,
 		price: 16000,
@@ -106,7 +106,7 @@ export const SERVICES: {
 	},
 	{
 		code: 'O-06',
-		name: 'Коронка диоксид циркония',
+		name: 'zirconiaCrown',
 		category: 'orth',
 		minutes: 60,
 		price: 28000,

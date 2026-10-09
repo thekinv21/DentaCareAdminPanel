@@ -1,7 +1,8 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
@@ -10,43 +11,39 @@ import { SearchInput } from '@/shared/ui/search-input'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { useStockTable } from '../model/use-stock-table'
+import { useStockTable } from '../model/useStockTable'
 
 export function StockTable() {
-	const { t } = useI18n()
+	const t = useTranslations('Inventory')
 	const { filter, setFilter, filters, rows } = useStockTable()
 
 	return (
 		<Card
 			as='section'
-			className='min-h-[420px] flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-105 flex-auto animate-rise max-[720px]:flex-none'
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
 				<Segmented
-					aria-label={t('Категория')}
+					aria-label={t('category')}
 					options={filters}
 					value={filter}
 					onChange={setFilter}
 				/>
-				<SearchInput
-					label={t('Название или артикул')}
-					size='sm'
-					className='basis-56'
-				/>
+				<SearchInput label={t('nameOrSku')} size='sm' className='basis-56' />
 			</div>
 			<TableScroll className='min-h-0 flex-auto'>
-				<Table className='min-w-[820px]'>
+				<Table className='min-w-205'>
 					<thead>
 						<tr>
-							<Th>{t('Позиция')}</Th>
-							<Th>{t('Категория')}</Th>
-							<Th className='w-[210px]'>{t('Остаток')}</Th>
-							<Th>{t('Поставщик')}</Th>
-							<Th>{t('Годен до')}</Th>
-							<Th>{t('Статус')}</Th>
+							<Th>{t('item')}</Th>
+							<Th>{t('category')}</Th>
+							<Th className='w-52.5'>{t('remaining')}</Th>
+							<Th>{t('supplier')}</Th>
+							<Th>{t('expires')}</Th>
+							<Th>{t('status')}</Th>
 							<Th>
-								<span className='sr-only'>{t('Действия')}</span>
+								<span className='sr-only'>{t('actions')}</span>
 							</Th>
 						</tr>
 					</thead>
@@ -64,14 +61,14 @@ export function StockTable() {
 								</Td>
 								<Td>
 									<div className='flex items-center gap-2.5'>
-										<span className='min-w-[72px] font-mono font-semibold whitespace-nowrap'>
+										<span className='min-w-18 font-mono font-semibold whitespace-nowrap'>
 											{row.quantity}
 										</span>
 										<ProgressBar
 											value={row.fill}
 											fillClass={row.fillClass}
 											delay={row.delay}
-											className='flex-grow'
+											className='grow'
 										/>
 									</div>
 									<div className='text-[11.5px] text-ink-muted'>

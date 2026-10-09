@@ -2,29 +2,27 @@
 
 import Link from 'next/link'
 
+import { useTranslations } from 'next-intl'
+
 import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 
 import { LoginForm } from './LoginForm'
 
 export function LoginPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Login')
 	return (
 		<AuthStack>
-			<AuthHeading
-				title={t('С возвращением')}
-				subtitle={t('Войдите, чтобы открыть расписание клиники.')}
-			/>
+			<AuthHeading title={t('welcomeBack')} subtitle={t('signInToOpen')} />
 			<LoginForm />
-			<p className='text-center text-sm leading-[22px] text-ink-muted'>
-				{t('Клиника ещё не подключена?')}{' '}
+			<p className='text-center text-sm leading-5.5 text-ink-muted'>
+				{t('clinicNotOnDenta')}{' '}
 				<Link
 					href={ROUTES.register}
 					className='font-semibold text-brand no-underline hover:underline'
 				>
-					{t('Зарегистрировать')}
+					{t('register')}
 				</Link>
 			</p>
 		</AuthStack>

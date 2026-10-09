@@ -1,4 +1,4 @@
-import type { Patient } from '../model/types'
+import type { Patient } from '../model/Types'
 
 /**
  * Mock first page of the patient list until the backend exposes /patients
@@ -9,10 +9,10 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20418',
 		fullName: 'Айгуль Тойчубекова',
-		age: '34 г.',
+		age: 'n34Y',
 		phone: '+996 555 418 201',
 		lastVisit: '12.09.2026',
-		nextVisit: 'Сегодня · 12:00',
+		nextVisit: 'today1200',
 		isNextVisitToday: true,
 		doctor: 'Касымова А.',
 		balance: 6400,
@@ -22,9 +22,9 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20311',
 		fullName: 'Нурлан Асанов',
-		age: '41 г.',
+		age: 'n41Y',
 		phone: '+996 700 210 448',
-		lastVisit: 'Сегодня',
+		lastVisit: 'today',
 		nextVisit: '05.04.2027',
 		isNextVisitToday: false,
 		doctor: 'Касымова А.',
@@ -35,9 +35,9 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20356',
 		fullName: 'Елена Ковалёва',
-		age: '27 л.',
+		age: 'n27Y',
 		phone: '+996 777 356 091',
-		lastVisit: 'Сегодня',
+		lastVisit: 'today',
 		nextVisit: '22.10.2026',
 		isNextVisitToday: false,
 		doctor: 'Петров С.',
@@ -48,9 +48,9 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20402',
 		fullName: 'Бакыт Усенов',
-		age: '58 л.',
+		age: 'n58Y',
 		phone: '+996 555 402 773',
-		lastVisit: 'Сегодня',
+		lastVisit: 'today',
 		nextVisit: null,
 		isNextVisitToday: false,
 		doctor: 'Токтогулов Э.',
@@ -61,9 +61,9 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20120',
 		fullName: 'Динара Жумабаева',
-		age: '63 г.',
+		age: 'n63Y',
 		phone: '+996 702 120 480',
-		lastVisit: 'Сегодня',
+		lastVisit: 'today',
 		nextVisit: '14.11.2026',
 		isNextVisitToday: false,
 		doctor: 'Петров С.',
@@ -74,10 +74,10 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20391',
 		fullName: 'Тимур Абдыкадыров',
-		age: '22 г.',
+		age: 'n22Y',
 		phone: '+996 509 391 621',
 		lastVisit: '02.06.2026',
-		nextVisit: 'Сегодня · 12:30',
+		nextVisit: 'today1230',
 		isNextVisitToday: true,
 		doctor: 'Токтогулов Э.',
 		balance: 0,
@@ -87,10 +87,10 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20433',
 		fullName: 'Мария Ли',
-		age: '30 л.',
+		age: 'n30Y',
 		phone: '+996 555 433 156',
 		lastVisit: '14.03.2026',
-		nextVisit: 'Сегодня · 13:00',
+		nextVisit: 'today1300',
 		isNextVisitToday: true,
 		doctor: 'Токтогулов Э.',
 		balance: 0,
@@ -100,7 +100,7 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-19982',
 		fullName: 'Азамат Садыков',
-		age: '45 л.',
+		age: 'n45Y',
 		phone: '+996 700 198 224',
 		lastVisit: '18.08.2026',
 		nextVisit: null,
@@ -113,10 +113,10 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-20077',
 		fullName: 'Жылдыз Осмонова',
-		age: '38 л.',
+		age: 'n38Y',
 		phone: '+996 777 077 319',
 		lastVisit: '30.09.2026',
-		nextVisit: 'Сегодня · 14:00',
+		nextVisit: 'today1400',
 		isNextVisitToday: true,
 		doctor: 'Касымова А.',
 		balance: 0,
@@ -126,10 +126,10 @@ export const PATIENTS: Patient[] = [
 	{
 		id: 'DN-19870',
 		fullName: 'Руслан Ким',
-		age: '51 г.',
+		age: 'n51Y',
 		phone: '+996 555 870 560',
 		lastVisit: '11.02.2026',
-		nextVisit: 'Сегодня · 16:00',
+		nextVisit: 'today1600',
 		isNextVisitToday: true,
 		doctor: 'Касымова А.',
 		balance: 0,

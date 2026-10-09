@@ -6,46 +6,46 @@ export const LANGUAGES: {
 	name: string
 	note: string
 }[] = [
-	{ id: 'ru', code: 'RU', name: 'Русский', note: 'Основной язык' },
-	{ id: 'ky', code: 'KY', name: 'Кыргызча', note: 'Государственный' },
-	{ id: 'en', code: 'EN', name: 'English', note: 'Для иностранцев' },
+	{ id: 'ru', code: 'RU', name: 'Русский', note: 'primaryLanguage' },
+	{ id: 'ky', code: 'KY', name: 'Кыргызча', note: 'state' },
+	{ id: 'en', code: 'EN', name: 'English', note: 'forForeignPatients' },
 ]
 
 export const NOTIFICATIONS = [
 	{
 		id: 'n24',
-		label: 'Напоминание за 24 часа',
-		hint: 'Пациенту на языке его карты',
+		label: 'reminder24HoursBefore',
+		hint: 'toThePatientIn',
 		channel: 'SMS',
 	},
 	{
 		id: 'n2',
-		label: 'Напоминание за 2 часа',
-		hint: 'Только для первичных визитов',
+		label: 'reminder2HoursBefore',
+		hint: 'firstVisitsOnly',
 		channel: 'SMS',
 	},
 	{
 		id: 'nwa',
-		label: 'Подтверждение записи',
-		hint: 'Сразу после создания записи',
+		label: 'appointmentConfirmation',
+		hint: 'immediatelyAfterBooking',
 		channel: 'WhatsApp',
 	},
 	{
 		id: 'nbd',
-		label: 'Поздравление с днём рождения',
-		hint: 'Со скидкой 10 % на профгигиену',
+		label: 'birthdayGreeting',
+		hint: 'with10OffProfessional',
 		channel: 'SMS',
 	},
 	{
 		id: 'nstock',
-		label: 'Низкий остаток на складе',
-		hint: 'Администратору и главному врачу',
-		channel: 'В приложении',
+		label: 'lowStockInInventory',
+		hint: 'toTheAdministratorAnd',
+		channel: 'inApp',
 	},
 	{
 		id: 'nrev',
-		label: 'Ежедневный отчёт по выручке',
-		hint: 'В 20:00 на info@denta.kg',
+		label: 'dailyRevenueReport',
+		hint: 'at2000To',
 		channel: 'Email',
 	},
 ]

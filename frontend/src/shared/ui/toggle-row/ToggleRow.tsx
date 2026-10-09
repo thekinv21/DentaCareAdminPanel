@@ -32,10 +32,10 @@ export function ToggleRow({
 	return (
 		<div className='flex items-center gap-3.5 border-b border-line py-3 last:border-b-0'>
 			{leading}
-			<div className='min-w-0 flex-grow'>
+			<div className='min-w-0 grow'>
 				<div className='font-semibold'>{label}</div>
 				{hint && (
-					<p className='text-[12.5px] leading-[18px] text-ink-muted'>{hint}</p>
+					<p className='text-[12.5px] leading-4.5 text-ink-muted'>{hint}</p>
 				)}
 			</div>
 			{meta}

@@ -1,4 +1,4 @@
-import type { ToothState } from '../model/teeth'
+import type { ToothState } from '../model/Teeth'
 
 interface ToothMarksProps {
 	state: ToothState

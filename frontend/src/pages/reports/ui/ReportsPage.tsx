@@ -1,32 +1,32 @@
 'use client'
 
 import { Download } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
-import { useReport } from '../model/use-report'
+import { useReport } from '../model/useReport'
 import { DoctorPerformance } from './DoctorPerformance'
 import { ReportCharts } from './ReportCharts'
 
 export function ReportsPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Reports')
 	const report = useReport()
-	const vsPrevious = t('к прошлому периоду')
+	const vsPrevious = t('vsPreviousPeriod')
 
 	return (
 		<>
 			<PageHeader
 				crumb={report.rangeLabel}
-				title={t('Отчёты')}
+				title={t('reports')}
 				search={false}
 				tools={
 					<Segmented
-						aria-label={t('Период')}
+						aria-label={t('period')}
 						options={report.ranges}
 						value={report.range}
 						onChange={report.setRange}
@@ -35,14 +35,14 @@ export function ReportsPage() {
 				actions={
 					<Button variant='primary'>
 						<Download size={17} aria-hidden='true' />
-						{t('Экспорт PDF')}
+						{t('exportPdf')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<StatGrid label={t('Показатели')}>
+				<StatGrid label={t('metrics')}>
 					<StatCard
-						label={t('Выручка')}
+						label={t('revenue')}
 						value={report.revenue}
 						footer={
 							<>
@@ -51,7 +51,7 @@ export function ReportsPage() {
 						}
 					/>
 					<StatCard
-						label={t('Новые пациенты')}
+						label={t('newPatients')}
 						value={report.kpi.newPatients}
 						delay={50}
 						footer={
@@ -61,9 +61,9 @@ export function ReportsPage() {
 						}
 					/>
 					<StatCard
-						label={t('Средний чек')}
+						label={t('averageBill')}
 						value='4 850'
-						unit={t('сом')}
+						unit={t('som')}
 						delay={100}
 						footer={
 							<>
@@ -72,12 +72,12 @@ export function ReportsPage() {
 						}
 					/>
 					<StatCard
-						label={t('Неявки')}
+						label={t('noShows')}
 						value='4,8%'
 						delay={150}
 						footer={
 							<>
-								<Delta>{t('−1,1 п.п.')}</Delta> {t('после SMS-напоминаний')}
+								<Delta>{t('n11PP')}</Delta> {t('afterSmsReminders')}
 							</>
 						}
 					/>

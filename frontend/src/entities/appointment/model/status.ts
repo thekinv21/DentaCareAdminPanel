@@ -1,17 +1,17 @@
 import type { Tone } from '@/shared/ui/badge'
 
-import type { AppointmentStatus } from './types'
+import type { AppointmentStatus } from './Types'
 
 export const APPOINTMENT_STATUS: Record<
 	AppointmentStatus,
 	{ label: string; tone: Tone }
 > = {
-	done: { label: 'Завершён', tone: 'ok' },
-	chair: { label: 'В кресле', tone: 'brand' },
-	next: { label: 'Следующий', tone: 'accent' },
-	confirmed: { label: 'Подтверждён', tone: 'info' },
-	pending: { label: 'Не подтверждён', tone: 'warning' },
-	noshow: { label: 'Не пришёл', tone: 'danger' },
+	done: { label: 'completed', tone: 'ok' },
+	chair: { label: 'inChair', tone: 'brand' },
+	next: { label: 'next', tone: 'accent' },
+	confirmed: { label: 'confirmed', tone: 'info' },
+	pending: { label: 'notConfirmed', tone: 'warning' },
+	noshow: { label: 'noShow', tone: 'danger' },
 }
 
 /**

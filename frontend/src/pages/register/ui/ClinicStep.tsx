@@ -1,35 +1,35 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { AuthField } from '@/widgets/auth-panel'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { RegisterFormModel } from '../model/use-register-form'
+import type { RegisterFormModel } from '../model/useRegisterForm'
 
 export function ClinicStep({ form }: { form: RegisterFormModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Register')
 	return (
 		<div className='flex animate-fade flex-col gap-4'>
 			<AuthField
 				id='clinicName'
-				label={t('Название клиники')}
+				label={t('clinicName')}
 				error={form.errorOf('clinicName')}
 			>
 				<input
 					id='clinicName'
 					className={inputLgClass}
-					placeholder={t('Например, Denta · Ала-Тоо')}
+					placeholder={t('eGDentaAla')}
 					{...form.fieldProps('clinicName')}
 				/>
 			</AuthField>
 			<div className='grid grid-cols-[1fr_140px] gap-3'>
-				<AuthField id='city' label={t('Город')}>
+				<AuthField id='city' label={t('city')}>
 					<select
 						id='city'
 						className={inputLgClass}
@@ -44,7 +44,7 @@ export function ClinicStep({ form }: { form: RegisterFormModel }) {
 				</AuthField>
 				<AuthField
 					id='chairs'
-					label={t('Кресел')}
+					label={t('chairs')}
 					error={form.errorOf('chairs')}
 				>
 					<input
@@ -58,7 +58,7 @@ export function ClinicStep({ form }: { form: RegisterFormModel }) {
 			</div>
 			<AuthField
 				id='clinicPhone'
-				label={t('Телефон клиники')}
+				label={t('clinicPhone')}
 				error={form.errorOf('clinicPhone')}
 			>
 				<PhoneInput
@@ -68,7 +68,7 @@ export function ClinicStep({ form }: { form: RegisterFormModel }) {
 				/>
 			</AuthField>
 			<Button variant='primary' size='lg' block onClick={form.next}>
-				{t('Продолжить')}
+				{t('continue')}
 				<ChevronRight size={18} aria-hidden='true' />
 			</Button>
 		</div>

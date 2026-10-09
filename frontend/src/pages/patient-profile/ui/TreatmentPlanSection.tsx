@@ -1,35 +1,36 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Card, CardHeader } from '@/shared/ui/card'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { useTreatmentPlan } from '../model/use-treatment-plan'
+import { useTreatmentPlan } from '../model/useTreatmentPlan'
 
 export function TreatmentPlanSection() {
-	const { t } = useI18n()
+	const t = useTranslations('PatientProfile')
 	const plan = useTreatmentPlan()
 
 	return (
 		<Card as='section' className='animate-fade'>
 			<CardHeader
-				title={t('План лечения')}
-				description={t('Согласован с пациентом 12.09.2026 · Касымова А.')}
-				actions={<Button size='sm'>{t('Записать оставшиеся')}</Button>}
+				title={t('treatmentPlan')}
+				description={t('agreedWithPatient12')}
+				actions={<Button size='sm'>{t('bookRemaining')}</Button>}
 			/>
 			<TableScroll>
-				<Table className='min-w-[640px]'>
+				<Table className='min-w-160'>
 					<thead>
 						<tr>
 							<Th>№</Th>
-							<Th>{t('Процедура')}</Th>
-							<Th>{t('Зуб')}</Th>
-							<Th>{t('Дата')}</Th>
-							<Th>{t('Статус')}</Th>
-							<Th align='right'>{t('Стоимость')}</Th>
+							<Th>{t('procedure')}</Th>
+							<Th>{t('tooth')}</Th>
+							<Th>{t('date')}</Th>
+							<Th>{t('status')}</Th>
+							<Th align='right'>{t('cost')}</Th>
 						</tr>
 					</thead>
 					<tbody>
@@ -58,7 +59,7 @@ export function TreatmentPlanSection() {
 				{plan.totals.map(item => (
 					<div
 						key={item.label}
-						className={cn('min-w-[140px] rounded-xl px-3.5 py-2', item.box)}
+						className={cn('min-w-35 rounded-xl px-3.5 py-2', item.box)}
 					>
 						<dt className={cn('text-[12.5px]', item.text)}>{item.label}</dt>
 						<dd className='font-mono font-semibold'>{item.value}</dd>

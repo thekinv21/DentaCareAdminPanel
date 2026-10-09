@@ -1,9 +1,10 @@
 'use client'
 
-import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
 
-import { type ToolId, TOOLS } from '../model/teeth'
+import { cn } from '@/shared/lib/cn'
+
+import { type ToolId, TOOLS } from '../model/Teeth'
 import { Swatch } from './Swatch'
 
 export function ChartToolbar({
@@ -13,11 +14,11 @@ export function ChartToolbar({
 	tool: ToolId
 	onChange: (tool: ToolId) => void
 }) {
-	const { t } = useI18n()
+	const t = useTranslations('DentalChart')
 	return (
 		<div
 			role='toolbar'
-			aria-label={t('Инструменты разметки')}
+			aria-label={t('markupTools')}
 			className='flex flex-wrap gap-1.5'
 		>
 			{TOOLS.map(item => {
@@ -30,7 +31,7 @@ export function ChartToolbar({
 						aria-pressed={active}
 						onClick={() => onChange(item.id)}
 						className={cn(
-							'inline-flex h-[34px] items-center gap-2 rounded-[10px] border px-2.5 text-[13px] font-semibold transition-[background-color,border-color,box-shadow] duration-150',
+							'inline-flex h-8.5 items-center gap-2 rounded-[10px] border px-2.5 text-[13px] font-semibold transition-[background-color,border-color,box-shadow] duration-150',
 							active
 								? 'border-brand bg-brand-soft text-brand-strong shadow-[0_0_0_1px_var(--brand)]'
 								: 'border-line bg-surface hover:bg-raised',

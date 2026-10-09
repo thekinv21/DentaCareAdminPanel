@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react'
 
-import { toothShape } from '../lib/tooth-shape'
-import type { Surface, SurfaceFinding, ToothState } from '../model/teeth'
+import { toothShape } from '../lib/ToothShape'
+import type { Surface, SurfaceFinding, ToothState } from '../model/Teeth'
 import { ToothMarks } from './ToothMarks'
 
 interface ToothSvgProps {
@@ -42,7 +42,7 @@ export function ToothSvg({
 		<svg
 			viewBox='0 0 40 96'
 			aria-hidden='true'
-			className='block h-auto w-full max-w-[46px] overflow-visible'
+			className='block h-auto w-full max-w-11.5 overflow-visible'
 		>
 			<g opacity={missing ? 0.45 : 1}>
 				{shape.roots.map(d => (
@@ -118,7 +118,7 @@ export function ToothSvg({
 					onClick={pick('c')}
 				>
 					<title>
-						{surfaceTitle('c', shape.anterior ? 'Режущий край' : undefined)}
+						{surfaceTitle('c', shape.anterior ? 'incisalEdge' : undefined)}
 					</title>
 				</path>
 				{visible && (

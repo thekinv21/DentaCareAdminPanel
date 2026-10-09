@@ -38,11 +38,11 @@ export function SearchInput({
 			<input
 				type='search'
 				placeholder={placeholder ?? label}
-				className='h-full min-w-0 flex-grow border-0 bg-transparent text-ink outline-none'
+				className='h-full min-w-0 grow border-0 bg-transparent text-ink outline-none'
 				{...props}
 			/>
 			{shortcut && (
-				<kbd className='shrink-0 rounded-md border border-line bg-raised px-1.5 font-mono text-[11px] leading-[18px] text-ink-muted'>
+				<kbd className='shrink-0 rounded-md border border-line bg-raised px-1.5 font-mono text-[11px] leading-4.5 text-ink-muted'>
 					{shortcut}
 				</kbd>
 			)}

@@ -1,2 +1,2 @@
 export { VerifyPage } from './ui/VerifyPage'
-export { generateMetadata } from './ui/metadata'
+export { generateMetadata } from './ui/Metadata'

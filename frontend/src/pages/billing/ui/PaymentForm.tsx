@@ -1,16 +1,17 @@
 'use client'
 
 import { Smartphone } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { type Invoice, PaymentMethodTile } from '@/entities/invoice'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { useFormat } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { inputClass } from '@/shared/ui/field'
 
-import type { PaymentFormModel } from '../model/use-payment-form'
+import type { PaymentFormModel } from '../model/usePaymentForm'
 
 interface PaymentFormProps {
 	invoice: Invoice
@@ -19,33 +20,34 @@ interface PaymentFormProps {
 }
 
 export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
-	const { t, format } = useI18n()
-	const amount = `${form.amount} ${t('сом')}`
+	const t = useTranslations('Billing')
+	const format = useFormat()
+	const amount = `${form.amount} ${t('som')}`
 
 	return (
 		<div className='flex flex-col gap-3.5'>
 			<div>
-				<h2 className='font-display text-base leading-[22px] font-bold'>
-					{t('Принять оплату')}
+				<h2 className='font-display text-base leading-5.5 font-bold'>
+					{t('acceptPayment')}
 				</h2>
-				<p className='text-[12.5px] leading-[18px] text-ink-muted'>
-					{t('Счёт')} <span className='font-mono'>{invoice.number}</span> ·{' '}
+				<p className='text-[12.5px] leading-4.5 text-ink-muted'>
+					{t('invoice')} <span className='font-mono'>{invoice.number}</span> ·{' '}
 					{format.name(invoice.patientName)}
 				</p>
 			</div>
 
 			<label className='flex flex-col gap-1.5'>
 				<span className='text-[12.5px] leading-4 font-semibold'>
-					{t('Сумма, сом')}
+					{t('amountSom')}
 				</span>
 				<input
 					key={invoice.number}
-					className={cn(inputClass, 'h-[46px] font-mono text-lg font-semibold')}
+					className={cn(inputClass, 'h-11.5 font-mono text-lg font-semibold')}
 					inputMode='numeric'
 					defaultValue={form.amount}
 				/>
-				<span className='text-[12.5px] leading-[18px] text-ink-muted'>
-					{t('Остаток по счёту:')} <span className='font-mono'>{amount}</span>
+				<span className='text-[12.5px] leading-4.5 text-ink-muted'>
+					{t('invoiceBalance')} <span className='font-mono'>{amount}</span>
 				</span>
 			</label>
 
@@ -54,7 +56,7 @@ export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
 					id='payment-method-label'
 					className='text-[12.5px] leading-4 font-semibold'
 				>
-					{t('Способ оплаты')}
+					{t('paymentMethod')}
 				</span>
 				<div
 					role='radiogroup'
@@ -91,7 +93,7 @@ export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
 
 			<div className='flex animate-fade items-center gap-3.5 rounded-[14px] border border-line bg-raised p-3.5'>
 				{form.isCard ? (
-					<span className='flex size-[104px] shrink-0 items-center justify-center rounded-[14px] border border-line bg-surface text-info'>
+					<span className='flex size-26 shrink-0 items-center justify-center rounded-[14px] border border-line bg-surface text-info'>
 						<Smartphone size={44} strokeWidth={1.4} aria-hidden='true' />
 					</span>
 				) : (
@@ -100,7 +102,7 @@ export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
 						height='104'
 						viewBox='0 0 25 25'
 						role='img'
-						aria-label={t('QR-код для оплаты')}
+						aria-label={t('paymentQrCode')}
 						className='shrink-0 rounded-lg bg-white p-1'
 					>
 						<path d={form.qr} fill='#0D2A2E' />
@@ -108,7 +110,7 @@ export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
 				)}
 				<div className='flex min-w-0 flex-col gap-1'>
 					<span className='font-semibold'>{form.hint.title}</span>
-					<span className='text-[12.5px] leading-[18px] text-ink-muted'>
+					<span className='text-[12.5px] leading-4.5 text-ink-muted'>
 						{form.hint.text}
 					</span>
 					<Badge tone='info' className='mt-1 self-start'>
@@ -117,11 +119,11 @@ export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
 				</div>
 			</div>
 
-			<Button variant='primary' block className='h-[46px]' onClick={onConfirm}>
-				{t('Подтвердить оплату ·')} <span className='font-mono'>{amount}</span>
+			<Button variant='primary' block className='h-11.5' onClick={onConfirm}>
+				{t('confirmPayment')} <span className='font-mono'>{amount}</span>
 			</Button>
 			<Button variant='ghost' size='sm' block>
-				{t('Выдать чек')}
+				{t('issueReceipt')}
 			</Button>
 		</div>
 	)

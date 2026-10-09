@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { kgPhoneSchema } from '@/shared/lib/validation'
 
-const password = z.string().min(1, 'Введите пароль')
+const password = z.string().min(1, 'enterYourPassword')
 
 export const loginSchema = z.discriminatedUnion('method', [
 	z.object({
@@ -13,7 +13,7 @@ export const loginSchema = z.discriminatedUnion('method', [
 	}),
 	z.object({
 		method: z.literal('email'),
-		email: z.email('Введите корректный email'),
+		email: z.email('enterAValidEmail'),
 		password,
 		remember: z.boolean(),
 	}),

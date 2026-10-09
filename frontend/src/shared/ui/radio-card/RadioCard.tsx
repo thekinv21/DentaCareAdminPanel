@@ -36,15 +36,15 @@ export function RadioCard({
 			<span className='inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-sunken font-mono text-[11px] font-bold tracking-[0.02em] text-ink'>
 				{code}
 			</span>
-			<span className='flex-grow'>
+			<span className='grow'>
 				<span className='block font-bold'>{title}</span>
-				<span className='block text-[12.5px] leading-[18px] text-ink-muted'>
+				<span className='block text-[12.5px] leading-4.5 text-ink-muted'>
 					{note}
 				</span>
 			</span>
 			<span
 				className={cn(
-					'size-[18px] shrink-0 rounded-full',
+					'size-4.5 shrink-0 rounded-full',
 					checked
 						? 'border-[5px] border-brand bg-surface'
 						: 'border-2 border-line-strong',

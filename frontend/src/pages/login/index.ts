@@ -1,2 +1,2 @@
 export { LoginPage } from './ui/LoginPage'
-export { generateMetadata } from './ui/metadata'
+export { generateMetadata } from './ui/Metadata'

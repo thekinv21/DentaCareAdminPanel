@@ -1,3 +1,3 @@
 import { localizedTitle } from '@/shared/lib/i18n-server'
 
-export const generateMetadata = localizedTitle('Пациенты')
+export const generateMetadata = localizedTitle('Patients', 'patients')

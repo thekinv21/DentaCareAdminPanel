@@ -2,11 +2,9 @@ export type PaymentMethodId = 'visa' | 'mbank' | 'komp' | 'optima'
 
 export interface PaymentMethod {
 	id: PaymentMethodId
-	name: string
 	/**
-	 * Short mark shown on the method tile
+	 * Message key in the Invoice namespace
 	 */
-	code: string
 	kind: string
 	/**
 	 * Tile classes (soft background + strong text)

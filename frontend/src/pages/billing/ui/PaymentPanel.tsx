@@ -1,30 +1,30 @@
 'use client'
 
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { PaymentMethodTile } from '@/entities/invoice'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { ProgressBar } from '@/shared/ui/progress'
 
-import type { BillingModel } from '../model/use-billing'
-import { usePaymentForm } from '../model/use-payment-form'
-import { useRevenueSplit } from '../model/use-revenue-split'
+import type { BillingModel } from '../model/useBilling'
+import { usePaymentForm } from '../model/usePaymentForm'
+import { useRevenueSplit } from '../model/useRevenueSplit'
 import { PaymentForm } from './PaymentForm'
 
 export function PaymentPanel({ billing }: { billing: BillingModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Billing')
 	const form = usePaymentForm(billing.invoice, billing.invoiceIndex)
 	const split = useRevenueSplit()
-	const amount = `${form.amount} ${t('сом')}`
+	const amount = `${form.amount} ${t('som')}`
 
 	return (
 		<Card
 			as='aside'
-			aria-label={t('Принять оплату')}
-			className='max-w-[440px] flex-[1_1_320px] animate-rise max-[720px]:max-w-none'
+			aria-label={t('acceptPayment')}
+			className='max-w-110 flex-[1_1_320px] animate-rise max-[720px]:max-w-none'
 			style={{ animationDelay: '200ms' }}
 		>
 			{billing.done ? (
@@ -36,25 +36,25 @@ export function PaymentPanel({ billing }: { billing: BillingModel }) {
 						<Check size={28} strokeWidth={2.4} aria-hidden='true' />
 					</span>
 					<div>
-						<h2 className='font-display text-base leading-[22px] font-bold'>
-							{t('Оплата принята')}
+						<h2 className='font-display text-base leading-5.5 font-bold'>
+							{t('paymentAccepted')}
 						</h2>
-						<p className='text-[12.5px] leading-[18px] text-ink-muted'>
+						<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 							<span className='font-mono'>{amount}</span> · {form.methodName}{' '}
-							{t('· счёт')}{' '}
+							{t('invoiceInline')}{' '}
 							<span className='font-mono'>{billing.invoice.number}</span>
 						</p>
 					</div>
 					<div className='flex w-full gap-2'>
 						<Button size='sm' className='flex-1'>
-							{t('Печать чека')}
+							{t('printReceipt')}
 						</Button>
 						<Button size='sm' className='flex-1'>
-							{t('Отправить SMS')}
+							{t('sendSms')}
 						</Button>
 					</div>
 					<Button size='sm' variant='ghost' onClick={billing.reset}>
-						{t('Новая оплата')}
+						{t('newPayment')}
 					</Button>
 				</div>
 			) : (
@@ -66,8 +66,8 @@ export function PaymentPanel({ billing }: { billing: BillingModel }) {
 			)}
 
 			<div className='flex flex-col gap-2.5 border-t border-line pt-3.5'>
-				<span className='text-[11px] leading-[14px] font-semibold tracking-[0.06em] text-ink-muted uppercase'>
-					{t('Поступления за октябрь')}
+				<span className='text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'>
+					{t('octoberRevenue')}
 				</span>
 				{split.map((item, index) => (
 					<div key={item.id}>

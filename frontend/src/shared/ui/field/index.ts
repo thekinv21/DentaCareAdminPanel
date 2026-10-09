@@ -5,4 +5,4 @@ export {
 	inputClass,
 	inputLgClass,
 	textareaClass,
-} from './field-class'
+} from './FieldClass'

@@ -5,42 +5,42 @@ export const BANK_DETAILS: {
 }[] = [
 	{
 		id: 'visa',
-		description: 'Карты Visa через POS-терминал на ресепшене',
+		description: 'visaCardsViaThe',
 		meta: [
-			['Терминал', 'POS · Ingenico Move/5000'],
-			['ID терминала', 'TID 40811752'],
-			['Эквайер', 'Optima Bank'],
-			['Комиссия', '1,8 %'],
+			['terminal', 'POS · Ingenico Move/5000'],
+			['terminalId', 'TID 40811752'],
+			['acquirer', 'Optima Bank'],
+			['fee', '1,8 %'],
 		],
 	},
 	{
 		id: 'mbank',
-		description: 'QR-оплата и перевод по номеру из приложения MBANK',
+		description: 'qrPaymentAndTransfer',
 		meta: [
-			['Мерчант', 'DENTA-ALATOO'],
+			['merchant', 'DENTA-ALATOO'],
 			['ID', 'MB-0042-7781'],
-			['Зачисление', 'Мгновенно'],
-			['Комиссия', '0,9 %'],
+			['settlement', 'instant'],
+			['fee', '0,9 %'],
 		],
 	},
 	{
 		id: 'komp',
-		description: 'QR-оплата через приложение банка «Компаньон»',
+		description: 'qrPaymentInThe',
 		meta: [
-			['Мерчант', 'DENTA KLINIK'],
+			['merchant', 'DENTA KLINIK'],
 			['ID', 'KMP-33190'],
-			['Зачисление', 'В течение дня'],
-			['Комиссия', '1,0 %'],
+			['settlement', 'duringTheDay'],
+			['fee', '1,0 %'],
 		],
 	},
 	{
 		id: 'optima',
-		description: 'QR Optima24 и рассрочка для планов лечения',
+		description: 'qrOptima24AndInstallments',
 		meta: [
-			['Мерчант', 'DENTA-01'],
+			['merchant', 'DENTA-01'],
 			['ID', 'OPT-778120'],
-			['Рассрочка', '3 / 6 / 12 мес'],
-			['Комиссия', '1,2 %'],
+			['installments', 'n3612Mo'],
+			['fee', '1,2 %'],
 		],
 	},
 ]
@@ -48,17 +48,17 @@ export const BANK_DETAILS: {
 export const PAYMENT_OPTIONS = [
 	{
 		id: 'fiscal',
-		label: 'Фискальный чек (ККМ)',
-		hint: 'Автоматически пробивать чек после каждой оплаты',
+		label: 'fiscalReceiptCashRegister',
+		hint: 'automaticallyIssueAReceipt',
 	},
 	{
 		id: 'prepay',
-		label: 'Предоплата при онлайн-записи',
-		hint: '30 % стоимости первого визита через MBANK или Optima',
+		label: 'prepaymentForOnlineBooking',
+		hint: 'n30OfTheFirst',
 	},
 	{
 		id: 'split',
-		label: 'Оплата несколькими способами',
-		hint: 'Например, часть через Visa, часть через MBANK',
+		label: 'splitPayment',
+		hint: 'forExamplePartVia',
 	},
 ]

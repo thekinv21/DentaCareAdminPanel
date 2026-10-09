@@ -25,10 +25,10 @@ export function AuthHeading({
 				</span>
 			)}
 			<div className='flex flex-col gap-1.5'>
-				<h1 className='font-display text-[30px] leading-[38px] font-extrabold tracking-[-0.025em] max-[900px]:text-[26px] max-[900px]:leading-8'>
+				<h1 className='font-display text-[30px] leading-9.5 font-extrabold tracking-tight max-[900px]:text-[26px] max-[900px]:leading-8'>
 					{title}
 				</h1>
-				<p className='text-sm leading-[22px] text-ink-muted'>{subtitle}</p>
+				<p className='text-sm leading-5.5 text-ink-muted'>{subtitle}</p>
 			</div>
 		</>
 	)
@@ -38,7 +38,7 @@ export function AuthHeading({
  * Vertical stack used by every auth screen
  */
 export function AuthStack({ children }: { children: ReactNode }) {
-	return <div className='flex animate-rise flex-col gap-[22px]'>{children}</div>
+	return <div className='flex animate-rise flex-col gap-5.5'>{children}</div>
 }
 
 /**
@@ -62,10 +62,7 @@ export function AuthField({
 	return (
 		<div className='flex flex-col gap-1.5'>
 			<div className='flex items-baseline justify-between'>
-				<label
-					htmlFor={id}
-					className='text-[13px] leading-[18px] font-semibold'
-				>
+				<label htmlFor={id} className='text-[13px] leading-4.5 font-semibold'>
 					{label}
 				</label>
 				{aside}
@@ -74,13 +71,13 @@ export function AuthField({
 			{error ? (
 				<span
 					id={`${id}-error`}
-					className='text-[12.5px] leading-[18px] text-danger'
+					className='text-[12.5px] leading-4.5 text-danger'
 				>
 					{error}
 				</span>
 			) : (
 				hint && (
-					<span className='text-[12.5px] leading-[18px] text-ink-muted'>
+					<span className='text-[12.5px] leading-4.5 text-ink-muted'>
 						{hint}
 					</span>
 				)

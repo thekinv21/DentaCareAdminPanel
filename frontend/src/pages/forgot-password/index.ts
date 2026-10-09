@@ -1,2 +1,2 @@
 export { ForgotPasswordPage } from './ui/ForgotPasswordPage'
-export { generateMetadata } from './ui/metadata'
+export { generateMetadata } from './ui/Metadata'

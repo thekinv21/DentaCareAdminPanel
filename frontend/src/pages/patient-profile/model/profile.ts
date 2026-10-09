@@ -7,11 +7,11 @@ import type { Tone } from '@/shared/ui/badge'
  */
 export const PROFILE = {
 	id: 'DN-20418',
-	initials: 'АТ',
+	initials: 'at',
 	fullName: 'Айгуль Тойчубекова',
-	details: 'Ж · 34 года · 03.02.1992',
+	details: 'f34YO',
 	phone: '+996 555 418 201',
-	doctor: 'Лечащий врач: Касымова А.',
+	doctor: 'attendingDentistKasymovaA',
 }
 
 export const PLAN_STEPS: {
@@ -23,41 +23,41 @@ export const PLAN_STEPS: {
 	price: number
 }[] = [
 	{
-		procedure: 'Лечение каналов',
+		procedure: 'rootCanalTreatment',
 		tooth: '46',
-		date: 'Сегодня · 12:00',
-		status: { label: 'Следующий', tone: 'accent' },
+		date: 'today1200',
+		status: { label: 'next', tone: 'accent' },
 		price: 9000,
 	},
 	{
-		procedure: 'Коронка из диоксида циркония',
+		procedure: 'zirconiaCrown',
 		tooth: '46',
 		date: '29.10.2026',
-		status: { label: 'Записан', tone: 'info' },
+		status: { label: 'booked', tone: 'info' },
 		price: 18000,
 	},
 	{
-		procedure: 'Пломба · Д, Ж',
+		procedure: 'fillingDO',
 		tooth: '26',
-		date: 'Не назначено',
+		date: 'notAssigned',
 		dateMuted: true,
-		status: { label: 'Записать', tone: 'warning' },
+		status: { label: 'book', tone: 'warning' },
 		price: 3500,
 	},
 	{
-		procedure: 'Хирургическое удаление',
+		procedure: 'surgicalExtraction',
 		tooth: '38',
-		date: 'Не назначено',
+		date: 'notAssigned',
 		dateMuted: true,
-		status: { label: 'Записать', tone: 'warning' },
+		status: { label: 'book', tone: 'warning' },
 		price: 6000,
 	},
 	{
-		procedure: 'Замена пломбы · Ж',
+		procedure: 'fillingReplacementO',
 		tooth: '14',
-		date: 'Не назначено',
+		date: 'notAssigned',
 		dateMuted: true,
-		status: { label: 'Записать', tone: 'warning' },
+		status: { label: 'book', tone: 'warning' },
 		price: 3500,
 	},
 ]
@@ -70,28 +70,28 @@ export const VISITS: {
 	done: boolean
 }[] = [
 	{
-		title: 'Осмотр и снимок ·',
+		title: 'examAndXRay',
 		tooth: '46',
-		meta: '12.09.2026 · Касымова А.',
-		note: 'Глубокий кариес с вовлечением пульпы. Показано эндодонтическое лечение.',
+		meta: 'n12092026Kasymova',
+		note: 'deepCariesWithPulp',
 		done: true,
 	},
 	{
-		title: 'Пломба ·',
+		title: 'filling',
 		tooth: '36',
-		meta: '04.04.2026 · Петров С.',
+		meta: 'n04042026Petrov',
 		done: true,
 	},
 	{
-		title: 'Имплантация ·',
+		title: 'implantPlacement',
 		tooth: '37',
-		meta: '15.01.2025 · Токтогулов Э.',
+		meta: 'n15012025Toktogulov',
 		done: true,
 	},
 	{
-		title: 'Коронка ·',
+		title: 'crown',
 		tooth: '21',
-		meta: '18.11.2024 · Касымова А.',
+		meta: 'n18112024Kasymova',
 		done: false,
 	},
 ]
@@ -121,7 +121,7 @@ export const PAYMENTS: {
 		date: '15.01.2025',
 		invoice: 'INV-25-0032',
 		method: 'optima',
-		methodLabel: 'Optima Bank · перевод',
+		methodLabel: 'optimaBankTransfer',
 		amount: 45000,
 	},
 ]

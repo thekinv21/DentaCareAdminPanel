@@ -16,7 +16,7 @@ export function Card({
 	return (
 		<Tag
 			className={cn(
-				'flex min-w-0 flex-col gap-3.5 rounded-[20px] bg-surface p-[18px] shadow-clay-md',
+				'flex min-w-0 flex-col gap-3.5 rounded-[20px] bg-surface p-4.5 shadow-clay-md',
 				className,
 			)}
 			{...props}
@@ -52,12 +52,12 @@ export function CardHeader({
 			{(title || description) && (
 				<div className='min-w-0'>
 					{title && (
-						<h2 className='font-display text-base leading-[22px] font-bold'>
+						<h2 className='font-display text-base leading-5.5 font-bold'>
 							{title}
 						</h2>
 					)}
 					{description && (
-						<p className='text-[12.5px] leading-[18px] text-ink-muted'>
+						<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 							{description}
 						</p>
 					)}

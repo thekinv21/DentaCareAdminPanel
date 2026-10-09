@@ -35,7 +35,7 @@ export function Segmented<T extends string>({
 			role='tablist'
 			aria-label={props['aria-label']}
 			className={cn(
-				'flex flex-wrap gap-[3px] rounded-xl bg-sunken p-[3px] shadow-press',
+				'flex flex-wrap gap-0.75 rounded-xl bg-sunken p-0.75 shadow-press',
 				className,
 			)}
 		>

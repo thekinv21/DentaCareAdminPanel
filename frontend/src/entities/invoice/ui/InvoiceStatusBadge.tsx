@@ -1,13 +1,14 @@
 'use client'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
+
 import { Badge } from '@/shared/ui/badge'
 
-import { INVOICE_STATUS } from '../model/maps'
-import type { InvoiceStatus } from '../model/types'
+import { INVOICE_STATUS } from '../model/Maps'
+import type { InvoiceStatus } from '../model/Types'
 
 export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
-	const { t } = useI18n()
+	const t = useTranslations('Invoice')
 	const { label, tone } = INVOICE_STATUS[status]
 	return <Badge tone={tone}>{t(label)}</Badge>
 }

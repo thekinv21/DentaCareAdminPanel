@@ -1,13 +1,14 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Avatar } from '@/shared/ui/avatar'
 import { TONE_CLASS } from '@/shared/ui/badge'
 import { Legend } from '@/shared/ui/legend'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { StaffBoardModel } from '../model/use-staff-board'
+import type { StaffBoardModel } from '../model/useStaffBoard'
 
 interface RosterTableProps {
 	roster: StaffBoardModel['roster']
@@ -15,14 +16,14 @@ interface RosterTableProps {
 }
 
 export function RosterTable({ roster, weekDays }: RosterTableProps) {
-	const { t } = useI18n()
+	const t = useTranslations('Staff')
 	return (
 		<>
 			<TableScroll className='min-h-0 flex-auto animate-fade'>
-				<Table className='min-w-[860px]'>
+				<Table className='min-w-215'>
 					<thead>
 						<tr>
-							<Th>{t('Сотрудник')}</Th>
+							<Th>{t('staffMember')}</Th>
 							{weekDays.map(day => (
 								<Th
 									key={day.label}
@@ -48,7 +49,7 @@ export function RosterTable({ roster, weekDays }: RosterTableProps) {
 									<Td key={day.key}>
 										<span
 											className={cn(
-												'inline-flex h-7 min-w-[92px] items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap',
+												'inline-flex h-7 min-w-23 items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap',
 												TONE_CLASS[day.tone],
 											)}
 										>
@@ -63,10 +64,10 @@ export function RosterTable({ roster, weekDays }: RosterTableProps) {
 			</TableScroll>
 			<Legend
 				items={[
-					{ label: t('Смена'), swatch: TONE_CLASS.brand },
-					{ label: t('Отпуск'), swatch: TONE_CLASS.accent },
-					{ label: t('Нужна замена'), swatch: TONE_CLASS.warning },
-					{ label: t('Выходной'), swatch: TONE_CLASS.neutral },
+					{ label: t('shift'), swatch: TONE_CLASS.brand },
+					{ label: t('leave'), swatch: TONE_CLASS.accent },
+					{ label: t('needsReplacement'), swatch: TONE_CLASS.warning },
+					{ label: t('dayOff'), swatch: TONE_CLASS.neutral },
 				]}
 			/>
 		</>

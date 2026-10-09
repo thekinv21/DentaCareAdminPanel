@@ -1,33 +1,34 @@
 'use client'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
+
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { Segmented } from '@/shared/ui/segmented'
 
-import { useStaffBoard } from '../model/use-staff-board'
+import { useStaffBoard } from '../model/useStaffBoard'
 import { RosterTable } from './RosterTable'
 import { TeamTable } from './TeamTable'
 
 export function StaffBoard() {
-	const { t } = useI18n()
+	const t = useTranslations('Staff')
 	const board = useStaffBoard()
 
 	return (
 		<Card
 			as='section'
-			className='min-h-[460px] flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-115 flex-auto animate-rise max-[720px]:flex-none'
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
 				<Segmented
-					aria-label={t('Раздел')}
+					aria-label={t('section')}
 					options={board.views}
 					value={board.view}
 					onChange={board.setView}
 				/>
 				{board.view === 'team' ? (
 					<Segmented
-						aria-label={t('Роль')}
+						aria-label={t('role')}
 						options={board.roles}
 						value={board.role}
 						onChange={board.setRole}
@@ -35,10 +36,10 @@ export function StaffBoard() {
 				) : (
 					<div className='flex items-center gap-2'>
 						<span className='text-[12.5px] text-ink-muted'>
-							{t('Неделя 41 · 5 – 11 октября')}
+							{t('week41October5')}
 						</span>
-						<Button size='sm'>{t('Копировать прошлую')}</Button>
-						<Button size='sm'>{t('Редактировать')}</Button>
+						<Button size='sm'>{t('copyPrevious')}</Button>
+						<Button size='sm'>{t('edit')}</Button>
 					</div>
 				)}
 			</div>

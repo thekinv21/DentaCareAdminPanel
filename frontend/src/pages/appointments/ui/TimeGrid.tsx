@@ -12,8 +12,8 @@ import {
 	GRID_HOURS,
 	HOUR_HEIGHT,
 	placeEvents,
-} from '../lib/layout'
-import type { CalendarColumn } from '../model/use-calendar-columns'
+} from '../lib/Layout'
+import type { CalendarColumn } from '../model/useCalendarColumns'
 import { EventBlock } from './EventBlock'
 
 const NOW_TOP = ((toMinutes(NOW_TIME) - DAY_START) * HOUR_HEIGHT) / 60
@@ -51,7 +51,7 @@ export function TimeGrid({
 			className='animate-fade'
 			style={{ minWidth: columns.length === 4 ? 700 : 780 }}
 		>
-			<div className='sticky top-0 z-[6] bg-surface pb-2'>
+			<div className='sticky top-0 z-6 bg-surface pb-2'>
 				<div style={gridStyle}>
 					<span />
 					{columns.map(column => (
@@ -67,13 +67,13 @@ export function TimeGrid({
 									: 'bg-raised text-ink hover:bg-sunken',
 							)}
 						>
-							<span className='text-[11px] leading-[14px] font-semibold tracking-[0.05em] uppercase opacity-85'>
+							<span className='text-[11px] leading-3.5 font-semibold tracking-wider uppercase opacity-85'>
 								{column.overline}
 							</span>
-							<span className='font-display text-[17px] leading-[22px] font-extrabold'>
+							<span className='font-display text-[17px] leading-5.5 font-extrabold'>
 								{column.title}
 							</span>
-							<span className='text-[11.5px] leading-[15px] opacity-85'>
+							<span className='text-[11.5px] leading-3.75 opacity-85'>
 								{column.caption}
 							</span>
 						</button>
@@ -86,7 +86,7 @@ export function TimeGrid({
 						<span
 							key={hour}
 							className={cn(
-								'absolute right-1.5 font-mono text-[11px] leading-[14px] text-ink-subtle',
+								'absolute right-1.5 font-mono text-[11px] leading-3.5 text-ink-subtle',
 								hourShift(i),
 							)}
 							style={{ top: i * HOUR_HEIGHT }}
@@ -110,10 +110,10 @@ export function TimeGrid({
 						{column.showNow && (
 							<div
 								aria-hidden='true'
-								className='pointer-events-none absolute right-0 left-0 z-[5] h-0.5 bg-accent'
+								className='pointer-events-none absolute right-0 left-0 z-5 h-0.5 bg-accent'
 								style={{ top: NOW_TOP }}
 							>
-								<span className='absolute -top-1 -left-[5px] size-2.5 animate-blink rounded-full bg-accent' />
+								<span className='absolute -top-1 -left-1.25 size-2.5 animate-blink rounded-full bg-accent' />
 							</div>
 						)}
 					</div>

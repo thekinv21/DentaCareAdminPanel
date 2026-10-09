@@ -1,15 +1,16 @@
 'use client'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
+
 import { Avatar } from '@/shared/ui/avatar'
 import { Card, CardHeader } from '@/shared/ui/card'
 import { ProgressBar } from '@/shared/ui/progress'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { ReportModel } from '../model/use-report'
+import type { ReportModel } from '../model/useReport'
 
 export function DoctorPerformance({ report }: { report: ReportModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Reports')
 	return (
 		<Card
 			as='section'
@@ -17,18 +18,18 @@ export function DoctorPerformance({ report }: { report: ReportModel }) {
 			style={{ animationDelay: '300ms' }}
 		>
 			<CardHeader
-				title={t('Эффективность врачей')}
+				title={t('dentistPerformance')}
 				description={report.rangeLabel}
 			/>
 			<TableScroll>
-				<Table className='min-w-[680px]'>
+				<Table className='min-w-170'>
 					<thead>
 						<tr>
-							<Th>{t('Врач')}</Th>
-							<Th align='right'>{t('Приёмы')}</Th>
-							<Th align='right'>{t('Выручка')}</Th>
-							<Th align='right'>{t('Согласие на планы')}</Th>
-							<Th className='w-[200px]'>{t('Загрузка кресла')}</Th>
+							<Th>{t('dentist')}</Th>
+							<Th align='right'>{t('visits')}</Th>
+							<Th align='right'>{t('revenue')}</Th>
+							<Th align='right'>{t('planConsent')}</Th>
+							<Th className='w-50'>{t('chairUtilization')}</Th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,7 +40,7 @@ export function DoctorPerformance({ report }: { report: ReportModel }) {
 										<Avatar initials={doctor.initials} tone={doctor.tone} />
 										<div>
 											<div className='font-semibold'>{doctor.name}</div>
-											<div className='text-[12.5px] leading-[18px] text-ink-muted'>
+											<div className='text-[12.5px] leading-4.5 text-ink-muted'>
 												{doctor.specialty}
 											</div>
 										</div>
@@ -59,7 +60,7 @@ export function DoctorPerformance({ report }: { report: ReportModel }) {
 										<ProgressBar
 											value={doctor.chairLoad}
 											delay={index * 60}
-											className='flex-grow'
+											className='grow'
 										/>
 										<span className='font-mono text-xs'>
 											{doctor.chairLoad}%

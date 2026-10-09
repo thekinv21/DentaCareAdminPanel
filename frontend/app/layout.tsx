@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Golos_Text, JetBrains_Mono, Manrope } from 'next/font/google'
 
-import { Providers } from '@/app/providers'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale } from 'next-intl/server'
 
-import { getLocale } from '@/shared/lib/i18n-server'
+import { Providers } from '@/app/providers'
 
 import './globals.css'
 
@@ -40,10 +41,11 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 		<html
 			lang={locale}
 			className={`${manrope.variable} ${golos.variable} ${jetbrainsMono.variable} h-full`}
-			suppressHydrationWarning
 		>
-			<body className='min-h-full'>
-				<Providers locale={locale}>{children}</Providers>
+			<body className='min-h-full' suppressHydrationWarning>
+				<NextIntlClientProvider>
+					<Providers>{children}</Providers>
+				</NextIntlClientProvider>
 			</body>
 		</html>
 	)

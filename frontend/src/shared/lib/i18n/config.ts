@@ -6,6 +6,11 @@ export const DEFAULT_LOCALE: Locale = 'ru'
 
 export const LOCALE_COOKIE = 'denta-locale'
 
+/**
+ * Native name and Intl locale of each supported language.
+ * To add a language: extend LOCALES, add it here and create messages/<code>.json
+ */
+
 export const LOCALE_META: Record<
 	Locale,
 	{ code: string; name: string; intl: string }

@@ -18,10 +18,7 @@ interface TableScrollProps {
 export function TableScroll({ className, children }: TableScrollProps) {
 	return (
 		<div
-			className={cn(
-				'-mx-[18px] overflow-auto px-[18px] scrollbar-thin',
-				className,
-			)}
+			className={cn('-mx-4.5 overflow-auto px-4.5 scrollbar-thin', className)}
 		>
 			{children}
 		</div>
@@ -36,7 +33,7 @@ export function Table({ hoverRows = true, className, ...props }: TableProps) {
 	return (
 		<table
 			className={cn(
-				'w-full border-separate border-spacing-0 text-[13px] leading-[18px]',
+				'w-full border-separate border-spacing-0 text-[13px] leading-4.5',
 				hoverRows && '[&_tbody_tr:hover_td]:bg-raised',
 				className,
 			)}
@@ -59,7 +56,7 @@ export function Th({
 		<th
 			scope={scope}
 			className={cn(
-				'sticky top-0 z-[1] border-b border-line bg-surface p-2.5 text-[11px] leading-[14px] font-semibold tracking-[0.06em] whitespace-nowrap text-ink-muted uppercase',
+				'sticky top-0 z-1 border-b border-line bg-surface p-2.5 text-[11px] leading-3.5 font-semibold tracking-[0.06em] whitespace-nowrap text-ink-muted uppercase',
 				align === 'left' && 'text-left',
 				align === 'center' && 'text-center',
 				align === 'right' && 'text-right',

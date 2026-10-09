@@ -1,18 +1,18 @@
 export const SECURITY_OPTIONS = [
 	{
 		id: 'tfa',
-		label: 'Двухэтапная проверка',
-		hint: 'Код по SMS на +996 555 ••• 441 при каждом входе',
+		label: 'twoStepVerification',
+		hint: 'smsCodeTo996',
 	},
 	{
 		id: 'newdev',
-		label: 'Оповещать о входе с нового устройства',
-		hint: 'SMS и email сразу после входа',
+		label: 'notifyOnSignIn',
+		hint: 'smsAndEmailRight',
 	},
 	{
 		id: 'autolock',
-		label: 'Блокировать экран через 10 минут',
-		hint: 'Если компьютер в кабинете остаётся без внимания',
+		label: 'lockScreenAfter10',
+		hint: 'ifTheOfficeComputer',
 	},
 ]
 
@@ -20,25 +20,25 @@ export const SESSIONS = [
 	{
 		id: 'cur',
 		device: 'Chrome · Windows 11',
-		where: 'Кабинет 1 · Бишкек · 212.42.104.18',
-		when: 'Сейчас',
+		where: 'room1Bishkek212',
+		when: 'now',
 	},
 	{
 		id: 'ipad',
 		device: 'Safari · iPad',
-		where: 'Бишкек · 212.42.104.22',
-		when: 'Сегодня, 08:10',
+		where: 'bishkek21242104',
+		when: 'today0810',
 	},
 	{
 		id: 'iph',
 		device: 'Denta · iPhone 15',
-		where: 'Бишкек · Beeline KG',
-		when: 'Вчера, 21:42',
+		where: 'bishkekBeelineKg',
+		when: 'yesterday2142',
 	},
 	{
 		id: 'home',
 		device: 'Chrome · macOS',
-		where: 'Бишкек · Aknet',
+		where: 'bishkekAknet',
 		when: '05.10.2026',
 	},
 ]
@@ -46,38 +46,38 @@ export const SESSIONS = [
 export const NOTIFICATION_EVENTS = [
 	{
 		id: 'a',
-		label: 'Новая онлайн-запись',
-		hint: 'Пациент записался через сайт или Instagram',
+		label: 'newOnlineAppointment',
+		hint: 'patientBookedViaWebsite',
 	},
 	{
 		id: 'c',
-		label: 'Отмена или перенос записи',
-		hint: 'Включая ответы на SMS-напоминания',
+		label: 'appointmentCancellationOrReschedule',
+		hint: 'includingRepliesToSms',
 	},
 	{
 		id: 'p',
-		label: 'Оплата получена',
-		hint: 'Visa, MBANK, Компаньон, Optima Bank',
+		label: 'paymentReceived',
+		hint: 'visaMbankKompanionOptima',
 	},
 	{
 		id: 's',
-		label: 'Низкий остаток на складе',
-		hint: 'Материалы, которые вы используете',
+		label: 'lowStockInInventory',
+		hint: 'materialsYouUse',
 	},
 	{
 		id: 'r',
-		label: 'Еженедельный отчёт',
-		hint: 'Выручка и загрузка по понедельникам',
+		label: 'weeklyReport',
+		hint: 'revenueAndUtilizationOn',
 	},
 	{
 		id: 'm',
-		label: 'Сообщения от коллег',
-		hint: 'Комментарии к планам лечения',
+		label: 'messagesFromColleagues',
+		hint: 'treatmentPlanComments',
 	},
 ]
 
 export const NOTIFICATION_CHANNELS = [
-	{ id: 'app', label: 'В приложении', aria: 'в приложении' },
+	{ id: 'app', label: 'inApp', aria: 'inTheApp' },
 	{ id: 'sms', label: 'SMS', aria: 'SMS' },
 	{ id: 'mail', label: 'Email', aria: 'email' },
 ]

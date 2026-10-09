@@ -36,14 +36,14 @@ export function StatCard({
 			style={{ animationDelay: `${delay}ms` }}
 		>
 			<div className='flex items-center justify-between gap-2.5'>
-				<span className='text-[11px] leading-[14px] font-semibold tracking-[0.06em] text-ink-muted uppercase'>
+				<span className='text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'>
 					{label}
 				</span>
 				{icon}
 			</div>
 			<div
 				className={cn(
-					'font-display text-2xl leading-[30px] font-extrabold tracking-[-0.02em] whitespace-nowrap tabular-nums',
+					'font-display text-2xl leading-7.5 font-extrabold tracking-[-0.02em] whitespace-nowrap tabular-nums',
 					valueClass,
 				)}
 			>
@@ -52,7 +52,7 @@ export function StatCard({
 			</div>
 			{children}
 			{footer && (
-				<p className='text-[12.5px] leading-[18px] text-ink-muted'>{footer}</p>
+				<p className='text-[12.5px] leading-4.5 text-ink-muted'>{footer}</p>
 			)}
 		</Card>
 	)

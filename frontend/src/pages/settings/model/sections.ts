@@ -9,40 +9,39 @@ export const SECTIONS: {
 }[] = [
 	{
 		id: 'clinic',
-		label: 'Клиника',
-		hint: 'Реквизиты, адрес, кресла',
-		description: 'Основные данные клиники для документов, чеков и SMS.',
+		label: 'clinic',
+		hint: 'companyDetailsAddressChairs',
+		description: 'coreClinicDetailsFor',
 	},
 	{
 		id: 'hours',
-		label: 'Часы работы',
-		hint: 'Пн–Сб · 08:00–19:00',
-		description: 'Рабочие дни и время, доступное для записи.',
+		label: 'workingHours',
+		hint: 'monSat0800',
+		description: 'workingDaysAndHours',
 	},
 	{
 		id: 'services',
-		label: 'Услуги и цены',
-		hint: '42 услуги',
-		description:
-			'Прайс-лист в сомах. Цены подставляются в планы лечения и счета.',
+		label: 'servicesAndPrices',
+		hint: 'n42Services',
+		description: 'priceListInSom',
 	},
 	{
 		id: 'pay',
-		label: 'Оплата',
-		hint: '4 банка',
-		description: 'Способы приёма оплаты: Visa, MBANK, Компаньон, Optima Bank.',
+		label: 'payment',
+		hint: 'n4Banks',
+		description: 'paymentMethodsVisaMbank',
 	},
 	{
 		id: 'lang',
-		label: 'Языки',
+		label: 'languages',
 		hint: 'RU · KY · EN',
-		description: 'Язык интерфейса, документов и сообщений пациентам.',
+		description: 'languageOfTheInterface',
 	},
 	{
 		id: 'notif',
-		label: 'Уведомления',
-		hint: 'SMS и email',
-		description: 'Напоминания пациентам и оповещения команды.',
+		label: 'notifications',
+		hint: 'smsAndEmail',
+		description: 'patientRemindersAndTeam',
 	},
 ]
 

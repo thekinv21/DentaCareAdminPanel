@@ -1,13 +1,14 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { FormFooter } from '@/shared/ui/form-footer'
 
-import { useSettings } from '../model/use-settings'
+import { useSettings } from '../model/useSettings'
 import { ClinicSection } from './ClinicSection'
 import { HoursSection } from './HoursSection'
 import { LanguageSection } from './LanguageSection'
@@ -17,16 +18,13 @@ import { ServicesSection } from './ServicesSection'
 import { SettingsNav } from './SettingsNav'
 
 export function SettingsPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Settings')
 	const settings = useSettings()
 	const { section } = settings
 
 	return (
 		<>
-			<PageHeader
-				crumb={t('Клиника · Бишкек, Ала-Тоо')}
-				title={t('Настройки')}
-			/>
+			<PageHeader crumb={t('clinicBishkekAlaToo')} title={t('settings')} />
 			<PageContent>
 				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-[720px]:flex-col'>
 					<SettingsNav
@@ -42,20 +40,20 @@ export function SettingsPage() {
 								<h2 className='font-display text-[17px] leading-6 font-bold tracking-[-0.01em]'>
 									{settings.current.label}
 								</h2>
-								<p className='text-[12.5px] leading-[18px] text-ink-muted'>
+								<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 									{settings.current.description}
 								</p>
 							</div>
 							{section === 'services' && (
 								<div className='flex gap-2'>
-									<Button size='sm'>{t('Импорт прайса')}</Button>
+									<Button size='sm'>{t('importPriceList')}</Button>
 									<Button size='sm' variant='primary'>
-										{t('+ Услуга')}
+										{t('addService')}
 									</Button>
 								</div>
 							)}
 						</div>
-						<div className='-mx-[18px] min-h-0 flex-auto overflow-auto px-[18px] scrollbar-thin max-[720px]:overflow-visible'>
+						<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-[720px]:overflow-visible'>
 							{section === 'clinic' && <ClinicSection />}
 							{section === 'hours' && <HoursSection {...settings} />}
 							{section === 'services' && <ServicesSection />}
@@ -65,7 +63,7 @@ export function SettingsPage() {
 						</div>
 						<FormFooter
 							saved={settings.saved}
-							savedLabel={t('✓ Изменения сохранены')}
+							savedLabel={t('changesSaved')}
 							dirty={settings.dirty}
 							onSave={settings.save}
 							onReset={settings.reset}

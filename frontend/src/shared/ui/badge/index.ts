@@ -1,3 +1,3 @@
 export { Badge } from './Badge'
-export { TONE_CLASS } from './tone'
-export type { Tone } from './tone'
+export { TONE_CLASS } from './Tone'
+export type { Tone } from './Tone'

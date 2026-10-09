@@ -1,26 +1,27 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { AuthField } from '@/widgets/auth-panel'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { RegisterFormModel } from '../model/use-register-form'
+import type { RegisterFormModel } from '../model/useRegisterForm'
 
 const linkClass = 'font-semibold text-brand no-underline hover:underline'
 
 export function AdminStep({ form }: { form: RegisterFormModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Register')
 	const agreeError = form.errorOf('agree')
 
 	return (
 		<div className='flex animate-fade flex-col gap-4'>
 			<AuthField
 				id='fullName'
-				label={t('Имя и фамилия')}
+				label={t('fullName')}
 				error={form.errorOf('fullName')}
 			>
 				<input
@@ -32,9 +33,9 @@ export function AdminStep({ form }: { form: RegisterFormModel }) {
 			</AuthField>
 			<AuthField
 				id='mobile'
-				label={t('Мобильный телефон')}
+				label={t('mobilePhone')}
 				error={form.errorOf('mobile')}
-				hint={t('Отправим SMS-код для подтверждения')}
+				hint={t('wellTextYouA')}
 			>
 				<PhoneInput
 					id='mobile'
@@ -44,13 +45,13 @@ export function AdminStep({ form }: { form: RegisterFormModel }) {
 			</AuthField>
 			<AuthField
 				id='password'
-				label={t('Пароль')}
+				label={t('password')}
 				error={form.errorOf('password')}
 			>
 				<PasswordInput
 					id='password'
 					autoComplete='new-password'
-					placeholder={t('Минимум 10 символов')}
+					placeholder={t('atLeast10Characters')}
 					{...form.fieldProps('password')}
 				/>
 			</AuthField>
@@ -58,17 +59,17 @@ export function AdminStep({ form }: { form: RegisterFormModel }) {
 				<label className='inline-flex cursor-pointer items-start gap-2.5 text-sm leading-5'>
 					<input
 						type='checkbox'
-						className='mt-px size-[18px] shrink-0 accent-brand'
+						className='mt-px size-4.5 shrink-0 accent-brand'
 						{...form.fieldProps('agree')}
 					/>
 					<span>
-						{t('Принимаю')}{' '}
+						{t('iAcceptThe')}{' '}
 						<a href='#' className={linkClass}>
-							{t('Условия')}
+							{t('terms')}
 						</a>{' '}
 						·{' '}
 						<a href='#' className={linkClass}>
-							{t('Конфиденциальность')}
+							{t('privacy')}
 						</a>
 					</span>
 				</label>
@@ -80,10 +81,10 @@ export function AdminStep({ form }: { form: RegisterFormModel }) {
 			</div>
 			<div className='flex gap-2.5'>
 				<Button size='lg' onClick={form.back}>
-					{t('Назад')}
+					{t('back')}
 				</Button>
 				<Button type='submit' variant='primary' size='lg' className='flex-1'>
-					{t('Создать аккаунт')}
+					{t('createAccount')}
 				</Button>
 			</div>
 		</div>

@@ -1,10 +1,10 @@
 'use client'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { useFormat } from '@/shared/lib/i18n'
 
-import { CHART, chartY, GRID_VALUES } from '../lib/chart-geometry'
-import { REVENUE_TARGET } from '../model/report'
-import type { ReportModel } from '../model/use-report'
+import { CHART, chartY, GRID_VALUES } from '../lib/ChartGeometry'
+import { REVENUE_TARGET } from '../model/Report'
+import type { ReportModel } from '../model/useReport'
 
 interface RevenueChartProps {
 	bars: ReportModel['bars']
@@ -12,7 +12,7 @@ interface RevenueChartProps {
 }
 
 export function RevenueChart({ bars, label }: RevenueChartProps) {
-	const { format } = useI18n()
+	const format = useFormat()
 	return (
 		<svg
 			viewBox='0 0 640 250'
@@ -66,7 +66,7 @@ export function RevenueChart({ bars, label }: RevenueChartProps) {
 						height={bar.height}
 						rx='5'
 						fill={bar.fill}
-						className='origin-bottom animate-growy transition-opacity duration-150 [transform-box:fill-box] hover:opacity-80'
+						className='origin-bottom animate-growy transition-opacity duration-150 transform-fill hover:opacity-80'
 						style={{ animationDelay: `${bar.delay}ms` }}
 					>
 						<title>{bar.title}</title>

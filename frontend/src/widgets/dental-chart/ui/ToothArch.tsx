@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/cn'
 
-import type { DentalChartModel } from '../model/use-dental-chart'
+import type { DentalChartModel } from '../model/useDentalChart'
 import { ToothSvg } from './ToothSvg'
 
 interface ToothArchProps {
@@ -23,7 +23,7 @@ export function ToothArch({ chart, teeth, upper }: ToothArchProps) {
 				const number = (
 					<span
 						className={cn(
-							'font-mono text-[11.5px] leading-[14px] font-semibold',
+							'font-mono text-[11.5px] leading-3.5 font-semibold',
 							selected ? 'text-brand-strong' : 'text-ink-muted',
 						)}
 					>
@@ -38,7 +38,7 @@ export function ToothArch({ chart, teeth, upper }: ToothArchProps) {
 						aria-pressed={selected}
 						aria-label={chart.toothLabel(n)}
 						className={cn(
-							'flex min-w-0 flex-col items-center gap-[3px] rounded-xl border-0 px-px py-1 transition-[background-color,box-shadow] duration-150',
+							'flex min-w-0 flex-col items-center gap-0.75 rounded-xl border-0 px-px py-1 transition-[background-color,box-shadow] duration-150',
 							selected
 								? 'bg-brand-soft shadow-[0_0_0_2px_var(--brand)]'
 								: 'bg-transparent hover:bg-raised',

@@ -3,10 +3,10 @@
 import Link from 'next/link'
 
 import { Ellipsis } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { AppointmentStatusBadge } from '@/entities/appointment'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
@@ -15,41 +15,41 @@ import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { useTodaySchedule } from '../model/use-today-schedule'
+import { useTodaySchedule } from '../model/useTodaySchedule'
 
 export function TodaySchedule() {
-	const { t } = useI18n()
+	const t = useTranslations('Dashboard')
 	const { filter, setFilter, filters, rows } = useTodaySchedule()
 
 	return (
 		<Card
 			as='section'
-			className='min-h-[380px] flex-[2_1_560px] animate-rise'
+			className='min-h-95 flex-[2_1_560px] animate-rise'
 			style={{ animationDelay: '200ms' }}
 		>
 			<CardHeader
-				title={t('Расписание на сегодня')}
-				description={t('4 кресла · 3 врача')}
+				title={t('todaysSchedule')}
+				description={t('n4Chairs3Dentists')}
 				actions={
 					<Segmented
-						aria-label={t('Фильтр')}
+						aria-label={t('filter')}
 						options={filters}
 						value={filter}
 						onChange={setFilter}
 					/>
 				}
 			/>
-			<TableScroll className='max-h-[420px] min-h-0 flex-auto'>
-				<Table className='min-w-[640px]'>
+			<TableScroll className='max-h-105 min-h-0 flex-auto'>
+				<Table className='min-w-160'>
 					<thead>
 						<tr>
-							<Th className='w-16'>{t('Время')}</Th>
-							<Th>{t('Пациент')}</Th>
-							<Th>{t('Услуга')}</Th>
-							<Th>{t('Кресло')}</Th>
-							<Th>{t('Статус')}</Th>
+							<Th className='w-16'>{t('time')}</Th>
+							<Th>{t('patient')}</Th>
+							<Th>{t('service')}</Th>
+							<Th>{t('chair')}</Th>
+							<Th>{t('status')}</Th>
 							<Th className='w-24'>
-								<span className='sr-only'>{t('Действия')}</span>
+								<span className='sr-only'>{t('actions')}</span>
 							</Th>
 						</tr>
 					</thead>
@@ -77,7 +77,7 @@ export function TodaySchedule() {
 								</Td>
 								<Td>
 									{row.procedure}
-									<div className='text-[12.5px] leading-[18px] whitespace-nowrap text-ink-muted'>
+									<div className='text-[12.5px] leading-4.5 whitespace-nowrap text-ink-muted'>
 										{row.details}
 									</div>
 								</Td>
@@ -88,13 +88,13 @@ export function TodaySchedule() {
 								<Td align='right' nowrap>
 									{row.canInvite ? (
 										<Button size='sm' className='border-accent text-accent'>
-											{t('Пригласить')}
+											{t('invite')}
 										</Button>
 									) : (
 										<IconButton
 											quiet
 											size='sm'
-											aria-label={`${t('Действия:')} ${row.patientName}`}
+											aria-label={`${t('actionsFor')} ${row.patientName}`}
 										>
 											<Ellipsis size={16} aria-hidden='true' />
 										</IconButton>

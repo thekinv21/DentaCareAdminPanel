@@ -1,25 +1,25 @@
 'use client'
 
 import { Monitor } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Field, formGrid3, inputClass } from '@/shared/ui/field'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
-import type { ProfileSettingsModel } from '../model/use-profile-settings'
+import type { ProfileSettingsModel } from '../model/useProfileSettings'
 
 export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Profile')
 	return (
-		<div className='flex animate-fade flex-col gap-[22px] pt-0.5 pb-2'>
+		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div>
 				<p className='mb-2.5 font-display text-[15px] leading-6 font-bold'>
-					{t('Смена пароля')}
+					{t('changePassword')}
 				</p>
 				<div className={formGrid3}>
-					<Field label={t('Текущий пароль')}>
+					<Field label={t('currentPassword')}>
 						<input
 							className={inputClass}
 							type='password'
@@ -27,25 +27,25 @@ export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
 							autoComplete='current-password'
 						/>
 					</Field>
-					<Field label={t('Новый пароль')}>
+					<Field label={t('newPassword')}>
 						<input
 							className={inputClass}
 							type='password'
-							placeholder={t('Минимум 10 символов')}
+							placeholder={t('atLeast10Characters')}
 							autoComplete='new-password'
 						/>
 					</Field>
-					<Field label={t('Повторите пароль')}>
+					<Field label={t('repeatPassword')}>
 						<input
 							className={inputClass}
 							type='password'
-							placeholder={t('Ещё раз')}
+							placeholder={t('repeatPlaceholder')}
 							autoComplete='new-password'
 						/>
 					</Field>
 				</div>
-				<p className='mt-2 text-[12.5px] leading-[18px] text-ink-muted'>
-					{t('Пароль меняли 64 дня назад. Рекомендуем менять каждые 90 дней.')}
+				<p className='mt-2 text-[12.5px] leading-4.5 text-ink-muted'>
+					{t('passwordWasChanged64')}
 				</p>
 			</div>
 
@@ -64,14 +64,14 @@ export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
 			<div>
 				<div className='mb-1.5 flex flex-wrap items-center justify-between gap-2.5'>
 					<p className='font-display text-[15px] leading-6 font-bold'>
-						{t('Активные сеансы')}
+						{t('activeSessions')}
 					</p>
 					<Button
 						size='sm'
 						className='text-danger'
 						onClick={model.endOtherSessions}
 					>
-						{t('Завершить все, кроме текущего')}
+						{t('endAllExceptCurrent')}
 					</Button>
 				</div>
 				<ul>
@@ -83,14 +83,14 @@ export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
 							<span className='inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-sunken'>
 								<Monitor size={18} aria-hidden='true' />
 							</span>
-							<div className='min-w-0 flex-grow'>
+							<div className='min-w-0 grow'>
 								<div className='flex items-center gap-2'>
 									<span className='font-semibold'>{session.device}</span>
 									{session.current && (
-										<Badge tone='ok'>{t('Этот сеанс')}</Badge>
+										<Badge tone='ok'>{t('thisSession')}</Badge>
 									)}
 								</div>
-								<p className='text-[12.5px] leading-[18px] text-ink-muted'>
+								<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 									{session.where}
 								</p>
 							</div>
@@ -99,7 +99,7 @@ export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
 							</span>
 							{!session.current && (
 								<Button size='sm' onClick={session.end}>
-									{t('Завершить')}
+									{t('endSession')}
 								</Button>
 							)}
 						</li>

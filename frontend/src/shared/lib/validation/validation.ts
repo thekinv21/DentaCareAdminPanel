@@ -6,27 +6,24 @@ import { z } from 'zod'
 export const kgPhoneSchema = z
 	.string()
 	.trim()
-	.refine(
-		value => /^\d{9}$/.test(value.replace(/\s/g, '')),
-		'Введите 9 цифр номера',
-	)
+	.refine(value => /^\d{9}$/.test(value.replace(/\s/g, '')), 'enterThe9Digit')
 
 export const PASSWORD_RULES = [
 	{
-		label: 'Не короче 10 символов',
+		label: 'atLeast10Characters',
 		test: (value: string) => value.length >= 10,
 	},
 	{
-		label: 'Заглавная буква',
+		label: 'uppercaseLetter',
 		test: (value: string) => /[A-ZА-ЯЁ]/.test(value),
 	},
-	{ label: 'Цифра', test: (value: string) => /\d/.test(value) },
-	{ label: 'Спецсимвол', test: (value: string) => /[^\wА-Яа-яЁё]/.test(value) },
+	{ label: 'digit', test: (value: string) => /\d/.test(value) },
+	{ label: 'symbol', test: (value: string) => /[^\wА-Яа-яЁё]/.test(value) },
 ]
 
 export const strongPasswordSchema = z
 	.string()
 	.refine(
 		value => PASSWORD_RULES.every(rule => rule.test(value)),
-		'Пароль не отвечает требованиям',
+		'passwordDoesntMeetThe',
 	)

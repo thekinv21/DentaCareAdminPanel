@@ -18,6 +18,7 @@ FSD reference (source of truth for every architecture question): https://fsd.how
 - Tailwind CSS v4
 - TanStack Query (react-query)
 - Lucide React for icons
+- next-intl for i18n (ru, ky, en; locale from a cookie, no locale in the URL)
 - React Hook Form + Zod + @hookform/resolvers for forms and validation
 - Axios for the HTTP client instance
 - Bun as package manager (`bun install`, `bun run <script>`)
@@ -141,9 +142,33 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
 - Use `next/image` for all images, never raw `<img>`.
 - Use `next/link` for internal navigation; route paths come from `shared/routes`.
 - CSS: Tailwind utility classes only. No CSS modules, no styled-components. Global styles: `app/globals.css`.
-- Naming: PascalCase for component files (`UserCard.tsx`), kebab-case for other files and all folders/slices
-  (`mark-as-read`, `use-notifications.ts`).
+  Use the canonical class Tailwind IntelliSense suggests (`h-180` not `h-[720px]`, `grow` not `flex-grow`,
+  `size-4.5` not `size-[18px]`); keep arbitrary values only when no scale value exists (`text-[13px]`).
+- Naming:
+  - Components: PascalCase (`UserCard.tsx`).
+  - Hooks: camelCase starting with `use` (`useSidebarNav.ts`), one hook per file, in the `model` segment.
+  - Every other file: PascalCase (`Calendar.ts`, `Schema.ts`, `Mock.ts`, `Metadata.ts`).
+  - Exceptions: `index.ts` (public API), Next.js route files (`page.tsx`, `layout.tsx`), locale files (`ru.json`).
+  - Folders and slices: kebab-case (`mark-as-read`, `patient-profile`).
+- Components stay under ~150 lines. Business logic (state, filtering, sorting, derived data, translation of
+  data) lives in `model/use*.ts` hooks; components only render what the hook returns.
 - Formatting: Prettier (tabs, single quotes, no semicolons). Imports are auto-sorted by FSD layer.
+
+## Internationalization (next-intl)
+
+- Messages: `src/shared/lib/i18n/messages/{ru,ky,en}.json`, one file per language, same key tree in each.
+- Top-level keys are namespaces named after the FSD slice in PascalCase (`Dashboard`, `PatientProfile`,
+  `Appointment`), plus `Common` (shared layer) and `Validation` (Zod error messages).
+- Keys are English camelCase: `t('newAppointment')`, never Russian text. Placeholders use ICU: `t('chairNumber', { n: 2 })`.
+- Client: `const t = useTranslations('Dashboard')`. Server (metadata): `localizedTitle('Dashboard', 'dashboard')`
+  from `@/shared/lib/i18n-server`.
+- Data that belongs to an entity is translated with that entity's namespace or its hook
+  (`useAppointmentLabels`, `usePaymentMethods`, `useCurrentUser`), not with the page namespace.
+- Mock fields that mix keys and raw data (dates, phones) go through `translateOptional(t, value)`.
+- Numbers, amounts, dates and people's names: `useFormat()` (`format.som`, `format.date`, `format.name`).
+- Switching language: `useChangeLocale()` (sets the `denta-locale` cookie and refreshes).
+- Adding a language: add it to `LOCALES` and `LOCALE_META` in `shared/lib/i18n/Config.ts` and create
+  `messages/<code>.json` with every key.
 
 ## Component patterns
 

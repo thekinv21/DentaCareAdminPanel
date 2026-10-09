@@ -4,7 +4,7 @@ import { Check, ChevronDown, Globe } from 'lucide-react'
 
 import { cn } from '@/shared/lib/cn'
 
-import { useLanguageMenu } from '../model/use-language-menu'
+import { useLanguageMenu } from '../model/useLanguageMenu'
 
 interface LanguageSwitcherProps {
 	/**
@@ -49,7 +49,7 @@ export function LanguageSwitcher({
 				<ul
 					role='listbox'
 					aria-label={label}
-					className='absolute top-[46px] right-0 z-30 min-w-[210px] animate-pop rounded-[14px] border border-line bg-surface p-1.5 shadow-float'
+					className='absolute top-11.5 right-0 z-30 min-w-52.5 animate-pop rounded-[14px] border border-line bg-surface p-1.5 shadow-float'
 				>
 					{options.map(option => (
 						<li key={option.id}>
@@ -59,11 +59,11 @@ export function LanguageSwitcher({
 								aria-selected={option.selected}
 								onClick={() => pick(option.id)}
 								className={cn(
-									'flex min-h-[38px] w-full items-center gap-2.5 rounded-[10px] border-0 bg-transparent px-2.5 text-left hover:bg-raised',
+									'flex min-h-9.5 w-full items-center gap-2.5 rounded-[10px] border-0 bg-transparent px-2.5 text-left hover:bg-raised',
 									option.selected && 'font-semibold text-brand-strong',
 								)}
 							>
-								<span className='flex-grow'>{option.name}</span>
+								<span className='grow'>{option.name}</span>
 								<span className='font-mono text-[11px] text-ink-muted'>
 									{option.code}
 								</span>

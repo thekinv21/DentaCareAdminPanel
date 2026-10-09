@@ -29,19 +29,19 @@ export type ToolId =
 export const SURFACES: Surface[] = ['m', 'd', 'b', 'o', 'c']
 
 export const SURFACE_NAME: Record<Surface, string> = {
-	m: 'Медиальная',
-	d: 'Дистальная',
-	b: 'Вестибулярная',
-	o: 'Оральная',
-	c: 'Жевательная',
+	m: 'mesial',
+	d: 'distal',
+	b: 'buccal',
+	o: 'lingual',
+	c: 'occlusal',
 }
 
 export const SURFACE_SHORT: Record<Surface, string> = {
-	m: 'М',
-	d: 'Д',
-	b: 'В',
-	o: 'О',
-	c: 'Ж',
+	m: 'm',
+	d: 'd',
+	b: 'b',
+	o: 'l',
+	c: 'o',
 }
 
 export const TOOLS: {
@@ -52,57 +52,57 @@ export const TOOLS: {
 }[] = [
 	{
 		id: 'select',
-		label: 'Выбор',
+		label: 'selection',
 		swatch: 'bg-surface border-[1.5px] border-ink-muted',
-		hint: 'Выбрать зуб',
+		hint: 'selectTooth',
 	},
 	{
 		id: 'car',
-		label: 'Кариес',
+		label: 'caries',
 		swatch: 'bg-caries',
-		hint: 'Нажмите на поверхность',
+		hint: 'clickASurface',
 	},
 	{
 		id: 'fill',
-		label: 'Пломба',
+		label: 'fillingTag',
 		swatch: 'bg-info',
-		hint: 'Нажмите на поверхность',
+		hint: 'clickASurface',
 	},
 	{
 		id: 'crown',
-		label: 'Коронка',
+		label: 'crownTag',
 		swatch: 'bg-info-soft border-[3px] border-info',
-		hint: 'Нажмите на зуб',
+		hint: 'clickATooth',
 	},
 	{
 		id: 'endo',
-		label: 'Каналы',
+		label: 'rootCanals',
 		swatch: 'bg-danger',
-		hint: 'Пролеченные каналы',
+		hint: 'treatedRootCanals',
 	},
 	{
 		id: 'implant',
-		label: 'Имплант',
+		label: 'implantTag',
 		swatch: 'bg-sunken border-[1.5px] border-ink-muted',
-		hint: 'Нажмите на зуб',
+		hint: 'clickATooth',
 	},
 	{
 		id: 'extract',
-		label: 'Удалить',
+		label: 'delete',
 		swatch: 'bg-accent-soft border-[1.5px] border-accent',
-		hint: 'Запланировать удаление',
+		hint: 'scheduleExtraction',
 	},
 	{
 		id: 'missing',
-		label: 'Отсутствует',
+		label: 'missingTag',
 		swatch: 'bg-transparent border-[1.5px] border-dashed border-line-strong',
-		hint: 'Нажмите на зуб',
+		hint: 'clickATooth',
 	},
 	{
 		id: 'clear',
-		label: 'Ластик',
+		label: 'eraser',
 		swatch: 'bg-raised border border-line',
-		hint: 'Сбросить зуб',
+		hint: 'resetTooth',
 	},
 ]
 
@@ -134,11 +134,11 @@ export const INITIAL_CHART: ChartMap = {
 }
 
 export const TOOTH_NOTES: Record<number, string> = {
-	46: 'Глубокий дистальный кариес с вовлечением пульпы. Сегодня — лечение каналов, 29.10 — коронка.',
-	26: 'Кариес на дистальной и жевательной поверхностях. Запланирована пломба.',
-	38: 'Частично прорезавшийся, рецидивирующий перикоронит. Хирургическое удаление.',
-	37: 'Имплант с коронкой, установлен 15.01.2025. Без жалоб.',
-	16: 'Металлокерамическая коронка, каналы пролечены (2019).',
-	21: 'Керамическая коронка после травмы.',
-	14: 'Стёртая пломба, план — замена.',
+	46: 'deepDistalCariesInvolving',
+	26: 'cariesOnTheDistal',
+	38: 'partiallyEruptedRecurrentPericoronitis',
+	37: 'implantWithCrownPlaced',
+	16: 'metalCeramicCrownRoot',
+	21: 'ceramicCrownAfterTrauma',
+	14: 'wornFillingPlanReplace',
 }

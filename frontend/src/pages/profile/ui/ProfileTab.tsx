@@ -1,7 +1,9 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { translateOptional } from '@/shared/lib/i18n'
 import type { ThemePreference } from '@/shared/lib/theme'
 import {
 	Field,
@@ -12,55 +14,53 @@ import {
 } from '@/shared/ui/field'
 import { RadioCard } from '@/shared/ui/radio-card'
 
-import type { ProfileSettingsModel } from '../model/use-profile-settings'
+import type { ProfileSettingsModel } from '../model/useProfileSettings'
 
 const FIELDS = [
-	{ label: 'Фамилия', value: 'Касымова', autoComplete: 'family-name' },
-	{ label: 'Имя', value: 'Айгерим', autoComplete: 'given-name' },
-	{ label: 'Должность', value: 'Главный врач' },
-	{ label: 'Специализация', value: 'Стоматолог-терапевт, эндодонтист' },
-	{ label: 'Телефон', value: '+996 555 701 441', mono: true, type: 'tel' },
+	{ label: 'lastName', value: 'kasymova', autoComplete: 'family-name' },
+	{ label: 'firstName', value: 'aigerim', autoComplete: 'given-name' },
+	{ label: 'position', value: 'chiefDentist' },
+	{ label: 'specialty', value: 'generalDentistEndodontist' },
+	{ label: 'phone', value: '+996 555 701 441', mono: true, type: 'tel' },
 	{ label: 'Email', value: 'a.kasymova@denta.kg', type: 'email' },
 	{
-		label: 'Номер диплома / сертификата',
-		value: 'КГМА 2014 · СТ-0912',
+		label: 'diplomaCertificateNumber',
+		value: 'ksma20140912',
 		mono: true,
 	},
 ]
 
 export function ProfileTab({ model }: { model: ProfileSettingsModel }) {
-	const { t } = useI18n()
+	const t = useTranslations('Profile')
 	return (
-		<div className='flex animate-fade flex-col gap-[22px] pt-0.5 pb-2'>
+		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div className={formGrid2}>
 				{FIELDS.map(field => (
-					<Field key={field.label} label={t(field.label)}>
+					<Field key={field.label} label={translateOptional(t, field.label)}>
 						<input
 							className={cn(inputClass, field.mono && 'font-mono')}
 							type={field.type}
 							autoComplete={field.autoComplete}
-							defaultValue={t(field.value)}
+							defaultValue={translateOptional(t, field.value)}
 						/>
 					</Field>
 				))}
-				<Field label={t('Кресло по умолчанию')}>
+				<Field label={t('defaultChair')}>
 					<select className={inputClass}>
-						<option>{t('Кресло 1 · Терапия')}</option>
-						<option>{t('Кресло 2 · Ортопедия')}</option>
+						<option>{t('chair1GeneralDentistry')}</option>
+						<option>{t('chair2Prosthodontics')}</option>
 					</select>
 				</Field>
 			</div>
 
 			<div>
-				<p className='mb-1 font-semibold'>{t('Язык интерфейса')}</p>
-				<p className='mb-2.5 text-[12.5px] leading-[18px] text-ink-muted'>
-					{t(
-						'Меняет язык меню и интерфейса для вас. Документы пациентам — по настройкам клиники.',
-					)}
+				<p className='mb-1 font-semibold'>{t('interfaceLanguage')}</p>
+				<p className='mb-2.5 text-[12.5px] leading-4.5 text-ink-muted'>
+					{t('changesTheMenuAnd')}
 				</p>
 				<div
 					role='radiogroup'
-					aria-label={t('Язык интерфейса')}
+					aria-label={t('interfaceLanguage')}
 					className={formGrid3}
 				>
 					{model.languages.map(language => (
@@ -77,7 +77,7 @@ export function ProfileTab({ model }: { model: ProfileSettingsModel }) {
 			</div>
 
 			<div className={formGrid2}>
-				<Field label={t('Тема')}>
+				<Field label={t('theme')}>
 					<select
 						className={inputClass}
 						value={model.theme}
@@ -92,19 +92,17 @@ export function ProfileTab({ model }: { model: ProfileSettingsModel }) {
 						))}
 					</select>
 				</Field>
-				<Field label={t('Вид расписания по умолчанию')}>
+				<Field label={t('defaultScheduleView')}>
 					<select className={inputClass}>
-						<option>{t('Неделя')}</option>
-						<option>{t('День')}</option>
-						<option>{t('Месяц')}</option>
+						<option>{t('week')}</option>
+						<option>{t('day')}</option>
+						<option>{t('month')}</option>
 					</select>
 				</Field>
-				<Field label={t('Подпись в документах')} className='col-span-full'>
+				<Field label={t('signatureOnDocuments')} className='col-span-full'>
 					<textarea
 						className={textareaClass}
-						defaultValue={t(
-							'Касымова А. Б., главный врач, стоматолог-терапевт. Denta · Ала-Тоо, г. Бишкек.',
-						)}
+						defaultValue={t('kasymovaABChief')}
 					/>
 				</Field>
 			</div>

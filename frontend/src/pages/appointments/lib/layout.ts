@@ -1,6 +1,6 @@
 import { fromMinutes, toMinutes } from '@/entities/appointment'
 
-import type { CalendarEvent } from './schedule'
+import type { CalendarEvent } from './Schedule'
 
 /* Layout of overlapping events in one column */
 

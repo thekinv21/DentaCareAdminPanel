@@ -1,4 +1,4 @@
-import type { PlanStatus } from './plan-status'
+import type { PlanStatus } from './PlanStatus'
 
 export interface TreatmentPlan {
 	patientId: string
@@ -20,7 +20,7 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-20418',
 		patientName: 'Айгуль Тойчубекова',
-		title: 'Эндодонтия и коронка',
+		title: 'endodonticsAndCrown',
 		teeth: '46 · 26 · 38 · 14',
 		stepsDone: 0,
 		stepsTotal: 5,
@@ -32,31 +32,31 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-20120',
 		patientName: 'Динара Жумабаева',
-		title: 'Коронки фронтальные',
+		title: 'anteriorCrowns',
 		teeth: '11 · 21',
 		stepsDone: 2,
 		stepsTotal: 3,
 		value: 36000,
 		status: 'progress',
 		doctor: 'Петров С.',
-		updated: 'сегодня',
+		updated: 'today',
 	},
 	{
 		patientId: 'DN-20402',
 		patientName: 'Бакыт Усенов',
-		title: 'Имплант и мост',
+		title: 'implantAndBridge',
 		teeth: '36 · 37',
 		stepsDone: 0,
 		stepsTotal: 4,
 		value: 98000,
 		status: 'waiting',
 		doctor: 'Токтогулов Э.',
-		updated: 'сегодня',
+		updated: 'today',
 	},
 	{
 		patientId: 'DN-19982',
 		patientName: 'Азамат Садыков',
-		title: 'Имплантация',
+		title: 'implantPlacement',
 		teeth: '46',
 		stepsDone: 1,
 		stepsTotal: 3,
@@ -68,19 +68,19 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-20356',
 		patientName: 'Елена Ковалёва',
-		title: 'Пломбы',
+		title: 'fillings',
 		teeth: '36 · 24',
 		stepsDone: 2,
 		stepsTotal: 2,
 		value: 7000,
 		status: 'done',
 		doctor: 'Петров С.',
-		updated: 'сегодня',
+		updated: 'today',
 	},
 	{
 		patientId: 'DN-20455',
 		patientName: 'Гульнара Мамытова',
-		title: 'Керамические виниры',
+		title: 'ceramicVeneers',
 		teeth: '13 – 23',
 		stepsDone: 0,
 		stepsTotal: 6,
@@ -92,7 +92,7 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-20391',
 		patientName: 'Тимур Абдыкадыров',
-		title: 'Удаление зубов мудрости',
+		title: 'wisdomTeethExtraction',
 		teeth: '38 · 48',
 		stepsDone: 0,
 		stepsTotal: 2,
@@ -104,8 +104,8 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-19870',
 		patientName: 'Руслан Ким',
-		title: 'Лечение пародонта',
-		teeth: 'Вся полость',
+		title: 'periodontalTreatment',
+		teeth: 'entireMouth',
 		stepsDone: 3,
 		stepsTotal: 4,
 		value: 21600,
@@ -116,8 +116,8 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 	{
 		patientId: 'DN-20210',
 		patientName: 'Нурлан Алиев',
-		title: 'Элайнеры',
-		teeth: 'Обе челюсти',
+		title: 'aligners',
+		teeth: 'bothJaws',
 		stepsDone: 0,
 		stepsTotal: 12,
 		value: 165000,

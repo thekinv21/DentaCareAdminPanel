@@ -1,6 +1,7 @@
 'use client'
 
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
+
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 
@@ -25,7 +26,7 @@ export function FormFooter({
 	onSave,
 	onReset,
 }: FormFooterProps) {
-	const { t } = useI18n()
+	const t = useTranslations('Common')
 	return (
 		<div className='flex shrink-0 items-center justify-end gap-2.5 border-t border-line pt-3.5'>
 			{saved && (
@@ -35,12 +36,12 @@ export function FormFooter({
 			)}
 			{dirty && !saved && (
 				<span className='mr-auto text-[12.5px] text-ink-muted'>
-					{t('Есть несохранённые изменения')}
+					{t('youHaveUnsavedChanges')}
 				</span>
 			)}
-			<Button onClick={onReset}>{t('Отменить')}</Button>
+			<Button onClick={onReset}>{t('cancel')}</Button>
 			<Button variant='primary' onClick={onSave}>
-				{t('Сохранить')}
+				{t('save')}
 			</Button>
 		</div>
 	)

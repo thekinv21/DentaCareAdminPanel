@@ -1,25 +1,25 @@
 'use client'
 
 import { Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 
 import { PatientsTable } from './PatientsTable'
 
 export function PatientsPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Patients')
 	return (
 		<>
 			<PageHeader
-				crumb={t('1 284 карты · 46 новых в октябре')}
-				title={t('Пациенты')}
+				crumb={t('n1284Records46')}
+				title={t('patients')}
 				actions={
 					<Button variant='primary'>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
-						{t('Новый пациент')}
+						{t('newPatient')}
 					</Button>
 				}
 			/>

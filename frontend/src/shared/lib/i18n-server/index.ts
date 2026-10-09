@@ -1,1 +1,1 @@
-export { getLocale, getTranslator, localizedTitle } from './locale'
+export { localizedTitle } from './Metadata'

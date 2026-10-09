@@ -1,59 +1,62 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 
-import { CHAIRS } from '../model/clinic'
+import { CHAIRS } from '../model/Clinic'
 
 const TEXT_FIELDS = [
-	{ label: 'Название клиники', value: 'Denta · Ала-Тоо' },
-	{ label: 'Юридическое лицо', value: 'ОсОО «Дента Клиник»' },
-	{ label: 'ИНН', value: '02410202610153', mono: true },
+	{ label: 'clinicName', value: 'dentaAlaToo' },
+	{ label: 'legalEntity', value: 'dentaClinicLlc' },
+	{ label: 'tin', value: '02410202610153', mono: true },
 	{
-		label: 'Лицензия Минздрава КР',
-		value: '№ 0417-МЗ · до 12.03.2029',
+		label: 'kyrgyzMinistryOfHealth',
+		value: 'no0417MzValid',
 		mono: true,
 	},
-	{ label: 'Адрес', value: 'г. Бишкек, ул. Токтогула 112, 1 этаж', wide: true },
-	{ label: 'Телефон ресепшена', value: '+996 312 90 41 41', mono: true },
+	{ label: 'address', value: 'n112ToktogulSt1st', wide: true },
+	{ label: 'receptionPhone', value: '+996 312 90 41 41', mono: true },
 	{ label: 'Email', value: 'info@denta.kg' },
 ]
 
 export function ClinicSection() {
-	const { t, format } = useI18n()
+	const t = useTranslations('Settings')
+	const format = useFormat()
 	return (
-		<div className='flex animate-fade flex-col gap-[22px] pt-0.5 pb-2'>
+		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div className={formGrid2}>
 				{TEXT_FIELDS.map(field => (
 					<Field
 						key={field.label}
-						label={t(field.label)}
+						label={translateOptional(t, field.label)}
 						className={field.wide ? 'col-span-full' : undefined}
 					>
 						<input
 							className={cn(inputClass, field.mono && 'font-mono')}
-							defaultValue={t(field.value)}
+							defaultValue={translateOptional(t, field.value)}
 						/>
 					</Field>
 				))}
-				<Field label={t('Часовой пояс')}>
+				<Field label={t('timeZone')}>
 					<select className={inputClass}>
-						<option>{t('Азия/Бишкек · UTC+6')}</option>
+						<option>{t('asiaBishkekUtc6')}</option>
 					</select>
 				</Field>
-				<Field label={t('Валюта')}>
+				<Field label={t('currency')}>
 					<select className={inputClass}>
-						<option>{t('Кыргызский сом · KGS')}</option>
+						<option>{t('kyrgyzSomKgs')}</option>
 					</select>
 				</Field>
 			</div>
 			<div>
 				<p className='font-display text-[15px] leading-6 font-bold'>
-					{t('Кабинеты и кресла')}
+					{t('roomsAndChairs')}
 				</p>
-				<p className='mb-2.5 text-[12.5px] leading-[18px] text-ink-muted'>
-					{t('Используются в расписании и отчётах по загрузке')}
+				<p className='mb-2.5 text-[12.5px] leading-4.5 text-ink-muted'>
+					{t('usedInTheSchedule')}
 				</p>
 				<div className='grid grid-cols-4 gap-x-4 gap-y-3.5 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1'>
 					{CHAIRS.map(chair => (
@@ -65,7 +68,7 @@ export function ClinicSection() {
 								{t(chair.id)}
 							</span>
 							<span className='font-semibold'>{t(chair.name)}</span>
-							<span className='text-[12.5px] leading-[18px] text-ink-muted'>
+							<span className='text-[12.5px] leading-4.5 text-ink-muted'>
 								{format.name(chair.doctor)}
 							</span>
 						</div>

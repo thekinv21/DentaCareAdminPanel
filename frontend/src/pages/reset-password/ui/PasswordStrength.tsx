@@ -1,9 +1,10 @@
 'use client'
 
-import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
 
-import type { ResetPasswordModel } from '../model/use-reset-password'
+import { cn } from '@/shared/lib/cn'
+
+import type { ResetPasswordModel } from '../model/useResetPassword'
 
 type PasswordStrengthProps = Pick<
 	ResetPasswordModel,
@@ -15,7 +16,7 @@ export function PasswordStrength({
 	strength,
 	rules,
 }: PasswordStrengthProps) {
-	const { t } = useI18n()
+	const t = useTranslations('ResetPassword')
 	return (
 		<>
 			<div className='-mt-2 flex flex-col gap-1.5'>
@@ -27,9 +28,9 @@ export function PasswordStrength({
 				<span
 					id='password-strength'
 					role='status'
-					className='text-[12.5px] leading-[18px] text-ink-muted'
+					className='text-[12.5px] leading-4.5 text-ink-muted'
 				>
-					{t('Надёжность')}:{' '}
+					{t('strength')}:{' '}
 					<strong className={strength.textClass}>{strength.label}</strong>
 				</span>
 			</div>

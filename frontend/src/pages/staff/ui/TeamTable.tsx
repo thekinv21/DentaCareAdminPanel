@@ -1,37 +1,30 @@
 'use client'
 
 import { Ellipsis, MessageSquare } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { StaffBoardModel } from '../model/use-staff-board'
+import type { StaffBoardModel } from '../model/useStaffBoard'
 
 export function TeamTable({ people }: { people: StaffBoardModel['people'] }) {
-	const { t } = useI18n()
-	const headers = [
-		'Сотрудник',
-		'Роль',
-		'Статус',
-		'Сегодня',
-		'Кресло',
-		'Телефон',
-	]
+	const t = useTranslations('Staff')
+	const headers = ['staffMember', 'role', 'status', 'today', 'chair', 'phone']
 
 	return (
 		<TableScroll className='min-h-0 flex-auto animate-fade'>
-			<Table className='min-w-[860px]'>
+			<Table className='min-w-215'>
 				<thead>
 					<tr>
 						{headers.map(header => (
 							<Th key={header}>{t(header)}</Th>
 						))}
 						<Th>
-							<span className='sr-only'>{t('Действия')}</span>
+							<span className='sr-only'>{t('actions')}</span>
 						</Th>
 					</tr>
 				</thead>
@@ -47,7 +40,7 @@ export function TeamTable({ people }: { people: StaffBoardModel['people'] }) {
 									>
 										<span
 											className={cn(
-												'absolute -right-px -bottom-px size-[11px] rounded-full border-2 border-surface',
+												'absolute -right-px -bottom-px size-2.75 rounded-full border-2 border-surface',
 												person.status.dotClass,
 											)}
 										/>
@@ -56,7 +49,7 @@ export function TeamTable({ people }: { people: StaffBoardModel['people'] }) {
 										<div className='font-semibold whitespace-nowrap'>
 											{person.name}
 										</div>
-										<div className='text-[12.5px] leading-[18px] whitespace-nowrap text-ink-muted'>
+										<div className='text-[12.5px] leading-4.5 whitespace-nowrap text-ink-muted'>
 											{person.specialty}
 										</div>
 									</div>
@@ -79,14 +72,14 @@ export function TeamTable({ people }: { people: StaffBoardModel['people'] }) {
 								<IconButton
 									quiet
 									size='sm'
-									aria-label={`${t('Написать:')} ${person.name}`}
+									aria-label={`${t('message')} ${person.name}`}
 								>
 									<MessageSquare size={16} aria-hidden='true' />
 								</IconButton>
 								<IconButton
 									quiet
 									size='sm'
-									aria-label={`${t('Действия:')} ${person.name}`}
+									aria-label={`${t('actionsFor')} ${person.name}`}
 								>
 									<Ellipsis size={16} aria-hidden='true' />
 								</IconButton>

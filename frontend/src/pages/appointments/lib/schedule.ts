@@ -6,7 +6,7 @@ import {
 	TODAY_APPOINTMENTS,
 } from '@/entities/appointment'
 
-import { toDate, weekday } from './dates'
+import { toDate, weekday } from './Dates'
 
 export interface CalendarEvent {
 	key: string
@@ -39,14 +39,14 @@ const NAMES = [
 	'Мамытова Г.',
 ]
 const PROCEDURES: [string, number][] = [
-	['Осмотр', 30],
-	['Профгигиена', 45],
-	['Пломба', 45],
-	['Лечение каналов', 90],
-	['Примерка коронки', 60],
-	['Удаление', 45],
-	['Отбеливание', 60],
-	['Консультация', 30],
+	['exam', 30],
+	['professionalCleaning', 45],
+	['filling', 45],
+	['rootCanalTreatment', 90],
+	['crownTryIn', 60],
+	['extraction', 45],
+	['whitening', 60],
+	['consultation', 30],
 ]
 const SLOTS = [
 	'09:00',

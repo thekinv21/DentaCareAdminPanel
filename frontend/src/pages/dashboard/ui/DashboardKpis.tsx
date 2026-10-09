@@ -5,8 +5,8 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 
 import { CalendarDays, ChartColumn, Clock, CreditCard } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { type Tone, TONE_CLASS } from '@/shared/ui/badge'
 import { ProgressBar } from '@/shared/ui/progress'
@@ -15,7 +15,7 @@ import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 function KpiIcon({ tone, children }: { tone: Tone; children: ReactNode }) {
 	return (
 		<span
-			className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] ${TONE_CLASS[tone]}`}
+			className={`flex size-8.5 shrink-0 items-center justify-center rounded-[10px] ${TONE_CLASS[tone]}`}
 		>
 			{children}
 		</span>
@@ -23,11 +23,11 @@ function KpiIcon({ tone, children }: { tone: Tone; children: ReactNode }) {
 }
 
 export function DashboardKpis() {
-	const { t } = useI18n()
+	const t = useTranslations('Dashboard')
 	return (
-		<StatGrid label={t('Сводка за день')}>
+		<StatGrid label={t('dailySummary')}>
 			<StatCard
-				label={t('Записей сегодня')}
+				label={t('appointmentsToday')}
 				value='28'
 				icon={
 					<KpiIcon tone='brand'>
@@ -36,12 +36,12 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						<Delta>+4</Delta> {t('к прошлой пятнице · 9 завершено')}
+						<Delta>+4</Delta> {t('vsLastFriday9')}
 					</>
 				}
 			/>
 			<StatCard
-				label={t('Загрузка кресел')}
+				label={t('chairUtilization')}
 				value='86%'
 				delay={50}
 				icon={
@@ -50,12 +50,12 @@ export function DashboardKpis() {
 					</KpiIcon>
 				}
 			>
-				<ProgressBar value={86} label={t('Загрузка кресел')} />
+				<ProgressBar value={86} label={t('chairUtilization')} />
 			</StatCard>
 			<StatCard
-				label={t('Выручка сегодня')}
+				label={t('revenueToday')}
 				value='142 500'
-				unit={t('сом')}
+				unit={t('som')}
 				delay={100}
 				icon={
 					<KpiIcon tone='ok'>
@@ -64,14 +64,14 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						<Delta>+12%</Delta> {t('к среднему за день')}
+						<Delta>+12%</Delta> {t('vsDailyAverage')}
 					</>
 				}
 			/>
 			<StatCard
-				label={t('Ожидает оплаты')}
+				label={t('awaitingPayment')}
 				value='18 400'
-				unit={t('сом')}
+				unit={t('som')}
 				delay={150}
 				icon={
 					<KpiIcon tone='warning'>
@@ -80,12 +80,12 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						{t('3 пациента ·')}{' '}
+						{t('n3Patients')}{' '}
 						<Link
 							href={ROUTES.billing}
 							className='font-semibold text-brand no-underline hover:underline'
 						>
-							{t('Открыть')}
+							{t('open')}
 						</Link>
 					</>
 				}

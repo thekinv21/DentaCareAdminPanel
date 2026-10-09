@@ -28,7 +28,7 @@ export function Legend({
 			{items.map(item => (
 				<li key={item.label} className='inline-flex items-center gap-1.5'>
 					<span
-						className={cn('size-[11px] rounded-[3px]', item.swatch)}
+						className={cn('size-2.75 rounded-[3px]', item.swatch)}
 						style={item.swatchStyle}
 					/>
 					{item.label}

@@ -1,10 +1,11 @@
 'use client'
 
-import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { useTranslations } from 'next-intl'
 
-import { PAYMENT_METHODS } from '../model/maps'
-import type { PaymentMethodId } from '../model/types'
+import { cn } from '@/shared/lib/cn'
+
+import { PAYMENT_METHODS } from '../model/Maps'
+import type { PaymentMethodId } from '../model/Types'
 
 interface PaymentMethodTileProps {
 	method: PaymentMethodId
@@ -20,21 +21,20 @@ export function PaymentMethodTile({
 	size = 'md',
 	className,
 }: PaymentMethodTileProps) {
-	const { t } = useI18n()
-	const { code, tileClass } = PAYMENT_METHODS[method]
+	const t = useTranslations('Invoice')
 	return (
 		<span
 			aria-hidden='true'
 			className={cn(
 				'inline-flex shrink-0 items-center justify-center font-display font-extrabold tracking-[0.02em]',
-				size === 'sm' && 'h-[22px] w-[34px] rounded-md text-[9.5px]',
+				size === 'sm' && 'h-5.5 w-8.5 rounded-md text-[9.5px]',
 				size === 'md' && 'h-7 w-10 rounded-[7px] text-[11px]',
 				size === 'lg' && 'size-10 rounded-xl text-[11px]',
-				tileClass,
+				PAYMENT_METHODS[method].tileClass,
 				className,
 			)}
 		>
-			{t(code)}
+			{t(`methodCode.${method}`)}
 		</span>
 	)
 }

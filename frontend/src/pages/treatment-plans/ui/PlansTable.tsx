@@ -3,8 +3,8 @@
 import Link from 'next/link'
 
 import { Ellipsis } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
@@ -15,43 +15,43 @@ import { SearchInput } from '@/shared/ui/search-input'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { usePlansTable } from '../model/use-plans-table'
+import { usePlansTable } from '../model/usePlansTable'
 
 export function PlansTable() {
-	const { t } = useI18n()
+	const t = useTranslations('TreatmentPlans')
 	const { filter, setFilter, filters, rows } = usePlansTable()
 
 	return (
 		<Card
 			as='section'
-			className='min-h-[420px] flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-105 flex-auto animate-rise max-[720px]:flex-none'
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
 				<Segmented
-					aria-label={t('Фильтр планов')}
+					aria-label={t('filterPlans')}
 					options={filters}
 					value={filter}
 					onChange={setFilter}
 				/>
 				<SearchInput
-					label={t('Пациент или зуб')}
+					label={t('patientOrTooth')}
 					size='sm'
 					className='basis-60'
 				/>
 			</div>
 			<TableScroll className='min-h-0 flex-auto'>
-				<Table className='min-w-[860px]'>
+				<Table className='min-w-215'>
 					<thead>
 						<tr>
-							<Th>{t('Пациент')}</Th>
-							<Th>{t('План')}</Th>
-							<Th>{t('Зубы')}</Th>
-							<Th className='w-40'>{t('Выполнено')}</Th>
-							<Th align='right'>{t('Стоимость')}</Th>
-							<Th>{t('Статус')}</Th>
+							<Th>{t('patient')}</Th>
+							<Th>{t('plan')}</Th>
+							<Th>{t('teeth')}</Th>
+							<Th className='w-40'>{t('done')}</Th>
+							<Th align='right'>{t('cost')}</Th>
+							<Th>{t('status')}</Th>
 							<Th>
-								<span className='sr-only'>{t('Действия')}</span>
+								<span className='sr-only'>{t('actions')}</span>
 							</Th>
 						</tr>
 					</thead>
@@ -76,7 +76,7 @@ export function PlansTable() {
 								</Td>
 								<Td>
 									<span className='font-semibold'>{row.title}</span>
-									<div className='text-[12.5px] leading-[18px] whitespace-nowrap text-ink-muted'>
+									<div className='text-[12.5px] leading-4.5 whitespace-nowrap text-ink-muted'>
 										{row.updated}
 									</div>
 								</Td>
@@ -89,7 +89,7 @@ export function PlansTable() {
 											value={row.progress}
 											delay={row.progressDelay}
 											fillClass={row.progressClass}
-											className='flex-grow'
+											className='grow'
 										/>
 										<span className='font-mono text-xs whitespace-nowrap text-ink-muted'>
 											{row.steps}
@@ -106,7 +106,7 @@ export function PlansTable() {
 									<IconButton
 										quiet
 										size='sm'
-										aria-label={`${t('Действия:')} ${row.patientName}`}
+										aria-label={`${t('actionsFor')} ${row.patientName}`}
 									>
 										<Ellipsis size={16} aria-hidden='true' />
 									</IconButton>

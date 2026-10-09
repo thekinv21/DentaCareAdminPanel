@@ -1,61 +1,59 @@
 'use client'
 
 import { Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
-import { useBilling } from '../model/use-billing'
+import { useBilling } from '../model/useBilling'
 import { InvoicesTable } from './InvoicesTable'
 import { PaymentPanel } from './PaymentPanel'
 
 export function BillingPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Billing')
 	const billing = useBilling()
 
 	return (
 		<>
 			<PageHeader
-				crumb={t(
-					'Октябрь 2026 · приём через Visa, MBANK, Компаньон, Optima Bank',
-				)}
-				title={t('Оплаты')}
+				crumb={t('october2026AcceptedVia')}
+				title={t('billing')}
 				actions={
 					<Button variant='primary'>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
-						{t('Новый счёт')}
+						{t('newInvoice')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<StatGrid label={t('Сводка')}>
+				<StatGrid label={t('summary')}>
 					<StatCard
-						label={t('Получено в октябре')}
+						label={t('receivedInOctober')}
 						value='2 184 300'
-						unit={t('сом')}
+						unit={t('som')}
 						footer={
 							<>
-								<Delta>+9%</Delta> {t('к сентябрю')}
+								<Delta>+9%</Delta> {t('vsSeptember')}
 							</>
 						}
 					/>
 					<StatCard
-						label={t('К оплате')}
+						label={t('amountDue')}
 						value='218 400'
-						unit={t('сом')}
+						unit={t('som')}
 						delay={50}
-						footer={t('23 пациента')}
+						footer={t('n23Patients')}
 					/>
 					<StatCard
-						label={t('Просрочено')}
+						label={t('overdue')}
 						value='46 900'
-						unit={t('сом')}
+						unit={t('som')}
 						valueClass='text-danger'
 						delay={100}
-						footer={t('6 счетов старше 30 дней')}
+						footer={t('n6InvoicesOlderThan')}
 					/>
 				</StatGrid>
 				<section className='flex flex-[1_0_auto] flex-wrap items-stretch gap-4'>

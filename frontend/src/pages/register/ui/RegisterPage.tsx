@@ -2,30 +2,29 @@
 
 import Link from 'next/link'
 
+import { useTranslations } from 'next-intl'
+
 import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 
-import { useRegisterForm } from '../model/use-register-form'
+import { useRegisterForm } from '../model/useRegisterForm'
 import { AdminStep } from './AdminStep'
 import { ClinicStep } from './ClinicStep'
 
 export function RegisterPage() {
-	const { t } = useI18n()
+	const t = useTranslations('Register')
 	const form = useRegisterForm()
 
 	return (
 		<AuthStack>
 			<AuthHeading
-				title={t('Подключить клинику')}
-				subtitle={t(
-					'Две минуты — и расписание, пациенты и оплаты в одном месте.',
-				)}
+				title={t('connectYourClinic')}
+				subtitle={t('twoMinutesAndSchedule')}
 			/>
 			<ol
-				aria-label={t('Шаги регистрации')}
+				aria-label={t('registrationSteps')}
 				className='m-0 flex list-none gap-2 p-0'
 			>
 				{form.steps.map(step => (
@@ -58,13 +57,13 @@ export function RegisterPage() {
 					<AdminStep form={form} />
 				)}
 			</form>
-			<p className='text-center text-sm leading-[22px] text-ink-muted'>
-				{t('Уже есть аккаунт?')}{' '}
+			<p className='text-center text-sm leading-5.5 text-ink-muted'>
+				{t('alreadyHaveAnAccount')}{' '}
 				<Link
 					href={ROUTES.login}
 					className='font-semibold text-brand no-underline hover:underline'
 				>
-					{t('Войти')}
+					{t('signIn')}
 				</Link>
 			</p>
 		</AuthStack>

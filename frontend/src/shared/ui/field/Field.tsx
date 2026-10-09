@@ -20,9 +20,7 @@ export function Field({ label, hint, className, children }: FieldProps) {
 			</span>
 			{children}
 			{hint && (
-				<span className='text-[12.5px] leading-[18px] text-ink-muted'>
-					{hint}
-				</span>
+				<span className='text-[12.5px] leading-4.5 text-ink-muted'>{hint}</span>
 			)}
 		</label>
 	)

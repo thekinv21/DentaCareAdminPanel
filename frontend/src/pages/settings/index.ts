@@ -1,2 +1,2 @@
 export { SettingsPage } from './ui/SettingsPage'
-export { generateMetadata } from './ui/metadata'
+export { generateMetadata } from './ui/Metadata'

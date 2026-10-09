@@ -1,11 +1,13 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import type { AppointmentStatus } from '@/entities/appointment'
 
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
+import { useFormat } from '@/shared/lib/i18n'
 
-import type { CalendarModel } from '../model/use-calendar'
+import type { CalendarModel } from '../model/useCalendar'
 
 const CHIP: Record<AppointmentStatus, string> = {
 	done: 'bg-raised text-ink-muted',
@@ -19,10 +21,11 @@ const CHIP: Record<AppointmentStatus, string> = {
 const GRID = 'grid grid-cols-[repeat(7,minmax(110px,1fr))] gap-1.5'
 
 export function MonthGrid({ calendar }: { calendar: CalendarModel }) {
-	const { t, format } = useI18n()
+	const t = useTranslations('Appointments')
+	const format = useFormat()
 	return (
-		<div className='min-w-[800px] animate-fade'>
-			<div className='sticky top-0 z-[6] bg-surface pb-2'>
+		<div className='min-w-200 animate-fade'>
+			<div className='sticky top-0 z-6 bg-surface pb-2'>
 				<div className={GRID}>
 					{calendar.weekdayNames.map(name => (
 						<span
@@ -40,9 +43,9 @@ export function MonthGrid({ calendar }: { calendar: CalendarModel }) {
 						key={day.iso}
 						type='button'
 						onClick={() => calendar.openDay(day.iso)}
-						aria-label={`${format.date(day.iso, { day: 'numeric', month: 'long' })}, ${t('записей:')} ${day.events.length}`}
+						aria-label={`${format.date(day.iso, { day: 'numeric', month: 'long' })}, ${t('appointmentsLabel')} ${day.events.length}`}
 						className={cn(
-							'flex min-h-28 flex-col items-stretch gap-[3px] rounded-xl border p-1.5 text-left transition-colors duration-150 hover:border-brand hover:bg-raised',
+							'flex min-h-28 flex-col items-stretch gap-0.75 rounded-xl border p-1.5 text-left transition-colors duration-150 hover:border-brand hover:bg-raised',
 							!day.inMonth && 'border-line bg-transparent opacity-45',
 							day.inMonth &&
 								day.isToday &&
@@ -74,7 +77,7 @@ export function MonthGrid({ calendar }: { calendar: CalendarModel }) {
 							<span
 								key={event.key}
 								className={cn(
-									'block truncate rounded-md px-1.5 text-[11.5px] leading-[18px]',
+									'block truncate rounded-md px-1.5 text-[11.5px] leading-4.5',
 									CHIP[event.status],
 								)}
 							>
@@ -84,12 +87,12 @@ export function MonthGrid({ calendar }: { calendar: CalendarModel }) {
 						))}
 						{day.events.length > 3 && (
 							<span className='px-1.5 text-[11.5px] font-semibold text-brand'>
-								{t('+{n} ещё', { n: day.events.length - 3 })}
+								{t('more', { n: day.events.length - 3 })}
 							</span>
 						)}
 						{day.closed && (
 							<span className='px-1.5 text-[11.5px] text-ink-subtle'>
-								{t('Выходной')}
+								{t('dayOff')}
 							</span>
 						)}
 					</button>

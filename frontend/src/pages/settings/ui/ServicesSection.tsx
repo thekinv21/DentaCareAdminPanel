@@ -1,39 +1,39 @@
 'use client'
 
 import { Pencil } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
-import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import { useServices } from '../model/use-services'
+import { useServices } from '../model/useServices'
 
 export function ServicesSection() {
-	const { t } = useI18n()
+	const t = useTranslations('Settings')
 	const { category, setCategory, filters, rows } = useServices()
 
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
 			<Segmented
-				aria-label={t('Категория')}
+				aria-label={t('category')}
 				options={filters}
 				value={category}
 				onChange={setCategory}
 				className='self-start'
 			/>
-			<Table className='min-w-[760px]'>
+			<Table className='min-w-190'>
 				<thead>
 					<tr>
-						<Th>{t('Код')}</Th>
-						<Th>{t('Услуга')}</Th>
-						<Th>{t('Категория')}</Th>
-						<Th align='right'>{t('Время')}</Th>
-						<Th align='right'>{t('Цена')}</Th>
-						<Th>{t('ФОМС')}</Th>
+						<Th>{t('code')}</Th>
+						<Th>{t('serviceColumn')}</Th>
+						<Th>{t('category')}</Th>
+						<Th align='right'>{t('time')}</Th>
+						<Th align='right'>{t('price')}</Th>
+						<Th>{t('mhif')}</Th>
 						<Th>
-							<span className='sr-only'>{t('Действия')}</span>
+							<span className='sr-only'>{t('actions')}</span>
 						</Th>
 					</tr>
 				</thead>
@@ -60,7 +60,7 @@ export function ServicesSection() {
 								<IconButton
 									quiet
 									size='sm'
-									aria-label={`${t('Изменить:')} ${row.name}`}
+									aria-label={`${t('change')} ${row.name}`}
 								>
 									<Pencil size={16} aria-hidden='true' />
 								</IconButton>

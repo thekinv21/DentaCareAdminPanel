@@ -1,37 +1,38 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '@/shared/lib/cn'
-import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Field, formGrid3, inputClass } from '@/shared/ui/field'
 import { Switch } from '@/shared/ui/switch'
 
-import { WORK_DAYS } from '../model/clinic'
-import type { TogglesProps } from '../model/use-settings'
+import { WORK_DAYS } from '../model/Clinic'
+import type { TogglesProps } from '../model/useSettings'
 
-const timeClass = cn(inputClass, 'w-[120px] font-mono')
+const timeClass = cn(inputClass, 'w-30 font-mono')
 
 export function HoursSection({ toggles, flip }: TogglesProps) {
-	const { t } = useI18n()
+	const t = useTranslations('Settings')
 	return (
 		<div className='animate-fade pb-2'>
 			<div className={cn(formGrid3, 'mb-2')}>
-				<Field label={t('Шаг записи')}>
+				<Field label={t('slotInterval')}>
 					<select className={inputClass}>
-						<option>{t('15 минут')}</option>
-						<option>{t('30 минут')}</option>
+						<option>{t('n15Minutes')}</option>
+						<option>{t('n30Minutes')}</option>
 					</select>
 				</Field>
-				<Field label={t('Обед')}>
+				<Field label={t('lunch')}>
 					<input
 						className={cn(inputClass, 'font-mono')}
 						defaultValue='13:00 – 14:00'
 					/>
 				</Field>
-				<Field label={t('Запись онлайн')}>
+				<Field label={t('onlineBooking')}>
 					<select className={inputClass}>
-						<option>{t('За 30 дней вперёд')}</option>
-						<option>{t('За 14 дней')}</option>
+						<option>{t('next30Days')}</option>
+						<option>{t('last14Days')}</option>
 					</select>
 				</Field>
 			</div>
@@ -46,9 +47,9 @@ export function HoursSection({ toggles, flip }: TogglesProps) {
 							<Switch
 								checked={toggles[day.id]}
 								onChange={() => flip(day.id)}
-								aria-label={`${name}${t(': рабочий день')}`}
+								aria-label={`${name}${t('workingDay')}`}
 							/>
-							<span className='w-[130px] font-semibold'>{name}</span>
+							<span className='w-32.5 font-semibold'>{name}</span>
 							{toggles[day.id] ? (
 								<>
 									<span className='flex items-center gap-2'>
@@ -56,22 +57,22 @@ export function HoursSection({ toggles, flip }: TogglesProps) {
 											type='time'
 											className={timeClass}
 											defaultValue={day.from}
-											aria-label={`${name}${t(': начало')}`}
+											aria-label={`${name}${t('start')}`}
 										/>
 										<span className='text-ink-muted'>—</span>
 										<input
 											type='time'
 											className={timeClass}
 											defaultValue={day.to}
-											aria-label={`${name}${t(': конец')}`}
+											aria-label={`${name}${t('end')}`}
 										/>
 									</span>
 									<span className='ml-auto text-[12.5px] text-ink-muted'>
-										{parseInt(day.to) - parseInt(day.from)} {t('ч')}
+										{parseInt(day.to) - parseInt(day.from)} {t('h')}
 									</span>
 								</>
 							) : (
-								<Badge>{t('Выходной')}</Badge>
+								<Badge>{t('dayOff')}</Badge>
 							)}
 						</li>
 					)
