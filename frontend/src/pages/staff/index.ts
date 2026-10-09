@@ -1,1 +1,2 @@
-export { StaffPage, metadata } from './ui/StaffPage'
+export { StaffPage } from './ui/StaffPage'
+export { generateMetadata } from './ui/metadata'

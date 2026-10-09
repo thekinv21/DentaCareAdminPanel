@@ -1,4 +1,7 @@
+'use client'
+
 import { cn } from '@/shared/lib/cn'
+import { useI18n } from '@/shared/lib/i18n'
 
 import { PAYMENT_METHODS } from '../model/maps'
 import type { PaymentMethodId } from '../model/types'
@@ -17,6 +20,7 @@ export function PaymentMethodTile({
 	size = 'md',
 	className,
 }: PaymentMethodTileProps) {
+	const { t } = useI18n()
 	const { code, tileClass } = PAYMENT_METHODS[method]
 	return (
 		<span
@@ -30,7 +34,7 @@ export function PaymentMethodTile({
 				className,
 			)}
 		>
-			{code}
+			{t(code)}
 		</span>
 	)
 }

@@ -1,2 +1,8 @@
 export { Field } from './Field'
-export { inputClass, inputLgClass, textareaClass } from './field-class'
+export {
+	formGrid2,
+	formGrid3,
+	inputClass,
+	inputLgClass,
+	textareaClass,
+} from './field-class'

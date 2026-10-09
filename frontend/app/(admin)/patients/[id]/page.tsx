@@ -1,4 +1,4 @@
 export {
 	PatientProfilePage as default,
-	metadata,
+	generateMetadata,
 } from '@/pages/patient-profile'

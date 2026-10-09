@@ -1,1 +1,2 @@
-export { BillingPage, metadata } from './ui/BillingPage'
+export { BillingPage } from './ui/BillingPage'
+export { generateMetadata } from './ui/metadata'

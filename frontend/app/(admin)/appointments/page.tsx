@@ -1,1 +1,4 @@
-export { AppointmentsPage as default, metadata } from '@/pages/appointments'
+export {
+	AppointmentsPage as default,
+	generateMetadata,
+} from '@/pages/appointments'

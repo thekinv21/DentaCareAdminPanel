@@ -5,6 +5,9 @@ import { usePathname } from 'next/navigation'
 
 import { ChevronLeft } from 'lucide-react'
 
+import { LanguageSwitcher } from '@/features/switch-language'
+
+import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { buttonClass } from '@/shared/ui/button'
 import { LogoMark } from '@/shared/ui/logo'
@@ -15,8 +18,8 @@ const ENTRY_ROUTES: string[] = [ROUTES.login, ROUTES.register]
  * Entry screens show the logo on small screens; the rest link back to sign-in
  */
 export function AuthTopBar() {
-	const pathname = usePathname() ?? ''
-	const isEntry = ENTRY_ROUTES.includes(pathname)
+	const { t } = useI18n()
+	const isEntry = ENTRY_ROUTES.includes(usePathname() ?? '')
 
 	return (
 		<div className='flex min-h-11 shrink-0 items-center gap-3'>
@@ -34,9 +37,11 @@ export function AuthTopBar() {
 					})}
 				>
 					<ChevronLeft size={18} aria-hidden='true' />
-					Ко входу
+					{t('Ко входу')}
 				</Link>
 			)}
+			<span className='flex-grow' />
+			<LanguageSwitcher variant='full' />
 		</div>
 	)
 }

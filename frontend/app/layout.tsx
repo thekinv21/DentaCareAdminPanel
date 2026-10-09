@@ -3,6 +3,8 @@ import { Golos_Text, JetBrains_Mono, Manrope } from 'next/font/google'
 
 import { Providers } from '@/app/providers'
 
+import { getLocale } from '@/shared/lib/i18n-server'
+
 import './globals.css'
 
 const manrope = Manrope({
@@ -28,18 +30,20 @@ export const metadata: Metadata = {
 		default: 'Denta',
 		template: '%s · Denta',
 	},
-	description: 'Denta — панель администратора стоматологической клиники',
+	description: 'Denta — dental clinic admin panel',
 }
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default async function RootLayout({ children }: LayoutProps<'/'>) {
+	const locale = await getLocale()
+
 	return (
 		<html
-			lang='ru'
+			lang={locale}
 			className={`${manrope.variable} ${golos.variable} ${jetbrainsMono.variable} h-full`}
 			suppressHydrationWarning
 		>
 			<body className='min-h-full'>
-				<Providers>{children}</Providers>
+				<Providers locale={locale}>{children}</Providers>
 			</body>
 		</html>
 	)

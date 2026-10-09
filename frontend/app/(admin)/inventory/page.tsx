@@ -1,1 +1,1 @@
-export { InventoryPage as default, metadata } from '@/pages/inventory'
+export { InventoryPage as default, generateMetadata } from '@/pages/inventory'

@@ -1,8 +1,14 @@
+'use client'
+
+import { useI18n } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 
 interface FormFooterProps {
 	saved: boolean
+	/**
+	 * Display-ready confirmation text
+	 */
 	savedLabel: string
 	dirty?: boolean
 	onSave: () => void
@@ -10,7 +16,7 @@ interface FormFooterProps {
 }
 
 /**
- * Sticky save/cancel bar at the bottom of a settings card
+ * Save/cancel bar at the bottom of a settings card
  */
 export function FormFooter({
 	saved,
@@ -19,6 +25,7 @@ export function FormFooter({
 	onSave,
 	onReset,
 }: FormFooterProps) {
+	const { t } = useI18n()
 	return (
 		<div className='flex shrink-0 items-center justify-end gap-2.5 border-t border-line pt-3.5'>
 			{saved && (
@@ -28,12 +35,12 @@ export function FormFooter({
 			)}
 			{dirty && !saved && (
 				<span className='mr-auto text-[12.5px] text-ink-muted'>
-					Есть несохранённые изменения
+					{t('Есть несохранённые изменения')}
 				</span>
 			)}
-			<Button onClick={onReset}>Отменить</Button>
+			<Button onClick={onReset}>{t('Отменить')}</Button>
 			<Button variant='primary' onClick={onSave}>
-				Сохранить
+				{t('Сохранить')}
 			</Button>
 		</div>
 	)

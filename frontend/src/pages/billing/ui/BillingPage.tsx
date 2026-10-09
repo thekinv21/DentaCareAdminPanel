@@ -1,58 +1,67 @@
-import type { Metadata } from 'next'
+'use client'
 
 import { Plus } from 'lucide-react'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
+import { useI18n } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
-import { BillingWorkspace } from './BillingWorkspace'
-
-export const metadata: Metadata = { title: 'Оплаты' }
+import { useBilling } from '../model/use-billing'
+import { InvoicesTable } from './InvoicesTable'
+import { PaymentPanel } from './PaymentPanel'
 
 export function BillingPage() {
+	const { t } = useI18n()
+	const billing = useBilling()
+
 	return (
 		<>
 			<PageHeader
-				crumb='Октябрь 2026 · приём через Visa, MBANK, Компаньон, Optima Bank'
-				title='Оплаты'
+				crumb={t(
+					'Октябрь 2026 · приём через Visa, MBANK, Компаньон, Optima Bank',
+				)}
+				title={t('Оплаты')}
 				actions={
 					<Button variant='primary'>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
-						Новый счёт
+						{t('Новый счёт')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<StatGrid label='Сводка'>
+				<StatGrid label={t('Сводка')}>
 					<StatCard
-						label='Получено в октябре'
+						label={t('Получено в октябре')}
 						value='2 184 300'
-						unit='сом'
+						unit={t('сом')}
 						footer={
 							<>
-								<Delta>+9%</Delta> к сентябрю
+								<Delta>+9%</Delta> {t('к сентябрю')}
 							</>
 						}
 					/>
 					<StatCard
-						label='К оплате'
+						label={t('К оплате')}
 						value='218 400'
-						unit='сом'
+						unit={t('сом')}
 						delay={50}
-						footer='23 пациента'
+						footer={t('23 пациента')}
 					/>
 					<StatCard
-						label='Просрочено'
+						label={t('Просрочено')}
 						value='46 900'
-						unit='сом'
+						unit={t('сом')}
 						valueClass='text-danger'
 						delay={100}
-						footer='6 счетов старше 30 дней'
+						footer={t('6 счетов старше 30 дней')}
 					/>
 				</StatGrid>
-				<BillingWorkspace />
+				<section className='flex flex-[1_0_auto] flex-wrap items-stretch gap-4'>
+					<InvoicesTable billing={billing} />
+					<PaymentPanel billing={billing} />
+				</section>
 			</PageContent>
 		</>
 	)

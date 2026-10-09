@@ -1,1 +1,1 @@
-export { DashboardPage as default, metadata } from '@/pages/dashboard'
+export { DashboardPage as default, generateMetadata } from '@/pages/dashboard'

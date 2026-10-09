@@ -1,19 +1,27 @@
+'use client'
+
 import type { ReactNode } from 'react'
 
 import { Bell } from 'lucide-react'
 
+import { LanguageSwitcher } from '@/features/switch-language'
+
+import { useI18n } from '@/shared/lib/i18n'
 import { IconButton } from '@/shared/ui/icon-button'
 import { SearchInput } from '@/shared/ui/search-input'
 
 interface PageHeaderProps {
+	/**
+	 * Display-ready (already translated) title
+	 */
 	title: string
 	crumb?: ReactNode
 	/**
-	 * Primary page actions, rendered after the notifications button
+	 * Primary page actions, rendered last
 	 */
 	actions?: ReactNode
 	/**
-	 * Controls rendered before the notifications button (e.g. a period switch)
+	 * Controls rendered before the language switch (e.g. a period switch)
 	 */
 	tools?: ReactNode
 	search?: boolean
@@ -26,6 +34,7 @@ export function PageHeader({
 	tools,
 	search = true,
 }: PageHeaderProps) {
+	const { t } = useI18n()
 	return (
 		<header className='flex shrink-0 items-center gap-2.5 px-1 pt-1 pb-3.5 max-[720px]:flex-wrap'>
 			<div className='min-w-0 flex-auto'>
@@ -38,13 +47,14 @@ export function PageHeader({
 			</div>
 			{search && (
 				<SearchInput
-					label='Поиск: пациент, ID, услуга'
+					label={t('Поиск: пациент, ID, услуга')}
 					shortcut='Ctrl K'
 					className='flex-[0_1_300px] max-[720px]:order-3 max-[720px]:basis-full'
 				/>
 			)}
 			{tools}
-			<IconButton aria-label='Уведомления, 3 новых'>
+			<LanguageSwitcher />
+			<IconButton aria-label={t('Уведомления, 3 новых')}>
 				<Bell size={18} aria-hidden='true' />
 				<span className='absolute top-2 right-[9px] size-2 rounded-full bg-accent shadow-[0_0_0_2px_var(--surface)]' />
 			</IconButton>

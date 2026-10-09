@@ -1,1 +1,2 @@
-export { TreatmentPlansPage, metadata } from './ui/TreatmentPlansPage'
+export { TreatmentPlansPage } from './ui/TreatmentPlansPage'
+export { generateMetadata } from './ui/metadata'

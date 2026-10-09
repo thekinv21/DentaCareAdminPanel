@@ -1,16 +1,4 @@
-import type { Tone } from '@/shared/ui/badge'
-
-export type PlanStatus =
-	'draft' | 'waiting' | 'approved' | 'progress' | 'done' | 'declined'
-
-export const PLAN_STATUS: Record<PlanStatus, { label: string; tone: Tone }> = {
-	draft: { label: 'Черновик', tone: 'neutral' },
-	waiting: { label: 'Ждёт согласия', tone: 'warning' },
-	approved: { label: 'Согласован', tone: 'info' },
-	progress: { label: 'В работе', tone: 'brand' },
-	done: { label: 'Завершён', tone: 'ok' },
-	declined: { label: 'Отклонён', tone: 'danger' },
-}
+import type { PlanStatus } from './plan-status'
 
 export interface TreatmentPlan {
 	patientId: string
@@ -138,15 +126,3 @@ export const TREATMENT_PLANS: TreatmentPlan[] = [
 		updated: '28.09',
 	},
 ]
-
-export type PlanFilter = 'all' | 'waiting' | 'progress' | 'closed'
-
-const FILTER_STATUSES: Record<Exclude<PlanFilter, 'all'>, PlanStatus[]> = {
-	waiting: ['waiting', 'draft'],
-	progress: ['progress', 'approved'],
-	closed: ['done', 'declined'],
-}
-
-export function matchesPlanFilter(plan: TreatmentPlan, filter: PlanFilter) {
-	return filter === 'all' || FILTER_STATUSES[filter].includes(plan.status)
-}

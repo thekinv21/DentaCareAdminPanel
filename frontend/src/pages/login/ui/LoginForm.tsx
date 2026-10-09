@@ -1,13 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useWatch } from 'react-hook-form'
 
 import { AuthField } from '@/widgets/auth-panel'
 
+import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
@@ -15,68 +12,40 @@ import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 import { Segmented } from '@/shared/ui/segmented'
 
-import { loginSchema, type LoginValues } from '../model/schema'
-
-const METHODS: { id: LoginValues['method']; label: string }[] = [
-	{ id: 'phone', label: 'Телефон' },
-	{ id: 'email', label: 'Email' },
-]
+import { useLoginForm } from '../model/use-login-form'
 
 export function LoginForm() {
-	const router = useRouter()
-	const {
-		register,
-		handleSubmit,
-		control,
-		setValue,
-		formState: { errors, isSubmitting },
-	} = useForm<LoginValues>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: { method: 'phone', phone: '', password: '', remember: true },
-	})
-
-	const method = useWatch({ control, name: 'method' })
-	const fieldErrors = errors as Partial<
-		Record<'phone' | 'email' | 'password', { message?: string }>
-	>
-
-	// No backend yet: a valid form continues to the SMS code step
-	const onSubmit = () => router.push(ROUTES.verify)
+	const { t } = useI18n()
+	const form = useLoginForm()
 
 	return (
-		<form
-			noValidate
-			onSubmit={handleSubmit(onSubmit)}
-			className='flex flex-col gap-4'
-		>
+		<form noValidate onSubmit={form.onSubmit} className='flex flex-col gap-4'>
 			<Segmented
-				aria-label='Способ входа'
-				options={METHODS}
-				value={method}
-				onChange={next => setValue('method', next, { shouldValidate: false })}
+				aria-label={t('Способ входа')}
+				options={form.methods}
+				value={form.method}
+				onChange={form.setMethod}
 				className='[&>button]:min-h-[38px] [&>button]:flex-1 [&>button]:justify-center [&>button]:text-sm'
 			/>
 
-			{method === 'phone' ? (
+			{form.method === 'phone' ? (
 				<AuthField
 					id='phone'
-					label='Номер телефона'
-					error={fieldErrors.phone?.message}
+					label={t('Номер телефона')}
+					error={form.errorOf('phone')}
 				>
 					<PhoneInput
 						id='phone'
 						autoComplete='tel'
 						placeholder='555 123 456'
-						aria-invalid={!!fieldErrors.phone}
-						aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
-						{...register('phone')}
+						{...form.fieldProps('phone')}
 					/>
 				</AuthField>
 			) : (
 				<AuthField
 					id='email'
-					label='Рабочий email'
-					error={fieldErrors.email?.message}
+					label={t('Рабочий email')}
+					error={form.errorOf('email')}
 				>
 					<input
 						id='email'
@@ -84,33 +53,29 @@ export function LoginForm() {
 						autoComplete='email'
 						placeholder='name@clinic.kg'
 						className={inputLgClass}
-						aria-invalid={!!fieldErrors.email}
-						aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-						{...register('email')}
+						{...form.fieldProps('email')}
 					/>
 				</AuthField>
 			)}
 
 			<AuthField
 				id='password'
-				label='Пароль'
-				error={fieldErrors.password?.message}
+				label={t('Пароль')}
+				error={form.errorOf('password')}
 				aside={
 					<Link
 						href={ROUTES.forgotPassword}
 						className='text-[13px] font-semibold text-brand no-underline hover:underline'
 					>
-						Забыли пароль?
+						{t('Забыли пароль?')}
 					</Link>
 				}
 			>
 				<PasswordInput
 					id='password'
 					autoComplete='current-password'
-					placeholder='Ваш пароль'
-					aria-invalid={!!fieldErrors.password}
-					aria-describedby={fieldErrors.password ? 'password-error' : undefined}
-					{...register('password')}
+					placeholder={t('Ваш пароль')}
+					{...form.fieldProps('password')}
 				/>
 			</AuthField>
 
@@ -118,9 +83,9 @@ export function LoginForm() {
 				<input
 					type='checkbox'
 					className='mt-px size-[18px] shrink-0 accent-brand'
-					{...register('remember')}
+					{...form.rememberProps}
 				/>
-				Запомнить это устройство на 30 дней
+				{t('Запомнить это устройство на 30 дней')}
 			</label>
 
 			<Button
@@ -128,9 +93,9 @@ export function LoginForm() {
 				variant='primary'
 				size='lg'
 				block
-				disabled={isSubmitting}
+				disabled={form.submitting}
 			>
-				Войти
+				{t('Войти')}
 			</Button>
 		</form>
 	)

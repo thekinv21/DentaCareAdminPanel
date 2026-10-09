@@ -1,1 +1,4 @@
-export { ResetPasswordPage as default, metadata } from '@/pages/reset-password'
+export {
+	ResetPasswordPage as default,
+	generateMetadata,
+} from '@/pages/reset-password'

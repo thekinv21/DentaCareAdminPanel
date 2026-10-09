@@ -105,9 +105,3 @@ export const INITIAL_PREFERENCES: Record<string, boolean> = {
 	m_sms: false,
 	m_mail: false,
 }
-
-export const INTERFACE_LANGUAGES = [
-	{ id: 'ru', code: 'RU', name: 'Русский', note: 'По умолчанию' },
-	{ id: 'ky', code: 'KY', name: 'Кыргызча', note: 'Государственный язык' },
-	{ id: 'en', code: 'EN', name: 'English', note: 'Международный' },
-]

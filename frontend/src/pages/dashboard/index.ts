@@ -1,1 +1,2 @@
-export { DashboardPage, metadata } from './ui/DashboardPage'
+export { DashboardPage } from './ui/DashboardPage'
+export { generateMetadata } from './ui/metadata'

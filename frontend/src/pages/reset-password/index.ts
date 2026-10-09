@@ -1,1 +1,2 @@
-export { ResetPasswordPage, metadata } from './ui/ResetPasswordPage'
+export { ResetPasswordPage } from './ui/ResetPasswordPage'
+export { generateMetadata } from './ui/metadata'

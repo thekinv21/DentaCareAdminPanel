@@ -1,1 +1,1 @@
-export { PatientsPage as default, metadata } from '@/pages/patients'
+export { PatientsPage as default, generateMetadata } from '@/pages/patients'

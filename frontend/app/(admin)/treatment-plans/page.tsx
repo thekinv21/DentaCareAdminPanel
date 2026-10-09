@@ -1,4 +1,4 @@
 export {
 	TreatmentPlansPage as default,
-	metadata,
+	generateMetadata,
 } from '@/pages/treatment-plans'

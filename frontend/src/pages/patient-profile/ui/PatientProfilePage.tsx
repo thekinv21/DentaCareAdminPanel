@@ -1,23 +1,32 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { use } from 'react'
+
 import Link from 'next/link'
 
 import { Play } from 'lucide-react'
 
+import { DentalChart } from '@/widgets/dental-chart'
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
+import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 
-import { PatientProfileView } from './PatientProfileView'
+import { useProfileTabs } from '../model/use-profile-tabs'
+import { PatientSummaryCard } from './PatientSummaryCard'
+import { PaymentsSection } from './PaymentsSection'
+import { TreatmentPlanSection } from './TreatmentPlanSection'
+import { VisitHistorySection } from './VisitHistorySection'
 
-export const metadata: Metadata = { title: 'Карта пациента' }
-
-interface PatientProfilePageProps {
+export function PatientProfilePage({
+	params,
+}: {
 	params: Promise<{ id: string }>
-}
-
-export async function PatientProfilePage({ params }: PatientProfilePageProps) {
-	const { id } = await params
+}) {
+	const { id } = use(params)
+	const { t } = useI18n()
+	const tabs = useProfileTabs()
 
 	return (
 		<>
@@ -28,7 +37,7 @@ export async function PatientProfilePage({ params }: PatientProfilePageProps) {
 							href={ROUTES.patients}
 							className='text-inherit no-underline hover:text-ink'
 						>
-							Пациенты
+							{t('Пациенты')}
 						</Link>
 						<span aria-hidden='true' className='px-1.5'>
 							/
@@ -36,16 +45,20 @@ export async function PatientProfilePage({ params }: PatientProfilePageProps) {
 						<span className='font-mono'>{decodeURIComponent(id)}</span>
 					</nav>
 				}
-				title='Карта пациента'
+				title={t('Карта пациента')}
 				actions={
 					<Button variant='primary'>
 						<Play size={15} fill='currentColor' aria-hidden='true' />
-						Начать приём
+						{t('Начать приём')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<PatientProfileView />
+				<PatientSummaryCard tabs={tabs} />
+				{tabs.tab === 'chart' && <DentalChart />}
+				{tabs.tab === 'plan' && <TreatmentPlanSection />}
+				{tabs.tab === 'history' && <VisitHistorySection />}
+				{tabs.tab === 'payments' && <PaymentsSection />}
 			</PageContent>
 		</>
 	)

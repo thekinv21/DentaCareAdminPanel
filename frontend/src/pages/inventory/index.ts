@@ -1,1 +1,2 @@
-export { InventoryPage, metadata } from './ui/InventoryPage'
+export { InventoryPage } from './ui/InventoryPage'
+export { generateMetadata } from './ui/metadata'

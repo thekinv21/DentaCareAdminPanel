@@ -1,1 +1,1 @@
-export { BillingPage as default, metadata } from '@/pages/billing'
+export { BillingPage as default, generateMetadata } from '@/pages/billing'

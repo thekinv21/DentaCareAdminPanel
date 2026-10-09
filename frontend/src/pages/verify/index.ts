@@ -1,1 +1,2 @@
-export { VerifyPage, metadata } from './ui/VerifyPage'
+export { VerifyPage } from './ui/VerifyPage'
+export { generateMetadata } from './ui/metadata'

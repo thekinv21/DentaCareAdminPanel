@@ -1,43 +1,43 @@
-import { formatNumber } from '@/shared/lib/format'
+'use client'
 
-import { MONTHLY_REVENUE, REVENUE_TARGET } from '../model/report'
+import { useI18n } from '@/shared/lib/i18n'
 
-const CHART = { left: 44, right: 640, base: 210, top: 15, max: 3000 }
-const GRID = [3000, 2000, 1000]
+import { CHART, chartY, GRID_VALUES } from '../lib/chart-geometry'
+import { REVENUE_TARGET } from '../model/report'
+import type { ReportModel } from '../model/use-report'
 
-const y = (value: number) =>
-	CHART.base - (value / CHART.max) * (CHART.base - CHART.top)
+interface RevenueChartProps {
+	bars: ReportModel['bars']
+	label: string
+}
 
-export function RevenueChart({ data }: { data: typeof MONTHLY_REVENUE }) {
-	const slot = (CHART.right - CHART.left) / data.length
-	const barWidth = Math.min(34, slot * 0.6)
-	const aria = `Выручка по месяцам: ${data.map(d => `${d.month} ${d.value} тыс. сом`).join(', ')}`
-
+export function RevenueChart({ bars, label }: RevenueChartProps) {
+	const { format } = useI18n()
 	return (
 		<svg
 			viewBox='0 0 640 250'
 			role='img'
-			aria-label={aria}
+			aria-label={label}
 			className='h-auto w-full overflow-visible'
 		>
-			{GRID.map(value => (
+			{GRID_VALUES.map(value => (
 				<g key={value}>
 					<line
 						x1={CHART.left}
 						x2={CHART.right}
-						y1={y(value)}
-						y2={y(value)}
+						y1={chartY(value)}
+						y2={chartY(value)}
 						stroke='var(--line)'
 						strokeDasharray='3 4'
 					/>
 					<text
 						x='0'
-						y={y(value) + 4}
+						y={chartY(value) + 4}
 						fontSize='11'
 						fill='var(--ink-subtle)'
 						className='font-mono'
 					>
-						{formatNumber(value)}
+						{format.number(value)}
 					</text>
 				</g>
 			))}
@@ -57,41 +57,37 @@ export function RevenueChart({ data }: { data: typeof MONTHLY_REVENUE }) {
 			>
 				0
 			</text>
-			{data.map((d, i) => {
-				const x = CHART.left + i * slot + (slot - barWidth) / 2
-				const top = y(d.value)
-				return (
-					<g key={d.month}>
-						<rect
-							x={x}
-							y={top}
-							width={barWidth}
-							height={CHART.base - top}
-							rx='5'
-							fill={d.value >= REVENUE_TARGET ? 'var(--brand)' : 'var(--info)'}
-							className='origin-bottom animate-growy transition-opacity duration-150 [transform-box:fill-box] hover:opacity-80'
-							style={{ animationDelay: `${i * 40}ms` }}
-						>
-							<title>{`${d.month} · ${formatNumber(d.value)} тыс. сом`}</title>
-						</rect>
-						<text
-							x={x + barWidth / 2}
-							y='230'
-							fontSize='11'
-							textAnchor='middle'
-							fill='var(--ink-subtle)'
-							className='font-mono'
-						>
-							{d.month}
-						</text>
-					</g>
-				)
-			})}
+			{bars.map(bar => (
+				<g key={bar.key}>
+					<rect
+						x={bar.x}
+						y={bar.y}
+						width={bar.width}
+						height={bar.height}
+						rx='5'
+						fill={bar.fill}
+						className='origin-bottom animate-growy transition-opacity duration-150 [transform-box:fill-box] hover:opacity-80'
+						style={{ animationDelay: `${bar.delay}ms` }}
+					>
+						<title>{bar.title}</title>
+					</rect>
+					<text
+						x={bar.center}
+						y='230'
+						fontSize='11'
+						textAnchor='middle'
+						fill='var(--ink-subtle)'
+						className='font-mono'
+					>
+						{bar.month}
+					</text>
+				</g>
+			))}
 			<line
 				x1={CHART.left}
 				x2={CHART.right}
-				y1={y(REVENUE_TARGET)}
-				y2={y(REVENUE_TARGET)}
+				y1={chartY(REVENUE_TARGET)}
+				y2={chartY(REVENUE_TARGET)}
 				stroke='var(--accent)'
 				strokeWidth='2'
 				strokeDasharray='6 5'

@@ -1,9 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 
 import { Camera, Clock, LogOut, Mail, MapPin, Phone } from 'lucide-react'
 
 import { CURRENT_USER } from '@/entities/employee'
 
+import { useI18n } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
@@ -18,6 +21,14 @@ const STATS = [
 ]
 
 export function ProfileSummary() {
+	const { t, format } = useI18n()
+	const contacts = [
+		{ icon: Phone, text: '+996 555 701 441', mono: true },
+		{ icon: Mail, text: 'a.kasymova@denta.kg' },
+		{ icon: MapPin, text: t('Кресло 1 · Бишкек, Ала-Тоо') },
+		{ icon: Clock, text: t('Пн–Пт · 08:30–17:30'), mono: true },
+	]
+
 	return (
 		<Card
 			as='aside'
@@ -26,13 +37,13 @@ export function ProfileSummary() {
 			<div className='flex flex-col items-center gap-2.5 pt-2 pb-1 text-center'>
 				<span className='relative'>
 					<Avatar
-						initials={CURRENT_USER.initials}
+						initials={t(CURRENT_USER.initials)}
 						tone='accent'
 						size={88}
 						className='font-display font-extrabold'
 					/>
 					<IconButton
-						aria-label='Сменить фото'
+						aria-label={t('Сменить фото')}
 						size='sm'
 						round
 						className='absolute -right-1 -bottom-1 shadow-clay-sm'
@@ -42,15 +53,15 @@ export function ProfileSummary() {
 				</span>
 				<div>
 					<h2 className='font-display text-[19px] leading-6 font-bold tracking-[-0.01em]'>
-						{CURRENT_USER.fullName}
+						{format.name(CURRENT_USER.fullName)}
 					</h2>
 					<p className='text-[12.5px] leading-[18px] text-ink-muted'>
-						{CURRENT_USER.role} · терапия, эндодонтия
+						{t(CURRENT_USER.role)} {t('· терапия, эндодонтия')}
 					</p>
 				</div>
 				<div className='flex flex-wrap justify-center gap-1.5'>
-					<Badge tone='ok'>● На смене</Badge>
-					<Badge tone='brand'>Администратор</Badge>
+					<Badge tone='ok'>{t('● На смене')}</Badge>
+					<Badge tone='brand'>{t('Администратор')}</Badge>
 				</div>
 			</div>
 
@@ -61,7 +72,7 @@ export function ProfileSummary() {
 						className='flex flex-col-reverse rounded-[14px] bg-raised px-1 py-2.5'
 					>
 						<dt className='text-[12.5px] leading-[18px] text-ink-muted'>
-							{stat.label}
+							{t(stat.label)}
 						</dt>
 						<dd className='font-mono text-base font-bold'>{stat.value}</dd>
 					</div>
@@ -69,38 +80,16 @@ export function ProfileSummary() {
 			</dl>
 
 			<ul className='flex flex-col gap-3 text-[13px]'>
-				<li className='flex items-center gap-2.5'>
-					<Phone
-						size={16}
-						aria-hidden='true'
-						className='shrink-0 text-ink-subtle'
-					/>
-					<span className='font-mono'>+996 555 701 441</span>
-				</li>
-				<li className='flex items-center gap-2.5'>
-					<Mail
-						size={16}
-						aria-hidden='true'
-						className='shrink-0 text-ink-subtle'
-					/>
-					<span className='truncate'>a.kasymova@denta.kg</span>
-				</li>
-				<li className='flex items-center gap-2.5'>
-					<MapPin
-						size={16}
-						aria-hidden='true'
-						className='shrink-0 text-ink-subtle'
-					/>
-					<span>Кресло 1 · Бишкек, Ала-Тоо</span>
-				</li>
-				<li className='flex items-center gap-2.5'>
-					<Clock
-						size={16}
-						aria-hidden='true'
-						className='shrink-0 text-ink-subtle'
-					/>
-					<span className='font-mono'>Пн–Пт · 08:30–17:30</span>
-				</li>
+				{contacts.map(({ icon: Icon, text, mono }) => (
+					<li key={text} className='flex items-center gap-2.5'>
+						<Icon
+							size={16}
+							aria-hidden='true'
+							className='shrink-0 text-ink-subtle'
+						/>
+						<span className={mono ? 'font-mono' : 'truncate'}>{text}</span>
+					</li>
+				))}
 			</ul>
 
 			<Link
@@ -108,7 +97,7 @@ export function ProfileSummary() {
 				className={buttonClass({ variant: 'danger', className: 'mt-auto' })}
 			>
 				<LogOut size={16} aria-hidden='true' />
-				Выйти из аккаунта
+				{t('Выйти из аккаунта')}
 			</Link>
 		</Card>
 	)
