@@ -13,7 +13,9 @@ import type { RegisterFormModel } from '../model/useRegisterForm'
 
 const linkClass = 'font-semibold text-brand no-underline hover:underline'
 
-export function AdminStep({ form }: { form: RegisterFormModel }) {
+type TAdminStepProps = { form: RegisterFormModel }
+
+export function AdminStep({ form }: TAdminStepProps) {
 	const t = useTranslations('Register')
 	const agreeError = form.errorOf('agree')
 

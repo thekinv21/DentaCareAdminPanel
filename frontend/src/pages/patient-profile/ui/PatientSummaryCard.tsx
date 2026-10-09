@@ -16,7 +16,9 @@ import { Card } from '@/shared/ui/card'
 import { PROFILE } from '../model/Profile'
 import type { ProfileTabsModel } from '../model/useProfileTabs'
 
-export function PatientSummaryCard({ tabs }: { tabs: ProfileTabsModel }) {
+type TPatientSummaryCardProps = { tabs: ProfileTabsModel }
+
+export function PatientSummaryCard({ tabs }: TPatientSummaryCardProps) {
 	const t = useTranslations('PatientProfile')
 	const format = useFormat()
 	return (

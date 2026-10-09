@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type TIconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	'aria-label': string
 	size?: 'sm' | 'md'
 	/**
@@ -12,14 +12,16 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	round?: boolean
 }
 
-export function IconButton({
-	size = 'md',
-	quiet,
-	round,
-	className,
-	type = 'button',
-	...props
-}: IconButtonProps) {
+export function IconButton(props: TIconButtonProps) {
+	const {
+		size = 'md',
+		quiet,
+		round,
+		className,
+		type = 'button',
+		...rest
+	} = props
+
 	return (
 		<button
 			type={type}
@@ -32,7 +34,7 @@ export function IconButton({
 					: 'border-line bg-surface text-ink',
 				className,
 			)}
-			{...props}
+			{...rest}
 		/>
 	)
 }

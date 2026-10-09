@@ -16,7 +16,9 @@ import { ROUTES } from '@/shared/routes'
 
 import type { PlacedEvent } from '../lib/Layout'
 
-export function EventBlock({ placed }: { placed: PlacedEvent }) {
+type TEventBlockProps = { placed: PlacedEvent }
+
+export function EventBlock({ placed }: TEventBlockProps) {
 	const t = useTranslations('Appointments')
 	const format = useFormat()
 	const labels = useAppointmentLabels()

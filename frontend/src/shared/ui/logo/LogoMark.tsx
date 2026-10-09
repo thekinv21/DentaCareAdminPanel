@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib/cn'
 
 import { ToothIcon } from './ToothIcon'
 
-interface LogoMarkProps {
+type TLogoMarkProps = {
 	size?: number
 	className?: string
 }
@@ -10,7 +10,7 @@ interface LogoMarkProps {
 /**
  * Glossy brand tile with the tooth mark
  */
-export function LogoMark({ size = 36, className }: LogoMarkProps) {
+export function LogoMark({ size = 36, className }: TLogoMarkProps) {
 	return (
 		<span
 			className={cn(

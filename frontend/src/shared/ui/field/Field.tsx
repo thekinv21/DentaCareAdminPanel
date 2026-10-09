@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-interface FieldProps {
+type TFieldProps = {
 	label: ReactNode
 	hint?: ReactNode
 	className?: string
@@ -12,7 +12,9 @@ interface FieldProps {
 /**
  * Label wrapping its control, so clicking the label focuses the input
  */
-export function Field({ label, hint, className, children }: FieldProps) {
+export function Field(props: TFieldProps) {
+	const { label, hint, className, children } = props
+
 	return (
 		<label className={cn('flex min-w-0 flex-col gap-1.5', className)}>
 			<span className='text-[12.5px] leading-4 font-semibold text-ink-muted'>

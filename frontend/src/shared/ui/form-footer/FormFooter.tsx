@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 
-interface FormFooterProps {
+type TFormFooterProps = {
 	saved: boolean
 	/**
 	 * Display-ready confirmation text
@@ -19,13 +19,9 @@ interface FormFooterProps {
 /**
  * Save/cancel bar at the bottom of a settings card
  */
-export function FormFooter({
-	saved,
-	savedLabel,
-	dirty,
-	onSave,
-	onReset,
-}: FormFooterProps) {
+export function FormFooter(props: TFormFooterProps) {
+	const { saved, savedLabel, dirty, onSave, onReset } = props
+
 	const t = useTranslations('Common')
 	return (
 		<div className='flex shrink-0 items-center justify-end gap-2.5 border-t border-line pt-3.5'>

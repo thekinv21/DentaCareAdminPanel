@@ -34,7 +34,9 @@ export const metadata: Metadata = {
 	description: 'Denta — dental clinic admin panel',
 }
 
-export default async function RootLayout({ children }: LayoutProps<'/'>) {
+type TRootLayoutProps = LayoutProps<'/'>
+
+export default async function RootLayout({ children }: TRootLayoutProps) {
 	const locale = await getLocale()
 
 	return (

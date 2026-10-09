@@ -56,7 +56,9 @@ function applyTheme(theme: ThemePreference) {
 	document.documentElement.classList.toggle('dark', isDark)
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+type TThemeProviderProps = { children: ReactNode }
+
+export function ThemeProvider({ children }: TThemeProviderProps) {
 	const theme = useSyncExternalStore(
 		subscribe,
 		readStoredTheme,

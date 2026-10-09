@@ -16,7 +16,9 @@ const DOT: Record<string, string> = {
 	accent: 'bg-accent',
 }
 
-export function CalendarToolbar({ calendar }: { calendar: CalendarModel }) {
+type TCalendarToolbarProps = { calendar: CalendarModel }
+
+export function CalendarToolbar({ calendar }: TCalendarToolbarProps) {
 	const t = useTranslations('Appointments')
 	return (
 		<>

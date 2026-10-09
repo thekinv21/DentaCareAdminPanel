@@ -14,13 +14,13 @@ const TONE: Record<AlertTone, string> = {
 
 const ICON = { danger: TriangleAlert, info: Info, ok: CircleAlert }
 
-interface AlertProps {
+type TAlertProps = {
 	tone?: AlertTone
 	className?: string
 	children: ReactNode
 }
 
-export function Alert({ tone = 'info', className, children }: AlertProps) {
+export function Alert({ tone = 'info', className, children }: TAlertProps) {
 	const Icon = ICON[tone]
 	return (
 		<div

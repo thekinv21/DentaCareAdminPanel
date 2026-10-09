@@ -70,4 +70,3 @@ export function useSettings() {
 }
 
 export type SettingsModel = ReturnType<typeof useSettings>
-export type TogglesProps = Pick<SettingsModel, 'toggles' | 'flip'>

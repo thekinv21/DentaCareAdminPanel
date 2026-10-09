@@ -9,17 +9,14 @@ import { ToggleRow } from '@/shared/ui/toggle-row'
 import { LANGUAGES } from '../model/Communication'
 import type { SettingsModel } from '../model/useSettings'
 
-type LanguageSectionProps = Pick<
+type TLanguageSectionProps = Pick<
 	SettingsModel,
 	'toggles' | 'flip' | 'defaultLanguage' | 'setDefaultLanguage'
 >
 
-export function LanguageSection({
-	toggles,
-	flip,
-	defaultLanguage,
-	setDefaultLanguage,
-}: LanguageSectionProps) {
+export function LanguageSection(props: TLanguageSectionProps) {
+	const { toggles, flip, defaultLanguage, setDefaultLanguage } = props
+
 	const t = useTranslations('Settings')
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pb-2'>

@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn'
 
 import type { ResetPasswordModel } from '../model/useResetPassword'
 
-type PasswordStrengthProps = Pick<
+type TPasswordStrengthProps = Pick<
 	ResetPasswordModel,
 	'meter' | 'strength' | 'rules'
 >
@@ -15,7 +15,7 @@ export function PasswordStrength({
 	meter,
 	strength,
 	rules,
-}: PasswordStrengthProps) {
+}: TPasswordStrengthProps) {
 	const t = useTranslations('ResetPassword')
 	return (
 		<>

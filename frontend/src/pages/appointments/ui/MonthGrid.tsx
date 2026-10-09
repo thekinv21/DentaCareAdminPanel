@@ -20,7 +20,9 @@ const CHIP: Record<AppointmentStatus, string> = {
 
 const GRID = 'grid grid-cols-[repeat(7,minmax(110px,1fr))] gap-1.5'
 
-export function MonthGrid({ calendar }: { calendar: CalendarModel }) {
+type TMonthGridProps = { calendar: CalendarModel }
+
+export function MonthGrid({ calendar }: TMonthGridProps) {
 	const t = useTranslations('Appointments')
 	const format = useFormat()
 	return (

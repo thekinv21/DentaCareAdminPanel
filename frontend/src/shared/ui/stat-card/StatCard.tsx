@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/cn'
 import { Card } from '@/shared/ui/card'
 
-interface StatCardProps {
+type TStatCardProps = {
 	label: string
 	value: ReactNode
 	unit?: string
@@ -20,16 +20,18 @@ interface StatCardProps {
 /**
  * KPI tile: overline label, big tabular number, one line of context
  */
-export function StatCard({
-	label,
-	value,
-	unit,
-	footer,
-	icon,
-	valueClass,
-	delay = 0,
-	children,
-}: StatCardProps) {
+export function StatCard(props: TStatCardProps) {
+	const {
+		label,
+		value,
+		unit,
+		footer,
+		icon,
+		valueClass,
+		delay = 0,
+		children,
+	} = props
+
 	return (
 		<Card
 			className='animate-rise gap-2'
@@ -58,16 +60,15 @@ export function StatCard({
 	)
 }
 
+type TStatGridProps = {
+	label: string
+	children: ReactNode
+}
+
 /**
  * Responsive grid of StatCards
  */
-export function StatGrid({
-	label,
-	children,
-}: {
-	label: string
-	children: ReactNode
-}) {
+export function StatGrid({ label, children }: TStatGridProps) {
 	return (
 		<section
 			aria-label={label}
@@ -78,9 +79,11 @@ export function StatGrid({
 	)
 }
 
+type TDeltaProps = { children: ReactNode }
+
 /**
  * Green "+12%" delta used in StatCard footers
  */
-export function Delta({ children }: { children: ReactNode }) {
+export function Delta({ children }: TDeltaProps) {
 	return <span className='font-semibold text-success'>{children}</span>
 }

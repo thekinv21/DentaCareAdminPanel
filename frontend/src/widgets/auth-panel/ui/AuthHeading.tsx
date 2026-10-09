@@ -9,8 +9,8 @@ type TAuthHeadingProps = {
 	iconTone?: 'brand' | 'ok'
 }
 
-export function AuthHeading(_props: TAuthHeadingProps) {
-	const { title, subtitle, icon, iconTone = 'brand' } = _props
+export function AuthHeading(props: TAuthHeadingProps) {
+	const { title, subtitle, icon, iconTone = 'brand' } = props
 
 	return (
 		<>

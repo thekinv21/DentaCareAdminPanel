@@ -6,12 +6,12 @@ import { CHART, chartY, GRID_VALUES } from '../lib/ChartGeometry'
 import { REVENUE_TARGET } from '../model/Report'
 import type { ReportModel } from '../model/useReport'
 
-interface RevenueChartProps {
+type TRevenueChartProps = {
 	bars: ReportModel['bars']
 	label: string
 }
 
-export function RevenueChart({ bars, label }: RevenueChartProps) {
+export function RevenueChart({ bars, label }: TRevenueChartProps) {
 	const format = useFormat()
 	return (
 		<svg

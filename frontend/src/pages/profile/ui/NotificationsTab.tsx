@@ -9,7 +9,9 @@ import { Table, Td, Th } from '@/shared/ui/table'
 
 import type { ProfileSettingsModel } from '../model/useProfileSettings'
 
-export function NotificationsTab({ model }: { model: ProfileSettingsModel }) {
+type TNotificationsTabProps = { model: ProfileSettingsModel }
+
+export function NotificationsTab({ model }: TNotificationsTabProps) {
 	const t = useTranslations('Profile')
 	return (
 		<div className='animate-fade pt-0.5 pb-2'>

@@ -12,7 +12,9 @@ import { type Tone, TONE_CLASS } from '@/shared/ui/badge'
 import { ProgressBar } from '@/shared/ui/progress'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
-function KpiIcon({ tone, children }: { tone: Tone; children: ReactNode }) {
+type TKpiIconProps = { tone: Tone; children: ReactNode }
+
+function KpiIcon({ tone, children }: TKpiIconProps) {
 	return (
 		<span
 			className={`flex size-8.5 shrink-0 items-center justify-center rounded-[10px] ${TONE_CLASS[tone]}`}

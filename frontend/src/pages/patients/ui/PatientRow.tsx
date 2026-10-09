@@ -17,13 +17,12 @@ import type { PatientRowView } from '../model/usePatientsTable'
 
 export const checkboxClass = 'size-4.25 cursor-pointer accent-brand'
 
-export function PatientRow({
-	row,
-	onToggle,
-}: {
+type TPatientRowProps = {
 	row: PatientRowView
 	onToggle: () => void
-}) {
+}
+
+export function PatientRow({ row, onToggle }: TPatientRowProps) {
 	const t = useTranslations('Patients')
 	const cell = row.isSelected ? 'bg-brand-soft' : undefined
 

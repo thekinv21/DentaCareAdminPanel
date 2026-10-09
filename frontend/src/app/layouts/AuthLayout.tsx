@@ -2,7 +2,9 @@ import type { ReactNode } from 'react'
 
 import { AuthBrandPanel, AuthTopBar } from '@/widgets/auth-panel'
 
-export function AuthLayout({ children }: { children: ReactNode }) {
+type TAuthLayoutProps = { children: ReactNode }
+
+export function AuthLayout({ children }: TAuthLayoutProps) {
 	return (
 		<div className='flex h-dvh min-h-155 max-[900px]:h-auto max-[900px]:min-h-dvh'>
 			<AuthBrandPanel />

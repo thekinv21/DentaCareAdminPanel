@@ -13,13 +13,13 @@ import { inputClass } from '@/shared/ui/field'
 
 import type { PaymentFormModel } from '../model/usePaymentForm'
 
-interface PaymentFormProps {
+type TPaymentFormProps = {
 	invoice: Invoice
 	form: PaymentFormModel
 	onConfirm: () => void
 }
 
-export function PaymentForm({ invoice, form, onConfirm }: PaymentFormProps) {
+export function PaymentForm({ invoice, form, onConfirm }: TPaymentFormProps) {
 	const t = useTranslations('Billing')
 	const format = useFormat()
 	const amount = `${form.amount} ${t('som')}`

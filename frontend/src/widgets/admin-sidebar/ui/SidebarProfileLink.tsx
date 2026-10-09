@@ -15,8 +15,8 @@ type TSidebarProfileLinkProps = {
 	active: boolean
 }
 
-export function SidebarProfileLink(_props: TSidebarProfileLinkProps) {
-	const { initials, fullName, role, active } = _props
+export function SidebarProfileLink(props: TSidebarProfileLinkProps) {
+	const { initials, fullName, role, active } = props
 
 	const t = useTranslations('AdminSidebar')
 	return (

@@ -7,7 +7,7 @@ import { cn } from '@/shared/lib/cn'
 import { PAYMENT_METHODS } from '../model/Maps'
 import type { PaymentMethodId } from '../model/Types'
 
-interface PaymentMethodTileProps {
+type TPaymentMethodTileProps = {
 	method: PaymentMethodId
 	size?: 'sm' | 'md' | 'lg'
 	className?: string
@@ -20,7 +20,7 @@ export function PaymentMethodTile({
 	method,
 	size = 'md',
 	className,
-}: PaymentMethodTileProps) {
+}: TPaymentMethodTileProps) {
 	const t = useTranslations('Invoice')
 	return (
 		<span

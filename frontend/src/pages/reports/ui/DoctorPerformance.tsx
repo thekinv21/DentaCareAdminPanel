@@ -9,7 +9,9 @@ import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
 import type { ReportModel } from '../model/useReport'
 
-export function DoctorPerformance({ report }: { report: ReportModel }) {
+type TDoctorPerformanceProps = { report: ReportModel }
+
+export function DoctorPerformance({ report }: TDoctorPerformanceProps) {
 	const t = useTranslations('Reports')
 	return (
 		<Card

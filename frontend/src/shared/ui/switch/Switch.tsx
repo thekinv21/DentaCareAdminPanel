@@ -2,7 +2,7 @@
 
 import { cn } from '@/shared/lib/cn'
 
-interface SwitchProps {
+type TSwitchProps = {
 	checked: boolean
 	onChange: (checked: boolean) => void
 	'aria-label': string
@@ -10,19 +10,15 @@ interface SwitchProps {
 	size?: 'sm' | 'md'
 }
 
-export function Switch({
-	checked,
-	onChange,
-	disabled,
-	size = 'sm',
-	...props
-}: SwitchProps) {
+export function Switch(props: TSwitchProps) {
+	const { checked, onChange, disabled, size = 'sm', ...rest } = props
+
 	return (
 		<button
 			type='button'
 			role='switch'
 			aria-checked={checked}
-			aria-label={props['aria-label']}
+			aria-label={rest['aria-label']}
 			disabled={disabled}
 			onClick={() => onChange(!checked)}
 			className={cn(

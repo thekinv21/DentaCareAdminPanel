@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn'
 
 import { useLanguageMenu } from '../model/useLanguageMenu'
 
-interface LanguageSwitcherProps {
+type TLanguageSwitcherProps = {
 	/**
 	 * `compact` shows the code (header), `full` shows the language name (auth screens)
 	 */
@@ -15,7 +15,7 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({
 	variant = 'compact',
-}: LanguageSwitcherProps) {
+}: TLanguageSwitcherProps) {
 	const { rootRef, open, toggle, options, current, pick, label } =
 		useLanguageMenu()
 

@@ -4,10 +4,7 @@ import { Search } from 'lucide-react'
 
 import { cn } from '@/shared/lib/cn'
 
-interface SearchInputProps extends Omit<
-	InputHTMLAttributes<HTMLInputElement>,
-	'size'
-> {
+type TSearchInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 	label: string
 	/**
 	 * `sm` sits inside cards on a raised fill
@@ -17,14 +14,16 @@ interface SearchInputProps extends Omit<
 	className?: string
 }
 
-export function SearchInput({
-	label,
-	size = 'md',
-	shortcut,
-	className,
-	placeholder,
-	...props
-}: SearchInputProps) {
+export function SearchInput(props: TSearchInputProps) {
+	const {
+		label,
+		size = 'md',
+		shortcut,
+		className,
+		placeholder,
+		...rest
+	} = props
+
 	return (
 		<label
 			className={cn(
@@ -39,7 +38,7 @@ export function SearchInput({
 				type='search'
 				placeholder={placeholder ?? label}
 				className='h-full min-w-0 grow border-0 bg-transparent text-ink outline-none'
-				{...props}
+				{...rest}
 			/>
 			{shortcut && (
 				<kbd className='shrink-0 rounded-md border border-line bg-raised px-1.5 font-mono text-[11px] leading-4.5 text-ink-muted'>

@@ -4,19 +4,16 @@ import { cn } from '@/shared/lib/cn'
 
 import { type Tone, TONE_CLASS } from './Tone'
 
-interface BadgeProps {
+type TBadgeProps = {
 	tone?: Tone
 	dot?: boolean
 	className?: string
 	children: ReactNode
 }
 
-export function Badge({
-	tone = 'neutral',
-	dot,
-	className,
-	children,
-}: BadgeProps) {
+export function Badge(props: TBadgeProps) {
+	const { tone = 'neutral', dot, className, children } = props
+
 	return (
 		<span
 			className={cn(

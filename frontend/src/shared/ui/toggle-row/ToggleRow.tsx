@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 import { Switch } from '@/shared/ui/switch'
 
-interface ToggleRowProps {
+type TToggleRowProps = {
 	label: string
 	hint?: ReactNode
 	checked: boolean
@@ -20,15 +20,9 @@ interface ToggleRowProps {
 /**
  * Settings row: text on the left, switch on the right, hairline between rows
  */
-export function ToggleRow({
-	label,
-	hint,
-	checked,
-	onChange,
-	meta,
-	leading,
-	disabled,
-}: ToggleRowProps) {
+export function ToggleRow(props: TToggleRowProps) {
+	const { label, hint, checked, onChange, meta, leading, disabled } = props
+
 	return (
 		<div className='flex items-center gap-3.5 border-b border-line py-3 last:border-b-0'>
 			{leading}

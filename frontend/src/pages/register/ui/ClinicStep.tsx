@@ -12,7 +12,9 @@ import { PhoneInput } from '@/shared/ui/phone-input'
 
 import type { RegisterFormModel } from '../model/useRegisterForm'
 
-export function ClinicStep({ form }: { form: RegisterFormModel }) {
+type TClinicStepProps = { form: RegisterFormModel }
+
+export function ClinicStep({ form }: TClinicStepProps) {
 	const t = useTranslations('Register')
 	return (
 		<div className='flex animate-fade flex-col gap-4'>

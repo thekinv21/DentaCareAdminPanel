@@ -7,7 +7,7 @@ import type {
 
 import { cn } from '@/shared/lib/cn'
 
-interface TableScrollProps {
+type TTableScrollProps = {
 	className?: string
 	children: ReactNode
 }
@@ -15,7 +15,7 @@ interface TableScrollProps {
 /**
  * Horizontal scroll box that bleeds to the card edges
  */
-export function TableScroll({ className, children }: TableScrollProps) {
+export function TableScroll({ className, children }: TTableScrollProps) {
 	return (
 		<div
 			className={cn('-mx-4.5 overflow-auto px-4.5 scrollbar-thin', className)}
@@ -25,11 +25,11 @@ export function TableScroll({ className, children }: TableScrollProps) {
 	)
 }
 
-interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
+type TTableProps = TableHTMLAttributes<HTMLTableElement> & {
 	hoverRows?: boolean
 }
 
-export function Table({ hoverRows = true, className, ...props }: TableProps) {
+export function Table({ hoverRows = true, className, ...props }: TTableProps) {
 	return (
 		<table
 			className={cn(
@@ -42,16 +42,13 @@ export function Table({ hoverRows = true, className, ...props }: TableProps) {
 	)
 }
 
-interface ThProps extends ThHTMLAttributes<HTMLTableCellElement> {
+type TThProps = ThHTMLAttributes<HTMLTableCellElement> & {
 	align?: 'left' | 'center' | 'right'
 }
 
-export function Th({
-	align = 'left',
-	className,
-	scope = 'col',
-	...props
-}: ThProps) {
+export function Th(props: TThProps) {
+	const { align = 'left', className, scope = 'col', ...rest } = props
+
 	return (
 		<th
 			scope={scope}
@@ -62,18 +59,20 @@ export function Th({
 				align === 'right' && 'text-right',
 				className,
 			)}
-			{...props}
+			{...rest}
 		/>
 	)
 }
 
-interface TdProps extends TdHTMLAttributes<HTMLTableCellElement> {
+type TTdProps = TdHTMLAttributes<HTMLTableCellElement> & {
 	align?: 'left' | 'center' | 'right'
 	mono?: boolean
 	nowrap?: boolean
 }
 
-export function Td({ align, mono, nowrap, className, ...props }: TdProps) {
+export function Td(props: TTdProps) {
+	const { align, mono, nowrap, className, ...rest } = props
+
 	return (
 		<td
 			className={cn(
@@ -84,7 +83,7 @@ export function Td({ align, mono, nowrap, className, ...props }: TdProps) {
 				nowrap && 'whitespace-nowrap',
 				className,
 			)}
-			{...props}
+			{...rest}
 		/>
 	)
 }

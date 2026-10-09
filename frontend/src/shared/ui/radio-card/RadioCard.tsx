@@ -2,7 +2,7 @@
 
 import { cn } from '@/shared/lib/cn'
 
-interface RadioCardProps {
+type TRadioCardProps = {
 	code: string
 	title: string
 	note: string
@@ -13,13 +13,9 @@ interface RadioCardProps {
 /**
  * Large selectable option with a code tile and a radio dot
  */
-export function RadioCard({
-	code,
-	title,
-	note,
-	checked,
-	onSelect,
-}: RadioCardProps) {
+export function RadioCard(props: TRadioCardProps) {
+	const { code, title, note, checked, onSelect } = props
+
 	return (
 		<button
 			type='button'

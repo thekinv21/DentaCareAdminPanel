@@ -172,6 +172,28 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
 
 ## Component patterns
 
+- Props are never typed inline. Every component that takes props declares
+  `type T<ComponentName>Props` directly above it (a `type`, not an `interface`; extend with `&`).
+  This applies to non-exported helper components too (`SortButton` → `TSortButtonProps`).
+- Up to 3 props: destructure in the signature. More than 3 (a `...rest` counts as one): take `props`
+  and destructure on the first line of the body, renaming a rest element to `rest`.
+
+  ```tsx
+  type TBadgeProps = { tone?: Tone; children: ReactNode }
+
+  export function Badge({ tone = 'neutral', children }: TBadgeProps) {}
+
+  type TButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  	variant?: ButtonVariant
+  	size?: ButtonSize
+  	block?: boolean
+  }
+
+  export function Button(props: TButtonProps) {
+  	const { variant, size, block, className, ...rest } = props
+  }
+  ```
+
 - FSD page components live in `src/pages/<slice>/ui`, exported via the slice `index.ts`.
 - Client components go in separate files with the `"use client"` directive.
 - Loading states use `loading.tsx` (Suspense boundary) in root `app/`.

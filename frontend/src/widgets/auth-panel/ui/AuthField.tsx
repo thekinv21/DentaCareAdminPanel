@@ -9,8 +9,8 @@ type TAuthFieldProps = {
 	children: ReactNode
 }
 
-export function AuthField(_props: TAuthFieldProps) {
-	const { id, label, error, hint, aside, children } = _props
+export function AuthField(props: TAuthFieldProps) {
+	const { id, label, error, hint, aside, children } = props
 
 	return (
 		<div className='flex flex-col gap-1.5'>

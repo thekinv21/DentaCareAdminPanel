@@ -11,7 +11,9 @@ import type { usePatientsTable } from '../model/usePatientsTable'
 
 type Table = ReturnType<typeof usePatientsTable>
 
-export function PatientsToolbar({ table }: { table: Table }) {
+type TPatientsToolbarProps = { table: Table }
+
+export function PatientsToolbar({ table }: TPatientsToolbarProps) {
 	const t = useTranslations('Patients')
 	return (
 		<>

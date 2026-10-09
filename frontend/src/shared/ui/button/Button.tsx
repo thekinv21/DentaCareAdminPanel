@@ -2,25 +2,20 @@ import type { ButtonHTMLAttributes } from 'react'
 
 import { buttonClass, type ButtonSize, type ButtonVariant } from './ButtonClass'
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type TButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: ButtonVariant
 	size?: ButtonSize
 	block?: boolean
 }
 
-export function Button({
-	variant,
-	size,
-	block,
-	className,
-	type = 'button',
-	...props
-}: ButtonProps) {
+export function Button(props: TButtonProps) {
+	const { variant, size, block, className, type = 'button', ...rest } = props
+
 	return (
 		<button
 			type={type}
 			className={buttonClass({ variant, size, block, className })}
-			{...props}
+			{...rest}
 		/>
 	)
 }

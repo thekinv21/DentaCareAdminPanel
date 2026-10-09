@@ -8,11 +8,13 @@ import { Field, formGrid3, inputClass } from '@/shared/ui/field'
 import { Switch } from '@/shared/ui/switch'
 
 import { WORK_DAYS } from '../model/Clinic'
-import type { TogglesProps } from '../model/useSettings'
+import type { SettingsModel } from '../model/useSettings'
 
 const timeClass = cn(inputClass, 'w-30 font-mono')
 
-export function HoursSection({ toggles, flip }: TogglesProps) {
+type THoursSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
+
+export function HoursSection({ toggles, flip }: THoursSectionProps) {
 	const t = useTranslations('Settings')
 	return (
 		<div className='animate-fade pb-2'>

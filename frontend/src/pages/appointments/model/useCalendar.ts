@@ -31,14 +31,11 @@ export type CalendarView = 'day' | 'week' | 'month'
 const DOCTOR_KEYS: DoctorKey[] = ['kas', 'pet', 'tok']
 const A_MONDAY = '2026-10-05'
 
-/**
- * Calendar navigation (view, cursor date) and the doctor filter
- */
 export function useCalendar() {
 	const t = useTranslations('Appointments')
 	const labels = useAppointmentLabels()
 	const format = useFormat()
-	const [view, setView] = useState<CalendarView>('week')
+	const [view, setView] = useState<CalendarView>('day')
 	const [cursor, setCursor] = useState(TODAY)
 	const [hidden, setHidden] = useState<Set<DoctorKey>>(new Set())
 

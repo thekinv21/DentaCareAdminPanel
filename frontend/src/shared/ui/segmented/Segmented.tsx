@@ -10,7 +10,7 @@ export interface SegmentedOption<T extends string> {
 	count?: ReactNode
 }
 
-interface SegmentedProps<T extends string> {
+type TSegmentedProps<T extends string> = {
 	options: SegmentedOption<T>[]
 	value: T
 	onChange: (value: T) => void
@@ -22,18 +22,13 @@ interface SegmentedProps<T extends string> {
 /**
  * Sunken track with a raised clay thumb on the selected tab
  */
-export function Segmented<T extends string>({
-	options,
-	value,
-	onChange,
-	size = 'md',
-	className,
-	...props
-}: SegmentedProps<T>) {
+export function Segmented<T extends string>(props: TSegmentedProps<T>) {
+	const { options, value, onChange, size = 'md', className, ...rest } = props
+
 	return (
 		<div
 			role='tablist'
-			aria-label={props['aria-label']}
+			aria-label={rest['aria-label']}
 			className={cn(
 				'flex flex-wrap gap-0.75 rounded-xl bg-sunken p-0.75 shadow-press',
 				className,

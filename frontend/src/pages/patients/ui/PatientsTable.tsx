@@ -14,13 +14,12 @@ import { usePatientsTable } from '../model/usePatientsTable'
 import { checkboxClass, PatientRow } from './PatientRow'
 import { PatientsToolbar } from './PatientsToolbar'
 
-function SortButton({
-	label,
-	onClick,
-}: {
+type TSortButtonProps = {
 	label: string
 	onClick: () => void
-}) {
+}
+
+function SortButton({ label, onClick }: TSortButtonProps) {
 	return (
 		<button
 			type='button'

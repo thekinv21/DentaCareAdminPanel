@@ -29,8 +29,8 @@ function crownFill({ missing, crown }: TToothState) {
 /**
  * Crown circle split into clickable surfaces, with treatment marks on top
  */
-export function ToothCrown(_props: TToothCrownProps) {
-	const { shape, state, surfaceTitle, onPickSurface } = _props
+export function ToothCrown(props: TToothCrownProps) {
+	const { shape, state, surfaceTitle, onPickSurface } = props
 
 	const visible = !state.missing
 

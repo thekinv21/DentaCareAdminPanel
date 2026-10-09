@@ -11,8 +11,8 @@ type TToothSvgProps = {
 	onPickSurface: (surface: TSurface) => void
 }
 
-export function ToothSvg(_props: TToothSvgProps) {
-	const { n, upper, state, surfaceTitle, onPickSurface } = _props
+export function ToothSvg(props: TToothSvgProps) {
+	const { n, upper, state, surfaceTitle, onPickSurface } = props
 
 	const shape = toothShape(n, upper, !!(state.missing || state.implant))
 

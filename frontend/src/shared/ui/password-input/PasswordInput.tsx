@@ -8,12 +8,12 @@ import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/cn'
 import { inputLgClass } from '@/shared/ui/field'
 
-type PasswordInputProps = Omit<ComponentProps<'input'>, 'type'>
+type TPasswordInputProps = Omit<ComponentProps<'input'>, 'type'>
 
 /**
  * Password field with a show/hide toggle
  */
-export function PasswordInput({ className, ...props }: PasswordInputProps) {
+export function PasswordInput({ className, ...props }: TPasswordInputProps) {
 	const t = useTranslations('Common')
 	const [visible, setVisible] = useState(false)
 	return (

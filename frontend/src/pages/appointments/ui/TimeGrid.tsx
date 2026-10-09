@@ -33,13 +33,12 @@ const hourShift = (i: number) =>
 			? '-translate-y-full'
 			: '-translate-y-1/2'
 
-export function TimeGrid({
-	columns,
-	minColumn,
-}: {
+type TTimeGridProps = {
 	columns: CalendarColumn[]
 	minColumn: number
-}) {
+}
+
+export function TimeGrid({ columns, minColumn }: TTimeGridProps) {
 	const gridStyle: CSSProperties = {
 		display: 'grid',
 		gridTemplateColumns: `52px repeat(${columns.length}, minmax(${minColumn}px, 1fr))`,

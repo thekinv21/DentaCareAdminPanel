@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-interface ProgressBarProps {
+type TProgressBarProps = {
 	/**
 	 * 0–100
 	 */
@@ -16,13 +16,9 @@ interface ProgressBarProps {
 	className?: string
 }
 
-export function ProgressBar({
-	value,
-	label,
-	fillClass = 'bg-brand',
-	delay = 0,
-	className,
-}: ProgressBarProps) {
+export function ProgressBar(props: TProgressBarProps) {
+	const { value, label, fillClass = 'bg-brand', delay = 0, className } = props
+
 	const style: CSSProperties = {
 		width: `${value}%`,
 		animationDelay: `${delay}ms`,

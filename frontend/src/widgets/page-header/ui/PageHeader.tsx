@@ -18,8 +18,8 @@ type TPageHeaderProps = {
 	search?: boolean
 }
 
-export function PageHeader(_props: TPageHeaderProps) {
-	const { title, crumb, actions, tools, search = true } = _props
+export function PageHeader(props: TPageHeaderProps) {
+	const { title, crumb, actions, tools, search = true } = props
 
 	const t = useTranslations('PageHeader')
 	return (

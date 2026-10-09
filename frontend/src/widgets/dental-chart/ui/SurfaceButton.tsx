@@ -9,8 +9,8 @@ type TSurfaceButtonProps = {
 	onClick: () => void
 }
 
-export function SurfaceButton(_props: TSurfaceButtonProps) {
-	const { short, label, finding, onClick } = _props
+export function SurfaceButton(props: TSurfaceButtonProps) {
+	const { short, label, finding, onClick } = props
 
 	return (
 		<button

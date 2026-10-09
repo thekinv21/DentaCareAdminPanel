@@ -30,7 +30,9 @@ const FIELDS = [
 	},
 ]
 
-export function ProfileTab({ model }: { model: ProfileSettingsModel }) {
+type TProfileTabProps = { model: ProfileSettingsModel }
+
+export function ProfileTab({ model }: TProfileTabProps) {
 	const t = useTranslations('Profile')
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>

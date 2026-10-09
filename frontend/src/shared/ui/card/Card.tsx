@@ -2,31 +2,28 @@ import type { HTMLAttributes, ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-interface CardProps extends HTMLAttributes<HTMLElement> {
+type TCardProps = HTMLAttributes<HTMLElement> & {
 	as?: 'div' | 'section' | 'aside' | 'article'
 	children: ReactNode
 }
 
-export function Card({
-	as: Tag = 'div',
-	className,
-	children,
-	...props
-}: CardProps) {
+export function Card(props: TCardProps) {
+	const { as: Tag = 'div', className, children, ...rest } = props
+
 	return (
 		<Tag
 			className={cn(
 				'flex min-w-0 flex-col gap-3.5 rounded-[20px] bg-surface p-4.5 shadow-clay-md',
 				className,
 			)}
-			{...props}
+			{...rest}
 		>
 			{children}
 		</Tag>
 	)
 }
 
-interface CardHeaderProps {
+type TCardHeaderProps = {
 	title?: ReactNode
 	description?: ReactNode
 	actions?: ReactNode
@@ -36,12 +33,9 @@ interface CardHeaderProps {
 /**
  * Title + description on the left, actions on the right; wraps on narrow cards
  */
-export function CardHeader({
-	title,
-	description,
-	actions,
-	className,
-}: CardHeaderProps) {
+export function CardHeader(props: TCardHeaderProps) {
+	const { title, description, actions, className } = props
+
 	return (
 		<div
 			className={cn(

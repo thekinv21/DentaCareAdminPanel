@@ -1,12 +1,11 @@
 import type { SVGProps } from 'react'
 
+type TToothIconProps = SVGProps<SVGSVGElement> & { size?: number }
+
 /**
  * Denta tooth mark (stroke icon, follows currentColor)
  */
-export function ToothIcon({
-	size = 20,
-	...props
-}: SVGProps<SVGSVGElement> & { size?: number }) {
+export function ToothIcon({ size = 20, ...props }: TToothIconProps) {
 	return (
 		<svg
 			width={size}

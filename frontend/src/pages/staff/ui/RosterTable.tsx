@@ -10,12 +10,12 @@ import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
 import type { StaffBoardModel } from '../model/useStaffBoard'
 
-interface RosterTableProps {
+type TRosterTableProps = {
 	roster: StaffBoardModel['roster']
 	weekDays: StaffBoardModel['weekDays']
 }
 
-export function RosterTable({ roster, weekDays }: RosterTableProps) {
+export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 	const t = useTranslations('Staff')
 	return (
 		<>

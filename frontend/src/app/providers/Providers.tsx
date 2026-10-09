@@ -6,7 +6,9 @@ import { ThemeProvider } from '@/shared/lib/theme'
 
 import { TanStackQueryProvider } from './TanStackQueryProvider'
 
-export function Providers({ children }: { children: ReactNode }) {
+type TProvidersProps = { children: ReactNode }
+
+export function Providers({ children }: TProvidersProps) {
 	return (
 		<TanStackQueryProvider>
 			<ThemeProvider>{children}</ThemeProvider>

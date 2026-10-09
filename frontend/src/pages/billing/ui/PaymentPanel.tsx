@@ -14,7 +14,9 @@ import { usePaymentForm } from '../model/usePaymentForm'
 import { useRevenueSplit } from '../model/useRevenueSplit'
 import { PaymentForm } from './PaymentForm'
 
-export function PaymentPanel({ billing }: { billing: BillingModel }) {
+type TPaymentPanelProps = { billing: BillingModel }
+
+export function PaymentPanel({ billing }: TPaymentPanelProps) {
 	const t = useTranslations('Billing')
 	const form = usePaymentForm(billing.invoice, billing.invoiceIndex)
 	const split = useRevenueSplit()

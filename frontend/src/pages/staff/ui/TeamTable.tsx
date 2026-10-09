@@ -11,7 +11,9 @@ import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
 import type { StaffBoardModel } from '../model/useStaffBoard'
 
-export function TeamTable({ people }: { people: StaffBoardModel['people'] }) {
+type TTeamTableProps = { people: StaffBoardModel['people'] }
+
+export function TeamTable({ people }: TTeamTableProps) {
 	const t = useTranslations('Staff')
 	const headers = ['staffMember', 'role', 'status', 'today', 'chair', 'phone']
 

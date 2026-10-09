@@ -11,7 +11,9 @@ import { ProgressBar } from '@/shared/ui/progress'
 import type { ReportModel } from '../model/useReport'
 import { RevenueChart } from './RevenueChart'
 
-export function ReportCharts({ report }: { report: ReportModel }) {
+type TReportChartsProps = { report: ReportModel }
+
+export function ReportCharts({ report }: TReportChartsProps) {
 	const t = useTranslations('Reports')
 	return (
 		<section className='flex flex-wrap items-stretch gap-4'>

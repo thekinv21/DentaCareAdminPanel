@@ -11,13 +11,12 @@ export interface LegendItem {
 	swatchStyle?: CSSProperties
 }
 
-export function Legend({
-	items,
-	className,
-}: {
+type TLegendProps = {
 	items: LegendItem[]
 	className?: string
-}) {
+}
+
+export function Legend({ items, className }: TLegendProps) {
 	return (
 		<ul
 			className={cn(

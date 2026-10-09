@@ -19,11 +19,11 @@ import { PaymentsSection } from './PaymentsSection'
 import { TreatmentPlanSection } from './TreatmentPlanSection'
 import { VisitHistorySection } from './VisitHistorySection'
 
-export function PatientProfilePage({
-	params,
-}: {
+type TPatientProfilePageProps = {
 	params: Promise<{ id: string }>
-}) {
+}
+
+export function PatientProfilePage({ params }: TPatientProfilePageProps) {
 	const { id } = use(params)
 	const t = useTranslations('PatientProfile')
 	const tabs = useProfileTabs()

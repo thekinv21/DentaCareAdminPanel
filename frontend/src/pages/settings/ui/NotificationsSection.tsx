@@ -8,14 +8,19 @@ import { Field, formGrid2, textareaClass } from '@/shared/ui/field'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
 import { NOTIFICATIONS } from '../model/Communication'
-import type { TogglesProps } from '../model/useSettings'
+import type { SettingsModel } from '../model/useSettings'
 
 const TEMPLATE_RU =
 	'Здравствуйте, {имя}! Напоминаем о записи в Denta {дата} в {время}. Врач: {врач}. Ответьте 1 — подтвердить, 2 — перенести.'
 const TEMPLATE_KY =
 	'Саламатсызбы, {аты}! Denta клиникасына {күнү} саат {убакыт} жазылууңузду эскертебиз. Дарыгер: {дарыгер}.'
 
-export function NotificationsSection({ toggles, flip }: TogglesProps) {
+type TNotificationsSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
+
+export function NotificationsSection({
+	toggles,
+	flip,
+}: TNotificationsSectionProps) {
 	const t = useTranslations('Settings')
 	return (
 		<div className='flex animate-fade flex-col gap-4.5 pb-2'>

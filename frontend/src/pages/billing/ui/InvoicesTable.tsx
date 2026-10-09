@@ -16,7 +16,9 @@ import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
 import type { BillingModel } from '../model/useBilling'
 
-export function InvoicesTable({ billing }: { billing: BillingModel }) {
+type TInvoicesTableProps = { billing: BillingModel }
+
+export function InvoicesTable({ billing }: TInvoicesTableProps) {
 	const t = useTranslations('Billing')
 	return (
 		<Card

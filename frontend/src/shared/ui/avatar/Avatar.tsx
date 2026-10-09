@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/cn'
 import { type Tone, TONE_CLASS } from '@/shared/ui/badge'
 
-interface AvatarProps {
+type TAvatarProps = {
 	initials: string
 	tone?: Tone
 	size?: number
@@ -14,13 +14,9 @@ interface AvatarProps {
 /**
  * Initials in a tinted circle; children render on top (e.g. a status dot)
  */
-export function Avatar({
-	initials,
-	tone = 'brand',
-	size = 32,
-	className,
-	children,
-}: AvatarProps) {
+export function Avatar(props: TAvatarProps) {
+	const { initials, tone = 'brand', size = 32, className, children } = props
+
 	return (
 		<span
 			aria-hidden='true'

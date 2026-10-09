@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/cn'
 import { IconButton } from '@/shared/ui/icon-button'
 
-interface PaginationProps {
+type TPaginationProps = {
 	current: number
 	/**
 	 * Page numbers to show; `null` renders an ellipsis
@@ -15,7 +15,7 @@ interface PaginationProps {
 	onChange?: (page: number) => void
 }
 
-export function Pagination({ current, pages, onChange }: PaginationProps) {
+export function Pagination({ current, pages, onChange }: TPaginationProps) {
 	const t = useTranslations('Common')
 	const last = Math.max(...pages.filter((p): p is number => p !== null))
 

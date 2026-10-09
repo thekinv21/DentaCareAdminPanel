@@ -10,7 +10,9 @@ import { ToggleRow } from '@/shared/ui/toggle-row'
 
 import type { ProfileSettingsModel } from '../model/useProfileSettings'
 
-export function SecurityTab({ model }: { model: ProfileSettingsModel }) {
+type TSecurityTabProps = { model: ProfileSettingsModel }
+
+export function SecurityTab({ model }: TSecurityTabProps) {
 	const t = useTranslations('Profile')
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>

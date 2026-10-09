@@ -3,13 +3,13 @@ import { ReactNode, useState } from 'react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-type ITanStackQueryProviderProps = {
+type TTanStackQueryProviderProps = {
 	children: ReactNode
 }
 
 export function TanStackQueryProvider({
 	children,
-}: ITanStackQueryProviderProps) {
+}: TTanStackQueryProviderProps) {
 	const [queryClient] = useState(
 		() =>
 			new QueryClient({

@@ -7,9 +7,9 @@ import { Card } from '@/shared/ui/card'
 
 import type { SettingsModel } from '../model/useSettings'
 
-type SettingsNavProps = Pick<SettingsModel, 'sections' | 'selectSection'>
+type TSettingsNavProps = Pick<SettingsModel, 'sections' | 'selectSection'>
 
-export function SettingsNav({ sections, selectSection }: SettingsNavProps) {
+export function SettingsNav({ sections, selectSection }: TSettingsNavProps) {
 	const t = useTranslations('Settings')
 	return (
 		<Card

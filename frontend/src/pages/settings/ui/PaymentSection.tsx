@@ -11,9 +11,11 @@ import { Switch } from '@/shared/ui/switch'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
 import { BANK_DETAILS, PAYMENT_OPTIONS } from '../model/Payments'
-import type { TogglesProps } from '../model/useSettings'
+import type { SettingsModel } from '../model/useSettings'
 
-export function PaymentSection({ toggles, flip }: TogglesProps) {
+type TPaymentSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
+
+export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
 	const t = useTranslations('Settings')
 	const methods = usePaymentMethods()
 	return (
