@@ -8,14 +8,16 @@ export const SERVICE_CATEGORY: Record<ServiceCategory, string> = {
 	orth: 'prosthodontics',
 }
 
-export const SERVICES: {
+export type TServiceItem = {
 	code: string
 	name: string
 	category: ServiceCategory
 	minutes: number
 	price: number
 	foms: boolean
-}[] = [
+}
+
+export const SERVICES: TServiceItem[] = [
 	{
 		code: 'T-01',
 		name: 'consultationAndExam',

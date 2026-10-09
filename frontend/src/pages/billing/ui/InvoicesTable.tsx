@@ -2,15 +2,17 @@
 
 import Link from 'next/link'
 
-import { Download } from 'lucide-react'
+import { Ban, Download, Pencil } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { InvoiceStatusBadge, PaymentMethodTile } from '@/entities/invoice'
 
 import { cn } from '@/shared/lib/cn'
 import { ROUTES } from '@/shared/routes'
+import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
+import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
@@ -99,14 +101,50 @@ export function InvoicesTable({ billing }: TInvoicesTableProps) {
 									</span>
 								</Td>
 								<Td>
-									<InvoiceStatusBadge status={row.status} />
+									{row.voided ? (
+										<Badge>{t('voided')}</Badge>
+									) : (
+										<InvoiceStatusBadge status={row.status} />
+									)}
 								</Td>
 								<Td align='right' nowrap>
-									{row.balance > 0 && (
-										<Button size='sm' onClick={row.pay}>
-											{t('pay')}
-										</Button>
-									)}
+									<span className='inline-flex items-center gap-0.5'>
+										{row.payable && (
+											<>
+												<Button size='sm' onClick={row.pay}>
+													{t('pay')}
+												</Button>
+												<IconButton
+													quiet
+													size='sm'
+													aria-label={`${t('editInvoice')} ${row.number}`}
+													title={t('edit')}
+													onClick={row.edit}
+												>
+													<Pencil size={16} aria-hidden='true' />
+												</IconButton>
+												<IconButton
+													quiet
+													size='sm'
+													aria-label={`${t('voidInvoice')} ${row.number}`}
+													title={t('void')}
+													onClick={row.voidInvoice}
+													className='text-danger'
+												>
+													<Ban size={16} aria-hidden='true' />
+												</IconButton>
+											</>
+										)}
+										{row.refundable && (
+											<Button
+												size='sm'
+												variant='dangerGhost'
+												onClick={row.refund}
+											>
+												{t('refund')}
+											</Button>
+										)}
+									</span>
 								</Td>
 							</tr>
 						))}

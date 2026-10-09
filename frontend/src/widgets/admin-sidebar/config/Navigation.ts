@@ -9,6 +9,8 @@ import {
 	type LucideIcon,
 	Package,
 	Settings,
+	ShieldCheck,
+	UserCog,
 	Users,
 } from 'lucide-react'
 
@@ -59,6 +61,8 @@ export const NAVIGATION: TNavGroup[] = [
 		label: 'admin',
 		items: [
 			{ href: ROUTES.staff, label: 'staff', icon: IdCard },
+			{ href: ROUTES.users, label: 'users', icon: UserCog },
+			{ href: ROUTES.roles, label: 'rolesAndAccess', icon: ShieldCheck },
 			{ href: ROUTES.settings, label: 'settings', icon: Settings },
 		],
 	},

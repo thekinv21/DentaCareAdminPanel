@@ -15,6 +15,7 @@ import { getInitials } from '@/shared/lib/format'
 import { translateOptional, useFormat } from '@/shared/lib/i18n'
 
 import { ROSTER, SHIFT, TODAY_COLUMN, WEEK_DAYS } from './Roster'
+import type { TShiftTarget } from './useShiftForm'
 
 export type StaffView = 'team' | 'roster'
 export type RoleFilter = 'all' | StaffRole
@@ -29,7 +30,7 @@ const ROLES: { id: RoleFilter; label: string }[] = [
 /**
  * Team list filtered by role and the weekly shift roster
  */
-export function useStaffBoard() {
+export function useStaffBoard(onPickShift: (target: TShiftTarget) => void) {
 	const t = useTranslations('Staff')
 	const tEmployee = useTranslations('Employee')
 	const format = useFormat()
@@ -62,15 +63,28 @@ export function useStaffBoard() {
 
 	const roster = ROSTER.map(row => {
 		const name = format.name(row.name)
+		const initials = getInitials(name)
 		return {
 			name,
-			initials: getInitials(name),
+			initials,
 			tone: row.tone,
-			days: row.days.map((key, index) => ({
-				key: index,
-				label: translateOptional(t, SHIFT[key].label),
-				tone: SHIFT[key].tone,
-			})),
+			days: row.days.map((key, index) => {
+				const label = translateOptional(t, SHIFT[key].label)
+				return {
+					key: index,
+					label,
+					tone: SHIFT[key].tone,
+					aria: `${name}, ${t(WEEK_DAYS[index])}: ${label}`,
+					pick: () =>
+						onPickShift({
+							name,
+							initials,
+							tone: row.tone,
+							dayIndex: index,
+							shift: key,
+						}),
+				}
+			}),
 		}
 	})
 

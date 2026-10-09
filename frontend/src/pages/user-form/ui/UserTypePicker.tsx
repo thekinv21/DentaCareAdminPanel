@@ -1,0 +1,83 @@
+'use client'
+
+import {
+	Calculator,
+	type LucideIcon,
+	MonitorSmartphone,
+	Star,
+	UserRoundCheck,
+} from 'lucide-react'
+import { useTranslations } from 'next-intl'
+
+import { type TUserType, USER_TYPES, useUserLabels } from '@/entities/user'
+
+import { cn } from '@/shared/lib/cn'
+import { FormSection } from '@/shared/ui/form-section'
+import { ToothIcon } from '@/shared/ui/logo'
+
+import type { TUserFormModel } from '../model/useUserForm'
+
+const ICON: Record<TUserType, LucideIcon | typeof ToothIcon> = {
+	chief: Star,
+	doctor: ToothIcon,
+	assistant: UserRoundCheck,
+	admin: MonitorSmartphone,
+	accountant: Calculator,
+}
+
+type TUserTypePickerProps = { form: TUserFormModel }
+
+export function UserTypePicker({ form }: TUserTypePickerProps) {
+	const t = useTranslations('UserForm')
+	const labels = useUserLabels()
+
+	return (
+		<FormSection
+			title={t('userType')}
+			aside={
+				<span className='text-[12.5px] text-ink-muted'>
+					{t('fieldsDependOnType')}
+				</span>
+			}
+		>
+			<div
+				role='radiogroup'
+				aria-label={t('userType')}
+				className='grid grid-cols-5 gap-2.5 max-[1100px]:grid-cols-3 max-[720px]:grid-cols-2'
+			>
+				{USER_TYPES.map(type => {
+					const on = form.type === type
+					const Icon = ICON[type]
+					return (
+						<button
+							key={type}
+							type='button'
+							role='radio'
+							aria-checked={on}
+							onClick={() => form.setType(type)}
+							className={cn(
+								'flex flex-col items-start gap-2 rounded-2xl p-3 text-left text-ink',
+								on
+									? 'border-2 border-brand bg-brand-soft'
+									: 'm-px border border-line bg-surface hover:bg-raised',
+							)}
+						>
+							<span
+								className={cn(
+									'inline-flex size-9 items-center justify-center rounded-[11px]',
+									on ? 'bg-brand text-on-brand' : 'bg-sunken text-ink-muted',
+								)}
+							>
+								<Icon size={18} aria-hidden='true' />
+							</span>
+							<span className='text-sm font-bold'>{labels.type(type)}</span>
+							<span className='text-xs leading-4 text-ink-muted'>
+								{labels.typeHint(type)}
+							</span>
+						</button>
+					)
+				})}
+			</div>
+		</FormSection>
+	)
+}

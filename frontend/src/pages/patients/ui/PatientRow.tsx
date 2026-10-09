@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { Ellipsis } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { PatientFlagBadge } from '@/entities/patient'
@@ -90,14 +90,28 @@ export function PatientRow({ row, onToggle }: TPatientRowProps) {
 					))}
 				</div>
 			</Td>
-			<Td align='right' className={cell}>
-				<IconButton
-					quiet
-					size='sm'
-					aria-label={`${t('actionsFor')} ${row.fullName}`}
-				>
-					<Ellipsis size={16} aria-hidden='true' />
-				</IconButton>
+			<Td align='right' nowrap className={cell}>
+				<span className='inline-flex gap-0.5'>
+					<IconButton
+						quiet
+						size='sm'
+						aria-label={`${t('editColon')} ${row.fullName}`}
+						title={t('edit')}
+						onClick={row.edit}
+					>
+						<Pencil size={16} aria-hidden='true' />
+					</IconButton>
+					<IconButton
+						quiet
+						size='sm'
+						aria-label={`${t('deleteColon')} ${row.fullName}`}
+						title={t('delete')}
+						onClick={row.remove}
+						className='text-danger'
+					>
+						<Trash2 size={16} aria-hidden='true' />
+					</IconButton>
+				</span>
 			</Td>
 		</tr>
 	)

@@ -6,7 +6,12 @@ import { useTranslations } from 'next-intl'
 
 import { useFormat } from '@/shared/lib/i18n'
 
-import { SERVICE_CATEGORY, type ServiceCategory, SERVICES } from './Services'
+import {
+	SERVICE_CATEGORY,
+	type ServiceCategory,
+	SERVICES,
+	type TServiceItem,
+} from './Services'
 
 type CategoryFilter = 'all' | Exclude<ServiceCategory, 'hyg'>
 
@@ -21,7 +26,17 @@ const FILTERS: { id: CategoryFilter; label: string }[] = [
 /**
  * Price list filtered by category
  */
-export function useServices() {
+type TServicesOptions = {
+	removedCodes: Set<string>
+	onEdit: (service: TServiceItem) => void
+	onRemove: (service: TServiceItem) => void
+}
+
+export function useServices({
+	removedCodes,
+	onEdit,
+	onRemove,
+}: TServicesOptions) {
 	const t = useTranslations('Settings')
 	const format = useFormat()
 	const [category, setCategory] = useState<CategoryFilter>('all')
@@ -31,7 +46,9 @@ export function useServices() {
 		setCategory,
 		filters: FILTERS.map(item => ({ ...item, label: t(item.label) })),
 		rows: SERVICES.filter(
-			service => category === 'all' || service.category === category,
+			service =>
+				!removedCodes.has(service.code) &&
+				(category === 'all' || service.category === category),
 		).map(service => ({
 			code: service.code,
 			name: t(service.name),
@@ -42,6 +59,10 @@ export function useServices() {
 				label: t(service.foms ? 'covers' : 'no'),
 				tone: service.foms ? ('ok' as const) : ('neutral' as const),
 			},
+			edit: () => onEdit(service),
+			remove: () => onRemove(service),
 		})),
 	}
 }
+
+export type TServicesModel = ReturnType<typeof useServices>

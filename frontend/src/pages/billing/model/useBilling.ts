@@ -27,7 +27,19 @@ function matchesFilter(invoice: Invoice, filter: InvoiceFilter) {
 /**
  * Invoice list filter and which invoice the payment panel is collecting
  */
-export function useBilling() {
+type TBillingOptions = {
+	voided: Set<string>
+	onEdit: (invoice: Invoice) => void
+	onVoid: (invoice: Invoice) => void
+	onRefund: (invoice: Invoice) => void
+}
+
+export function useBilling({
+	voided,
+	onEdit,
+	onVoid,
+	onRefund,
+}: TBillingOptions) {
 	const t = useTranslations('Billing')
 	const tInvoice = useTranslations('Invoice')
 	const methods = usePaymentMethods()
@@ -45,6 +57,12 @@ export function useBilling() {
 			balanceText: invoice.balance ? format.som(invoice.balance) : '—',
 			methodName: methods.byId(invoice.method).name,
 			overdue: invoice.status === 'overdue',
+			voided: voided.has(invoice.number),
+			payable: invoice.balance > 0 && !voided.has(invoice.number),
+			refundable: invoice.balance === 0 && !voided.has(invoice.number),
+			edit: () => onEdit(invoice),
+			voidInvoice: () => onVoid(invoice),
+			refund: () => onRefund(invoice),
 			pay: () => {
 				setSelectedIndex(INVOICES.indexOf(invoice))
 				setDone(false)

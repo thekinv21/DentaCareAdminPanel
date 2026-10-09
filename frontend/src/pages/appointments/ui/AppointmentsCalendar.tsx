@@ -5,14 +5,15 @@ import { useTranslations } from 'next-intl'
 import { Card } from '@/shared/ui/card'
 import { Legend } from '@/shared/ui/legend'
 
-import { useCalendar } from '../model/useCalendar'
+import type { CalendarModel } from '../model/useCalendar'
 import { CalendarToolbar } from './CalendarToolbar'
 import { MonthGrid } from './MonthGrid'
 import { TimeGrid } from './TimeGrid'
 
-export function AppointmentsCalendar() {
+type TAppointmentsCalendarProps = { calendar: CalendarModel }
+
+export function AppointmentsCalendar({ calendar }: TAppointmentsCalendarProps) {
 	const t = useTranslations('Appointments')
-	const calendar = useCalendar()
 
 	return (
 		<Card
@@ -28,6 +29,7 @@ export function AppointmentsCalendar() {
 					<TimeGrid
 						columns={calendar.columns}
 						minColumn={calendar.view === 'day' ? 150 : 118}
+						onOpenEvent={calendar.openEvent}
 					/>
 				)}
 			</div>

@@ -47,14 +47,17 @@ export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 								</Td>
 								{row.days.map(day => (
 									<Td key={day.key}>
-										<span
+										<button
+											type='button'
+											onClick={day.pick}
+											aria-label={day.aria}
 											className={cn(
-												'inline-flex h-7 min-w-23 items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap',
+												'inline-flex h-7 min-w-23 items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap transition-shadow hover:shadow-[0_0_0_2px_var(--brand)]',
 												TONE_CLASS[day.tone],
 											)}
 										>
 											{day.label}
-										</span>
+										</button>
 									</Td>
 								))}
 							</tr>

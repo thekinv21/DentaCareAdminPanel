@@ -10,7 +10,7 @@ import { Card } from '@/shared/ui/card'
 import { Pagination } from '@/shared/ui/pagination'
 import { Table, TableScroll, Th } from '@/shared/ui/table'
 
-import { usePatientsTable } from '../model/usePatientsTable'
+import type { TPatientsTableModel } from '../model/usePatientsTable'
 import { checkboxClass, PatientRow } from './PatientRow'
 import { PatientsToolbar } from './PatientsToolbar'
 
@@ -32,10 +32,11 @@ function SortButton({ label, onClick }: TSortButtonProps) {
 	)
 }
 
-export function PatientsTable() {
+type TPatientsTableProps = { table: TPatientsTableModel }
+
+export function PatientsTable({ table }: TPatientsTableProps) {
 	const t = useTranslations('Patients')
 	const format = useFormat()
-	const table = usePatientsTable()
 
 	return (
 		<Card
@@ -74,7 +75,7 @@ export function PatientsTable() {
 								/>
 							</Th>
 							<Th>{t('tags')}</Th>
-							<Th className='w-11'>
+							<Th className='w-20'>
 								<span className='sr-only'>{t('actions')}</span>
 							</Th>
 						</tr>

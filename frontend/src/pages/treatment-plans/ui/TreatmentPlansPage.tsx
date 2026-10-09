@@ -8,17 +8,29 @@ import { PageContent, PageHeader } from '@/widgets/page-header'
 import { Button } from '@/shared/ui/button'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
+import { usePlanForm } from '../model/usePlanForm'
+import { usePlanRemoval } from '../model/usePlanRemoval'
+import { usePlansTable } from '../model/usePlansTable'
+import { PlanFormModal } from './PlanFormModal'
 import { PlansTable } from './PlansTable'
 
 export function TreatmentPlansPage() {
 	const t = useTranslations('TreatmentPlans')
+	const removal = usePlanRemoval()
+	const form = usePlanForm(removal.remove)
+	const table = usePlansTable({
+		removedKeys: removal.removedKeys,
+		onEdit: form.openEdit,
+		onRemove: plan => removal.remove(plan),
+	})
+
 	return (
 		<>
 			<PageHeader
 				crumb={t('planApprovalAndCompletion')}
 				title={t('treatmentPlans')}
 				actions={
-					<Button variant='primary'>
+					<Button variant='primary' onClick={form.openCreate}>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
 						{t('newPlan')}
 					</Button>
@@ -48,8 +60,9 @@ export function TreatmentPlansPage() {
 						footer={t('last90DaysTarget')}
 					/>
 				</StatGrid>
-				<PlansTable />
+				<PlansTable table={table} />
 			</PageContent>
+			<PlanFormModal form={form} />
 		</>
 	)
 }

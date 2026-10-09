@@ -1,6 +1,13 @@
 import { cn } from '@/shared/lib/cn'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
+export type ButtonVariant =
+	| 'primary'
+	| 'secondary'
+	| 'ghost'
+	| 'danger'
+	| 'destructive'
+	| 'warning'
+	| 'dangerGhost'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonClassOptions {
@@ -26,6 +33,12 @@ const VARIANT: Record<ButtonVariant, string> = {
 		'border-line-strong bg-surface text-ink hover:bg-raised active:shadow-press',
 	ghost: 'border-transparent bg-transparent text-ink hover:bg-raised',
 	danger: 'border-line bg-surface text-danger hover:bg-danger-soft',
+	destructive:
+		'border-transparent bg-danger text-white shadow-[0_8px_18px_-8px_rgba(185,47,39,0.6)] hover:bg-[#9e2620] active:shadow-press',
+	warning:
+		'border-transparent bg-warning text-white hover:brightness-95 active:shadow-press',
+	dangerGhost:
+		'border-transparent bg-transparent text-danger hover:bg-danger-soft',
 }
 
 /**

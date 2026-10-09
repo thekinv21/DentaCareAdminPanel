@@ -13,6 +13,7 @@ import {
 	HOUR_HEIGHT,
 	placeEvents,
 } from '../lib/Layout'
+import type { CalendarEvent } from '../lib/Schedule'
 import type { CalendarColumn } from '../model/useCalendarColumns'
 import { EventBlock } from './EventBlock'
 
@@ -36,9 +37,10 @@ const hourShift = (i: number) =>
 type TTimeGridProps = {
 	columns: CalendarColumn[]
 	minColumn: number
+	onOpenEvent: (event: CalendarEvent) => void
 }
 
-export function TimeGrid({ columns, minColumn }: TTimeGridProps) {
+export function TimeGrid({ columns, minColumn, onOpenEvent }: TTimeGridProps) {
 	const gridStyle: CSSProperties = {
 		display: 'grid',
 		gridTemplateColumns: `52px repeat(${columns.length}, minmax(${minColumn}px, 1fr))`,
@@ -104,7 +106,11 @@ export function TimeGrid({ columns, minColumn }: TTimeGridProps) {
 						style={COLUMN_STYLE}
 					>
 						{placeEvents(column.events).map(placed => (
-							<EventBlock key={placed.event.key} placed={placed} />
+							<EventBlock
+								key={placed.event.key}
+								placed={placed}
+								onOpen={() => onOpenEvent(placed.event)}
+							/>
 						))}
 						{column.showNow && (
 							<div

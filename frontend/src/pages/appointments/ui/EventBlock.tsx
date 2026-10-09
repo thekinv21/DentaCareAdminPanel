@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-
 import { useTranslations } from 'next-intl'
 
 import {
@@ -12,13 +10,15 @@ import { DOCTORS } from '@/entities/employee'
 
 import { cn } from '@/shared/lib/cn'
 import { useFormat } from '@/shared/lib/i18n'
-import { ROUTES } from '@/shared/routes'
 
 import type { TPlacedEvent } from '../lib/Layout'
 
-type TEventBlockProps = { placed: TPlacedEvent }
+type TEventBlockProps = {
+	placed: TPlacedEvent
+	onOpen: () => void
+}
 
-export function EventBlock({ placed }: TEventBlockProps) {
+export function EventBlock({ placed, onOpen }: TEventBlockProps) {
 	const { event, top, height, lane, lanes, end } = placed
 
 	const t = useTranslations('Appointments')
@@ -30,11 +30,12 @@ export function EventBlock({ placed }: TEventBlockProps) {
 	const what: string = labels.procedure(event.what)
 
 	return (
-		<Link
-			href={event.patientId ? ROUTES.patient(event.patientId) : ROUTES.patients}
+		<button
+			type='button'
+			onClick={onOpen}
 			title={`${who} · ${what} · ${event.time}–${end} · ${t('chairNumber', { n: event.chair })}`}
 			className={cn(
-				'absolute z-1 flex flex-col overflow-hidden rounded-[9px] px-1.75 py-1 no-underline transition-[transform,box-shadow] duration-150 hover:z-4 hover:-translate-y-px hover:shadow-float',
+				'absolute z-1 flex flex-col items-start overflow-hidden rounded-[9px] px-1.75 py-1 text-left transition-[transform,box-shadow] duration-150 hover:z-4 hover:-translate-y-px hover:shadow-float',
 				APPOINTMENT_BLOCK_CLASS[event.status],
 			)}
 			style={{
@@ -55,6 +56,6 @@ export function EventBlock({ placed }: TEventBlockProps) {
 					{what} · {format.name(DOCTORS[event.doctorId].shortName)}
 				</span>
 			)}
-		</Link>
+		</button>
 	)
 }

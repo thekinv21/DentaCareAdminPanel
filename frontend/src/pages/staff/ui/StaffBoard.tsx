@@ -6,13 +6,14 @@ import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { Segmented } from '@/shared/ui/segmented'
 
-import { useStaffBoard } from '../model/useStaffBoard'
+import type { StaffBoardModel } from '../model/useStaffBoard'
 import { RosterTable } from './RosterTable'
 import { TeamTable } from './TeamTable'
 
-export function StaffBoard() {
+type TStaffBoardProps = { board: StaffBoardModel }
+
+export function StaffBoard({ board }: TStaffBoardProps) {
 	const t = useTranslations('Staff')
-	const board = useStaffBoard()
 
 	return (
 		<Card

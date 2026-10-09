@@ -8,6 +8,12 @@ export const ROUTES = {
 	inventory: '/inventory',
 	reports: '/reports',
 	staff: '/staff',
+	users: '/users',
+	userNew: '/users/new',
+	user: (id: string) => `/users/${id}`,
+	roles: '/roles',
+	roleNew: '/roles/new',
+	role: (id: string) => `/roles/${id}`,
 	settings: '/settings',
 	profile: '/profile',
 

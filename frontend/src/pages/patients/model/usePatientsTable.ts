@@ -40,7 +40,16 @@ function sortPatients(list: Patient[], sort: Sort) {
 /**
  * Segment tabs, sorting and row selection of the patient list
  */
-export function usePatientsTable() {
+type TPatientsTableOptions = {
+	removedIds: Set<string>
+	onEdit: (patient: Patient) => void
+	onRemove: (patient: Patient) => void
+	onBulkRemove: (patients: Patient[], onDone: () => void) => void
+}
+
+export function usePatientsTable(options: TPatientsTableOptions) {
+	const { removedIds, onEdit, onRemove, onBulkRemove } = options
+
 	const t = useTranslations('Patients')
 	const tPatient = useTranslations('Patient')
 	const format = useFormat()
@@ -49,7 +58,7 @@ export function usePatientsTable() {
 	const [sort, setSort] = useState<Sort>(null)
 
 	const visible = sortPatients(
-		PATIENTS.filter(p => matchesTab(p, tab)),
+		PATIENTS.filter(p => !removedIds.has(p.id) && matchesTab(p, tab)),
 		sort,
 	)
 	const allSelected =
@@ -69,6 +78,8 @@ export function usePatientsTable() {
 		doctor: format.name(patient.doctor),
 		balanceText: patient.balance ? format.som(patient.balance) : '—',
 		isSelected: selected.has(patient.id),
+		edit: () => onEdit(patient),
+		remove: () => onRemove(patient),
 	}))
 
 	const toggleRow = (id: string) =>
@@ -109,9 +120,15 @@ export function usePatientsTable() {
 		toggleRow,
 		toggleAll,
 		clearSelection: () => setSelected(new Set()),
+		bulkDelete: () =>
+			onBulkRemove(
+				visible.filter(p => selected.has(p.id)),
+				() => setSelected(new Set()),
+			),
 		toggleSort,
 		ariaSort,
 	}
 }
 
 export type PatientRowView = ReturnType<typeof usePatientsTable>['rows'][number]
+export type TPatientsTableModel = ReturnType<typeof usePatientsTable>

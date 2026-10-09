@@ -10,6 +10,7 @@ import {
 	CATEGORY_LABEL,
 	STOCK,
 	type StockCategory,
+	type StockItem,
 	type StockLevel,
 	stockLevel,
 } from './Stock'
@@ -34,40 +35,52 @@ const LEVEL: Record<StockLevel, { label: string; tone: Tone; bar: string }> = {
 /**
  * Stock positions filtered by category or shortage, with level bars
  */
-export function useStockTable() {
+type TStockTableOptions = {
+	removedSkus: Set<string>
+	onMove: (item: StockItem) => void
+	onEdit: (item: StockItem) => void
+	onRemove: (item: StockItem) => void
+}
+
+export function useStockTable(options: TStockTableOptions) {
+	const { removedSkus, onMove, onEdit, onRemove } = options
+
 	const t = useTranslations('Inventory')
 	const [filter, setFilter] = useState<StockFilter>('all')
 
-	const rows = STOCK.filter(item =>
-		filter === 'all'
-			? true
-			: filter === 'low'
-				? item.quantity < item.minimum
-				: item.category === filter,
-	).map((item, index) => {
-		const level = LEVEL[stockLevel(item)]
-		const unit = t(item.unit)
-		const low = item.quantity < item.minimum
-		return {
-			key: item.sku,
-			name: t(item.name),
-			sku: item.sku,
-			category: t(CATEGORY_LABEL[item.category]),
-			quantity: `${item.quantity} ${unit}`,
-			minimum: `${t('minimum')} ${item.minimum} ${unit}`,
-			fill: Math.max(
-				4,
-				Math.min(100, Math.round((item.quantity / (item.minimum * 2)) * 100)),
-			),
-			fillClass: level.bar,
-			delay: 240 + index * 40,
-			supplier: t(item.supplier),
-			expires: item.expires,
-			expiresSoon: !!item.expiresSoon,
-			level: { label: t(level.label), tone: level.tone },
-			action: t(low ? 'order' : 'writeOff'),
-		}
-	})
+	const rows = STOCK.filter(item => !removedSkus.has(item.sku))
+		.filter(item =>
+			filter === 'all'
+				? true
+				: filter === 'low'
+					? item.quantity < item.minimum
+					: item.category === filter,
+		)
+		.map((item, index) => {
+			const level = LEVEL[stockLevel(item)]
+			const unit = t(item.unit)
+			return {
+				key: item.sku,
+				name: t(item.name),
+				sku: item.sku,
+				category: t(CATEGORY_LABEL[item.category]),
+				quantity: `${item.quantity} ${unit}`,
+				minimum: `${t('minimum')} ${item.minimum} ${unit}`,
+				fill: Math.max(
+					4,
+					Math.min(100, Math.round((item.quantity / (item.minimum * 2)) * 100)),
+				),
+				fillClass: level.bar,
+				delay: 240 + index * 40,
+				supplier: t(item.supplier),
+				expires: item.expires,
+				expiresSoon: !!item.expiresSoon,
+				level: { label: t(level.label), tone: level.tone },
+				move: () => onMove(item),
+				edit: () => onEdit(item),
+				remove: () => onRemove(item),
+			}
+		})
 
 	return {
 		filter,
@@ -76,3 +89,5 @@ export function useStockTable() {
 		rows,
 	}
 }
+
+export type TStockTableModel = ReturnType<typeof useStockTable>

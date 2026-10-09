@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { Ellipsis } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '@/shared/routes'
@@ -15,11 +15,13 @@ import { SearchInput } from '@/shared/ui/search-input'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { usePlansTable } from '../model/usePlansTable'
+import type { TPlansTableModel } from '../model/usePlansTable'
 
-export function PlansTable() {
+type TPlansTableProps = { table: TPlansTableModel }
+
+export function PlansTable({ table }: TPlansTableProps) {
 	const t = useTranslations('TreatmentPlans')
-	const { filter, setFilter, filters, rows } = usePlansTable()
+	const { filter, setFilter, filters, rows } = table
 
 	return (
 		<Card
@@ -102,14 +104,28 @@ export function PlansTable() {
 								<Td>
 									<Badge tone={row.status.tone}>{row.status.label}</Badge>
 								</Td>
-								<Td align='right'>
-									<IconButton
-										quiet
-										size='sm'
-										aria-label={`${t('actionsFor')} ${row.patientName}`}
-									>
-										<Ellipsis size={16} aria-hidden='true' />
-									</IconButton>
+								<Td align='right' nowrap>
+									<span className='inline-flex gap-0.5'>
+										<IconButton
+											quiet
+											size='sm'
+											aria-label={`${t('editColon')} ${row.patientName}`}
+											title={t('edit')}
+											onClick={row.edit}
+										>
+											<Pencil size={16} aria-hidden='true' />
+										</IconButton>
+										<IconButton
+											quiet
+											size='sm'
+											aria-label={`${t('deleteColon')} ${row.patientName}`}
+											title={t('delete')}
+											onClick={row.remove}
+											className='text-danger'
+										>
+											<Trash2 size={16} aria-hidden='true' />
+										</IconButton>
+									</span>
 								</Td>
 							</tr>
 						))}

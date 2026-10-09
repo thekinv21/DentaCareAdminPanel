@@ -1,6 +1,6 @@
 'use client'
 
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { Badge } from '@/shared/ui/badge'
@@ -8,11 +8,13 @@ import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import { useServices } from '../model/useServices'
+import type { TServicesModel } from '../model/useServices'
 
-export function ServicesSection() {
+type TServicesSectionProps = { services: TServicesModel }
+
+export function ServicesSection({ services }: TServicesSectionProps) {
 	const t = useTranslations('Settings')
-	const { category, setCategory, filters, rows } = useServices()
+	const { category, setCategory, filters, rows } = services
 
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
@@ -56,14 +58,26 @@ export function ServicesSection() {
 							<Td>
 								<Badge tone={row.foms.tone}>{row.foms.label}</Badge>
 							</Td>
-							<Td align='right'>
-								<IconButton
-									quiet
-									size='sm'
-									aria-label={`${t('change')} ${row.name}`}
-								>
-									<Pencil size={16} aria-hidden='true' />
-								</IconButton>
+							<Td align='right' nowrap>
+								<span className='inline-flex gap-0.5'>
+									<IconButton
+										quiet
+										size='sm'
+										aria-label={`${t('change')} ${row.name}`}
+										onClick={row.edit}
+									>
+										<Pencil size={16} aria-hidden='true' />
+									</IconButton>
+									<IconButton
+										quiet
+										size='sm'
+										aria-label={`${t('deleteColon')} ${row.name}`}
+										onClick={row.remove}
+										className='text-danger'
+									>
+										<Trash2 size={16} aria-hidden='true' />
+									</IconButton>
+								</span>
 							</Td>
 						</tr>
 					))}

@@ -7,10 +7,16 @@ import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { Button } from '@/shared/ui/button'
 
+import { useShiftForm } from '../model/useShiftForm'
+import { useStaffBoard } from '../model/useStaffBoard'
+import { ShiftModal } from './ShiftModal'
 import { StaffBoard } from './StaffBoard'
 
 export function StaffPage() {
 	const t = useTranslations('Staff')
+	const shift = useShiftForm()
+	const board = useStaffBoard(shift.openFor)
+
 	return (
 		<>
 			<PageHeader
@@ -24,8 +30,9 @@ export function StaffPage() {
 				}
 			/>
 			<PageContent>
-				<StaffBoard />
+				<StaffBoard board={board} />
 			</PageContent>
+			<ShiftModal shift={shift} />
 		</>
 	)
 }

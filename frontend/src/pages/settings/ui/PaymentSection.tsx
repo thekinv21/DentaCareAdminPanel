@@ -11,6 +11,7 @@ import { Switch } from '@/shared/ui/switch'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
 import { BANK_DETAILS, PAYMENT_OPTIONS } from '../model/Payments'
+import { useBankSwitch } from '../model/useBankSwitch'
 import type { SettingsModel } from '../model/useSettings'
 
 type TPaymentSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
@@ -18,6 +19,7 @@ type TPaymentSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
 export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
 	const t = useTranslations('Settings')
 	const methods = usePaymentMethods()
+	const switchBank = useBankSwitch(flip)
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
 			{BANK_DETAILS.map(bank => {
@@ -46,7 +48,7 @@ export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
 							</div>
 							<Switch
 								checked={on}
-								onChange={() => flip(bank.id)}
+								onChange={() => switchBank(bank.id, name, on)}
 								aria-label={`${t('acceptPayment')} ${name}`}
 							/>
 						</div>

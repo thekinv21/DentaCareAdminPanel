@@ -10,6 +10,10 @@ import { toDate, weekday } from './Dates'
 
 export interface CalendarEvent {
 	key: string
+	/**
+	 * ISO day the event belongs to
+	 */
+	date: string
 	time: string
 	duration: number
 	who: string
@@ -66,6 +70,7 @@ const DOCTOR_KEYS: DoctorKey[] = ['kas', 'pet', 'tok']
 
 const TODAY_EVENTS: CalendarEvent[] = TODAY_APPOINTMENTS.map(a => ({
 	key: a.id,
+	date: TODAY,
 	time: a.time,
 	duration: a.duration,
 	who: shortPersonName(a.patientName),
@@ -107,6 +112,7 @@ export function eventsForDay(iso: string): CalendarEvent[] {
 
 		events.push({
 			key: `${iso}-${i}`,
+			date: iso,
 			time: SLOTS[slot],
 			duration,
 			who: NAMES[(day * 3 + i * 5) % NAMES.length],

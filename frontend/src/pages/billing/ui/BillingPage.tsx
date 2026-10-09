@@ -5,16 +5,31 @@ import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
+import { usePaymentMethods } from '@/entities/invoice'
+
 import { Button } from '@/shared/ui/button'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
 import { useBilling } from '../model/useBilling'
+import { useInvoiceActions } from '../model/useInvoiceActions'
+import { useInvoiceForm } from '../model/useInvoiceForm'
+import { InvoiceFormModal } from './InvoiceFormModal'
 import { InvoicesTable } from './InvoicesTable'
 import { PaymentPanel } from './PaymentPanel'
 
 export function BillingPage() {
 	const t = useTranslations('Billing')
-	const billing = useBilling()
+	const methods = usePaymentMethods()
+	const form = useInvoiceForm()
+	const actions = useInvoiceActions(
+		invoice => methods.byId(invoice.method).name,
+	)
+	const billing = useBilling({
+		voided: actions.voided,
+		onEdit: form.openEdit,
+		onVoid: actions.voidInvoice,
+		onRefund: actions.refund,
+	})
 
 	return (
 		<>
@@ -22,7 +37,7 @@ export function BillingPage() {
 				crumb={t('october2026AcceptedVia')}
 				title={t('billing')}
 				actions={
-					<Button variant='primary'>
+					<Button variant='primary' onClick={form.openCreate}>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
 						{t('newInvoice')}
 					</Button>
@@ -61,6 +76,7 @@ export function BillingPage() {
 					<PaymentPanel billing={billing} />
 				</section>
 			</PageContent>
+			<InvoiceFormModal form={form} />
 		</>
 	)
 }

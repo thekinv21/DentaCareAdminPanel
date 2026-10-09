@@ -1,6 +1,6 @@
 import type { Tone } from '@/shared/ui/badge'
 
-type ShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
+export type ShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
 
 export const SHIFT: Record<ShiftKey, { label: string; tone: Tone }> = {
 	s1: { label: '08:30–17:30', tone: 'brand' },
@@ -14,6 +14,7 @@ export const SHIFT: Record<ShiftKey, { label: string; tone: Tone }> = {
 
 export const WEEK_DAYS = ['mon5', 'tue6', 'wed7', 'thu8', 'fri9', 'sat10']
 export const TODAY_COLUMN = 4
+export const WEEK_START = '2026-10-05'
 
 /**
  * Mock roster for week 41 until the backend exposes /schedule

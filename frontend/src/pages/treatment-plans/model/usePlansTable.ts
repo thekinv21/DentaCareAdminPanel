@@ -8,7 +8,7 @@ import { getInitials } from '@/shared/lib/format'
 import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { avatarTone } from '@/shared/ui/avatar'
 
-import { TREATMENT_PLANS } from './Plans'
+import { TREATMENT_PLANS, type TreatmentPlan } from './Plans'
 import { matchesPlanFilter, PLAN_STATUS, type PlanFilter } from './PlanStatus'
 
 const FILTERS: { id: PlanFilter; label: string }[] = [
@@ -26,7 +26,17 @@ const BAR_CLASS = { done: 'bg-success', declined: 'bg-line-strong' } as Record<
 /**
  * Plan list filtered by stage, with progress and translated labels
  */
-export function usePlansTable() {
+type TPlansTableOptions = {
+	removedKeys: Set<string>
+	onEdit: (plan: TreatmentPlan) => void
+	onRemove: (plan: TreatmentPlan) => void
+}
+
+export function usePlansTable({
+	removedKeys,
+	onEdit,
+	onRemove,
+}: TPlansTableOptions) {
 	const t = useTranslations('TreatmentPlans')
 	const format = useFormat()
 	const [filter, setFilter] = useState<PlanFilter>('all')
@@ -38,8 +48,8 @@ export function usePlansTable() {
 			.length,
 	}))
 
-	const rows = TREATMENT_PLANS.filter(plan =>
-		matchesPlanFilter(plan, filter),
+	const rows = TREATMENT_PLANS.filter(
+		plan => !removedKeys.has(plan.patientId) && matchesPlanFilter(plan, filter),
 	).map(plan => {
 		const index = TREATMENT_PLANS.indexOf(plan)
 		const status = PLAN_STATUS[plan.status]
@@ -64,8 +74,12 @@ export function usePlansTable() {
 			}),
 			value: format.som(plan.value),
 			status: { label: t(status.label), tone: status.tone },
+			edit: () => onEdit(plan),
+			remove: () => onRemove(plan),
 		}
 	})
 
 	return { filter, setFilter, filters, rows }
 }
+
+export type TPlansTableModel = ReturnType<typeof usePlansTable>

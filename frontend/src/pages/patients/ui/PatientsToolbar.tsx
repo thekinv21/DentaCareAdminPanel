@@ -7,11 +7,9 @@ import { Button } from '@/shared/ui/button'
 import { SearchInput } from '@/shared/ui/search-input'
 import { Segmented } from '@/shared/ui/segmented'
 
-import type { usePatientsTable } from '../model/usePatientsTable'
+import type { TPatientsTableModel } from '../model/usePatientsTable'
 
-type Table = ReturnType<typeof usePatientsTable>
-
-type TPatientsToolbarProps = { table: Table }
+type TPatientsToolbarProps = { table: TPatientsTableModel }
 
 export function PatientsToolbar({ table }: TPatientsToolbarProps) {
 	const t = useTranslations('Patients')
@@ -53,6 +51,9 @@ export function PatientsToolbar({ table }: TPatientsToolbarProps) {
 						{t('sendSms')}
 					</Button>
 					<Button size='sm'>{t('assignDentist')}</Button>
+					<Button size='sm' variant='destructive' onClick={table.bulkDelete}>
+						{t('deleteSelected')}
+					</Button>
 					<Button
 						size='sm'
 						variant='ghost'

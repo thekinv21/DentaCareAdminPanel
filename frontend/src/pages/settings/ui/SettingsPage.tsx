@@ -8,18 +8,29 @@ import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { FormFooter } from '@/shared/ui/form-footer'
 
+import { useServiceForm } from '../model/useServiceForm'
+import { useServiceRemoval } from '../model/useServiceRemoval'
+import { useServices } from '../model/useServices'
 import { useSettings } from '../model/useSettings'
 import { ClinicSection } from './ClinicSection'
 import { HoursSection } from './HoursSection'
 import { LanguageSection } from './LanguageSection'
 import { NotificationsSection } from './NotificationsSection'
 import { PaymentSection } from './PaymentSection'
+import { ServiceFormModal } from './ServiceFormModal'
 import { ServicesSection } from './ServicesSection'
 import { SettingsNav } from './SettingsNav'
 
 export function SettingsPage() {
 	const t = useTranslations('Settings')
 	const settings = useSettings()
+	const removal = useServiceRemoval()
+	const serviceForm = useServiceForm(removal.remove)
+	const services = useServices({
+		removedCodes: removal.removedCodes,
+		onEdit: serviceForm.openEdit,
+		onRemove: service => removal.remove(service),
+	})
 	const { section } = settings
 
 	return (
@@ -47,7 +58,11 @@ export function SettingsPage() {
 							{section === 'services' && (
 								<div className='flex gap-2'>
 									<Button size='sm'>{t('importPriceList')}</Button>
-									<Button size='sm' variant='primary'>
+									<Button
+										size='sm'
+										variant='primary'
+										onClick={serviceForm.openCreate}
+									>
 										{t('addService')}
 									</Button>
 								</div>
@@ -56,7 +71,9 @@ export function SettingsPage() {
 						<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-[720px]:overflow-visible'>
 							{section === 'clinic' && <ClinicSection />}
 							{section === 'hours' && <HoursSection {...settings} />}
-							{section === 'services' && <ServicesSection />}
+							{section === 'services' && (
+								<ServicesSection services={services} />
+							)}
 							{section === 'pay' && <PaymentSection {...settings} />}
 							{section === 'lang' && <LanguageSection {...settings} />}
 							{section === 'notif' && <NotificationsSection {...settings} />}
@@ -71,6 +88,7 @@ export function SettingsPage() {
 					</Card>
 				</div>
 			</PageContent>
+			<ServiceFormModal form={serviceForm} />
 		</>
 	)
 }

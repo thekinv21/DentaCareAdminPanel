@@ -1,21 +1,25 @@
 'use client'
 
+import { ArrowLeftRight, Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
+import { IconButton } from '@/shared/ui/icon-button'
 import { ProgressBar } from '@/shared/ui/progress'
 import { SearchInput } from '@/shared/ui/search-input'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { useStockTable } from '../model/useStockTable'
+import type { TStockTableModel } from '../model/useStockTable'
 
-export function StockTable() {
+type TStockTableProps = { table: TStockTableModel }
+
+export function StockTable({ table }: TStockTableProps) {
 	const t = useTranslations('Inventory')
-	const { filter, setFilter, filters, rows } = useStockTable()
+	const { filter, setFilter, filters, rows } = table
 
 	return (
 		<Card
@@ -91,8 +95,32 @@ export function StockTable() {
 								<Td>
 									<Badge tone={row.level.tone}>{row.level.label}</Badge>
 								</Td>
-								<Td align='right'>
-									<Button size='sm'>{row.action}</Button>
+								<Td align='right' nowrap>
+									<span className='inline-flex items-center gap-0.5'>
+										<Button size='sm' onClick={row.move}>
+											<ArrowLeftRight size={14} aria-hidden='true' />
+											{t('movement')}
+										</Button>
+										<IconButton
+											quiet
+											size='sm'
+											aria-label={`${t('editColon')} ${row.name}`}
+											title={t('edit')}
+											onClick={row.edit}
+										>
+											<Pencil size={16} aria-hidden='true' />
+										</IconButton>
+										<IconButton
+											quiet
+											size='sm'
+											aria-label={`${t('deleteColon')} ${row.name}`}
+											title={t('delete')}
+											onClick={row.remove}
+											className='text-danger'
+										>
+											<Trash2 size={16} aria-hidden='true' />
+										</IconButton>
+									</span>
 								</Td>
 							</tr>
 						))}
