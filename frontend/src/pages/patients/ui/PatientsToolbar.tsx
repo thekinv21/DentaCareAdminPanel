@@ -22,7 +22,7 @@ export function PatientsToolbar({ table }: { table: Table }) {
 					value={table.tab}
 					onChange={table.setTab}
 				/>
-				<div className='flex flex-wrap gap-2'>
+				<div className='flex flex-wrap lg:flex-nowrap gap-2'>
 					<SearchInput
 						label={t('nameIdOrPhone')}
 						size='sm'
