@@ -1,0 +1,57 @@
+import type { Tone } from '@/shared/ui/badge'
+
+type ShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
+
+export const SHIFT: Record<ShiftKey, { label: string; tone: Tone }> = {
+	s1: { label: '08:30–17:30', tone: 'brand' },
+	s2: { label: '09:00–18:00', tone: 'brand' },
+	s3: { label: '08:00–16:00', tone: 'brand' },
+	s4: { label: '13:00–18:00', tone: 'brand' },
+	off: { label: 'Выходной', tone: 'neutral' },
+	leave: { label: 'Отпуск', tone: 'accent' },
+	open: { label: 'Замена', tone: 'warning' },
+}
+
+export const WEEK_DAYS = ['Пн 5', 'Вт 6', 'Ср 7', 'Чт 8', 'Пт 9', 'Сб 10']
+export const TODAY_COLUMN = 4
+
+/**
+ * Mock roster for week 41 until the backend exposes /schedule
+ */
+export const ROSTER: { name: string; tone: Tone; days: ShiftKey[] }[] = [
+	{
+		name: 'Айгерим Касымова',
+		tone: 'accent',
+		days: ['s1', 's1', 's1', 's1', 's1', 'off'],
+	},
+	{
+		name: 'Сергей Петров',
+		tone: 'info',
+		days: ['s2', 's2', 'off', 's2', 's2', 's4'],
+	},
+	{
+		name: 'Эрмек Токтогулов',
+		tone: 'ok',
+		days: ['s3', 's3', 's3', 's3', 's3', 'open'],
+	},
+	{
+		name: 'Дария Юсупова',
+		tone: 'warning',
+		days: ['s4', 'off', 's4', 'off', 'off', 's4'],
+	},
+	{
+		name: 'Бермет Карасаева',
+		tone: 'brand',
+		days: ['s1', 's1', 's1', 's1', 's1', 'off'],
+	},
+	{
+		name: 'Ирина Гусева',
+		tone: 'accent',
+		days: ['leave', 'leave', 'leave', 'leave', 'leave', 'off'],
+	},
+	{
+		name: 'Эльмира Танаева',
+		tone: 'ok',
+		days: ['s3', 's3', 's3', 's3', 's3', 'open'],
+	},
+]
