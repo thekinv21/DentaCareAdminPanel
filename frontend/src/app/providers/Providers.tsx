@@ -4,6 +4,12 @@ import type { ReactNode } from 'react'
 
 import { ThemeProvider } from '@/shared/lib/theme'
 
+import { TanStackQueryProvider } from './TanStackQueryProvider'
+
 export function Providers({ children }: { children: ReactNode }) {
-	return <ThemeProvider>{children}</ThemeProvider>
+	return (
+		<TanStackQueryProvider>
+			<ThemeProvider>{children}</ThemeProvider>
+		</TanStackQueryProvider>
+	)
 }
