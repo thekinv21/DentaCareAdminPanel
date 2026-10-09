@@ -1,8 +1,8 @@
-export type Surface = 'm' | 'd' | 'b' | 'o' | 'c'
-export type SurfaceFinding = 'car' | 'fill'
+export type TSurface = 'm' | 'd' | 'b' | 'o' | 'c'
+export type TSurfaceFinding = 'car' | 'fill'
 
-export interface ToothState {
-	surfaces: Partial<Record<Surface, SurfaceFinding>>
+export type TToothState = {
+	surfaces: Partial<Record<TSurface, TSurfaceFinding>>
 	crown?: boolean
 	endo?: boolean
 	implant?: boolean
@@ -11,11 +11,11 @@ export interface ToothState {
 	plan?: boolean
 }
 
-export type ChartMap = Record<number, ToothState>
+export type TChartMap = Record<number, TToothState>
 
-export type Dentition = 'permanent' | 'primary'
+export type TDentition = 'permanent' | 'primary'
 
-export type ToolId =
+export type TToolId =
 	| 'select'
 	| 'car'
 	| 'fill'
@@ -26,9 +26,9 @@ export type ToolId =
 	| 'missing'
 	| 'clear'
 
-export const SURFACES: Surface[] = ['m', 'd', 'b', 'o', 'c']
+export const SURFACES: TSurface[] = ['m', 'd', 'b', 'o', 'c']
 
-export const SURFACE_NAME: Record<Surface, string> = {
+export const SURFACE_NAME: Record<TSurface, string> = {
 	m: 'mesial',
 	d: 'distal',
 	b: 'buccal',
@@ -36,7 +36,7 @@ export const SURFACE_NAME: Record<Surface, string> = {
 	c: 'occlusal',
 }
 
-export const SURFACE_SHORT: Record<Surface, string> = {
+export const SURFACE_SHORT: Record<TSurface, string> = {
 	m: 'm',
 	d: 'd',
 	b: 'b',
@@ -45,7 +45,7 @@ export const SURFACE_SHORT: Record<Surface, string> = {
 }
 
 export const TOOLS: {
-	id: ToolId
+	id: TToolId
 	label: string
 	swatch: string
 	hint: string
@@ -118,7 +118,7 @@ export const PRIMARY_LOWER = [85, 84, 83, 82, 81, 71, 72, 73, 74, 75]
 /**
  * Mock chart of patient DN-20418 (last updated 12.09.2026)
  */
-export const INITIAL_CHART: ChartMap = {
+export const INITIAL_CHART: TChartMap = {
 	46: { surfaces: { d: 'car', c: 'car' }, plan: true },
 	47: { surfaces: { c: 'car' } },
 	36: { surfaces: { d: 'fill' } },

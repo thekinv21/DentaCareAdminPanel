@@ -6,7 +6,16 @@ import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '@/shared/routes'
 
-import { NAVIGATION } from '../config/Navigation'
+import { NAVIGATION, type TNavItem } from '../config/Navigation'
+
+export type TSidebarItem = TNavItem & {
+	active: boolean
+}
+
+export type TSidebarGroup = {
+	label: string
+	items: TSidebarItem[]
+}
 
 function isActive(pathname: string, href: string) {
 	if (href === ROUTES.dashboard) return pathname === href
@@ -20,7 +29,7 @@ export function useSidebarNav() {
 	const pathname = usePathname() ?? ''
 	const t = useTranslations('AdminSidebar')
 
-	const groups = NAVIGATION.map(group => ({
+	const groups: TSidebarGroup[] = NAVIGATION.map(group => ({
 		label: t(group.label),
 		items: group.items.map(item => ({
 			...item,

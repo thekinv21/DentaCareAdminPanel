@@ -15,19 +15,19 @@ import {
 import { ROUTES } from '@/shared/routes'
 import { ToothIcon } from '@/shared/ui/logo'
 
-export interface NavItem {
+export type TNavItem = {
 	href: string
 	label: string
 	icon: LucideIcon | ComponentType<{ size?: number }>
 	count?: { value: number; warning?: boolean }
 }
 
-export interface NavGroup {
+export type TNavGroup = {
 	label: string
-	items: NavItem[]
+	items: TNavItem[]
 }
 
-export const NAVIGATION: NavGroup[] = [
+export const NAVIGATION: TNavGroup[] = [
 	{
 		label: 'clinic',
 		items: [

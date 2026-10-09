@@ -6,31 +6,31 @@ import { useTranslations } from 'next-intl'
 
 import { applyTool, summarize } from './ChartActions'
 import {
-	type ChartMap,
-	type Dentition,
 	INITIAL_CHART,
 	PERMANENT_LOWER,
 	PERMANENT_UPPER,
 	PRIMARY_LOWER,
 	PRIMARY_UPPER,
-	type Surface,
-	type ToolId,
+	type TChartMap,
+	type TDentition,
 	TOOTH_NOTES,
-	type ToothState,
+	type TSurface,
+	type TToolId,
+	type TToothState,
 } from './Teeth'
 import { useToothLabels } from './useToothLabels'
 
-const EMPTY: ToothState = { surfaces: {} }
+const EMPTY: TToothState = { surfaces: {} }
 
 /**
  * Chart state for both dentitions, the active tool and the selected tooth
  */
 export function useDentalChart() {
 	const t = useTranslations('DentalChart')
-	const [dentition, setDentition] = useState<Dentition>('permanent')
-	const [tool, setTool] = useState<ToolId>('select')
+	const [dentition, setDentition] = useState<TDentition>('permanent')
+	const [tool, setTool] = useState<TToolId>('select')
 	const [selected, setSelected] = useState(46)
-	const [charts, setCharts] = useState<Record<Dentition, ChartMap>>({
+	const [charts, setCharts] = useState<Record<TDentition, TChartMap>>({
 		permanent: INITIAL_CHART,
 		primary: {},
 	})
@@ -41,7 +41,7 @@ export function useDentalChart() {
 
 	const updateTooth = (
 		n: number,
-		update: (tooth: ToothState) => ToothState,
+		update: (tooth: TToothState) => TToothState,
 	) => {
 		setCharts(current => ({
 			...current,
@@ -58,7 +58,7 @@ export function useDentalChart() {
 		else updateTooth(n, tooth => applyTool(tooth, tool))
 	}
 
-	const pickSurface = (n: number, surface: Surface) => {
+	const pickSurface = (n: number, surface: TSurface) => {
 		if (tool !== 'car' && tool !== 'fill') return pickTooth(n)
 		updateTooth(n, tooth => ({
 			...tooth,
@@ -69,14 +69,14 @@ export function useDentalChart() {
 		}))
 	}
 
-	const cycleSurface = (surface: Surface) =>
+	const cycleSurface = (surface: TSurface) =>
 		updateTooth(selected, tooth => {
 			const current = tooth.surfaces[surface]
 			const next = !current ? 'car' : current === 'car' ? 'fill' : undefined
 			return { ...tooth, surfaces: { ...tooth.surfaces, [surface]: next } }
 		})
 
-	const switchDentition = (next: Dentition) => {
+	const switchDentition = (next: TDentition) => {
 		setDentition(next)
 		setSelected(next === 'permanent' ? 46 : 84)
 	}
@@ -109,4 +109,4 @@ export function useDentalChart() {
 	}
 }
 
-export type DentalChartModel = ReturnType<typeof useDentalChart>
+export type TDentalChartModel = ReturnType<typeof useDentalChart>

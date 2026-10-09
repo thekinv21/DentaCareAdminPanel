@@ -1,10 +1,7 @@
-import type { ChartMap, ToolId, ToothState } from './Teeth'
+import type { TChartMap, TToolId, TToothState } from './Teeth'
 
-/**
- * Applies a whole-tooth tool; caries and filling mark the occlusal surface
- */
-export function applyTool(tooth: ToothState, tool: ToolId): ToothState {
-	const next: ToothState = { ...tooth, surfaces: { ...tooth.surfaces } }
+export function applyTool(tooth: TToothState, tool: TToolId): TToothState {
+	const next: TToothState = { ...tooth, surfaces: { ...tooth.surfaces } }
 	switch (tool) {
 		case 'car':
 		case 'fill':
@@ -27,7 +24,7 @@ export function applyTool(tooth: ToothState, tool: ToolId): ToothState {
 	}
 }
 
-export function summarize(chart: ChartMap) {
+export function summarize(chart: TChartMap) {
 	const count = {
 		car: 0,
 		fill: 0,

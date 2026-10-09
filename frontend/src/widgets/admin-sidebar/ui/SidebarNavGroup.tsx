@@ -1,21 +1,19 @@
-import { TGroups } from './SidebarNav'
-import { SidebarNavGroupItems } from './SidebarNavGroupItems'
+import type { TSidebarGroup } from '../model/useSidebarNav'
+import { SidebarNavItem } from './SidebarNavItem'
 
 type TSidebarNavGroupProps = {
-	groups: TGroups
+	group: TSidebarGroup
 }
 
-export function SidebarNavGroup({ groups }: TSidebarNavGroupProps) {
+export function SidebarNavGroup({ group }: TSidebarNavGroupProps) {
 	return (
-		<>
-			{groups.map(group => (
-				<div key={group.label} className='contents'>
-					<div className='px-2.5 pt-3.5 pb-1.5 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-subtle uppercase max-[1100px]:hidden'>
-						{group.label}
-					</div>
-					<SidebarNavGroupItems items={group.items} />
-				</div>
+		<div className='contents'>
+			<div className='px-2.5 pt-3.5 pb-1.5 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-subtle uppercase max-[1100px]:hidden'>
+				{group.label}
+			</div>
+			{group.items.map(item => (
+				<SidebarNavItem key={item.href} item={item} />
 			))}
-		</>
+		</div>
 	)
 }

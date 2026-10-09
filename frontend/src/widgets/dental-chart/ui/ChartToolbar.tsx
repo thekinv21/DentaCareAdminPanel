@@ -4,16 +4,15 @@ import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
 
-import { type ToolId, TOOLS } from '../model/Teeth'
+import { TOOLS, type TToolId } from '../model/Teeth'
 import { Swatch } from './Swatch'
 
-export function ChartToolbar({
-	tool,
-	onChange,
-}: {
-	tool: ToolId
-	onChange: (tool: ToolId) => void
-}) {
+type TChartToolbarProps = {
+	tool: TToolId
+	onChange: (tool: TToolId) => void
+}
+
+export function ChartToolbar({ tool, onChange }: TChartToolbarProps) {
 	const t = useTranslations('DentalChart')
 	return (
 		<div

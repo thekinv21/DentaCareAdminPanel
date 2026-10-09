@@ -3,12 +3,12 @@
 import { useTranslations } from 'next-intl'
 
 import type { summarize } from '../model/ChartActions'
-import type { ToolId } from '../model/Teeth'
+import type { TToolId } from '../model/Teeth'
 import { Swatch, swatchOf } from './Swatch'
 
-type Counts = ReturnType<typeof summarize>
+type TCounts = ReturnType<typeof summarize>
 
-const ITEMS: { key: keyof Counts; label: string; tool: ToolId }[] = [
+const ITEMS: { key: keyof TCounts; label: string; tool: TToolId }[] = [
 	{ key: 'car', label: 'caries', tool: 'car' },
 	{ key: 'fill', label: 'fillings', tool: 'fill' },
 	{ key: 'crown', label: 'crowns', tool: 'crown' },
@@ -18,7 +18,9 @@ const ITEMS: { key: keyof Counts; label: string; tool: ToolId }[] = [
 	{ key: 'missing', label: 'missing', tool: 'missing' },
 ]
 
-export function ChartSummary({ counts }: { counts: Counts }) {
+type TChartSummaryProps = { counts: TCounts }
+
+export function ChartSummary({ counts }: TChartSummaryProps) {
 	const t = useTranslations('DentalChart')
 	return (
 		<ul className='flex flex-wrap gap-2 border-t border-line pt-3'>

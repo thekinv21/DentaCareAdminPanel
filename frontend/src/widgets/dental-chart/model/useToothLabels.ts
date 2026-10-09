@@ -9,26 +9,26 @@ import {
 	toothTags,
 } from './ChartLogic'
 import {
-	type Surface,
 	SURFACE_NAME,
 	SURFACE_SHORT,
-	type ToothState,
+	type TSurface,
+	type TToothState,
 } from './Teeth'
 
 /**
  * Translated names, accessible labels and badges for teeth and surfaces
  */
-export function useToothLabels(stateOf: (n: number) => ToothState) {
+export function useToothLabels(stateOf: (n: number) => TToothState) {
 	const t = useTranslations('DentalChart')
 
-	const surfaceShort = (surface: Surface) => t(SURFACE_SHORT[surface])
+	const surfaceShort = (surface: TSurface) => t(SURFACE_SHORT[surface])
 
 	const toothName = (n: number) => {
 		const { kind, primary, quadrant } = toothNameParts(n)
 		return `${t(kind)}${primary ? ` (${t('primaryTooth')})` : ''}, ${t(quadrant)}`
 	}
 
-	const withSurface = (label: string, surface?: Surface, separator = ' ') =>
+	const withSurface = (label: string, surface?: TSurface, separator = ' ') =>
 		surface ? `${t(label)}${separator}${surfaceShort(surface)}` : t(label)
 
 	return {
@@ -43,13 +43,13 @@ export function useToothLabels(stateOf: (n: number) => ToothState) {
 		},
 		surfaceTitle: (
 			n: number,
-			surface: Surface,
+			surface: TSurface,
 			name = SURFACE_NAME[surface],
 		) => {
 			const finding = stateOf(n).surfaces[surface]
 			return finding ? `${t(name)} · ${t(findingLabel(finding))}` : t(name)
 		},
-		tagsOf: (tooth: ToothState) =>
+		tagsOf: (tooth: TToothState) =>
 			toothTags(tooth).map(tag => ({
 				tone: tag.tone,
 				label: withSurface(tag.label, tag.surface, ' · '),

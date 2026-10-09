@@ -1,10 +1,10 @@
 import type { Tone } from '@/shared/ui/badge'
 
 import {
-	type Surface,
-	type SurfaceFinding,
 	SURFACES,
-	type ToothState,
+	type TSurface,
+	type TSurfaceFinding,
+	type TToothState,
 } from './Teeth'
 
 /* Pure chart rules; every label here is a Russian source string for `t` */
@@ -53,17 +53,17 @@ export function toothNameParts(n: number) {
 	}
 }
 
-export function findingLabel(finding: SurfaceFinding) {
+export function findingLabel(finding: TSurfaceFinding) {
 	return finding === 'car' ? 'cariesFinding' : 'fillingFinding'
 }
 
-interface Flag {
+type TFlag = {
 	label: string
-	surface?: Surface
+	surface?: TSurface
 }
 
-function wholeToothFlags(tooth: ToothState): Flag[] {
-	const flags: Flag[] = []
+function wholeToothFlags(tooth: TToothState): TFlag[] {
+	const flags: TFlag[] = []
 	if (tooth.crown) flags.push({ label: 'crownFinding' })
 	if (tooth.endo) flags.push({ label: 'rootCanalsTreatedFinding' })
 	if (tooth.implant) flags.push({ label: 'implantFinding' })
@@ -75,7 +75,7 @@ function wholeToothFlags(tooth: ToothState): Flag[] {
 /**
  * Findings of a tooth for its accessible label
  */
-export function toothFlags(tooth: ToothState): Flag[] {
+export function toothFlags(tooth: TToothState): TFlag[] {
 	const surfaces = SURFACES.flatMap(surface => {
 		const finding = tooth.surfaces[surface]
 		return finding ? [{ label: findingLabel(finding), surface }] : []
@@ -86,10 +86,10 @@ export function toothFlags(tooth: ToothState): Flag[] {
 /**
  * Badges for the selected-tooth panel
  */
-type Tag = Flag & { tone: Tone }
+type TTag = TFlag & { tone: Tone }
 
-export function toothTags(tooth: ToothState): Tag[] {
-	const tags = SURFACES.flatMap((surface): Tag[] => {
+export function toothTags(tooth: TToothState): TTag[] {
+	const tags = SURFACES.flatMap((surface): TTag[] => {
 		const finding = tooth.surfaces[surface]
 		if (finding === 'car')
 			return [{ label: 'caries', surface, tone: 'warning' }]

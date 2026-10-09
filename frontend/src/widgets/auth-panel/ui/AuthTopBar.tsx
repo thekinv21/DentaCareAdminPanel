@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
 import { ChevronLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -12,14 +11,11 @@ import { ROUTES } from '@/shared/routes'
 import { buttonClass } from '@/shared/ui/button'
 import { LogoMark } from '@/shared/ui/logo'
 
-const ENTRY_ROUTES: string[] = [ROUTES.login, ROUTES.register]
+import { useIsEntryRoute } from '../model/useIsEntryRoute'
 
-/**
- * Entry screens show the logo on small screens; the rest link back to sign-in
- */
 export function AuthTopBar() {
 	const t = useTranslations('AuthPanel')
-	const isEntry = ENTRY_ROUTES.includes(usePathname() ?? '')
+	const isEntry = useIsEntryRoute()
 
 	return (
 		<div className='flex min-h-11 shrink-0 items-center gap-3'>

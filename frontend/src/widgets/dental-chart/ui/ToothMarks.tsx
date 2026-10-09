@@ -1,15 +1,12 @@
-import type { ToothState } from '../model/Teeth'
+import type { TToothState } from '../model/Teeth'
 
-interface ToothMarksProps {
-	state: ToothState
+type TToothMarksProps = {
+	state: TToothState
 	cy: number
 	cross: string
 }
 
-/**
- * Crown ring, planned-treatment halo and extraction cross drawn over a tooth
- */
-export function ToothMarks({ state, cy, cross }: ToothMarksProps) {
+export function ToothMarks({ state, cy, cross }: TToothMarksProps) {
 	return (
 		<>
 			{state.crown && (

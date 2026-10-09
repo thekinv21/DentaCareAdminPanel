@@ -1,3 +1,5 @@
 export { AuthBrandPanel } from './ui/AuthBrandPanel'
-export { AuthField, AuthHeading, AuthStack } from './ui/AuthHeading'
+export { AuthField } from './ui/AuthField'
+export { AuthHeading } from './ui/AuthHeading'
+export { AuthStack } from './ui/AuthStack'
 export { AuthTopBar } from './ui/AuthTopBar'
