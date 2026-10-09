@@ -14,18 +14,20 @@ import { cn } from '@/shared/lib/cn'
 import { useFormat } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 
-import type { PlacedEvent } from '../lib/Layout'
+import type { TPlacedEvent } from '../lib/Layout'
 
-type TEventBlockProps = { placed: PlacedEvent }
+type TEventBlockProps = { placed: TPlacedEvent }
 
 export function EventBlock({ placed }: TEventBlockProps) {
+	const { event, top, height, lane, lanes, end } = placed
+
 	const t = useTranslations('Appointments')
 	const format = useFormat()
 	const labels = useAppointmentLabels()
-	const { event, top, height, lane, lanes, end } = placed
-	const width = 100 / lanes
-	const who = format.name(event.who)
-	const what = labels.procedure(event.what)
+
+	const width: number = 100 / lanes
+	const who: string = format.name(event.who)
+	const what: string = labels.procedure(event.what)
 
 	return (
 		<Link

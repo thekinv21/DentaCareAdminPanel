@@ -22,7 +22,7 @@ export const GRID_HOURS = [
 ]
 export const GRID_HEIGHT = (GRID_HOURS.length - 1) * HOUR_HEIGHT
 
-export interface PlacedEvent {
+export type TPlacedEvent = {
 	event: CalendarEvent
 	top: number
 	height: number
@@ -31,7 +31,7 @@ export interface PlacedEvent {
 	end: string
 }
 
-export function placeEvents(events: CalendarEvent[]): PlacedEvent[] {
+export function placeEvents(events: CalendarEvent[]): TPlacedEvent[] {
 	const px = HOUR_HEIGHT / 60
 	const items = events
 		.map(event => {
