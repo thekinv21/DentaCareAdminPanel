@@ -7,26 +7,6 @@
 		"users": "Пользователи",
 		"rolesAndAccess": "Роли и доступ"
 	},
-	"Appointment": {
-		"completed": "Завершён",
-		"confirmed": "Подтверждён",
-		"consultationImplant": "Консультация · имплант",
-		"exam": "Осмотр",
-		"followUpExam": "Повторный осмотр",
-		"inChair": "В кресле",
-		"next": "Следующий",
-		"noShow": "Не пришёл",
-		"notConfirmed": "Не подтверждён",
-		"professionalCleaning": "Профгигиена",
-		"whitening": "Отбеливание",
-		"filling": "Пломба",
-		"rootCanalTreatment": "Лечение каналов",
-		"crownTryIn": "Примерка коронки",
-		"extraction": "Удаление",
-		"consultation": "Консультация",
-		"crown": "Коронка",
-		"procedureOnTooth": "{procedure} · {tooth}"
-	},
 	"AuthPanel": {
 		"aboutDenta": "О Denta",
 		"allergyPenicillin": "Аллергия: пенициллин",
@@ -89,26 +69,8 @@
 		"working": "Выполняем…"
 	},
 	"Employee": {
-		"administrator": "Администратор",
-		"assistant": "Ассистент",
 		"bishkekAlaToo": "Бишкек · Ала-Тоо",
-		"chair1": "Кресло 1",
-		"chair2": "Кресло 2",
-		"chairs34": "Кресла 3, 4",
-		"chiefDentist": "Главный врач",
-		"dayOff": "Выходной",
-		"dentalAssistant": "Ассистент врача",
-		"dentist": "Врач",
-		"frontDesk": "Ресепшен",
-		"frontDeskBilling": "Ресепшен, оплаты",
-		"hygienistPartTime": "Гигиенист · полставки",
-		"leave": "Отпуск",
-		"onShift": "На смене",
-		"prosthodontics": "Ортопедия",
-		"restorativeDentistryEndodontics": "Терапия, эндодонтия",
-		"sterilization": "Стерилизация",
-		"sterilizationRoom": "Стерилизационная",
-		"surgeryImplantology": "Хирургия, имплантация"
+		"chiefDentist": "Главный врач"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "Проверьте SMS",

@@ -1,15 +1,8 @@
-import type { TDoctor, TDoctorId, TStaffMember } from '../model/Types'
+import type { TDoctor, TDoctorId } from '../model/Types'
 
 export const DOCTOR_IDS = ['kas', 'pet', 'tok'] as const satisfies TDoctorId[]
 
 export const CHAIR_NUMBERS = [1, 2, 3, 4] as const
-
-export const CHAIR_DOCTOR: Record<(typeof CHAIR_NUMBERS)[number], TDoctorId> = {
-	1: 'kas',
-	2: 'pet',
-	3: 'tok',
-	4: 'tok',
-}
 
 export const DOCTORS: Record<TDoctorId, TDoctor> = {
 	kas: {
@@ -43,94 +36,3 @@ export const CURRENT_USER = {
 	role: 'chiefDentist',
 	branch: 'bishkekAlaToo',
 }
-
-export const STAFF: TStaffMember[] = [
-	{
-		id: 's1',
-		fullName: 'Айгерим Касымова',
-		role: 'dentist',
-		specialty: 'restorativeDentistryEndodontics',
-		status: 'on',
-		todayShift: '08:30–17:30',
-		workplace: 'chair1',
-		phone: '+996 555 701 441',
-		tone: 'accent',
-	},
-	{
-		id: 's2',
-		fullName: 'Сергей Петров',
-		role: 'dentist',
-		specialty: 'prosthodontics',
-		status: 'on',
-		todayShift: '09:00–18:00',
-		workplace: 'chair2',
-		phone: '+996 700 112 908',
-		tone: 'info',
-	},
-	{
-		id: 's3',
-		fullName: 'Эрмек Токтогулов',
-		role: 'dentist',
-		specialty: 'surgeryImplantology',
-		status: 'on',
-		todayShift: '08:00–16:00',
-		workplace: 'chairs34',
-		phone: '+996 777 304 512',
-		tone: 'ok',
-	},
-	{
-		id: 's4',
-		fullName: 'Дария Юсупова',
-		role: 'dentist',
-		specialty: 'hygienistPartTime',
-		status: 'off',
-		todayShift: '—',
-		workplace: '—',
-		phone: '+996 555 920 117',
-		tone: 'warning',
-	},
-	{
-		id: 's5',
-		fullName: 'Бермет Карасаева',
-		role: 'assistant',
-		specialty: 'dentalAssistant',
-		status: 'on',
-		todayShift: '08:30–17:30',
-		workplace: 'chair1',
-		phone: '+996 702 553 018',
-		tone: 'brand',
-	},
-	{
-		id: 's6',
-		fullName: 'Олег Демченко',
-		role: 'assistant',
-		specialty: 'sterilization',
-		status: 'on',
-		todayShift: '08:00–16:00',
-		workplace: 'sterilizationRoom',
-		phone: '+996 509 228 764',
-		tone: 'info',
-	},
-	{
-		id: 's7',
-		fullName: 'Ирина Гусева',
-		role: 'assistant',
-		specialty: 'dentalAssistant',
-		status: 'leave',
-		todayShift: '—',
-		workplace: '—',
-		phone: '+996 555 640 233',
-		tone: 'accent',
-	},
-	{
-		id: 's8',
-		fullName: 'Эльмира Танаева',
-		role: 'reception',
-		specialty: 'frontDeskBilling',
-		status: 'on',
-		todayShift: '08:00–17:00',
-		workplace: 'frontDesk',
-		phone: '+996 777 811 402',
-		tone: 'ok',
-	},
-]

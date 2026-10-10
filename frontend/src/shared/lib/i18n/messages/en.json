@@ -7,26 +7,6 @@
 		"users": "Users",
 		"rolesAndAccess": "Roles & access"
 	},
-	"Appointment": {
-		"completed": "Completed",
-		"confirmed": "Confirmed",
-		"consultationImplant": "Consultation · implant",
-		"exam": "Exam",
-		"followUpExam": "Follow-up exam",
-		"inChair": "In chair",
-		"next": "Next",
-		"noShow": "No-show",
-		"notConfirmed": "Not confirmed",
-		"professionalCleaning": "Professional cleaning",
-		"whitening": "Whitening",
-		"filling": "Filling",
-		"rootCanalTreatment": "Root canal treatment",
-		"crownTryIn": "Crown try-in",
-		"extraction": "Extraction",
-		"consultation": "Consultation",
-		"crown": "Crown",
-		"procedureOnTooth": "{procedure} · {tooth}"
-	},
 	"AuthPanel": {
 		"aboutDenta": "About Denta",
 		"allergyPenicillin": "Allergy: penicillin",
@@ -89,26 +69,8 @@
 		"working": "Working…"
 	},
 	"Employee": {
-		"administrator": "Administrator",
-		"assistant": "Assistant",
 		"bishkekAlaToo": "Bishkek · Ala-Too",
-		"chair1": "Chair 1",
-		"chair2": "Chair 2",
-		"chairs34": "Chairs 3, 4",
-		"chiefDentist": "Chief dentist",
-		"dayOff": "Day off",
-		"dentalAssistant": "Dental assistant",
-		"dentist": "Dentist",
-		"frontDesk": "Front desk",
-		"frontDeskBilling": "Front desk, billing",
-		"hygienistPartTime": "Hygienist · part-time",
-		"leave": "Leave",
-		"onShift": "On shift",
-		"prosthodontics": "Prosthodontics",
-		"restorativeDentistryEndodontics": "Restorative dentistry, endodontics",
-		"sterilization": "Sterilization",
-		"sterilizationRoom": "Sterilization room",
-		"surgeryImplantology": "Surgery, implantology"
+		"chiefDentist": "Chief dentist"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "Check your SMS",

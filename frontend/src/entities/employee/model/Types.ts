@@ -16,18 +16,3 @@ export type TDoctor = {
 	color: 'brand' | 'info' | 'accent'
 	tone: TTone
 }
-
-export type TStaffRole = 'dentist' | 'assistant' | 'reception'
-export type TStaffStatus = 'on' | 'off' | 'leave'
-
-export type TStaffMember = {
-	id: string
-	fullName: string
-	role: TStaffRole
-	specialty: string
-	status: TStaffStatus
-	todayShift: string
-	workplace: string
-	phone: string
-	tone: TTone
-}

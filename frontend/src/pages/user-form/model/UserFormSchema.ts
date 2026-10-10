@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { toMinutes } from '@/entities/appointment'
 import type { TSystemRoleId } from '@/entities/role'
 import { USER_TYPES } from '@/entities/user'
 
+import { toMinutes } from '@/shared/lib/date'
 import { LOCALES } from '@/shared/lib/i18n'
 import {
 	kgPhoneSchema,

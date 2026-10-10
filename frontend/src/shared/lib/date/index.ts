@@ -8,3 +8,4 @@ export {
 	WEEK_DAYS,
 } from './DisplayDate'
 export type { TWeekDay } from './DisplayDate'
+export { toMinutes } from './Time'

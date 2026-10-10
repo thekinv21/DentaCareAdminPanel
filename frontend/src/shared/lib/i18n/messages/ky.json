@@ -7,26 +7,6 @@
 		"users": "Колдонуучулар",
 		"rolesAndAccess": "Ролдор жана мүмкүнчүлүк"
 	},
-	"Appointment": {
-		"completed": "Аяктады",
-		"confirmed": "Ырасталды",
-		"consultationImplant": "Консультация · имплант",
-		"exam": "Кароо",
-		"followUpExam": "Кайра кароо",
-		"inChair": "Креслодо",
-		"next": "Кийинки",
-		"noShow": "Келген жок",
-		"notConfirmed": "Ырасталган жок",
-		"professionalCleaning": "Кесиптик гигиена",
-		"whitening": "Агартуу",
-		"filling": "Пломба",
-		"rootCanalTreatment": "Каналдарды дарылоо",
-		"crownTryIn": "Таажыны ченеп көрүү",
-		"extraction": "Тиш алдыруу",
-		"consultation": "Консультация",
-		"crown": "Таажы",
-		"procedureOnTooth": "{procedure} · {tooth}"
-	},
 	"AuthPanel": {
 		"aboutDenta": "Denta жөнүндө",
 		"allergyPenicillin": "Аллергия: пенициллин",
@@ -89,26 +69,8 @@
 		"working": "Аткарылууда…"
 	},
 	"Employee": {
-		"administrator": "Администратор",
-		"assistant": "Ассистент",
 		"bishkekAlaToo": "Бишкек · Ала-Тоо",
-		"chair1": "1-кресло",
-		"chair2": "Кресло 2",
-		"chairs34": "Креслолор 3, 4",
-		"chiefDentist": "Башкы дарыгер",
-		"dayOff": "Дем алыш",
-		"dentalAssistant": "Дарыгердин ассистенти",
-		"dentist": "Дарыгер",
-		"frontDesk": "Ресепшн",
-		"frontDeskBilling": "Ресепшн, төлөмдөр",
-		"hygienistPartTime": "Гигиенист · жарым ставка",
-		"leave": "Өргүү",
-		"onShift": "Сменада",
-		"prosthodontics": "Ортопедия",
-		"restorativeDentistryEndodontics": "Терапия, эндодонтия",
-		"sterilization": "Стерилизация",
-		"sterilizationRoom": "Стерилизация бөлмөсү",
-		"surgeryImplantology": "Хирургия, имплантация"
+		"chiefDentist": "Башкы дарыгер"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "SMSти текшериңиз",
