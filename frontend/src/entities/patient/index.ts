@@ -1,5 +1,0 @@
-export { PATIENTS, PATIENTS_TOTAL } from './api/Mock'
-export { patientAvatarTone } from './lib/PatientTone'
-export type { TPatient, TPatientSegment } from './model/Types'
-export { usePatientLabels } from './model/usePatientLabels'
-export { PatientFlagBadge } from './ui/PatientFlagBadge'
