@@ -5,7 +5,7 @@ export type TConfirmTone =
 
 export type TImpactTone = 'danger' | 'warning' | 'ok' | 'neutral' | 'info'
 
-type TConfirmSubject = {
+export type TConfirmSubject = {
 	title: string
 	subtitle?: string
 	initials?: string

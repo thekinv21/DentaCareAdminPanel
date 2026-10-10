@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 
+import { writeCookie } from '@/shared/lib/cookie'
+
 import { LOCALE_COOKIE, type TLocale } from './Config'
 
 const ONE_YEAR = 60 * 60 * 24 * 365
@@ -13,7 +15,7 @@ export function useChangeLocale() {
 	const router = useRouter()
 
 	return (locale: TLocale) => {
-		document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax`
+		writeCookie(LOCALE_COOKIE, locale, ONE_YEAR)
 
 		router.refresh()
 	}

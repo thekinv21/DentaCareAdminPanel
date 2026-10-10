@@ -1,11 +1,22 @@
 'use client'
 
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { authUserAtom } from '@/shared/model'
+import {
+	authUserAtom,
+	isAuthenticatedAtom,
+	signInAtom,
+	signOutAtom,
+} from '@/shared/model'
 
 export function useAuth() {
 	const user = useAtomValue(authUserAtom)
 
-	return { user }
+	const isAuthenticated = useAtomValue(isAuthenticatedAtom)
+
+	const signIn = useSetAtom(signInAtom)
+
+	const signOut = useSetAtom(signOutAtom)
+
+	return { user, isAuthenticated, signIn, signOut }
 }

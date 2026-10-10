@@ -25,18 +25,6 @@ export function SidebarNavItem({ item }: TSidebarNavItemProps) {
 		>
 			<Icon size={19} aria-hidden='true' />
 			<span className='grow truncate max-laptop:sr-only'>{item.label}</span>
-			{item.count && (
-				<span
-					className={cn(
-						'rounded-full px-1.75 font-mono text-[11px] leading-4.5 max-laptop:hidden',
-						item.count.warning
-							? 'bg-warning-soft text-warning'
-							: 'bg-sunken text-ink',
-					)}
-				>
-					{item.count.value}
-				</span>
-			)}
 		</Link>
 	)
 }

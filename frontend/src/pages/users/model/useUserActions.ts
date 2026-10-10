@@ -7,9 +7,10 @@ import { useTranslations } from 'next-intl'
 import { type TUser, USERS, useUserLabels } from '@/entities/user'
 
 import { mockRequest } from '@/shared/api'
-import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
+
+import { useDeactivateConfirm } from './useDeactivateConfirm'
 
 /**
  * The user list (mock edits stay in memory) with activation and deletion
@@ -24,6 +25,8 @@ export function useUserActions() {
 
 	const confirm = useConfirm()
 
+	const { confirmDeactivate } = useDeactivateConfirm()
+
 	const [currentUsers, setCurrentUsers] = useState<TUser[]>(USERS)
 
 	const updateUser = (id: string, change: Partial<TUser>) =>
@@ -31,11 +34,10 @@ export function useUserActions() {
 			list.map(user => (user.id === id ? { ...user, ...change } : user)),
 		)
 
-	const toConfirmSubject = (user: TUser) => {
-		const name = format.name(user.fullName)
-
-		return { title: name, initials: getInitials(name), tone: user.tone }
-	}
+	const toConfirmSubject = (user: TUser) => ({
+		title: format.name(user.fullName),
+		tone: user.tone,
+	})
 
 	const onToggleActive = (user: TUser) => {
 		const subject = {
@@ -58,30 +60,10 @@ export function useUserActions() {
 			return
 		}
 
-		confirm({
-			tone: 'warning',
-			title: t('deactivateQuestion'),
-			description: t('deactivateDescription'),
+		confirmDeactivate({
 			subject,
-			options: [
-				{
-					id: 'logout',
-					label: t('endSessions'),
-					hint: t('endSessionsHint'),
-					checked: true,
-				},
-				{
-					id: 'move',
-					label: t('moveAppointments'),
-					hint: t('moveAppointmentsHint'),
-				},
-				{ id: 'notify', label: t('notifyBySms') },
-			],
-			confirmText: t('deactivate'),
-			pendingText: t('disabling'),
-			successText: t('userDeactivated'),
-			onConfirm: () =>
-				mockRequest().then(() => updateUser(user.id, { active: false })),
+			description: t('deactivateDescription'),
+			onDeactivated: () => updateUser(user.id, { active: false }),
 		})
 	}
 

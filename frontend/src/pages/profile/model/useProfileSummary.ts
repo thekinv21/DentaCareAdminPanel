@@ -28,7 +28,7 @@ export function useProfileSummary() {
 
 	const router = useRouter()
 
-	const auth = useAuth()
+	const { user: authUser, signOut } = useAuth()
 
 	const { defaultValues } = useFormState<TProfileFormValues>()
 
@@ -38,12 +38,12 @@ export function useProfileSummary() {
 
 	const fullName =
 		[saved?.firstName, saved?.lastName].filter(Boolean).join(' ') ||
-		format.name(auth.user?.fullName ?? '')
+		(authUser ? format.name(authUser.fullName) : '')
 
 	const user = {
 		fullName,
 		initials: getInitials(fullName),
-		role: auth.user ? labels.type(auth.user.type) : '',
+		role: authUser ? labels.type(authUser.type) : '',
 	}
 
 	const stats = PROFILE_FACTS.stats.map(stat => ({
@@ -70,6 +70,8 @@ export function useProfileSummary() {
 	]
 
 	const onSignOut = () => {
+		signOut()
+
 		router.push(ROUTES.login)
 	}
 

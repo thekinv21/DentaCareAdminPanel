@@ -8,7 +8,6 @@ export type TNavItem = {
 	href: string
 	label: string
 	icon: LucideIcon | ComponentType<{ size?: number }>
-	count?: { value: number; warning?: boolean }
 }
 
 type TNavGroup = {

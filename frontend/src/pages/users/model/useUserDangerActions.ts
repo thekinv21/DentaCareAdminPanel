@@ -3,11 +3,12 @@
 import { useTranslations } from 'next-intl'
 
 import { mockRequest } from '@/shared/api'
-import type { TTone } from '@/shared/ui/badge'
-import { useConfirm } from '@/shared/ui/confirm-dialog'
+import { type TConfirmSubject, useConfirm } from '@/shared/ui/confirm-dialog'
+
+import { useDeactivateConfirm } from './useDeactivateConfirm'
 
 type TDangerActionsOptions = {
-	subject: { title: string; subtitle: string; initials: string; tone?: TTone }
+	subject: TConfirmSubject
 	phone: string
 	onDeactivated: () => void
 	onDeleted: () => void
@@ -25,6 +26,8 @@ export function useUserDangerActions(options: TDangerActionsOptions) {
 
 	const confirm = useConfirm()
 
+	const { confirmDeactivate } = useDeactivateConfirm()
+
 	const onResetPassword = () =>
 		confirm({
 			tone: 'warning',
@@ -37,29 +40,10 @@ export function useUserDangerActions(options: TDangerActionsOptions) {
 		})
 
 	const onDeactivate = () =>
-		confirm({
-			tone: 'warning',
-			title: tUsers('deactivateQuestion'),
-			description: t('deactivateShortDescription'),
+		confirmDeactivate({
 			subject,
-			options: [
-				{
-					id: 'logout',
-					label: tUsers('endSessions'),
-					hint: tUsers('endSessionsHint'),
-					checked: true,
-				},
-				{
-					id: 'move',
-					label: tUsers('moveAppointments'),
-					hint: tUsers('moveAppointmentsHint'),
-				},
-				{ id: 'notify', label: tUsers('notifyBySms') },
-			],
-			confirmText: tUsers('deactivate'),
-			pendingText: tUsers('disabling'),
-			successText: tUsers('userDeactivated'),
-			onConfirm: () => mockRequest().then(onDeactivated),
+			description: t('deactivateShortDescription'),
+			onDeactivated,
 		})
 
 	const onDelete = () =>

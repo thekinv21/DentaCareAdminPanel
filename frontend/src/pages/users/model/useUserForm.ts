@@ -60,7 +60,6 @@ export function useUserForm(userId?: string) {
 		subject: {
 			title: fullName,
 			subtitle: user ? `${labels.type(type)} · ${user.email}` : '',
-			initials: getInitials(fullName),
 			tone: user?.tone,
 		},
 		phone: user?.phone ?? '',
