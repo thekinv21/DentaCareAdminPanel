@@ -8,11 +8,11 @@ import helmet from 'helmet';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
 
 import { createSwaggerConfig, TEnv } from '@/shared/config';
+import { GlobalExceptionsFilter } from '@/shared/filters';
+import { ApiResponseInterceptor } from '@/shared/interceptors';
+import { GlobalValidationPipe } from '@/shared/pipes';
 
-import { AppModule } from './AppModule';
-import { GlobalExceptionsFilter } from './shared/filters';
-import { ApiResponseInterceptor } from './shared/interceptors';
-import { GlobalValidationPipe } from './shared/pipes';
+import { AppModule } from '@/app/AppModule';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

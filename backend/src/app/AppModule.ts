@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { validateEnv } from '@/shared/config';
 
-import { PrismaModule } from './shared/prisma';
+import { PrismaModule } from '@/infrastructure/database/prisma';
 
 @Module({
   imports: [

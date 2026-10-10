@@ -5,6 +5,12 @@
   "importOrder": [
     "^@nestjs/(.*)$",
     "<THIRD_PARTY_MODULES>",
+    "^@/shared/(.*)$",
+    "^@/domain/(.*)$",
+    "^@/app/(.*)$",
+    "^@/infrastructure/(.*)$",
+    "^@/presentation/(.*)$",
+    "^@/use-case/(.*)$",
     "^@/(.*)$",
     "^[./]"
   ],
