@@ -1,2 +1,7 @@
 export { RolesPage } from './ui/RolesPage'
-export { generateMetadata } from './ui/Metadata'
+export { RoleFormPage } from './ui/RoleFormPage'
+export {
+	generateMetadata,
+	createRoleMetadata,
+	editRoleMetadata,
+} from './ui/Metadata'

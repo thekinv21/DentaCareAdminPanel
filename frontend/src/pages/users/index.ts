@@ -1,2 +1,7 @@
 export { UsersPage } from './ui/UsersPage'
-export { generateMetadata } from './ui/Metadata'
+export { UserFormPage } from './ui/UserFormPage'
+export {
+	generateMetadata,
+	createUserMetadata,
+	editUserMetadata,
+} from './ui/Metadata'

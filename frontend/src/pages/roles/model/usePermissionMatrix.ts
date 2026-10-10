@@ -20,13 +20,13 @@ import type { TRoleFormValues, TScope } from './RoleFormSchema'
 const triState = (values: boolean[]): TCheckState =>
 	values.every(Boolean) ? true : values.some(Boolean) ? 'mixed' : false
 
-/**
- * Module × action checkbox grid of the role form with row/column toggles and a summary
- */
 export function usePermissionMatrix() {
 	const t = useTranslations('RoleForm')
+
 	const labels = useRoleLabels()
+
 	const { control, setValue } = useFormContext<TRoleFormValues>()
+
 	const [permissions, scope] = useWatch({
 		control,
 		name: ['permissions', 'scope'],
@@ -34,10 +34,13 @@ export function usePermissionMatrix() {
 
 	const isGranted = (moduleId: string, action: TPermissionAction) =>
 		!!permissions[moduleId]?.includes(action)
+
 	const setPermissions = (next: TPermissions) =>
 		setValue('permissions', next, { shouldDirty: true })
+
 	const setModuleActions = (moduleId: string, actions: TPermissionAction[]) =>
 		setPermissions({ ...permissions, [moduleId]: actions })
+
 	const replaceAll = (keepAction: (action: TPermissionAction) => boolean) =>
 		setPermissions(
 			Object.fromEntries(
@@ -93,11 +96,13 @@ export function usePermissionMatrix() {
 		const modules = PERMISSION_MODULES.filter(permissionModule =>
 			permissionModule.actions.includes(action.id),
 		)
+
 		const state = triState(
 			modules.map(permissionModule =>
 				isGranted(permissionModule.id, action.id),
 			),
 		)
+
 		return {
 			id: action.id,
 			label: labels.action(action.label),
