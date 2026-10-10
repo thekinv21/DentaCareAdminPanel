@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { CHAIR_NUMBERS } from '@/entities/employee'
 import { ROLE_COLORS, useRoleLabels } from '@/entities/role'
 
 import { cn } from '@/shared/lib/cn'
@@ -22,7 +21,7 @@ import {
 import { FormSection } from '@/shared/ui/form-section'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
-import { SPECIALTIES, VISIT_DURATIONS } from '../model/Options'
+import { CHAIR_NUMBERS, SPECIALTIES, VISIT_DURATIONS } from '../model/Options'
 import type { TUserFormValues } from '../model/UserFormSchema'
 
 const SCHEDULE_COLORS = ROLE_COLORS.slice(0, 6)

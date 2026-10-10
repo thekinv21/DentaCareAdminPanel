@@ -112,6 +112,22 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
 - Route handlers: logic lives in `src/app/api-routes`, `app/api/**/route.ts` only re-exports it.
 - `proxy.ts` (Next 16 replacement for middleware) and `instrumentation.ts` live at the project root.
 
+### Auth / session placement
+
+- State management: **Jotai** (`JotaiProvider` in `src/app/providers`).
+- Tokens (access/refresh) → cookies, via `saveTokens`/`removeTokens`/`getAccessToken` from `@/shared/api`;
+  the axios `instance` adds `Authorization: Bearer` itself.
+- Global stores live in the `shared/model` segment, one folder per store (`shared/model/auth/AuthStore.ts`, `Types.ts`),
+  exported from `shared/model/index.ts` (import `@/shared/model`). Auth store: `authUserAtom` (`atomWithStorage`,
+  localStorage), `isAuthenticatedAtom`, write atoms `signInAtom`/`signOutAtom`. `entities/user` extends `TAuthUser`
+  (`TUser = TAuthUser & {...}`).
+- Global hooks live next to their purpose in `shared/lib/<module>` (`shared/lib/auth/useAuth.ts`), like `useFormat`/`useTheme`.
+  Hooks only read/write the store; no state in the hook file.
+- Never create `shared/store`, `shared/hooks`, `shared/types`: Steiger `segments-by-purpose` rejects them.
+- `useAuth()` is the global session hook: import it from `@/shared/lib/auth` on any layer
+  (`user`, `isAuthenticated`, `signIn`, `signOut`).
+  There is no separate current-user hook; derive display values (initials, role label) in the consumer's model hook.
+
 ### Realtime / WebSocket placement
 
 - Socket client instance and connection config → `shared/api` (`shared/config` for URLs).
@@ -226,7 +242,7 @@ forms, settings pages, table filters, search boxes, sorting, calendar range, con
 - **Derived values** (totals, previews, conflicts) live in `model/use*.ts` hooks that call
   `useWatch({ control, name: [...] })` close to where they are rendered.
 - **Filters**: `const form = useForm<TQuery>({ defaultValues })` + `useWatch({ control: form.control,
-  name: [...] })` in the table hook; the toolbar binds `Segmented` via `Controller` and `SearchInput` via
+name: [...] })` in the table hook; the toolbar binds `Segmented` via `Controller` and `SearchInput` via
   `form.register('search')`.
 - **Save/dirty state** of settings-like pages comes from `formState` (`isDirty`, `isSubmitSuccessful`);
   after a successful save call `form.reset(values)` so "Cancel" returns to the last saved values.

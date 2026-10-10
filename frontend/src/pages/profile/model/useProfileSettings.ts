@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { useLocale, useTranslations } from 'next-intl'
 
+import { useAuth } from '@/shared/lib/auth'
 import {
 	LOCALE_META,
 	LOCALES,
@@ -53,6 +54,8 @@ export function useProfileSettings() {
 	const t = useTranslations('Profile')
 
 	const format = useFormat()
+
+	const { user } = useAuth()
 
 	const locale = useLocale()
 
@@ -140,7 +143,10 @@ export function useProfileSettings() {
 		}
 	})
 
+	const crumb = `${t('account')} · ${format.name(user?.fullName ?? '')}`
+
 	return {
+		crumb,
 		tab,
 		tabs,
 		onTabChange,

@@ -27,9 +27,7 @@
 	"Common": {
 		"back": "Артка",
 		"cancel": "Жокко чыгаруу",
-		"forward": "Алга",
 		"hidePassword": "Сырсөздү жашыруу",
-		"pages": "Барактар",
 		"save": "Сактоо",
 		"showPassword": "Сырсөздү көрсөтүү",
 		"som": "сом",
@@ -67,10 +65,6 @@
 		"undo": "Кайтаруу",
 		"whatWillHappen": "Эмне болот",
 		"working": "Аткарылууда…"
-	},
-	"Employee": {
-		"bishkekAlaToo": "Бишкек · Ала-Тоо",
-		"chiefDentist": "Башкы дарыгер"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "SMSти текшериңиз",
@@ -611,7 +605,6 @@
 		"deleting": "Өчүрүлүүдө…",
 		"disabledFilter": "Өчүрүлгөн",
 		"disabling": "Өчүрүлүүдө…",
-		"edit": "Өзгөртүү",
 		"enabling": "Иштетилүүдө…",
 		"endSessions": "Бардык активдүү сессияларды аяктоо",
 		"endSessionsHint": "Бардык түзмөктөрдөн бир убакта чыгуу",
@@ -665,18 +658,7 @@
 		"enterLicenseNumber": "Лицензиянын номерин жазыңыз",
 		"enterRoleName": "Ролдун аталышын жазыңыз",
 		"enterDateDdMmYyyy": "Датаны КК.АА.ЖЖЖЖ форматында жазыңыз",
-		"enter14Digits": "14 сан жазыңыз",
-		"consentRequired": "Макулдуксуз карта түзүүгө болбойт",
-		"selectPatient": "Бейтапты тандаңыз",
 		"enterAmount": "Сан жазыңыз",
-		"enterPlanName": "Пландын аталышын жазыңыз",
-		"enterService": "Кызматты көрсөтүңүз",
-		"discountUpTo100": "Арзандатуу 100%дан ашпайт",
-		"addAtLeastOneStage": "Жок дегенде бир этап кошуңуз",
-		"addAtLeastOneItem": "Жок дегенде бир позиция кошуңуз",
-		"enterItemName": "Позициянын аталышын жазыңыз",
-		"enterServiceName": "Кызматтын аталышын жазыңыз",
-		"enterPrice": "Бааны жазыңыз",
 		"phoneMustHave9Digits": "Номердин 9 цифрасын киргизиңиз",
 		"passwordTooWeak": "Сырсөз талаптарга жооп бербейт",
 		"enterTimeHhMm": "Убакытты СС:ММ форматында жазыңыз",
@@ -685,8 +667,7 @@
 		"selectAtLeastOneDoctor": "Жок дегенде бир дарыгерди тандаңыз",
 		"enterPercent": "0дөн 100гө чейин пайыз жазыңыз",
 		"enterWholeNumber": "Бүтүн сан жазыңыз",
-		"enterRequiredValue": "Бул талааны толтуруңуз",
-		"enterMonthYear": "АА.ЖЖЖЖ форматында жазыңыз"
+		"enterRequiredValue": "Бул талааны толтуруңуз"
 	},
 	"Verify": {
 		"digit": "Сан",

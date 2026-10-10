@@ -2,9 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 
-import { useCurrentUser } from '@/entities/employee'
-
 import { useSidebarNav } from '../model/useSidebarNav'
+import { useSidebarProfile } from '../model/useSidebarProfile'
 import { SidebarBrand } from './SidebarBrand'
 import { SidebarNav } from './SidebarNav'
 import { SidebarProfileLink } from './SidebarProfileLink'
@@ -12,7 +11,7 @@ import { SidebarProfileLink } from './SidebarProfileLink'
 export function AdminSidebar() {
 	const t = useTranslations('AdminSidebar')
 
-	const user = useCurrentUser()
+	const user = useSidebarProfile()
 
 	const { groups, profileActive } = useSidebarNav()
 

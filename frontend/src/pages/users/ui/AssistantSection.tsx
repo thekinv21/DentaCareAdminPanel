@@ -3,8 +3,6 @@
 import { useTranslations } from 'next-intl'
 import { useFormContext } from 'react-hook-form'
 
-import { CHAIR_NUMBERS } from '@/entities/employee'
-
 import { useFieldProps } from '@/shared/lib/form'
 import { useFormat } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
@@ -13,7 +11,11 @@ import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
-import { ASSISTANT_DOCTORS, QUALIFICATIONS } from '../model/Options'
+import {
+	ASSISTANT_DOCTORS,
+	CHAIR_NUMBERS,
+	QUALIFICATIONS,
+} from '../model/Options'
 import type { TUserFormValues } from '../model/UserFormSchema'
 
 /**

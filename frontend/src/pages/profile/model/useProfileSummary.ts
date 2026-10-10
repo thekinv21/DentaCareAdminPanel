@@ -1,12 +1,16 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+
 import { useTranslations } from 'next-intl'
 import { useFormState } from 'react-hook-form'
 
-import { useCurrentUser } from '@/entities/employee'
+import { useUserLabels } from '@/entities/user'
 
+import { useAuth } from '@/shared/lib/auth'
 import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
+import { ROUTES } from '@/shared/routes'
 
 import { PROFILE_FACTS } from './Profile'
 import type { TProfileFormValues } from './ProfileFormSchema'
@@ -20,7 +24,11 @@ export function useProfileSummary() {
 
 	const format = useFormat()
 
-	const currentUser = useCurrentUser()
+	const labels = useUserLabels()
+
+	const router = useRouter()
+
+	const auth = useAuth()
 
 	const { defaultValues } = useFormState<TProfileFormValues>()
 
@@ -30,9 +38,13 @@ export function useProfileSummary() {
 
 	const fullName =
 		[saved?.firstName, saved?.lastName].filter(Boolean).join(' ') ||
-		currentUser.fullName
+		format.name(auth.user?.fullName ?? '')
 
-	const user = { ...currentUser, fullName, initials: getInitials(fullName) }
+	const user = {
+		fullName,
+		initials: getInitials(fullName),
+		role: auth.user ? labels.type(auth.user.type) : '',
+	}
 
 	const stats = PROFILE_FACTS.stats.map(stat => ({
 		label: t(stat.label),
@@ -57,5 +69,9 @@ export function useProfileSummary() {
 		},
 	]
 
-	return { user, stats, contacts }
+	const onSignOut = () => {
+		router.push(ROUTES.login)
+	}
+
+	return { user, stats, contacts, onSignOut }
 }

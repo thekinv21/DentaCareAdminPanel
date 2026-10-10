@@ -1,25 +1,22 @@
 import type { TSystemRoleId } from '@/entities/role/@x/user'
 
+import type { TAuthUser } from '@/shared/model'
 import type { TTone } from '@/shared/ui/badge'
 
-export type TUserType =
-	'chief' | 'doctor' | 'assistant' | 'admin' | 'accountant'
+export type TUserType = TAuthUser['type']
 
-export type TBranch = 'alaToo' | 'jal'
+export type TBranch = TAuthUser['branch']
 
 export type TLastSeen =
 	| { kind: 'online' | 'invited' }
 	| { kind: 'today' | 'yesterday'; time: string }
 	| { kind: 'date'; date: string }
 
-export type TUser = {
-	id: string
-	fullName: string
-	type: TUserType
+/**
+ * An account in the user list: the session user plus role, activity and status
+ */
+export type TUser = TAuthUser & {
 	role: TSystemRoleId
-	branch: TBranch
-	phone: string
-	email: string
 	lastSeen: TLastSeen
 	tone: TTone
 	active: boolean

@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-
 import {
 	Camera,
 	Clock,
@@ -13,10 +11,9 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
-import { buttonClass } from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { IconButton } from '@/shared/ui/icon-button'
 
@@ -108,17 +105,14 @@ export function ProfileSummary() {
 				})}
 			</ul>
 
-			{/* there is no session yet: signing out just opens the login screen */}
-			<Link
-				href={ROUTES.login}
-				className={buttonClass({
-					variant: 'dangerOutline',
-					className: 'mt-auto',
-				})}
+			<Button
+				variant='dangerOutline'
+				className='mt-auto'
+				onClick={summary.onSignOut}
 			>
 				<LogOut size={16} aria-hidden='true' />
 				{t('signOutOfAccount')}
-			</Link>
+			</Button>
 		</Card>
 	)
 }

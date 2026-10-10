@@ -1,1 +1,1 @@
-export { getInitials } from './Format'
+export { getInitials, getShortName } from './Format'

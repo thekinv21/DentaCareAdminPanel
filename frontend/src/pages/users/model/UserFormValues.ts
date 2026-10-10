@@ -22,7 +22,7 @@ export const EMPTY_USER_VALUES: TUserFormValues = {
 	chair: 1,
 	duration: 60,
 	color: '#1D5DA3',
-	doctors: ['pet'],
+	doctors: ['u2'],
 	qualification: 'dentalAssistant',
 	payments: ['visa', 'mbank', 'komp', 'optima'],
 	discountLimit: '10',

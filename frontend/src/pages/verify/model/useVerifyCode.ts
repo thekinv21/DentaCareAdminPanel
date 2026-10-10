@@ -13,9 +13,6 @@ import { CODE_LENGTH, type TVerifyValues, verifySchema } from './VerifySchema'
 
 const onlyDigits = (value: string) => value.replace(/\D/g, '')
 
-/**
- * Six one-digit inputs with auto-advance, backspace and paste; any full code signs in (no backend yet)
- */
 export function useVerifyCode() {
 	const router = useRouter()
 
@@ -35,9 +32,6 @@ export function useVerifyCode() {
 
 	const setCode = (next: string[]) => form.setValue('code', next)
 
-	/**
-	 * Writes digits from `position` on; used by typing, OS autofill and paste
-	 */
 	const fillFrom = (position: number, digits: string) => {
 		const next = [...code]
 
@@ -61,10 +55,14 @@ export function useVerifyCode() {
 		onChange: (event: { target: { value: string } }) => {
 			const digits = onlyDigits(event.target.value)
 
-			// typing over a filled cell gives two digits: keep the new one
+			/**
+			 * typing over a filled cell gives two digits: keep the new one
+			 */
 			const isTypingOver = digits.length === 2 && !!code[index]
 
-			// a one-time code autofilled by the OS arrives whole in one cell
+			/**
+			 * a one-time code autofilled by the OS arrives whole in one cell
+			 */
 			if (digits.length > 1 && !isTypingOver) return fillFrom(index, digits)
 
 			const digit = digits.slice(-1)
@@ -110,7 +108,9 @@ export function useVerifyCode() {
 
 	const rememberProps = form.register('rememberDevice')
 
-	const onSubmit = form.handleSubmit(() => router.push(ROUTES.dashboard))
+	const onSubmit = form.handleSubmit(() => {
+		router.push(ROUTES.dashboard)
+	})
 
 	return { cells, isComplete, rememberProps, onSubmit }
 }

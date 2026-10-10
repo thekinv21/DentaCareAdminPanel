@@ -1,6 +1,7 @@
-import { DOCTOR_IDS, DOCTORS } from '@/entities/employee'
+import { USERS } from '@/entities/user'
 
 import { WEEK_DAYS } from '@/shared/lib/date'
+import { getShortName } from '@/shared/lib/format'
 
 /**
  * Option lists of the user form; labels are message keys in the UserForm namespace
@@ -18,13 +19,14 @@ export const SPECIALTIES = [
 
 export const VISIT_DURATIONS = [30, 45, 60, 90] as const
 
+export const CHAIR_NUMBERS = [1, 2, 3, 4] as const
+
 /**
- * Assistants can also work with the hygienist, who is not a dentist
+ * Dentists an assistant can be attached to: the chief and the doctors
  */
-export const ASSISTANT_DOCTORS = [
-	...DOCTOR_IDS.map(id => ({ id, name: DOCTORS[id].shortName })),
-	{ id: 'yus', name: 'Юсупова Д.' },
-]
+export const ASSISTANT_DOCTORS = USERS.filter(
+	user => user.type === 'chief' || user.type === 'doctor',
+).map(user => ({ id: user.id, name: getShortName(user.fullName) }))
 
 export const QUALIFICATIONS = ['dentalAssistant', 'nurse', 'hygienist'] as const
 

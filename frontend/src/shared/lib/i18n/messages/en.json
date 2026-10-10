@@ -27,9 +27,7 @@
 	"Common": {
 		"back": "Back",
 		"cancel": "Cancel",
-		"forward": "Forward",
 		"hidePassword": "Hide password",
-		"pages": "Pages",
 		"save": "Save",
 		"showPassword": "Show password",
 		"som": "som",
@@ -67,10 +65,6 @@
 		"undo": "Undo",
 		"whatWillHappen": "What will happen",
 		"working": "Working…"
-	},
-	"Employee": {
-		"bishkekAlaToo": "Bishkek · Ala-Too",
-		"chiefDentist": "Chief dentist"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "Check your SMS",
@@ -611,7 +605,6 @@
 		"deleting": "Deleting…",
 		"disabledFilter": "Disabled",
 		"disabling": "Disabling…",
-		"edit": "Edit",
 		"enabling": "Enabling…",
 		"endSessions": "End all active sessions",
 		"endSessionsHint": "Sign out on all devices at once",
@@ -665,18 +658,7 @@
 		"enterLicenseNumber": "Enter the license number",
 		"enterRoleName": "Enter the role name",
 		"enterDateDdMmYyyy": "Enter the date as DD.MM.YYYY",
-		"enter14Digits": "Enter 14 digits",
-		"consentRequired": "A record can't be created without consent",
-		"selectPatient": "Select a patient",
 		"enterAmount": "Enter a number",
-		"enterPlanName": "Enter the plan name",
-		"enterService": "Enter the service",
-		"discountUpTo100": "Discount can't exceed 100%",
-		"addAtLeastOneStage": "Add at least one stage",
-		"addAtLeastOneItem": "Add at least one item",
-		"enterItemName": "Enter the item name",
-		"enterServiceName": "Enter the service name",
-		"enterPrice": "Enter the price",
 		"phoneMustHave9Digits": "Enter the 9-digit number",
 		"passwordTooWeak": "Password doesn't meet the requirements",
 		"enterTimeHhMm": "Enter the time as HH:MM",
@@ -685,8 +667,7 @@
 		"selectAtLeastOneDoctor": "Select at least one dentist",
 		"enterPercent": "Enter a percentage from 0 to 100",
 		"enterWholeNumber": "Enter a whole number",
-		"enterRequiredValue": "Fill in this field",
-		"enterMonthYear": "Enter as MM.YYYY"
+		"enterRequiredValue": "Fill in this field"
 	},
 	"Verify": {
 		"digit": "Digit",

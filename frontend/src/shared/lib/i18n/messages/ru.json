@@ -27,9 +27,7 @@
 	"Common": {
 		"back": "Назад",
 		"cancel": "Отменить",
-		"forward": "Вперёд",
 		"hidePassword": "Скрыть пароль",
-		"pages": "Страницы",
 		"save": "Сохранить",
 		"showPassword": "Показать пароль",
 		"som": "сом",
@@ -67,10 +65,6 @@
 		"undo": "Отменить",
 		"whatWillHappen": "Что произойдёт",
 		"working": "Выполняем…"
-	},
-	"Employee": {
-		"bishkekAlaToo": "Бишкек · Ала-Тоо",
-		"chiefDentist": "Главный врач"
 	},
 	"ForgotPassword": {
 		"checkYourSms": "Проверьте SMS",
@@ -611,7 +605,6 @@
 		"deleting": "Удаляем…",
 		"disabledFilter": "Отключены",
 		"disabling": "Отключаем…",
-		"edit": "Изменить",
 		"enabling": "Включаем…",
 		"endSessions": "Завершить все активные сессии",
 		"endSessionsHint": "Выход на всех устройствах сразу",
@@ -665,18 +658,7 @@
 		"enterLicenseNumber": "Введите номер лицензии",
 		"enterRoleName": "Введите название роли",
 		"enterDateDdMmYyyy": "Введите дату в формате ДД.ММ.ГГГГ",
-		"enter14Digits": "Введите 14 цифр",
-		"consentRequired": "Без согласия карту создать нельзя",
-		"selectPatient": "Выберите пациента",
 		"enterAmount": "Введите число",
-		"enterPlanName": "Введите название плана",
-		"enterService": "Укажите услугу",
-		"discountUpTo100": "Скидка не больше 100%",
-		"addAtLeastOneStage": "Добавьте хотя бы один этап",
-		"addAtLeastOneItem": "Добавьте хотя бы одну позицию",
-		"enterItemName": "Введите название позиции",
-		"enterServiceName": "Введите название услуги",
-		"enterPrice": "Введите цену",
 		"phoneMustHave9Digits": "Введите 9 цифр номера",
 		"passwordTooWeak": "Пароль не отвечает требованиям",
 		"enterTimeHhMm": "Введите время в формате ЧЧ:ММ",
@@ -685,8 +667,7 @@
 		"selectAtLeastOneDoctor": "Выберите хотя бы одного врача",
 		"enterPercent": "Введите процент от 0 до 100",
 		"enterWholeNumber": "Введите целое число",
-		"enterRequiredValue": "Заполните это поле",
-		"enterMonthYear": "Введите в формате ММ.ГГГГ"
+		"enterRequiredValue": "Заполните это поле"
 	},
 	"Verify": {
 		"digit": "Цифра",
