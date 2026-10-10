@@ -11,12 +11,13 @@ import { ROUTES } from '@/shared/routes'
 import { buttonClass } from '@/shared/ui/button'
 
 import { useUsersTable } from '../model/useUsersTable'
+import { USER_COLUMNS } from './UserColumns'
 import { UsersTable } from './UsersTable'
 
 export function UsersPage() {
 	const t = useTranslations('Users')
 
-	const { form, types, statuses, rows, countText, crumb } = useUsersTable()
+	const { form, types, statuses, table, crumb } = useUsersTable(USER_COLUMNS)
 
 	return (
 		<>
@@ -38,8 +39,7 @@ export function UsersPage() {
 					form={form}
 					types={types}
 					statuses={statuses}
-					rows={rows}
-					countText={countText}
+					table={table}
 				/>
 			</PageContent>
 		</>

@@ -3,33 +3,31 @@
 import { useTranslations } from 'next-intl'
 
 import { Card } from '@/shared/ui/card'
+import { DataGrid, DataGridPagination } from '@/shared/ui/data-grid'
 import { SearchInput } from '@/shared/ui/search-input'
 import { SegmentedField } from '@/shared/ui/segmented'
-import { Table, TableScroll, Th } from '@/shared/ui/table'
 
+import type { TUserRow } from '../model/UserRow'
 import type { TUsersTableModel } from '../model/useUsersTable'
-import { UserRow } from './UserRow'
 
 type TUsersTableProps = {
 	form: TUsersTableModel['form']
 	types: TUsersTableModel['types']
 	statuses: TUsersTableModel['statuses']
-	rows: TUsersTableModel['rows']
-	countText: string
+	table: TUsersTableModel['table']
 }
 
+const isRowMuted = (row: TUserRow) => !row.isActive
+
 export function UsersTable(props: TUsersTableProps) {
-	const { form, types, statuses, rows, countText } = props
+	const { form, types, statuses, table } = props
 
 	const t = useTranslations('Users')
 
 	const { control, register } = form
 
 	return (
-		<Card
-			as='section'
-			className='min-h-115 flex-auto animate-rise max-mobile:flex-none'
-		>
+		<Card as='section' className='animate-rise'>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
 				<SegmentedField
 					control={control}
@@ -54,37 +52,15 @@ export function UsersTable(props: TUsersTableProps) {
 					/>
 				</div>
 			</div>
-			<TableScroll className='min-h-0 flex-auto'>
-				<Table className='min-w-245'>
-					<thead>
-						<tr>
-							<Th>{t('user')}</Th>
-							<Th>{t('type')}</Th>
-							<Th>{t('role')}</Th>
-							<Th>{t('branch')}</Th>
-							<Th>{t('phone')}</Th>
-							<Th>{t('lastLogin')}</Th>
-							<Th>{t('active')}</Th>
-							<Th>
-								<span className='sr-only'>{t('actions')}</span>
-							</Th>
-						</tr>
-					</thead>
-					<tbody>
-						{rows.map(row => (
-							<UserRow key={row.id} row={row} />
-						))}
-					</tbody>
-				</Table>
-				{rows.length === 0 && (
-					<p className='py-12 text-center text-[12.5px] text-ink-muted'>
-						{t('nobodyFound')}
-					</p>
-				)}
-			</TableScroll>
+			<DataGrid
+				table={table}
+				emptyText={t('nobodyFound')}
+				className='min-w-245'
+				isRowMuted={isRowMuted}
+			/>
 			<div className='flex flex-wrap items-center justify-between gap-2.5 text-[12.5px] text-ink-muted'>
-				<span>{countText}</span>
 				<span>{t('deactivatedNote')}</span>
+				<DataGridPagination table={table} />
 			</div>
 		</Card>
 	)

@@ -13,15 +13,13 @@ import {
 
 import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
-import { matchesText } from '@/shared/lib/search'
+import { type TDataGridColumn, useDataGrid } from '@/shared/ui/data-grid'
 
+import type { TUserRow } from './UserRow'
 import { useUserActions } from './useUserActions'
 
 type TTypeFilter = 'all' | TUserType
 
-/**
- * Query of the user list: type tab, active/disabled status and search text
- */
 type TUsersQuery = {
 	type: TTypeFilter
 	status: 'all' | 'active' | 'disabled'
@@ -41,15 +39,18 @@ const TYPE_FILTERS: TTypeFilter[] = [
 
 const ROLE_BY_ID = new Map(ROLES.map(role => [role.id, role]))
 
-function matchesQuery(user: TUser, query: TUsersQuery) {
-	const { type, status, search } = query
+function toColumnFilters(type: TTypeFilter, status: TUsersQuery['status']) {
+	const filters = []
 
-	return (
-		(type === 'all' || user.type === type) &&
-		(status === 'all' || (status === 'active') === user.active) &&
-		matchesText(`${user.fullName} ${user.phone} ${user.email}`, search)
-	)
+	if (type !== 'all') filters.push({ id: 'type', value: type })
+
+	if (status !== 'all')
+		filters.push({ id: 'active', value: status === 'active' })
+
+	return filters
 }
+
+const getSearchText = (row: TUserRow) => row.searchText
 
 function countByType(users: TUser[]) {
 	const counts: Partial<Record<TTypeFilter, number>> = { all: users.length }
@@ -61,10 +62,7 @@ function countByType(users: TUser[]) {
 	return counts
 }
 
-/**
- * User accounts filtered by type, status and search
- */
-export function useUsersTable() {
+export function useUsersTable(columns: TDataGridColumn<TUserRow>[]) {
 	const t = useTranslations('Users')
 
 	const labels = useUserLabels()
@@ -86,37 +84,37 @@ export function useUsersTable() {
 
 	const typeCounts = countByType(users)
 
-	const rows = users
-		.filter(user => matchesQuery(user, { type, status, search }))
-		.map(user => {
-			const role = ROLE_BY_ID.get(user.role)
+	const rows = users.map((user): TUserRow => {
+		const role = ROLE_BY_ID.get(user.role)
 
-			const name = format.name(user.fullName)
+		const name = format.name(user.fullName)
 
-			return {
-				id: user.id,
-				name,
-				initials: getInitials(name),
-				tone: user.tone,
-				email: user.email,
-				phone: user.phone,
-				type: {
-					label: labels.type(user.type),
-					tone: USER_TYPE[user.type].tone,
-				},
-				role: {
-					label: role ? roleLabels.text(role.name) : '',
-					color: role?.color,
-				},
-				branch: labels.branch(user.branch),
-				lastSeen: user.active
-					? labels.lastSeen(user.lastSeen)
-					: t('accessDisabled'),
-				isActive: user.active,
-				onToggleActive: () => actions.onToggleActive(user),
-				onDelete: () => actions.onDelete(user),
-			}
-		})
+		return {
+			id: user.id,
+			name,
+			initials: getInitials(name),
+			tone: user.tone,
+			email: user.email,
+			phone: user.phone,
+			type: {
+				id: user.type,
+				label: labels.type(user.type),
+				tone: USER_TYPE[user.type].tone,
+			},
+			role: {
+				label: role ? roleLabels.text(role.name) : '',
+				color: role?.color,
+			},
+			branch: labels.branch(user.branch),
+			lastSeen: user.active
+				? labels.lastSeen(user.lastSeen)
+				: t('accessDisabled'),
+			isActive: user.active,
+			searchText: `${user.fullName} ${user.phone} ${user.email}`,
+			onToggleActive: () => actions.onToggleActive(user),
+			onDelete: () => actions.onDelete(user),
+		}
+	})
 
 	const types = TYPE_FILTERS.map(typeFilter => ({
 		id: typeFilter,
@@ -130,11 +128,19 @@ export function useUsersTable() {
 		{ id: 'disabled' as const, label: t('disabledFilter') },
 	]
 
-	const countText = t('shownOf', { shown: rows.length, total: users.length })
+	const filters = toColumnFilters(type, status)
+
+	const { table } = useDataGrid({
+		data: rows,
+		columns,
+		getSearchText,
+		search,
+		filters,
+	})
 
 	const crumb = t('usersBranches', { n: users.length })
 
-	return { form, types, statuses, rows, countText, crumb }
+	return { form, types, statuses, table, crumb }
 }
 
 export type TUsersTableModel = ReturnType<typeof useUsersTable>

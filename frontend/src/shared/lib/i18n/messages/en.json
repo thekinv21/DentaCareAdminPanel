@@ -628,8 +628,7 @@
 		"addUser": "Add user",
 		"usersBranches": "{n} users · 2 branches",
 		"nameEmailOrPhone": "Name, email or phone",
-		"deactivatedNote": "Deactivated users can't sign in, but their records and history are kept",
-		"shownOf": "Showing {shown} of {total}"
+		"deactivatedNote": "Deactivated users can't sign in, but their records and history are kept"
 	},
 	"Validation": {
 		"atLeast10Characters": "At least 10 characters",
@@ -688,5 +687,12 @@
 		"noFinanceAccess": "No access to finances",
 		"scheduleAndPatients": "Schedule and patients",
 		"cantSignIn": "Staff won’t be able to sign in"
+	},
+	"DataGrid": {
+		"pagination": "Pagination",
+		"previousPage": "Previous page",
+		"nextPage": "Next page",
+		"page": "Page {n}",
+		"range": "{from}–{to} of {total}"
 	}
 }
