@@ -15,7 +15,7 @@ import { useVerifyCode } from '../model/useVerifyCode'
 export function VerifyPage() {
 	const t = useTranslations('Verify')
 
-	const verify = useVerifyCode()
+	const { cells, isComplete, rememberProps, onSubmit } = useVerifyCode()
 
 	return (
 		<AuthStack>
@@ -31,17 +31,13 @@ export function VerifyPage() {
 					</>
 				}
 			/>
-			<form
-				noValidate
-				onSubmit={verify.onSubmit}
-				className='flex flex-col gap-4.5'
-			>
+			<form noValidate onSubmit={onSubmit} className='flex flex-col gap-4.5'>
 				<fieldset className='m-0 border-0 p-0'>
 					<legend className='mb-2 text-[13px] leading-4.5 font-semibold'>
 						{t('verificationCode')}
 					</legend>
 					<div className='grid grid-cols-6 gap-2'>
-						{verify.cells.map(cell => (
+						{cells.map(cell => (
 							<input
 								key={cell.index}
 								inputMode='numeric'
@@ -57,15 +53,13 @@ export function VerifyPage() {
 						))}
 					</div>
 				</fieldset>
-				<CheckboxLabel {...verify.rememberProps}>
-					{t('dontAskOnThis')}
-				</CheckboxLabel>
+				<CheckboxLabel {...rememberProps}>{t('dontAskOnThis')}</CheckboxLabel>
 				<Button
 					type='submit'
 					variant='primary'
 					size='lg'
 					block
-					disabled={!verify.isComplete}
+					disabled={!isComplete}
 				>
 					{t('verifyAndSignIn')}
 				</Button>

@@ -28,7 +28,7 @@ export function UserPreview({ preview }: TUserPreviewProps) {
 
 	const [type, role] = useWatch({ control, name: ['type', 'role'] })
 
-	const access = useRoleAccess(role)
+	const { name: roleName, rows } = useRoleAccess(role)
 
 	return (
 		<Card
@@ -51,14 +51,14 @@ export function UserPreview({ preview }: TUserPreviewProps) {
 				<div className='flex flex-wrap justify-center gap-1.5'>
 					<Badge tone={USER_TYPE[type].tone}>{labels.type(type)}</Badge>
 					<Badge>
-						{t('roleColon')} {access.name}
+						{t('roleColon')} {roleName}
 					</Badge>
 				</div>
 			</div>
 			<div>
 				<Overline className='mb-2'>{t('whatWillBeAvailable')}</Overline>
 				<ul className='flex flex-col gap-1.75 text-[13px]'>
-					{access.rows.map(row => (
+					{rows.map(row => (
 						<AccessRow key={row.module} row={row} />
 					))}
 				</ul>

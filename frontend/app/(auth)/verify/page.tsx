@@ -1,1 +1,4 @@
-export { VerifyPage as default, generateMetadata } from '@/pages/verify'
+export {
+	VerifyPage as default,
+	verifyMetadata as generateMetadata,
+} from '@/pages/auth'

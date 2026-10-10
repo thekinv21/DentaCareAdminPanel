@@ -19,18 +19,34 @@ import { SecurityTab } from './SecurityTab'
 export function ProfilePage() {
 	const t = useTranslations('Profile')
 
-	const settings = useProfileSettings()
+	const {
+		crumb,
+		tab,
+		tabs,
+		onTabChange,
+		languages,
+		theme,
+		themes,
+		onThemeChange,
+		passwordHint,
+		dailyScheduleLabel,
+		security,
+		sessions,
+		onEndOtherSessions,
+		channels,
+		events,
+	} = useProfileSettings()
 
-	const model = useProfileForm()
+	const { form, saved, dirty, saving, onSubmit, onReset } = useProfileForm()
 
 	return (
 		<>
-			<PageHeader crumb={settings.crumb} title={t('myProfile')} />
+			<PageHeader crumb={crumb} title={t('myProfile')} />
 			<PageContent>
-				<FormProvider {...model.form}>
+				<FormProvider {...form}>
 					<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
 						<ProfileSummary />
-						<form noValidate onSubmit={model.onSubmit} className='contents'>
+						<form noValidate onSubmit={onSubmit} className='contents'>
 							<Card
 								as='section'
 								className='min-h-0 min-w-0 flex-auto max-mobile:flex-none'
@@ -38,31 +54,45 @@ export function ProfilePage() {
 								<div className='flex flex-wrap items-center justify-between gap-2.5'>
 									<Segmented
 										aria-label={t('profileSection')}
-										options={settings.tabs}
-										value={settings.tab}
-										onChange={settings.onTabChange}
+										options={tabs}
+										value={tab}
+										onChange={onTabChange}
 									/>
 									<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 										{t('lastSignInToday')}
 									</p>
 								</div>
 								<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-mobile:overflow-visible'>
-									{settings.tab === 'profile' && (
-										<ProfileTab settings={settings} />
+									{tab === 'profile' && (
+										<ProfileTab
+											languages={languages}
+											theme={theme}
+											themes={themes}
+											onThemeChange={onThemeChange}
+										/>
 									)}
-									{settings.tab === 'security' && (
-										<SecurityTab settings={settings} />
+									{tab === 'security' && (
+										<SecurityTab
+											passwordHint={passwordHint}
+											security={security}
+											sessions={sessions}
+											onEndOtherSessions={onEndOtherSessions}
+										/>
 									)}
-									{settings.tab === 'notifications' && (
-										<NotificationsTab settings={settings} />
+									{tab === 'notifications' && (
+										<NotificationsTab
+											channels={channels}
+											events={events}
+											dailyScheduleLabel={dailyScheduleLabel}
+										/>
 									)}
 								</div>
 								<FormFooter
-									saved={model.saved}
+									saved={saved}
 									savedLabel={t('profileSaved')}
-									dirty={model.dirty}
-									saving={model.saving}
-									onReset={model.onReset}
+									dirty={dirty}
+									saving={saving}
+									onReset={onReset}
 								/>
 							</Card>
 						</form>

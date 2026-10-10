@@ -11,9 +11,17 @@ import type { TProfileFormValues } from '../model/ProfileFormSchema'
 import type { TProfileSettingsModel } from '../model/useProfileSettings'
 import { NotificationEventRow } from './NotificationEventRow'
 
-type TNotificationsTabProps = { settings: TProfileSettingsModel }
+type TNotificationsTabProps = {
+	channels: TProfileSettingsModel['channels']
+	events: TProfileSettingsModel['events']
+	dailyScheduleLabel: string
+}
 
-export function NotificationsTab({ settings }: TNotificationsTabProps) {
+export function NotificationsTab({
+	channels,
+	events,
+	dailyScheduleLabel,
+}: TNotificationsTabProps) {
 	const t = useTranslations('Profile')
 
 	const { register } = useFormContext<TProfileFormValues>()
@@ -25,7 +33,7 @@ export function NotificationsTab({ settings }: TNotificationsTabProps) {
 					<thead>
 						<tr>
 							<Th>{t('event')}</Th>
-							{settings.channels.map(channel => (
+							{channels.map(channel => (
 								<Th key={channel.id} align='center'>
 									{channel.label}
 								</Th>
@@ -33,7 +41,7 @@ export function NotificationsTab({ settings }: TNotificationsTabProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{settings.events.map(event => (
+						{events.map(event => (
 							<NotificationEventRow key={event.id} event={event} />
 						))}
 					</tbody>
@@ -48,7 +56,7 @@ export function NotificationsTab({ settings }: TNotificationsTabProps) {
 				</Field>
 				<Field label={t('daySummary')}>
 					<select className={inputClass} {...register('daySummary')}>
-						<option value='daily'>{settings.dailyScheduleLabel}</option>
+						<option value='daily'>{dailyScheduleLabel}</option>
 						<option value='never'>{t('dontSend')}</option>
 					</select>
 				</Field>

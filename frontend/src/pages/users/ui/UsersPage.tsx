@@ -16,12 +16,12 @@ import { UsersTable } from './UsersTable'
 export function UsersPage() {
 	const t = useTranslations('Users')
 
-	const table = useUsersTable()
+	const { form, types, statuses, rows, countText, crumb } = useUsersTable()
 
 	return (
 		<>
 			<PageHeader
-				crumb={table.crumb}
+				crumb={crumb}
 				title={t('users')}
 				actions={
 					<Link
@@ -34,7 +34,13 @@ export function UsersPage() {
 				}
 			/>
 			<PageContent>
-				<UsersTable table={table} />
+				<UsersTable
+					form={form}
+					types={types}
+					statuses={statuses}
+					rows={rows}
+					countText={countText}
+				/>
 			</PageContent>
 		</>
 	)

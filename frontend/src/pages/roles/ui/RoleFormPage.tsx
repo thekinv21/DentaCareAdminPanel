@@ -26,7 +26,22 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 
 	const t = useTranslations('RoleForm')
 
-	const model = useRoleForm(roleId)
+	const {
+		form,
+		isEdit,
+		title,
+		breadcrumbLabel,
+		fallbackName,
+		colors,
+		presets,
+		onPresetChange,
+		members,
+		membersCount,
+		dirtyText,
+		saving,
+		onSubmit,
+		onDelete,
+	} = useRoleForm(roleId)
 
 	return (
 		<>
@@ -39,37 +54,46 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 						>
 							{t('rolesAndAccess')}
 						</Link>{' '}
-						/ {model.breadcrumbLabel}
+						/ {breadcrumbLabel}
 					</>
 				}
-				title={model.title}
+				title={title}
 			/>
 			<PageContent>
-				<FormProvider {...model.form}>
+				<FormProvider {...form}>
 					<form
 						noValidate
-						onSubmit={model.onSubmit}
+						onSubmit={onSubmit}
 						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
 					>
 						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
 							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
-								<RoleBasics model={model} />
+								<RoleBasics
+									isEdit={isEdit}
+									colors={colors}
+									presets={presets}
+									onPresetChange={onPresetChange}
+								/>
 								<PermissionMatrix />
-								{model.isEdit && (
+								{isEdit && (
 									<RoleDangerZone
-										roleName={model.fallbackName}
-										membersCount={model.membersCount}
-										onDelete={model.onDelete}
+										roleName={fallbackName}
+										membersCount={membersCount}
+										onDelete={onDelete}
 									/>
 								)}
 							</div>
 							<RoleFormFooter
-								isEdit={model.isEdit}
-								saving={model.saving}
-								statusText={model.dirtyText}
+								isEdit={isEdit}
+								saving={saving}
+								statusText={dirtyText}
 							/>
 						</Card>
-						<RoleSummary model={model} />
+						<RoleSummary
+							fallbackName={fallbackName}
+							members={members}
+							membersCount={membersCount}
+						/>
 					</form>
 				</FormProvider>
 			</PageContent>

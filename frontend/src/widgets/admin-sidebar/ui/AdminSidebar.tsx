@@ -11,7 +11,7 @@ import { SidebarProfileLink } from './SidebarProfileLink'
 export function AdminSidebar() {
 	const t = useTranslations('AdminSidebar')
 
-	const user = useSidebarProfile()
+	const { fullName, initials, role, branch } = useSidebarProfile()
 
 	const { groups, profileActive } = useSidebarNav()
 
@@ -20,12 +20,12 @@ export function AdminSidebar() {
 			aria-label={t('menu')}
 			className='flex h-full w-61 shrink-0 flex-col gap-2 overflow-y-auto rounded-[22px] bg-surface px-3 py-3.5 shadow-clay-md scrollbar-none max-laptop:w-17 max-laptop:px-2 max-laptop:py-3 max-mobile:h-auto max-mobile:w-auto max-mobile:flex-row max-mobile:items-center max-mobile:overflow-x-auto max-mobile:rounded-2xl max-mobile:p-2'
 		>
-			<SidebarBrand branch={user.branch} />
+			<SidebarBrand branch={branch} />
 			<SidebarNav groups={groups} label={t('mainMenu')} />
 			<SidebarProfileLink
-				initials={user.initials}
-				fullName={user.fullName}
-				role={user.role}
+				initials={initials}
+				fullName={fullName}
+				role={role}
 				active={profileActive}
 			/>
 		</aside>

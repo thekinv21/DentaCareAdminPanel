@@ -13,7 +13,16 @@ import { PermissionRow } from './PermissionRow'
 export function PermissionMatrix() {
 	const t = useTranslations('RoleForm')
 
-	const matrix = usePermissionMatrix()
+	const {
+		rows,
+		columns,
+		scopes,
+		granted,
+		total,
+		onAllOn,
+		onAllOff,
+		onViewOnly,
+	} = usePermissionMatrix()
 
 	return (
 		<FormSection
@@ -21,15 +30,15 @@ export function PermissionMatrix() {
 			aside={
 				<>
 					<span className='text-[12.5px] text-ink-muted'>
-						{t('permissionsOf', { n: matrix.granted, total: matrix.total })}
+						{t('permissionsOf', { n: granted, total })}
 					</span>
-					<Button size='sm' onClick={matrix.onViewOnly}>
+					<Button size='sm' onClick={onViewOnly}>
 						{t('viewOnly')}
 					</Button>
-					<Button size='sm' onClick={matrix.onAllOn}>
+					<Button size='sm' onClick={onAllOn}>
 						{t('everything')}
 					</Button>
-					<Button size='sm' variant='dangerGhost' onClick={matrix.onAllOff}>
+					<Button size='sm' variant='dangerGhost' onClick={onAllOff}>
 						{t('clear')}
 					</Button>
 				</>
@@ -40,7 +49,7 @@ export function PermissionMatrix() {
 					<thead>
 						<tr>
 							<Th>{t('section')}</Th>
-							{matrix.columns.map(column => (
+							{columns.map(column => (
 								<Th key={column.id} align='center'>
 									<span className='inline-flex flex-col items-center gap-1.5'>
 										{column.label}
@@ -57,8 +66,8 @@ export function PermissionMatrix() {
 						</tr>
 					</thead>
 					<tbody>
-						{matrix.rows.map(row => (
-							<PermissionRow key={row.id} row={row} scopes={matrix.scopes} />
+						{rows.map(row => (
+							<PermissionRow key={row.id} row={row} scopes={scopes} />
 						))}
 					</tbody>
 				</Table>

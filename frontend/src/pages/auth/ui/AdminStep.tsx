@@ -13,7 +13,6 @@ import { PhoneInput } from '@/shared/ui/phone-input'
 
 import type { TRegisterInput } from '../model/RegisterSchema'
 
-// terms and privacy pages don't exist yet, so these are plain text for now
 const linkClass = 'font-semibold text-brand'
 
 type TAdminStepProps = { onBack: () => void }
@@ -23,7 +22,7 @@ export function AdminStep({ onBack }: TAdminStepProps) {
 
 	const inputProps = useFieldProps<TRegisterInput>()
 
-	const agreeError = useFieldError('agree')
+	const agreeError: string | undefined = useFieldError('agree')
 
 	return (
 		<div className='flex animate-fade flex-col gap-4'>

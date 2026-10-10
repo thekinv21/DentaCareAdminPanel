@@ -217,7 +217,12 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
   }
   ```
 
-- FSD page components live in `src/pages/<slice>/ui`, exported via the slice `index.ts`.
+- FSD page components live in `src/pages/<slice>/ui`, exported via the slice `index.ts`. One slice per domain:
+  list + create/edit screens share a slice (`pages/roles`, `pages/users`), all auth screens live in `pages/auth`
+  (login, register, verify, forgot-password, reset-password; metadata exported as `loginMetadata`, ...).
+- Components always destructure what a hook returns (`const { rows, onDelete } = useX()`), never `const model = useX()`
+  + `model.rows`. Don't pass a whole hook result to a child; pass only the props it needs, typed from the hook
+  (`rows: TUsersTableModel['rows']`).
 - Client components go in separate files with the `"use client"` directive.
 - Loading states use `loading.tsx` (Suspense boundary) in root `app/`.
 - Error boundaries use `error.tsx` with `"use client"` in root `app/`.
@@ -232,7 +237,7 @@ forms, settings pages, table filters, search boxes, sorting, calendar range, con
   `const form = useForm<T>({ resolver: zodResolver(schema), defaultValues })`, then
   `const onSubmit = form.handleSubmit(...)`, `const saving = form.formState.isSubmitting` and `return { form, onSubmit, saving }`.
   Create/edit modals use `useFormModal(item => form.reset(...))` from `@/shared/lib/form`.
-- **UI**: the hook result is `const model = useXForm()`; wrap in `<FormProvider {...model.form}>`; `Modal` takes `onSubmit` and renders a `<form>`
+- **UI**: destructure the hook result: `const { form, onSubmit } = useXForm()`; wrap in `<FormProvider {...form}>`; `Modal` takes `onSubmit` and renders a `<form>`
   (submit button `type='submit'`, Enter submits). Field components read the form with
   `useFormContext<T>()`; never pass custom `field()/errorOf()/set()` adapters.
 - **Inputs**: `useFieldProps<T>()` → `{...inputProps('name')}` (register + `aria-invalid` + `aria-describedby`).

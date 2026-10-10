@@ -32,9 +32,20 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 
 	const t = useTranslations('UserForm')
 
-	const model = useUserForm(userId)
-
-	const sections = model.visibleSections
+	const {
+		form,
+		isEdit,
+		title,
+		breadcrumbLabel,
+		onTypeChange,
+		visibleSections: sections,
+		preview,
+		saving,
+		onSubmit,
+		onResetPassword,
+		onDeactivate,
+		onDelete,
+	} = useUserForm(userId)
 
 	return (
 		<>
@@ -47,41 +58,41 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 						>
 							{t('users')}
 						</Link>{' '}
-						/ {model.breadcrumbLabel}
+						/ {breadcrumbLabel}
 					</>
 				}
-				title={model.title}
+				title={title}
 			/>
 			<PageContent>
-				<FormProvider {...model.form}>
+				<FormProvider {...form}>
 					<form
 						noValidate
-						onSubmit={model.onSubmit}
+						onSubmit={onSubmit}
 						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
 					>
 						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
 							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
-								<UserTypePicker onChange={model.onTypeChange} />
+								<UserTypePicker onChange={onTypeChange} />
 								<BasicSection />
 								<AccessSection
-									isEdit={model.isEdit}
-									onResetPassword={model.onResetPassword}
+									isEdit={isEdit}
+									onResetPassword={onResetPassword}
 								/>
 								{sections.medic && <MedicSection isChief={sections.chief} />}
 								{sections.assistant && <AssistantSection />}
 								{sections.admin && <AdminSection />}
 								{sections.accountant && <AccountantSection />}
 								{sections.schedule && <ScheduleSection />}
-								{model.isEdit && (
+								{isEdit && (
 									<UserDangerZone
-										onDeactivate={model.onDeactivate}
-										onDelete={model.onDelete}
+										onDeactivate={onDeactivate}
+										onDelete={onDelete}
 									/>
 								)}
 							</div>
-							<UserFormFooter isEdit={model.isEdit} saving={model.saving} />
+							<UserFormFooter isEdit={isEdit} saving={saving} />
 						</Card>
-						<UserPreview preview={model.preview} />
+						<UserPreview preview={preview} />
 					</form>
 				</FormProvider>
 			</PageContent>

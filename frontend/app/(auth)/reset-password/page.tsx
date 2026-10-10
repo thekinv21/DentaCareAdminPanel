@@ -1,4 +1,4 @@
 export {
 	ResetPasswordPage as default,
-	generateMetadata,
-} from '@/pages/reset-password'
+	resetPasswordMetadata as generateMetadata,
+} from '@/pages/auth'

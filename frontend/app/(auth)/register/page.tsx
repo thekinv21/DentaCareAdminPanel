@@ -1,1 +1,4 @@
-export { RegisterPage as default, generateMetadata } from '@/pages/register'
+export {
+	RegisterPage as default,
+	registerMetadata as generateMetadata,
+} from '@/pages/auth'

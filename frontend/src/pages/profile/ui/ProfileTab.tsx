@@ -21,9 +21,16 @@ import { PROFILE_FIELDS } from '../model/Profile'
 import type { TProfileFormValues } from '../model/ProfileFormSchema'
 import type { TProfileSettingsModel } from '../model/useProfileSettings'
 
-type TProfileTabProps = { settings: TProfileSettingsModel }
+type TProfileTabProps = {
+	languages: TProfileSettingsModel['languages']
+	theme: TProfileSettingsModel['theme']
+	themes: TProfileSettingsModel['themes']
+	onThemeChange: TProfileSettingsModel['onThemeChange']
+}
 
-export function ProfileTab({ settings }: TProfileTabProps) {
+export function ProfileTab(props: TProfileTabProps) {
+	const { languages, theme, themes, onThemeChange } = props
+
 	const t = useTranslations('Profile')
 
 	const { register } = useFormContext<TProfileFormValues>()
@@ -67,7 +74,7 @@ export function ProfileTab({ settings }: TProfileTabProps) {
 					aria-label={t('interfaceLanguage')}
 					className={formGrid3}
 				>
-					{settings.languages.map(language => (
+					{languages.map(language => (
 						<RadioCard
 							key={language.id}
 							code={language.code}
@@ -84,12 +91,12 @@ export function ProfileTab({ settings }: TProfileTabProps) {
 				<Field label={t('theme')}>
 					<select
 						className={inputClass}
-						value={settings.theme}
+						value={theme}
 						onChange={event =>
-							settings.setTheme(event.target.value as TThemePreference)
+							onThemeChange(event.target.value as TThemePreference)
 						}
 					>
-						{settings.themes.map(item => (
+						{themes.map(item => (
 							<option key={item.id} value={item.id}>
 								{item.label}
 							</option>

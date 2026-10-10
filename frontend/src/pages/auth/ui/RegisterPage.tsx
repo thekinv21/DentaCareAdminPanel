@@ -15,7 +15,8 @@ import { ClinicStep } from './ClinicStep'
 export function RegisterPage() {
 	const t = useTranslations('Register')
 
-	const model = useRegisterForm()
+	const { form, step, steps, onNext, onKeyDown, onBack, onSubmit } =
+		useRegisterForm()
 
 	return (
 		<AuthStack>
@@ -27,40 +28,40 @@ export function RegisterPage() {
 				aria-label={t('registrationSteps')}
 				className='m-0 flex list-none gap-2 p-0'
 			>
-				{model.steps.map(step => (
+				{steps.map(item => (
 					<li
-						key={step.number}
-						aria-current={step.isCurrent ? 'step' : undefined}
+						key={item.number}
+						aria-current={item.isCurrent ? 'step' : undefined}
 						className='flex flex-1 flex-col gap-2'
 					>
 						<span
 							className={cn(
 								'block h-1 rounded-full',
-								step.isDone ? 'bg-brand' : 'bg-line',
+								item.isDone ? 'bg-brand' : 'bg-line',
 							)}
 						/>
 						<span
 							className={cn(
 								'text-[13px] font-semibold',
-								step.isCurrent ? 'text-ink' : 'text-ink-muted',
+								item.isCurrent ? 'text-ink' : 'text-ink-muted',
 							)}
 						>
-							<span className='font-mono'>{step.number}</span> · {step.label}
+							<span className='font-mono'>{item.number}</span> · {item.label}
 						</span>
 					</li>
 				))}
 			</ol>
-			<FormProvider {...model.form}>
+			<FormProvider {...form}>
 				<form
 					noValidate
-					onSubmit={model.onSubmit}
-					onKeyDown={model.onKeyDown}
+					onSubmit={onSubmit}
+					onKeyDown={onKeyDown}
 					className='flex flex-col gap-4'
 				>
-					{model.step === 1 ? (
-						<ClinicStep onNext={model.onNext} />
+					{step === 1 ? (
+						<ClinicStep onNext={onNext} />
 					) : (
-						<AdminStep onBack={model.onBack} />
+						<AdminStep onBack={onBack} />
 					)}
 				</form>
 			</FormProvider>

@@ -17,9 +17,6 @@ import {
 	type TRegisterValues,
 } from './RegisterSchema'
 
-/**
- * Two-step clinic sign-up; step 1 is validated before moving on (no backend yet)
- */
 export function useRegisterForm() {
 	const t = useTranslations('Register')
 
@@ -44,16 +41,19 @@ export function useRegisterForm() {
 		if (await form.trigger(CLINIC_FIELDS)) setStep(2)
 	}
 
-	const steps = [t('clinic'), t('administrator')].map((label, index) => ({
-		label,
-		number: `0${index + 1}`,
-		isDone: index + 1 <= step,
-		isCurrent: index + 1 === step,
-	}))
+	const steps = [t('clinic'), t('administrator')].map(
+		(label: string, idx: number) => ({
+			label,
+			number: `0${idx + 1}`,
+			isDone: idx + 1 <= step,
+			isCurrent: idx + 1 === step,
+		}),
+	)
 
 	/**
 	 * On the clinic step Enter means "next", it must not submit the whole form
 	 */
+
 	const onKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
 		if (step !== 1 || event.key !== 'Enter') return
 

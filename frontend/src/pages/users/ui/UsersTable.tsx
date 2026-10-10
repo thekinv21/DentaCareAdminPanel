@@ -10,12 +10,20 @@ import { Table, TableScroll, Th } from '@/shared/ui/table'
 import type { TUsersTableModel } from '../model/useUsersTable'
 import { UserRow } from './UserRow'
 
-type TUsersTableProps = { table: TUsersTableModel }
+type TUsersTableProps = {
+	form: TUsersTableModel['form']
+	types: TUsersTableModel['types']
+	statuses: TUsersTableModel['statuses']
+	rows: TUsersTableModel['rows']
+	countText: string
+}
 
-export function UsersTable({ table }: TUsersTableProps) {
+export function UsersTable(props: TUsersTableProps) {
+	const { form, types, statuses, rows, countText } = props
+
 	const t = useTranslations('Users')
 
-	const { control, register } = table.form
+	const { control, register } = form
 
 	return (
 		<Card
@@ -27,7 +35,7 @@ export function UsersTable({ table }: TUsersTableProps) {
 					control={control}
 					name='type'
 					aria-label={t('userType')}
-					options={table.types}
+					options={types}
 				/>
 				<div className='flex items-center gap-2 max-mobile:flex-wrap'>
 					<SearchInput
@@ -41,7 +49,7 @@ export function UsersTable({ table }: TUsersTableProps) {
 						control={control}
 						name='status'
 						aria-label={t('status')}
-						options={table.statuses}
+						options={statuses}
 						className='flex-nowrap'
 					/>
 				</div>
@@ -63,19 +71,19 @@ export function UsersTable({ table }: TUsersTableProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{table.rows.map(row => (
+						{rows.map(row => (
 							<UserRow key={row.id} row={row} />
 						))}
 					</tbody>
 				</Table>
-				{table.rows.length === 0 && (
+				{rows.length === 0 && (
 					<p className='py-12 text-center text-[12.5px] text-ink-muted'>
 						{t('nobodyFound')}
 					</p>
 				)}
 			</TableScroll>
 			<div className='flex flex-wrap items-center justify-between gap-2.5 text-[12.5px] text-ink-muted'>
-				<span>{table.countText}</span>
+				<span>{countText}</span>
 				<span>{t('deactivatedNote')}</span>
 			</div>
 		</Card>

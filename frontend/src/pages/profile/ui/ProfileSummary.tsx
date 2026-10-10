@@ -32,9 +32,7 @@ const CONTACT_ICON: Record<
 export function ProfileSummary() {
 	const t = useTranslations('Profile')
 
-	const summary = useProfileSummary()
-
-	const { user } = summary
+	const { user, stats, contacts, onSignOut } = useProfileSummary()
 
 	return (
 		<Card
@@ -75,7 +73,7 @@ export function ProfileSummary() {
 			</div>
 
 			<dl className='grid grid-cols-3 gap-2 text-center'>
-				{summary.stats.map(stat => (
+				{stats.map(stat => (
 					<div
 						key={stat.label}
 						className='flex flex-col-reverse rounded-[14px] bg-raised px-1 py-2.5'
@@ -89,7 +87,7 @@ export function ProfileSummary() {
 			</dl>
 
 			<ul className='flex flex-col gap-3 text-[13px]'>
-				{summary.contacts.map(({ kind, text, isMono }) => {
+				{contacts.map(({ kind, text, isMono }) => {
 					const Icon = CONTACT_ICON[kind]
 
 					return (
@@ -105,11 +103,7 @@ export function ProfileSummary() {
 				})}
 			</ul>
 
-			<Button
-				variant='dangerOutline'
-				className='mt-auto'
-				onClick={summary.onSignOut}
-			>
+			<Button variant='dangerOutline' className='mt-auto' onClick={onSignOut}>
 				<LogOut size={16} aria-hidden='true' />
 				{t('signOutOfAccount')}
 			</Button>

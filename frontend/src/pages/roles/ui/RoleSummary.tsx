@@ -11,12 +11,21 @@ import { Overline } from '@/shared/ui/overline'
 import type { TRoleFormModel } from '../model/useRoleForm'
 import { useRoleSummary } from '../model/useRoleSummary'
 
-type TRoleSummaryProps = { model: TRoleFormModel }
+type TRoleSummaryProps = {
+	fallbackName: string
+	members: TRoleFormModel['members']
+	membersCount: number
+}
 
-export function RoleSummary({ model }: TRoleSummaryProps) {
+export function RoleSummary({
+	fallbackName,
+	members,
+	membersCount,
+}: TRoleSummaryProps) {
 	const t = useTranslations('RoleForm')
 
-	const summary = useRoleSummary(model.fallbackName)
+	const { name, color, granted, total, percent, rows } =
+		useRoleSummary(fallbackName)
 
 	return (
 		<Card
@@ -26,29 +35,27 @@ export function RoleSummary({ model }: TRoleSummaryProps) {
 			<div className='flex items-center gap-3'>
 				<span
 					className='inline-flex size-11 shrink-0 items-center justify-center rounded-[13px] text-white'
-					style={{ background: summary.color }}
+					style={{ background: color }}
 				>
 					<ShieldCheck size={20} aria-hidden='true' />
 				</span>
 				<div>
-					<div className='font-display text-[17px] font-extrabold'>
-						{summary.name}
-					</div>
+					<div className='font-display text-[17px] font-extrabold'>{name}</div>
 					<div className='text-[12.5px] text-ink-muted'>
-						{t('permissionsOf', { n: summary.granted, total: summary.total })}
+						{t('permissionsOf', { n: granted, total })}
 					</div>
 				</div>
 			</div>
 			<div className='h-1.5 overflow-hidden rounded-full bg-sunken'>
 				<span
 					className='block h-full rounded-full transition-[width] duration-200'
-					style={{ width: `${summary.percent}%`, background: summary.color }}
+					style={{ width: `${percent}%`, background: color }}
 				/>
 			</div>
 			<div>
 				<Overline className='mb-2'>{t('summary')}</Overline>
 				<ul className='flex flex-col gap-1.75 text-[13px]'>
-					{summary.rows.map(row => (
+					{rows.map(row => (
 						<li key={row.module} className='flex justify-between gap-2'>
 							<span className='font-semibold'>{row.module}</span>
 							<span className='text-right text-ink-muted'>
@@ -60,13 +67,13 @@ export function RoleSummary({ model }: TRoleSummaryProps) {
 					))}
 				</ul>
 			</div>
-			{model.members.length > 0 && (
+			{members.length > 0 && (
 				<div>
 					<Overline className='mb-2'>
-						{t('staffWithRole', { n: model.membersCount })}
+						{t('staffWithRole', { n: membersCount })}
 					</Overline>
 					<ul className='flex flex-col gap-2'>
-						{model.members.map(member => (
+						{members.map(member => (
 							<li key={member.name} className='flex items-center gap-2.5'>
 								<Avatar initials={member.initials} tone={member.tone} />
 								<span className='min-w-0 flex-1'>

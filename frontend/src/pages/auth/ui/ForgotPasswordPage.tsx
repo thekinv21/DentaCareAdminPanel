@@ -13,17 +13,18 @@ import { ForgotPasswordSent } from './ForgotPasswordSent'
 export function ForgotPasswordPage() {
 	const t = useTranslations('ForgotPassword')
 
-	const flow = useForgotPassword()
+	const { form, isSent, maskedPhone, onSubmit, onChangeNumber } =
+		useForgotPassword()
 
 	return (
 		<AuthStack>
-			{flow.isSent ? (
+			{isSent ? (
 				<ForgotPasswordSent
-					maskedPhone={flow.maskedPhone}
-					onChangeNumber={flow.onChangeNumber}
+					maskedPhone={maskedPhone}
+					onChangeNumber={onChangeNumber}
 				/>
 			) : (
-				<ForgotPasswordRequest flow={flow} />
+				<ForgotPasswordRequest form={form} onSubmit={onSubmit} />
 			)}
 			<AuthSwitchLink
 				question={t('rememberedIt')}

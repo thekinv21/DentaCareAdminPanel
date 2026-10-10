@@ -17,9 +17,9 @@ import { ResetPasswordFields } from './ResetPasswordFields'
 export function ResetPasswordPage() {
 	const t = useTranslations('ResetPassword')
 
-	const reset = useResetPassword()
+	const { form, done, onSubmit } = useResetPassword()
 
-	if (reset.done) {
+	if (done) {
 		return (
 			<AuthStack>
 				<AuthHeading
@@ -48,12 +48,8 @@ export function ResetPasswordPage() {
 				title={t('createANewPassword')}
 				subtitle={t('forAigerimKasymovasAccount')}
 			/>
-			<FormProvider {...reset.form}>
-				<form
-					noValidate
-					onSubmit={reset.onSubmit}
-					className='flex flex-col gap-4'
-				>
+			<FormProvider {...form}>
+				<form noValidate onSubmit={onSubmit} className='flex flex-col gap-4'>
 					<ResetPasswordFields />
 					<Button type='submit' variant='primary' size='lg' block>
 						{t('savePassword')}

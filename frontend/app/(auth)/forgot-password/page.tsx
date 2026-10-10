@@ -1,4 +1,4 @@
 export {
 	ForgotPasswordPage as default,
-	generateMetadata,
-} from '@/pages/forgot-password'
+	forgotPasswordMetadata as generateMetadata,
+} from '@/pages/auth'

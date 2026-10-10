@@ -61,7 +61,7 @@ export function useProfileSettings() {
 
 	const setLocale = useChangeLocale()
 
-	const { theme, setTheme } = useTheme()
+	const { theme, setTheme: onThemeChange } = useTheme()
 
 	const [tab, onTabChange] = useState<TProfileTab>('profile')
 
@@ -153,7 +153,7 @@ export function useProfileSettings() {
 		languages,
 		theme,
 		themes,
-		setTheme,
+		onThemeChange,
 		passwordHint,
 		dailyScheduleLabel,
 		security,

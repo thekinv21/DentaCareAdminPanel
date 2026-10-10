@@ -27,3 +27,5 @@ export function useForgotPassword() {
 
 	return { form, isSent, maskedPhone, onSubmit, onChangeNumber }
 }
+
+export type TForgotPasswordModel = ReturnType<typeof useForgotPassword>

@@ -11,19 +11,26 @@ import type { TProfileSettingsModel } from '../model/useProfileSettings'
 import { PasswordChangeFields } from './PasswordChangeFields'
 import { SessionRow } from './SessionRow'
 
-type TSecurityTabProps = { settings: TProfileSettingsModel }
+type TSecurityTabProps = {
+	passwordHint: string
+	security: TProfileSettingsModel['security']
+	sessions: TProfileSettingsModel['sessions']
+	onEndOtherSessions: () => void
+}
 
-export function SecurityTab({ settings }: TSecurityTabProps) {
+export function SecurityTab(props: TSecurityTabProps) {
+	const { passwordHint, security, sessions, onEndOtherSessions } = props
+
 	const t = useTranslations('Profile')
 
 	const { control } = useFormContext<TProfileFormValues>()
 
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
-			<PasswordChangeFields hint={settings.passwordHint} />
+			<PasswordChangeFields hint={passwordHint} />
 
 			<div className='rounded-2xl border border-line px-3.5 py-1'>
-				{settings.security.map(option => (
+				{security.map(option => (
 					<ToggleRowField
 						key={option.id}
 						control={control}
@@ -42,13 +49,13 @@ export function SecurityTab({ settings }: TSecurityTabProps) {
 					<Button
 						size='sm'
 						className='text-danger'
-						onClick={settings.onEndOtherSessions}
+						onClick={onEndOtherSessions}
 					>
 						{t('endAllExceptCurrent')}
 					</Button>
 				</div>
 				<ul>
-					{settings.sessions.map(session => (
+					{sessions.map(session => (
 						<SessionRow key={session.id} session={session} />
 					))}
 				</ul>

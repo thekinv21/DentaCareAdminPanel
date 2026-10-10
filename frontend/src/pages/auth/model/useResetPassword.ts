@@ -5,9 +5,6 @@ import { useForm } from 'react-hook-form'
 
 import { resetSchema, type TResetValues } from './ResetPasswordSchema'
 
-/**
- * New password form; a valid form shows the "password updated" state (no backend yet)
- */
 export function useResetPassword() {
 	const form = useForm<TResetValues>({
 		resolver: zodResolver(resetSchema),
