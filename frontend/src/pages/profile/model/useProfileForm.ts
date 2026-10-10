@@ -1,5 +1,7 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
@@ -23,9 +25,9 @@ export function useProfileForm() {
 	const t = useTranslations('Profile')
 	const format = useFormat()
 
-	const methods = useForm<TProfileFormValues>({
-		resolver: zodResolver(profileFormSchema),
-		defaultValues: {
+	// useForm reads the defaults only on the first render, so build them once
+	const defaultValues = useMemo<TProfileFormValues>(
+		() => ({
 			profile: Object.fromEntries(
 				PROFILE_FIELDS.map(field => [
 					field.name,
@@ -42,19 +44,28 @@ export function useProfileForm() {
 			notifications: INITIAL_NOTIFICATIONS,
 			doNotDisturb: '21:00 – 07:30',
 			daySummary: 'daily',
-		},
+		}),
+		[format, t],
+	)
+
+	const methods = useForm<TProfileFormValues>({
+		resolver: zodResolver(profileFormSchema),
+		defaultValues,
 	})
 	const { isDirty, isSubmitting, isSubmitSuccessful } = methods.formState
+
+	const submit = methods.handleSubmit(async values => {
+		await mockRequest()
+		methods.reset({ ...values, password: EMPTY_PASSWORD })
+	})
+	const reset = () => methods.reset()
 
 	return {
 		methods,
 		saved: isSubmitSuccessful,
 		dirty: isDirty,
 		saving: isSubmitting,
-		submit: methods.handleSubmit(async values => {
-			await mockRequest()
-			methods.reset({ ...values, password: EMPTY_PASSWORD })
-		}),
-		reset: () => methods.reset(),
+		submit,
+		reset,
 	}
 }

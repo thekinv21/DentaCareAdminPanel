@@ -20,11 +20,13 @@ import { AppointmentsCalendar } from './AppointmentsCalendar'
 /**
  * ISO week of the mock "today"
  */
+
 const CURRENT_WEEK_NUMBER = 41
 
 export function AppointmentsPage() {
 	const t = useTranslations('Appointments')
 	const format = useFormat()
+
 	const removed = useRemovedAppointments()
 	const form = useAppointmentForm(removed.removedKeys)
 	const actions = useAppointmentActions({

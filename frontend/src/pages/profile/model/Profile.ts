@@ -47,9 +47,9 @@ export const PROFILE_FACTS = {
 	autoLockMinutes: 10,
 	dailyScheduleTime: '07:45',
 	stats: [
-		{ value: 1284, label: 'patients' },
-		{ value: 12, label: 'yearsOfExperience' },
-		{ value: '94%', label: 'chairLoad' },
+		{ value: 1284, kind: 'number', label: 'patients' },
+		{ value: 12, kind: 'number', label: 'yearsOfExperience' },
+		{ value: 0.94, kind: 'percent', label: 'chairLoad' },
 	],
 }
 
@@ -73,6 +73,9 @@ export const SESSIONS: {
 	lastActive:
 		| { kind: 'now' }
 		| { kind: 'today' | 'yesterday'; time: string }
+		/**
+		 * ISO date (YYYY-MM-DD), formatted for the locale when shown
+		 */
 		| { kind: 'date'; date: string }
 }[] = [
 	{
@@ -97,7 +100,7 @@ export const SESSIONS: {
 		id: 'home',
 		device: 'Chrome · macOS',
 		place: 'sessionPlaceHome',
-		lastActive: { kind: 'date', date: '05.10.2026' },
+		lastActive: { kind: 'date', date: '2026-10-05' },
 	},
 ]
 

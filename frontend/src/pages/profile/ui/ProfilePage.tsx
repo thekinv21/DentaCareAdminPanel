@@ -31,9 +31,9 @@ export function ProfilePage() {
 				title={t('myProfile')}
 			/>
 			<PageContent>
-				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
-					<ProfileSummary />
-					<FormProvider {...form.methods}>
+				<FormProvider {...form.methods}>
+					<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
+						<ProfileSummary />
 						<form noValidate onSubmit={form.submit} className='contents'>
 							<Card
 								as='section'
@@ -70,8 +70,8 @@ export function ProfilePage() {
 								/>
 							</Card>
 						</form>
-					</FormProvider>
-				</div>
+					</div>
+				</FormProvider>
 			</PageContent>
 		</>
 	)

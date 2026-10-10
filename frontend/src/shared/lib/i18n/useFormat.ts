@@ -18,8 +18,13 @@ export function useFormat() {
 	return useMemo(() => {
 		const intl = isLocale(locale) ? LOCALE_META[locale].intl : locale
 		const numbers = new Intl.NumberFormat(intl)
+		const percents = new Intl.NumberFormat(intl, { style: 'percent' })
 		return {
 			number: (value: number) => numbers.format(value),
+			/**
+			 * A ratio from 0 to 1 as a percentage: 0.94 → 94%
+			 */
+			percent: (ratio: number) => percents.format(ratio),
 			som: (value: number) => `${numbers.format(value)} ${t('som')}`,
 			/**
 			 * People's names stay as written, transliterated for English
