@@ -36,6 +36,7 @@ function subscribe(onChange: () => void) {
 	window.addEventListener('storage', onChange)
 	return () => {
 		window.removeEventListener(CHANGE_EVENT, onChange)
+
 		window.removeEventListener('storage', onChange)
 	}
 }
@@ -46,6 +47,7 @@ function setTheme(next: TThemePreference) {
 	} catch {
 		// storage can be unavailable (private mode); the change is lost on reload
 	}
+
 	window.dispatchEvent(new Event(CHANGE_EVENT))
 }
 
@@ -53,6 +55,7 @@ function applyTheme(theme: TThemePreference) {
 	const isDark =
 		theme === 'dark' ||
 		(theme === 'system' && window.matchMedia(DARK_MEDIA_QUERY).matches)
+
 	document.documentElement.classList.toggle('dark', isDark)
 }
 
@@ -67,11 +70,15 @@ export function ThemeProvider({ children }: TThemeProviderProps) {
 
 	useEffect(() => {
 		applyTheme(theme)
+
 		if (theme !== 'system') return
 
 		const media = window.matchMedia(DARK_MEDIA_QUERY)
+
 		const onChange = () => applyTheme('system')
+
 		media.addEventListener('change', onChange)
+
 		return () => media.removeEventListener('change', onChange)
 	}, [theme])
 
@@ -82,6 +89,8 @@ export function ThemeProvider({ children }: TThemeProviderProps) {
 
 export function useTheme(): TThemeContextValue {
 	const context = useContext(ThemeContext)
+
 	if (!context) throw new Error('useTheme must be used inside ThemeProvider')
+
 	return context
 }

@@ -31,8 +31,11 @@ type TMedicSectionProps = { isChief: boolean }
 
 export function MedicSection({ isChief }: TMedicSectionProps) {
 	const t = useTranslations('UserForm')
+
 	const roleLabels = useRoleLabels()
+
 	const { control, register } = useFormContext<TUserFormValues>()
+
 	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (

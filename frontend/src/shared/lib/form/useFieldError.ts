@@ -10,7 +10,10 @@ import { errorKeyOf } from './ErrorKey'
  */
 export function useFieldError(name: string) {
 	const t = useTranslations('Validation')
+
 	const { errors } = useFormState({ name })
+
 	const message = errorKeyOf(errors, name)
+
 	return message ? t(message) : undefined
 }

@@ -9,7 +9,9 @@ type TFieldErrorProps = { name: string }
  */
 export function FieldError({ name }: TFieldErrorProps) {
 	const error = useFieldError(name)
+
 	if (!error) return null
+
 	return (
 		<span id={`${name}-error`} className='text-xs font-semibold text-danger'>
 			{error}

@@ -37,6 +37,7 @@ export function Alert(props: TAlertProps) {
 	const { tone = 'info', size = 'md', className, children } = props
 
 	const Icon = ALERT_ICON[tone]
+
 	return (
 		<div
 			role={tone === 'danger' || tone === 'warning' ? 'alert' : 'status'}

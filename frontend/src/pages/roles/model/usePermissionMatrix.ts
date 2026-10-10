@@ -52,35 +52,39 @@ export function usePermissionMatrix() {
 		)
 
 	const rows = PERMISSION_MODULES.map(permissionModule => {
-		const name = labels.module(permissionModule.name)
+		const name = labels.moduleName(permissionModule.name)
+
 		const state = triState(
 			permissionModule.actions.map(action =>
 				isGranted(permissionModule.id, action),
 			),
 		)
+
 		return {
 			id: permissionModule.id,
 			name,
-			hint: labels.module(permissionModule.hint),
+			hint: labels.moduleName(permissionModule.hint),
 			isScoped: !!permissionModule.scoped,
 			scope: scope[permissionModule.id] ?? 'all',
-			setScope: (value: TScope) =>
+			onScopeChange: (value: TScope) =>
 				setValue(`scope.${permissionModule.id}`, value, { shouldDirty: true }),
 			state,
-			toggleRow: () =>
+			onToggleRow: () =>
 				setModuleActions(
 					permissionModule.id,
 					state === true ? [] : permissionModule.actions,
 				),
 			cells: PERMISSION_ACTIONS.map(action => {
 				const isChecked = isGranted(permissionModule.id, action.id)
+
 				const current = permissions[permissionModule.id] ?? []
+
 				return {
 					id: action.id,
 					isAvailable: permissionModule.actions.includes(action.id),
 					isChecked,
 					label: `${name}: ${labels.action(action.label)}`,
-					toggle: () =>
+					onToggle: () =>
 						setModuleActions(
 							permissionModule.id,
 							isChecked
@@ -107,7 +111,7 @@ export function usePermissionMatrix() {
 			id: action.id,
 			label: labels.action(action.label),
 			state,
-			toggle: () =>
+			onToggle: () =>
 				setPermissions({
 					...permissions,
 					...Object.fromEntries(
@@ -115,6 +119,7 @@ export function usePermissionMatrix() {
 							const others = (permissions[permissionModule.id] ?? []).filter(
 								granted => granted !== action.id,
 							)
+
 							return [
 								permissionModule.id,
 								state === true ? others : [...others, action.id],
@@ -125,18 +130,30 @@ export function usePermissionMatrix() {
 		}
 	})
 
+	const scopes = [
+		{ id: 'all' as const, label: t('scopeAll') },
+		{ id: 'own' as const, label: t('scopeOwn') },
+	]
+
+	const granted = countGranted(permissions)
+
+	const total = PERMISSIONS_TOTAL
+
+	const onAllOn = () => replaceAll(() => true)
+
+	const onAllOff = () => replaceAll(() => false)
+
+	const onViewOnly = () => replaceAll(action => action === 'view')
+
 	return {
 		rows,
 		columns,
-		scopes: [
-			{ id: 'all' as const, label: t('scopeAll') },
-			{ id: 'own' as const, label: t('scopeOwn') },
-		],
-		granted: countGranted(permissions),
-		total: PERMISSIONS_TOTAL,
-		allOn: () => replaceAll(() => true),
-		allOff: () => replaceAll(() => false),
-		viewOnly: () => replaceAll(action => action === 'view'),
+		scopes,
+		granted,
+		total,
+		onAllOn,
+		onAllOff,
+		onViewOnly,
 	}
 }
 

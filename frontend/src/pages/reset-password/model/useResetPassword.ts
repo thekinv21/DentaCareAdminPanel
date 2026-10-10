@@ -9,14 +9,14 @@ import { resetSchema, type TResetValues } from './ResetPasswordSchema'
  * New password form; a valid form shows the "password updated" state (no backend yet)
  */
 export function useResetPassword() {
-	const methods = useForm<TResetValues>({
+	const form = useForm<TResetValues>({
 		resolver: zodResolver(resetSchema),
 		defaultValues: { password: '', confirmPassword: '', signOutOthers: true },
 	})
 
-	return {
-		methods,
-		done: methods.formState.isSubmitSuccessful,
-		submit: methods.handleSubmit(() => {}),
-	}
+	const done = form.formState.isSubmitSuccessful
+
+	const onSubmit = form.handleSubmit(() => {})
+
+	return { form, done, onSubmit }
 }

@@ -15,6 +15,7 @@ import { UsersTable } from './UsersTable'
 
 export function UsersPage() {
 	const t = useTranslations('Users')
+
 	const table = useUsersTable()
 
 	return (

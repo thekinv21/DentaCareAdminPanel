@@ -11,13 +11,14 @@ import { LoginFields } from './LoginFields'
 
 export function LoginForm() {
 	const t = useTranslations('Login')
-	const form = useLoginForm()
+
+	const { form, onSubmit, method } = useLoginForm()
 
 	return (
-		<FormProvider {...form.methods}>
-			<form noValidate onSubmit={form.submit} className='flex flex-col gap-4'>
+		<FormProvider {...form}>
+			<form noValidate onSubmit={onSubmit} className='flex flex-col gap-4'>
 				<SegmentedField
-					control={form.methods.control}
+					control={form.control}
 					name='method'
 					aria-label={t('signInMethod')}
 					options={[
@@ -26,7 +27,7 @@ export function LoginForm() {
 					]}
 					className='[&>button]:min-h-9.5 [&>button]:flex-1 [&>button]:justify-center [&>button]:text-sm'
 				/>
-				<LoginFields method={form.method} />
+				<LoginFields method={method} />
 				<Button type='submit' variant='primary' size='lg' block>
 					{t('signIn')}
 				</Button>

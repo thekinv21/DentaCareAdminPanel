@@ -7,24 +7,23 @@ import { forgotSchema, type TForgotValues } from './ForgotPasswordSchema'
 
 function maskPhone(phone: string) {
 	const digits = phone.replace(/\D/g, '')
+
 	return `+996 ${digits.slice(0, 3)} ••• ${digits.slice(-3)}`
 }
 
-/**
- * Phone form and the "link sent" state of password recovery
- */
 export function useForgotPassword() {
-	const methods = useForm<TForgotValues>({
+	const form = useForm<TForgotValues>({
 		resolver: zodResolver(forgotSchema),
 		defaultValues: { phone: '' },
 	})
 
-	return {
-		methods,
-		isSent: methods.formState.isSubmitSuccessful,
-		maskedPhone: maskPhone(methods.getValues('phone')),
-		// no backend yet: a valid phone simply shows the "link sent" state
-		submit: methods.handleSubmit(() => {}),
-		changeNumber: () => methods.reset(methods.getValues()),
-	}
+	const isSent = form.formState.isSubmitSuccessful
+
+	const maskedPhone = maskPhone(form.getValues('phone'))
+
+	const onSubmit = form.handleSubmit(() => {})
+
+	const onChangeNumber = () => form.reset(form.getValues())
+
+	return { form, isSent, maskedPhone, onSubmit, onChangeNumber }
 }

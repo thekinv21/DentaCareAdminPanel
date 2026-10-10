@@ -16,6 +16,7 @@ type TUserRowProps = { row: TUsersTableModel['rows'][number] }
 
 export function UserRow({ row }: TUserRowProps) {
 	const t = useTranslations('Users')
+
 	const inactiveClass = row.isActive ? undefined : 'opacity-55'
 
 	return (
@@ -55,7 +56,7 @@ export function UserRow({ row }: TUserRowProps) {
 			<Td>
 				<Switch
 					checked={row.isActive}
-					onChange={row.toggleActive}
+					onChange={row.onToggleActive}
 					aria-label={`${t('activeColon')} ${row.name}`}
 				/>
 			</Td>
@@ -63,7 +64,7 @@ export function UserRow({ row }: TUserRowProps) {
 				<RowActions
 					subject={row.name}
 					editHref={ROUTES.user(row.id)}
-					onDelete={row.remove}
+					onDelete={row.onDelete}
 				/>
 			</Td>
 		</tr>

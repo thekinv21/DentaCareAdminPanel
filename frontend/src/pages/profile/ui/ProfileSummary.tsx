@@ -34,7 +34,9 @@ const CONTACT_ICON: Record<
 
 export function ProfileSummary() {
 	const t = useTranslations('Profile')
+
 	const summary = useProfileSummary()
+
 	const { user } = summary
 
 	return (
@@ -92,6 +94,7 @@ export function ProfileSummary() {
 			<ul className='flex flex-col gap-3 text-[13px]'>
 				{summary.contacts.map(({ kind, text, isMono }) => {
 					const Icon = CONTACT_ICON[kind]
+
 					return (
 						<li key={text} className='flex items-center gap-2.5'>
 							<Icon

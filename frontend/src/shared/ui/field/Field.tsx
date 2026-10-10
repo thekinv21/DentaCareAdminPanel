@@ -58,7 +58,9 @@ export function Field(props: TFieldProps) {
 	} = props
 
 	const Tag = htmlFor ? 'div' : as
+
 	const LabelTag = htmlFor ? 'label' : 'span'
+
 	const labelText = (
 		<LabelTag
 			htmlFor={htmlFor}

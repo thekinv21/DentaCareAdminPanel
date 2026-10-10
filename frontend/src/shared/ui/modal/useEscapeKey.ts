@@ -8,6 +8,7 @@ import { useOverlayKey } from './useOverlayKey'
 export function useEscapeKey(active: boolean, onEscape: () => void) {
 	useOverlayKey(active, event => {
 		if (event.key !== 'Escape') return false
+
 		onEscape()
 	})
 }

@@ -17,6 +17,7 @@ import { RoleCard } from './RoleCard'
 
 export function RolesPage() {
 	const t = useTranslations('Roles')
+
 	const { cards, countText } = useRoleCards()
 
 	return (

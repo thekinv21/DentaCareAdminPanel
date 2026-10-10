@@ -11,6 +11,7 @@ export const PASSWORD_STRENGTH_ID = 'password-strength'
 
 export function PasswordStrength() {
 	const t = useTranslations('ResetPassword')
+
 	const { meter, strength, rules } = usePasswordStrength()
 
 	return (

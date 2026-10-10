@@ -18,30 +18,38 @@ const onlyDigits = (value: string) => value.replace(/\D/g, '')
  */
 export function useVerifyCode() {
 	const router = useRouter()
-	const methods = useForm<TVerifyValues>({
+
+	const form = useForm<TVerifyValues>({
 		resolver: zodResolver(verifySchema),
 		defaultValues: {
 			code: Array(CODE_LENGTH).fill(''),
 			rememberDevice: true,
 		},
 	})
-	const code = useWatch({ control: methods.control, name: 'code' })
+
+	const code = useWatch({ control: form.control, name: 'code' })
+
 	const inputs = useRef<(HTMLInputElement | null)[]>([])
+
 	const focus = (position: number) => inputs.current[position]?.focus()
-	const setCode = (next: string[]) => methods.setValue('code', next)
+
+	const setCode = (next: string[]) => form.setValue('code', next)
 
 	/**
 	 * Writes digits from `position` on; used by typing, OS autofill and paste
 	 */
 	const fillFrom = (position: number, digits: string) => {
 		const next = [...code]
+
 		digits
 			.slice(0, CODE_LENGTH - position)
 			.split('')
 			.forEach((digit, offset) => {
 				next[position + offset] = digit
 			})
+
 		setCode(next)
+
 		focus(Math.min(position + digits.length, CODE_LENGTH - 1))
 	}
 
@@ -52,14 +60,19 @@ export function useVerifyCode() {
 		value: code[index],
 		onChange: (event: { target: { value: string } }) => {
 			const digits = onlyDigits(event.target.value)
+
 			// typing over a filled cell gives two digits: keep the new one
 			const isTypingOver = digits.length === 2 && !!code[index]
+
 			// a one-time code autofilled by the OS arrives whole in one cell
 			if (digits.length > 1 && !isTypingOver) return fillFrom(index, digits)
+
 			const digit = digits.slice(-1)
+
 			setCode(
 				code.map((current, position) => (position === index ? digit : current)),
 			)
+
 			if (digit && index < CODE_LENGTH - 1) focus(index + 1)
 		},
 		onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
@@ -71,26 +84,33 @@ export function useVerifyCode() {
 				0,
 				CODE_LENGTH,
 			)
+
 			if (!digits) return
+
 			event.preventDefault()
+
 			setCode(
 				Array.from(
 					{ length: CODE_LENGTH },
 					(_, position) => digits[position] ?? '',
 				),
 			)
+
 			focus(Math.min(digits.length, CODE_LENGTH - 1))
 		},
 	})
 
-	return {
-		cells: code.map((digit, index) => ({
-			index,
-			isFilled: !!digit,
-			props: cellProps(index),
-		})),
-		isComplete: code.every(Boolean),
-		rememberProps: methods.register('rememberDevice'),
-		submit: methods.handleSubmit(() => router.push(ROUTES.dashboard)),
-	}
+	const cells = code.map((digit, index) => ({
+		index,
+		isFilled: !!digit,
+		props: cellProps(index),
+	}))
+
+	const isComplete = code.every(Boolean)
+
+	const rememberProps = form.register('rememberDevice')
+
+	const onSubmit = form.handleSubmit(() => router.push(ROUTES.dashboard))
+
+	return { cells, isComplete, rememberProps, onSubmit }
 }

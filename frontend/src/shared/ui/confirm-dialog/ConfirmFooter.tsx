@@ -24,6 +24,7 @@ type TConfirmFooterProps = {
  */
 export function ConfirmFooter({ request, model }: TConfirmFooterProps) {
 	const t = useTranslations('Confirm')
+
 	const tone = CONFIRM_TONE[request.tone ?? 'danger']
 
 	return (
@@ -42,8 +43,8 @@ export function ConfirmFooter({ request, model }: TConfirmFooterProps) {
 			<div className='ml-auto flex shrink-0 gap-2.5'>
 				{model.bulk.failed ? (
 					<>
-						<Button onClick={model.finishPartial}>{t('done')}</Button>
-						<Button variant={tone.button} onClick={model.retryFailed}>
+						<Button onClick={model.onFinishPartial}>{t('done')}</Button>
+						<Button variant={tone.button} onClick={model.onRetryFailed}>
 							{t('retryFor', { n: model.bulk.failed.length })}
 						</Button>
 					</>
@@ -51,14 +52,14 @@ export function ConfirmFooter({ request, model }: TConfirmFooterProps) {
 					<>
 						<Button
 							autoFocus
-							onClick={model.close}
+							onClick={model.onClose}
 							aria-disabled={model.pending}
 						>
 							{request.cancelText ?? t('cancel')}
 						</Button>
 						<Button
 							variant={tone.button}
-							onClick={model.confirm}
+							onClick={model.onConfirm}
 							aria-busy={model.pending}
 							aria-disabled={!model.canConfirm && !model.pending}
 							className={cn(model.pending && 'pointer-events-none')}

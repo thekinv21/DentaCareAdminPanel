@@ -17,9 +17,13 @@ import { useConfirm } from '@/shared/ui/confirm-dialog'
  */
 export function useUserActions() {
 	const t = useTranslations('Users')
+
 	const labels = useUserLabels()
+
 	const format = useFormat()
+
 	const confirm = useConfirm()
+
 	const [currentUsers, setCurrentUsers] = useState<TUser[]>(USERS)
 
 	const updateUser = (id: string, change: Partial<TUser>) =>
@@ -29,14 +33,16 @@ export function useUserActions() {
 
 	const toConfirmSubject = (user: TUser) => {
 		const name = format.name(user.fullName)
+
 		return { title: name, initials: getInitials(name), tone: user.tone }
 	}
 
-	const toggleActive = (user: TUser) => {
+	const onToggleActive = (user: TUser) => {
 		const subject = {
 			...toConfirmSubject(user),
 			subtitle: `${labels.type(user.type)} · ${labels.branch(user.branch)}`,
 		}
+
 		if (!user.active) {
 			confirm({
 				tone: 'success',
@@ -51,6 +57,7 @@ export function useUserActions() {
 			})
 			return
 		}
+
 		confirm({
 			tone: 'warning',
 			title: t('deactivateQuestion'),
@@ -78,7 +85,7 @@ export function useUserActions() {
 		})
 	}
 
-	const remove = (user: TUser) =>
+	const onDelete = (user: TUser) =>
 		confirm({
 			tone: 'danger',
 			title: t('deleteUserQuestion'),
@@ -93,5 +100,5 @@ export function useUserActions() {
 				),
 		})
 
-	return { currentUsers, toggleActive, remove }
+	return { currentUsers, onToggleActive, onDelete }
 }

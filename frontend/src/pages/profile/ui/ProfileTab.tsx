@@ -25,7 +25,9 @@ type TProfileTabProps = { settings: TProfileSettingsModel }
 
 export function ProfileTab({ settings }: TProfileTabProps) {
 	const t = useTranslations('Profile')
+
 	const { register } = useFormContext<TProfileFormValues>()
+
 	const inputProps = useFieldProps<TProfileFormValues>()
 
 	return (
@@ -72,7 +74,7 @@ export function ProfileTab({ settings }: TProfileTabProps) {
 							title={language.name}
 							note={language.note}
 							checked={language.isChecked}
-							onSelect={language.select}
+							onSelect={language.onSelect}
 						/>
 					))}
 				</div>

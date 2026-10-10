@@ -33,7 +33,7 @@ export function PermissionRow({ row, scopes }: TPermissionRowProps) {
 					{cell.isAvailable ? (
 						<TriCheckbox
 							checked={cell.isChecked}
-							onChange={cell.toggle}
+							onChange={cell.onToggle}
 							aria-label={cell.label}
 						/>
 					) : (
@@ -48,7 +48,7 @@ export function PermissionRow({ row, scopes }: TPermissionRowProps) {
 						size='sm'
 						options={scopes}
 						value={row.scope}
-						onChange={row.setScope}
+						onChange={row.onScopeChange}
 						className='mx-auto w-max'
 					/>
 				) : (
@@ -60,7 +60,7 @@ export function PermissionRow({ row, scopes }: TPermissionRowProps) {
 			<Td align='center'>
 				<TriCheckbox
 					checked={row.state}
-					onChange={row.toggleRow}
+					onChange={row.onToggleRow}
 					aria-label={`${t('allPermissionsColon')} ${row.name}`}
 				/>
 			</Td>

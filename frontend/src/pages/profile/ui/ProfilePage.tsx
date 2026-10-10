@@ -20,9 +20,12 @@ import { SecurityTab } from './SecurityTab'
 
 export function ProfilePage() {
 	const t = useTranslations('Profile')
+
 	const user = useCurrentUser()
+
 	const settings = useProfileSettings()
-	const form = useProfileForm()
+
+	const model = useProfileForm()
 
 	return (
 		<>
@@ -31,10 +34,10 @@ export function ProfilePage() {
 				title={t('myProfile')}
 			/>
 			<PageContent>
-				<FormProvider {...form.methods}>
+				<FormProvider {...model.form}>
 					<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
 						<ProfileSummary />
-						<form noValidate onSubmit={form.submit} className='contents'>
+						<form noValidate onSubmit={model.onSubmit} className='contents'>
 							<Card
 								as='section'
 								className='min-h-0 min-w-0 flex-auto max-mobile:flex-none'
@@ -44,7 +47,7 @@ export function ProfilePage() {
 										aria-label={t('profileSection')}
 										options={settings.tabs}
 										value={settings.tab}
-										onChange={settings.selectTab}
+										onChange={settings.onTabChange}
 									/>
 									<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 										{t('lastSignInToday')}
@@ -62,11 +65,11 @@ export function ProfilePage() {
 									)}
 								</div>
 								<FormFooter
-									saved={form.saved}
+									saved={model.saved}
 									savedLabel={t('profileSaved')}
-									dirty={form.dirty}
-									saving={form.saving}
-									onReset={form.reset}
+									dirty={model.dirty}
+									saving={model.saving}
+									onReset={model.onReset}
 								/>
 							</Card>
 						</form>

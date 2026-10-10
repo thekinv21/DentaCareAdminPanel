@@ -9,6 +9,7 @@ import { DEFAULT_LOCALE, isLocale, LOCALE_COOKIE } from './Config'
  */
 export default getRequestConfig(async () => {
 	const value = (await cookies()).get(LOCALE_COOKIE)?.value
+
 	const locale = isLocale(value) ? value : DEFAULT_LOCALE
 
 	return {

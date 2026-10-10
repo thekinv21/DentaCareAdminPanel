@@ -14,7 +14,8 @@ type TUsersTableProps = { table: TUsersTableModel }
 
 export function UsersTable({ table }: TUsersTableProps) {
 	const t = useTranslations('Users')
-	const { control, register } = table.filters
+
+	const { control, register } = table.form
 
 	return (
 		<Card

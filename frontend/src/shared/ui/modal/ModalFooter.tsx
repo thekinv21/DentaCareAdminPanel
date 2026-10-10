@@ -32,6 +32,7 @@ export function ModalFooter(props: TModalFooterProps) {
 	const { onCancel, saving, submitLabel, savingLabel, leading, extra } = props
 
 	const t = useTranslations('Common')
+
 	return (
 		<>
 			{leading}

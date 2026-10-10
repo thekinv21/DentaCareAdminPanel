@@ -11,11 +11,12 @@ import { Overline } from '@/shared/ui/overline'
 import type { TRoleFormModel } from '../model/useRoleForm'
 import { useRoleSummary } from '../model/useRoleSummary'
 
-type TRoleSummaryProps = { form: TRoleFormModel }
+type TRoleSummaryProps = { model: TRoleFormModel }
 
-export function RoleSummary({ form }: TRoleSummaryProps) {
+export function RoleSummary({ model }: TRoleSummaryProps) {
 	const t = useTranslations('RoleForm')
-	const summary = useRoleSummary(form.fallbackName)
+
+	const summary = useRoleSummary(model.fallbackName)
 
 	return (
 		<Card
@@ -59,13 +60,13 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 					))}
 				</ul>
 			</div>
-			{form.members.length > 0 && (
+			{model.members.length > 0 && (
 				<div>
 					<Overline className='mb-2'>
-						{t('staffWithRole', { n: form.membersCount })}
+						{t('staffWithRole', { n: model.membersCount })}
 					</Overline>
 					<ul className='flex flex-col gap-2'>
-						{form.members.map(member => (
+						{model.members.map(member => (
 							<li key={member.name} className='flex items-center gap-2.5'>
 								<Avatar initials={member.initials} tone={member.tone} />
 								<span className='min-w-0 flex-1'>

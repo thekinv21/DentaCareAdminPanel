@@ -15,8 +15,11 @@ export function useFocusTrap(
 ) {
 	useEffect(() => {
 		const container = containerRef.current
+
 		if (!container) return
+
 		const previousOverflow = document.body.style.overflow
+
 		document.body.style.overflow = 'hidden'
 
 		if (!container.contains(document.activeElement)) {
@@ -25,10 +28,15 @@ export function useFocusTrap(
 
 		const keepFocusInside = (event: KeyboardEvent) => {
 			if (event.key !== 'Tab') return
+
 			const focusable = [...container.querySelectorAll<HTMLElement>(FOCUSABLE)]
+
 			if (!focusable.length) return
+
 			const first = focusable[0]
+
 			const last = focusable[focusable.length - 1]
+
 			if (event.shiftKey && document.activeElement === first) {
 				event.preventDefault()
 				last.focus()
@@ -37,11 +45,14 @@ export function useFocusTrap(
 				first.focus()
 			}
 		}
+
 		container.addEventListener('keydown', keepFocusInside)
 
 		return () => {
 			container.removeEventListener('keydown', keepFocusInside)
+
 			document.body.style.overflow = previousOverflow
+
 			opener?.focus()
 		}
 	}, [containerRef, opener])

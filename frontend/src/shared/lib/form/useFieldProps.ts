@@ -15,10 +15,12 @@ import { errorKeyOf } from './ErrorKey'
  */
 export function useFieldProps<TValues extends FieldValues>() {
 	const { register, control } = useFormContext<TValues>()
+
 	const { errors } = useFormState({ control })
 
 	return (name: Path<TValues>) => {
 		const invalid = !!errorKeyOf(errors, name)
+
 		return {
 			...register(name),
 			'aria-invalid': invalid,

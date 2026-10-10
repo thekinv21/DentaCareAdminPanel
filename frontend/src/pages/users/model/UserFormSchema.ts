@@ -60,8 +60,10 @@ export const userFormSchema = z
 			if (!value.specialties.length)
 				issue('specialties', 'selectAtLeastOneSpecialty')
 		}
+
 		if (value.type === 'assistant' && !value.doctors.length)
 			issue('doctors', 'selectAtLeastOneDoctor')
+
 		if (toMinutes(value.workEnd) <= toMinutes(value.workStart))
 			issue('workEnd', 'endAfterStart')
 	})

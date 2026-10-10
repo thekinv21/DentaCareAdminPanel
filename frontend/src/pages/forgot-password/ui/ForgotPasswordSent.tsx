@@ -16,9 +16,6 @@ type TForgotPasswordSentProps = {
 	onChangeNumber: () => void
 }
 
-/**
- * "Check your SMS" state after the reset link was sent
- */
 export function ForgotPasswordSent({
 	maskedPhone,
 	onChangeNumber,

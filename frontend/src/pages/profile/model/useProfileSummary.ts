@@ -17,15 +17,21 @@ import type { TProfileFormValues } from './ProfileFormSchema'
  */
 export function useProfileSummary() {
 	const t = useTranslations('Profile')
+
 	const format = useFormat()
+
 	const currentUser = useCurrentUser()
+
 	const { defaultValues } = useFormState<TProfileFormValues>()
+
 	const saved = defaultValues?.profile
+
 	const { workingHours } = PROFILE_FACTS
 
 	const fullName =
 		[saved?.firstName, saved?.lastName].filter(Boolean).join(' ') ||
 		currentUser.fullName
+
 	const user = { ...currentUser, fullName, initials: getInitials(fullName) }
 
 	const stats = PROFILE_FACTS.stats.map(stat => ({

@@ -13,24 +13,33 @@ import {
 
 export function useLanguageMenu() {
 	const locale = useLocale()
+
 	const setLocale = useChangeLocale()
+
 	const t = useTranslations('LanguageSwitcher')
 
 	const [isOpen, setIsOpen] = useState<boolean>(false)
+
 	const rootRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (!isOpen) return
+
 		const onPointer = (event: PointerEvent) => {
 			if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false)
 		}
+
 		const onKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') setIsOpen(false)
 		}
+
 		document.addEventListener('pointerdown', onPointer)
+
 		document.addEventListener('keydown', onKey)
+
 		return () => {
 			document.removeEventListener('pointerdown', onPointer)
+
 			document.removeEventListener('keydown', onKey)
 		}
 	}, [isOpen])
@@ -41,24 +50,21 @@ export function useLanguageMenu() {
 		isSelected: id === locale,
 	}))
 
-	const pick = (id: TLocale): void => {
+	const onPick = (id: TLocale): void => {
 		setIsOpen(false)
+
 		if (id !== locale) setLocale(id)
 	}
 
-	const toggle = () => {
+	const onToggle = () => {
 		setIsOpen(current => !current)
 	}
 
-	return {
-		rootRef,
-		isOpen,
-		toggle,
-		options,
-		current: LOCALE_META[locale],
-		pick,
-		label: t('interfaceLanguage'),
-	}
+	const current = LOCALE_META[locale]
+
+	const label = t('interfaceLanguage')
+
+	return { rootRef, isOpen, onToggle, options, current, onPick, label }
 }
 
 export type TLanguageOption = ReturnType<

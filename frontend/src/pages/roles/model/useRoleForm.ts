@@ -42,21 +42,31 @@ const initialPermissions = (role: TRole): TPermissions =>
  */
 export function useRoleForm(roleId?: string) {
 	const t = useTranslations('RoleForm')
+
 	const labels = useRoleLabels()
+
 	const transferChoice = useRoleTransferChoice()
+
 	const format = useFormat()
+
 	const confirm = useConfirm()
+
 	const toast = useToast()
+
 	const router = useRouter()
+
 	const role = roleId
 		? ROLES.find(candidate => candidate.id === roleId)
 		: undefined
+
 	// an unknown id must never open (and let the user edit) another role
 	if (roleId && !role) notFound()
+
 	const isEdit = !!role
+
 	const roleName = role ? labels.text(role.name) : ''
 
-	const methods = useForm<TRoleFormValues>({
+	const form = useForm<TRoleFormValues>({
 		resolver: zodResolver(roleFormSchema),
 		defaultValues: {
 			name: roleName,
@@ -67,70 +77,99 @@ export function useRoleForm(roleId?: string) {
 			scope: role?.id === 'doctor' ? DOCTOR_ROLE_SCOPE : {},
 		},
 	})
-	const { isDirty, isSubmitting } = methods.formState
-	const members = role?.id === 'doctor' ? DOCTOR_ROLE_MEMBERS : []
 
-	return {
-		methods,
-		isEdit,
-		title: isEdit ? t('roleNamed', { name: roleName }) : t('newRole'),
-		breadcrumbLabel: isEdit ? t('editing') : t('creating'),
-		fallbackName: isEdit ? roleName : t('newRole'),
-		colors: ROLE_COLORS.map(swatch => ({
-			color: swatch.color,
-			name: labels.color(swatch.name),
-		})),
-		presets: PRESET_IDS.map(id => ({
-			id,
-			label: labels.module(ROLE_PRESETS[id].label),
-		})),
-		applyPreset: (id: TRolePreset) => {
-			methods.setValue('preset', id)
-			methods.setValue('permissions', ROLE_PRESETS[id].permissions, {
-				shouldDirty: true,
-			})
-		},
-		members: members.map(member => {
+	const { isDirty, isSubmitting: saving } = form.formState
+
+	const membersCount = role?.users ?? 0
+
+	const title = isEdit ? t('roleNamed', { name: roleName }) : t('newRole')
+
+	const breadcrumbLabel = isEdit ? t('editing') : t('creating')
+
+	const fallbackName = isEdit ? roleName : t('newRole')
+
+	const dirtyText = isDirty ? t('unsavedChanges') : t('appliesToAllWithRole')
+
+	const colors = ROLE_COLORS.map(swatch => ({
+		color: swatch.color,
+		name: labels.color(swatch.name),
+	}))
+
+	const presets = PRESET_IDS.map(id => ({
+		id,
+		label: labels.moduleName(ROLE_PRESETS[id].label),
+	}))
+
+	const onPresetChange = (id: TRolePreset) => {
+		form.setValue('preset', id)
+
+		form.setValue('permissions', ROLE_PRESETS[id].permissions, {
+			shouldDirty: true,
+		})
+	}
+
+	const members = (role?.id === 'doctor' ? DOCTOR_ROLE_MEMBERS : []).map(
+		member => {
 			const name = format.name(member.name)
+
 			return {
 				name,
-				subtitle: labels.module(member.sub),
+				subtitle: labels.moduleName(member.sub),
 				initials: getInitials(name),
 				tone: member.tone,
 			}
-		}),
-		membersCount: role?.users ?? 0,
-		dirtyText: isDirty ? t('unsavedChanges') : t('appliesToAllWithRole'),
-		saving: isSubmitting,
-		submit: methods.handleSubmit(async values => {
-			await mockRequest()
-			methods.reset(values)
-			toast.show(isEdit ? t('rolePermissionsUpdated') : t('roleCreated'))
-			if (!isEdit) router.push(ROUTES.roles)
-		}),
-		remove: () =>
-			confirm({
-				tone: 'danger',
-				title: t('deleteRoleNamedQuestion', { name: roleName }),
-				description: t('deleteRoleChoiceDescription', { n: role?.users ?? 0 }),
-				choice: transferChoice,
-				impact: [
-					{
-						tone: 'warning',
-						n: role?.users ?? 0,
-						text: t('impactStaffChangeRole'),
-					},
-					{
-						tone: 'neutral',
-						n: PERMISSIONS_TOTAL,
-						text: t('impactPermissionsRemoved'),
-					},
-				],
-				confirmText: t('deleteRole'),
-				pendingText: t('deleting'),
-				successText: t('roleDeletedReassigned'),
-				onConfirm: () => mockRequest().then(() => router.push(ROUTES.roles)),
-			}),
+		},
+	)
+
+	const onSubmit = form.handleSubmit(async values => {
+		await mockRequest()
+
+		form.reset(values)
+
+		toast.show(isEdit ? t('rolePermissionsUpdated') : t('roleCreated'))
+
+		if (!isEdit) router.push(ROUTES.roles)
+	})
+
+	const onDelete = () =>
+		confirm({
+			tone: 'danger',
+			title: t('deleteRoleNamedQuestion', { name: roleName }),
+			description: t('deleteRoleChoiceDescription', { n: membersCount }),
+			choice: transferChoice,
+			impact: [
+				{
+					tone: 'warning',
+					n: membersCount,
+					text: t('impactStaffChangeRole'),
+				},
+				{
+					tone: 'neutral',
+					n: PERMISSIONS_TOTAL,
+					text: t('impactPermissionsRemoved'),
+				},
+			],
+			confirmText: t('deleteRole'),
+			pendingText: t('deleting'),
+			successText: t('roleDeletedReassigned'),
+			onConfirm: () => mockRequest().then(() => router.push(ROUTES.roles)),
+		})
+
+	return {
+		form,
+		isEdit,
+		title,
+		breadcrumbLabel,
+		fallbackName,
+		colors,
+		presets,
+		onPresetChange,
+		members,
+		membersCount,
+		dirtyText,
+		saving,
+		onSubmit,
+		onDelete,
 	}
 }
 

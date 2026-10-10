@@ -15,7 +15,9 @@ type TPasswordInputProps = Omit<ComponentProps<'input'>, 'type'>
  */
 export function PasswordInput({ className, ...props }: TPasswordInputProps) {
 	const t = useTranslations('Common')
+
 	const [visible, setVisible] = useState(false)
+
 	return (
 		<div className='relative flex items-center'>
 			<input

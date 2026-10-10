@@ -10,6 +10,7 @@ type TSidebarNavItemProps = {
 
 export function SidebarNavItem({ item }: TSidebarNavItemProps) {
 	const Icon = item.icon
+
 	return (
 		<Link
 			href={item.href}

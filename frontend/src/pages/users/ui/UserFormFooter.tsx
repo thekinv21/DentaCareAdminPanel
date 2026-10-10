@@ -12,6 +12,7 @@ type TUserFormFooterProps = { isEdit: boolean; saving: boolean }
 
 export function UserFormFooter({ isEdit, saving }: TUserFormFooterProps) {
 	const t = useTranslations('UserForm')
+
 	const tCommon = useTranslations('Common')
 
 	return (

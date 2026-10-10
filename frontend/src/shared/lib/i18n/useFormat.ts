@@ -13,12 +13,16 @@ import { transliterate } from './Translit'
  */
 export function useFormat() {
 	const locale = useLocale()
+
 	const t = useTranslations('Common')
 
 	return useMemo(() => {
 		const intl = isLocale(locale) ? LOCALE_META[locale].intl : locale
+
 		const numbers = new Intl.NumberFormat(intl)
+
 		const percents = new Intl.NumberFormat(intl, { style: 'percent' })
+
 		return {
 			number: (value: number) => numbers.format(value),
 			/**
@@ -35,10 +39,12 @@ export function useFormat() {
 			 */
 			date: (iso: string, options: Intl.DateTimeFormatOptions) => {
 				if (!isValidIsoDate(iso)) return ''
+
 				const text = new Intl.DateTimeFormat(intl, {
 					timeZone: 'UTC',
 					...options,
 				}).format(toUtcDate(iso))
+
 				return text.charAt(0).toUpperCase() + text.slice(1)
 			},
 		}

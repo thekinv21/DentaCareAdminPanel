@@ -23,6 +23,7 @@ function isActive(pathname: string, href: string) {
 
 export function useSidebarNav() {
 	const pathname = usePathname() ?? ''
+
 	const t = useTranslations('AdminSidebar')
 
 	const groups: TSidebarGroup[] = NAVIGATION.map(group => ({
@@ -34,5 +35,7 @@ export function useSidebarNav() {
 		})),
 	}))
 
-	return { groups, profileActive: isActive(pathname, ROUTES.profile) }
+	const profileActive = isActive(pathname, ROUTES.profile)
+
+	return { groups, profileActive }
 }

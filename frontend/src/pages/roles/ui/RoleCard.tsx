@@ -16,6 +16,7 @@ type TRoleCardProps = { role: TRoleCardView }
 
 export function RoleCard({ role }: TRoleCardProps) {
 	const t = useTranslations('Roles')
+
 	const tCommon = useTranslations('Common')
 
 	return (
@@ -81,7 +82,7 @@ export function RoleCard({ role }: TRoleCardProps) {
 				</Link>
 				<Button
 					size='sm'
-					onClick={role.copy}
+					onClick={role.onCopy}
 					aria-label={`${t('createCopyColon')} ${role.name}`}
 				>
 					<Copy size={15} aria-hidden='true' />
@@ -90,7 +91,7 @@ export function RoleCard({ role }: TRoleCardProps) {
 				<Button
 					size='sm'
 					variant='dangerGhost'
-					onClick={role.remove}
+					onClick={role.onDelete}
 					aria-label={tCommon('deleteItem', { name: role.name })}
 					aria-disabled={role.system}
 					title={role.system ? t('systemRoleCantBeDeleted') : t('deleteRole')}

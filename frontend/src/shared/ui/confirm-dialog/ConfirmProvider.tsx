@@ -13,10 +13,12 @@ type TConfirmProviderProps = { children: ReactNode }
  */
 export function ConfirmProvider({ children }: TConfirmProviderProps) {
 	const [request, setRequest] = useState<TConfirmRequest | null>(null)
+
 	const nextKey = useRef(0)
 
 	const confirm = useCallback((options: TConfirmOptions) => {
 		nextKey.current += 1
+
 		setRequest({ ...options, key: nextKey.current })
 	}, [])
 

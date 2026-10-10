@@ -14,9 +14,13 @@ import { PASSWORD_STRENGTH_ID, PasswordStrength } from './PasswordStrength'
 
 export function ResetPasswordFields() {
 	const t = useTranslations('ResetPassword')
+
 	const { register } = useFormContext<TResetValues>()
+
 	const inputProps = useFieldProps<TResetValues>()
+
 	const passwordProps = inputProps('password')
+
 	// the input is described by both its error and the live strength meter
 	const passwordDescription = [
 		passwordProps['aria-describedby'],

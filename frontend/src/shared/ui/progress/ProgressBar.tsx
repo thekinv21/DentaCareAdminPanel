@@ -34,6 +34,7 @@ export function ProgressBar(props: TProgressBarProps) {
 		width: `${value}%`,
 		animationDelay: `${delay}ms`,
 	}
+
 	return (
 		<div
 			className={cn(

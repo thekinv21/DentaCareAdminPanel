@@ -19,6 +19,7 @@ export function FormField(props: TFormFieldProps) {
 	const { name, error, ...rest } = props
 
 	const fieldError = useFieldError(name)
+
 	return (
 		<Field {...rest} error={error ?? fieldError} errorId={`${name}-error`} />
 	)

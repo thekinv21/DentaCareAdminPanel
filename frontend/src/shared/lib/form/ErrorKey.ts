@@ -6,5 +6,6 @@ import { type FieldErrors, get } from 'react-hook-form'
 export function errorKeyOf(errors: FieldErrors, name: string) {
 	const message: string | undefined =
 		get(errors, name)?.message ?? get(errors, `${name}.root`)?.message
+
 	return message
 }

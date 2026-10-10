@@ -12,6 +12,7 @@ import { PermissionRow } from './PermissionRow'
 
 export function PermissionMatrix() {
 	const t = useTranslations('RoleForm')
+
 	const matrix = usePermissionMatrix()
 
 	return (
@@ -22,13 +23,13 @@ export function PermissionMatrix() {
 					<span className='text-[12.5px] text-ink-muted'>
 						{t('permissionsOf', { n: matrix.granted, total: matrix.total })}
 					</span>
-					<Button size='sm' onClick={matrix.viewOnly}>
+					<Button size='sm' onClick={matrix.onViewOnly}>
 						{t('viewOnly')}
 					</Button>
-					<Button size='sm' onClick={matrix.allOn}>
+					<Button size='sm' onClick={matrix.onAllOn}>
 						{t('everything')}
 					</Button>
-					<Button size='sm' variant='dangerGhost' onClick={matrix.allOff}>
+					<Button size='sm' variant='dangerGhost' onClick={matrix.onAllOff}>
 						{t('clear')}
 					</Button>
 				</>
@@ -45,7 +46,7 @@ export function PermissionMatrix() {
 										{column.label}
 										<TriCheckbox
 											checked={column.state}
-											onChange={column.toggle}
+											onChange={column.onToggle}
 											aria-label={t('forAllSections', { action: column.label })}
 										/>
 									</span>

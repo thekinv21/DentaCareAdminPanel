@@ -14,6 +14,7 @@ type TPasswordChangeFieldsProps = { hint: string }
  */
 export function PasswordChangeFields({ hint }: TPasswordChangeFieldsProps) {
 	const t = useTranslations('Profile')
+
 	const inputProps = useFieldProps<TProfileFormValues>()
 
 	return (

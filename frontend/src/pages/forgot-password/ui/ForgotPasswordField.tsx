@@ -11,6 +11,7 @@ import type { TForgotValues } from '../model/ForgotPasswordSchema'
 
 export function ForgotPasswordField() {
 	const t = useTranslations('ForgotPassword')
+
 	const inputProps = useFieldProps<TForgotValues>()
 
 	return (

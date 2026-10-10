@@ -43,6 +43,7 @@ const ROLE_BY_ID = new Map(ROLES.map(role => [role.id, role]))
 
 function matchesQuery(user: TUser, query: TUsersQuery) {
 	const { type, status, search } = query
+
 	return (
 		(type === 'all' || user.type === type) &&
 		(status === 'all' || (status === 'active') === user.active) &&
@@ -52,9 +53,11 @@ function matchesQuery(user: TUser, query: TUsersQuery) {
 
 function countByType(users: TUser[]) {
 	const counts: Partial<Record<TTypeFilter, number>> = { all: users.length }
+
 	users.forEach(user => {
 		counts[user.type] = (counts[user.type] ?? 0) + 1
 	})
+
 	return counts
 }
 
@@ -63,23 +66,33 @@ function countByType(users: TUser[]) {
  */
 export function useUsersTable() {
 	const t = useTranslations('Users')
+
 	const labels = useUserLabels()
+
 	const roleLabels = useRoleLabels()
+
 	const format = useFormat()
+
 	const actions = useUserActions()
-	const filters = useForm<TUsersQuery>({ defaultValues: DEFAULT_QUERY })
+
+	const form = useForm<TUsersQuery>({ defaultValues: DEFAULT_QUERY })
+
 	const [type, status, search] = useWatch({
-		control: filters.control,
+		control: form.control,
 		name: ['type', 'status', 'search'],
 	})
+
 	const users = actions.currentUsers
+
 	const typeCounts = countByType(users)
 
 	const rows = users
 		.filter(user => matchesQuery(user, { type, status, search }))
 		.map(user => {
 			const role = ROLE_BY_ID.get(user.role)
+
 			const name = format.name(user.fullName)
+
 			return {
 				id: user.id,
 				name,
@@ -100,27 +113,28 @@ export function useUsersTable() {
 					? labels.lastSeen(user.lastSeen)
 					: t('accessDisabled'),
 				isActive: user.active,
-				toggleActive: () => actions.toggleActive(user),
-				remove: () => actions.remove(user),
+				onToggleActive: () => actions.onToggleActive(user),
+				onDelete: () => actions.onDelete(user),
 			}
 		})
 
-	return {
-		filters,
-		types: TYPE_FILTERS.map(typeFilter => ({
-			id: typeFilter,
-			label: typeFilter === 'all' ? t('all') : labels.typePlural(typeFilter),
-			count: typeCounts[typeFilter] ?? 0,
-		})),
-		statuses: [
-			{ id: 'all' as const, label: t('all') },
-			{ id: 'active' as const, label: t('activeFilter') },
-			{ id: 'disabled' as const, label: t('disabledFilter') },
-		],
-		rows,
-		countText: t('shownOf', { shown: rows.length, total: users.length }),
-		crumb: t('usersBranches', { n: users.length }),
-	}
+	const types = TYPE_FILTERS.map(typeFilter => ({
+		id: typeFilter,
+		label: typeFilter === 'all' ? t('all') : labels.typePlural(typeFilter),
+		count: typeCounts[typeFilter] ?? 0,
+	}))
+
+	const statuses = [
+		{ id: 'all' as const, label: t('all') },
+		{ id: 'active' as const, label: t('activeFilter') },
+		{ id: 'disabled' as const, label: t('disabledFilter') },
+	]
+
+	const countText = t('shownOf', { shown: rows.length, total: users.length })
+
+	const crumb = t('usersBranches', { n: users.length })
+
+	return { form, types, statuses, rows, countText, crumb }
 }
 
 export type TUsersTableModel = ReturnType<typeof useUsersTable>

@@ -150,6 +150,13 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
   - Every other file: PascalCase (`Calendar.ts`, `Schema.ts`, `Mock.ts`, `Metadata.ts`).
   - Exceptions: `index.ts` (public API), Next.js route files (`page.tsx`, `layout.tsx`), locale files (`ru.json`).
   - Folders and slices: kebab-case (`mark-as-read`, `patient-profile`).
+- Hooks return only shorthand values: compute every value into a named `const` first, then
+  `return { form, isSent, onSubmit }`. No inline expressions, calls, ternaries or renames (`a: b`) in the return object.
+- Don't compress code: put a blank line between consecutive statements of every function body (hooks and components),
+  e.g. between `const isSent = ...`, `const maskedPhone = ...` and `const onSubmit = ...`.
+- Event handlers returned from hooks (also inside rows/cards) are named `on<Action>`: `onSubmit`, `onReset`, `onDelete`,
+  `onToggle`, `onTabChange`, never `submit`/`remove`/`toggle`. Imperative APIs (`useFormModal().openCreate`, `toast.show`)
+  and label formatters (`labels.text`) keep verb names.
 - Components stay under ~150 lines. Business logic (state, filtering, sorting, derived data, translation of
   data) lives in `model/use*.ts` hooks; components only render what the hook returns.
 - Formatting: Prettier (tabs, single quotes, no semicolons). Imports are auto-sorted by FSD layer.
@@ -205,10 +212,11 @@ Everything the user fills in or that becomes a request/query goes through react-
 forms, settings pages, table filters, search boxes, sorting, calendar range, confirm-dialog reasons.
 `useState` is only for pure UI state (open tab, selected rows, modal target).
 
-- **Model hook owns the form**: `const methods = useForm<T>({ resolver: zodResolver(schema), defaultValues })`
-  and returns `methods`, `submit: methods.handleSubmit(...)`, `saving: methods.formState.isSubmitting`.
-  Create/edit modals use `useFormModal(item => methods.reset(...))` from `@/shared/lib/form`.
-- **UI**: wrap in `<FormProvider {...form.methods}>`; `Modal` takes `onSubmit` and renders a `<form>`
+- **Model hook owns the form**: the `useForm` result is always named `form` (never `methods`/`fields`/`filters`):
+  `const form = useForm<T>({ resolver: zodResolver(schema), defaultValues })`, then
+  `const onSubmit = form.handleSubmit(...)`, `const saving = form.formState.isSubmitting` and `return { form, onSubmit, saving }`.
+  Create/edit modals use `useFormModal(item => form.reset(...))` from `@/shared/lib/form`.
+- **UI**: the hook result is `const model = useXForm()`; wrap in `<FormProvider {...model.form}>`; `Modal` takes `onSubmit` and renders a `<form>`
   (submit button `type='submit'`, Enter submits). Field components read the form with
   `useFormContext<T>()`; never pass custom `field()/errorOf()/set()` adapters.
 - **Inputs**: `useFieldProps<T>()` → `{...inputProps('name')}` (register + `aria-invalid` + `aria-describedby`).
@@ -217,11 +225,11 @@ forms, settings pages, table filters, search boxes, sorting, calendar range, con
   their own label, `AuthField name=...` on auth screens. Zod messages are keys of the `Validation` namespace.
 - **Derived values** (totals, previews, conflicts) live in `model/use*.ts` hooks that call
   `useWatch({ control, name: [...] })` close to where they are rendered.
-- **Filters**: `const filters = useForm<TQuery>({ defaultValues })` + `useWatch({ control: filters.control,
+- **Filters**: `const form = useForm<TQuery>({ defaultValues })` + `useWatch({ control: form.control,
   name: [...] })` in the table hook; the toolbar binds `Segmented` via `Controller` and `SearchInput` via
-  `filters.register('search')`.
+  `form.register('search')`.
 - **Save/dirty state** of settings-like pages comes from `formState` (`isDirty`, `isSubmitSuccessful`);
-  after a successful save call `methods.reset(values)` so "Cancel" returns to the last saved values.
+  after a successful save call `form.reset(values)` so "Cancel" returns to the last saved values.
 
 ## Testing
 

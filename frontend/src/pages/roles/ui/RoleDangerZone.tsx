@@ -17,6 +17,7 @@ export function RoleDangerZone(props: TRoleDangerZoneProps) {
 	const { roleName, membersCount, onDelete } = props
 
 	const t = useTranslations('RoleForm')
+
 	return (
 		<FormSection title={t('dangerZone')} danger>
 			<DangerZone

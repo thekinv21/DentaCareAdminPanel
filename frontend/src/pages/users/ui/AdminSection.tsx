@@ -16,7 +16,9 @@ import type { TUserFormValues } from '../model/UserFormSchema'
 
 export function AdminSection() {
 	const t = useTranslations('UserForm')
+
 	const { control } = useFormContext<TUserFormValues>()
+
 	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (

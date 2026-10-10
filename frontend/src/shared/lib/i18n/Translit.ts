@@ -43,7 +43,9 @@ const MAP: Record<string, string> = {
 export function transliterate(text: string): string {
 	return text.replace(/[А-Яа-яЁёҢңӨөҮү]/g, char => {
 		const lower = char.toLowerCase()
+
 		const latin = MAP[lower] ?? ''
+
 		return char === lower
 			? latin
 			: latin.charAt(0).toUpperCase() + latin.slice(1)

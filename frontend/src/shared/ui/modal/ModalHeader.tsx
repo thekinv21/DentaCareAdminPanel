@@ -22,6 +22,7 @@ export function ModalHeader(props: TModalHeaderProps) {
 	const { titleId, title, subtitle, icon, onClose } = props
 
 	const t = useTranslations('Common')
+
 	return (
 		<div className='flex shrink-0 items-start gap-3.5 border-b border-line px-5.5 pt-5 pb-3.5'>
 			{icon && (

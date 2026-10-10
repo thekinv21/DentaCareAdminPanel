@@ -12,16 +12,16 @@ export function useFormModal<TItem>(onOpen: (item: TItem | null) => void) {
 
 	const show = (next: TItem | null): void => {
 		setItem(next)
+
 		onOpen(next)
+
 		setOpen(true)
 	}
 
-	return {
-		open,
-		item,
-		isEdit: item !== null,
-		openCreate: () => show(null),
-		openEdit: (next: TItem) => show(next),
-		close: () => setOpen(false),
-	}
+	const isEdit = item !== null
+	const openCreate = () => show(null)
+	const openEdit = (next: TItem) => show(next)
+	const close = () => setOpen(false)
+
+	return { open, item, isEdit, openCreate, openEdit, close }
 }

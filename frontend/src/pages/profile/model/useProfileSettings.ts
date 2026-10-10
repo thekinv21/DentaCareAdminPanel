@@ -51,17 +51,25 @@ const SESSION_DATE_FORMAT: Intl.DateTimeFormatOptions = {
  */
 export function useProfileSettings() {
 	const t = useTranslations('Profile')
+
 	const format = useFormat()
+
 	const locale = useLocale()
+
 	const setLocale = useChangeLocale()
+
 	const { theme, setTheme } = useTheme()
-	const [tab, setTab] = useState<TProfileTab>('profile')
+
+	const [tab, onTabChange] = useState<TProfileTab>('profile')
+
 	const [endedSessionIds, setEndedSessionIds] = useState<string[]>([])
 
 	const lastActiveText = ({ lastActive }: TSession) => {
 		if (lastActive.kind === 'now') return t('now')
+
 		if (lastActive.kind === 'date')
 			return format.date(lastActive.date, SESSION_DATE_FORMAT)
+
 		return lastActive.kind === 'today'
 			? t('todayAt', { time: lastActive.time })
 			: t('yesterdayAt', { time: lastActive.time })
@@ -80,7 +88,7 @@ export function useProfileSettings() {
 		...LOCALE_META[id],
 		note: t(LANGUAGE_NOTE[id]),
 		isChecked: id === locale,
-		select: () => setLocale(id),
+		onSelect: () => setLocale(id),
 	}))
 
 	const themes = THEMES.map(item => ({ ...item, label: t(item.label) }))
@@ -88,6 +96,7 @@ export function useProfileSettings() {
 	const passwordHint = t('passwordAgeHint', {
 		days: PROFILE_FACTS.passwordAgeDays,
 	})
+
 	const dailyScheduleLabel = t('dailyScheduleAt', {
 		time: PROFILE_FACTS.dailyScheduleTime,
 	})
@@ -106,10 +115,10 @@ export function useProfileSettings() {
 		place: t(session.place),
 		lastActive: lastActiveText(session),
 		isCurrent: session.id === CURRENT_SESSION_ID,
-		end: () => setEndedSessionIds(current => [...current, session.id]),
+		onEnd: () => setEndedSessionIds(current => [...current, session.id]),
 	}))
 
-	const endOtherSessions = () => setEndedSessionIds(OTHER_SESSION_IDS)
+	const onEndOtherSessions = () => setEndedSessionIds(OTHER_SESSION_IDS)
 
 	const channels = NOTIFICATION_CHANNELS.map(channel => ({
 		id: channel.id,
@@ -119,6 +128,7 @@ export function useProfileSettings() {
 
 	const events = NOTIFICATION_EVENTS.map(event => {
 		const label = t(event.label)
+
 		return {
 			id: event.id,
 			label,
@@ -133,7 +143,7 @@ export function useProfileSettings() {
 	return {
 		tab,
 		tabs,
-		selectTab: setTab,
+		onTabChange,
 		languages,
 		theme,
 		themes,
@@ -142,7 +152,7 @@ export function useProfileSettings() {
 		dailyScheduleLabel,
 		security,
 		sessions,
-		endOtherSessions,
+		onEndOtherSessions,
 		channels,
 		events,
 	}

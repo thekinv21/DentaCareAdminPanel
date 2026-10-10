@@ -4,12 +4,15 @@ const openLayers: symbol[] = []
 
 export function pushLayer(): symbol {
 	const layer = Symbol('overlay')
+
 	openLayers.push(layer)
+
 	return layer
 }
 
 export function removeLayer(layer: symbol): void {
 	const index = openLayers.indexOf(layer)
+
 	if (index >= 0) openLayers.splice(index, 1)
 }
 

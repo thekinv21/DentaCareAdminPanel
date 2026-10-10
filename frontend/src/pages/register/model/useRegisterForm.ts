@@ -22,9 +22,12 @@ import {
  */
 export function useRegisterForm() {
 	const t = useTranslations('Register')
+
 	const router = useRouter()
+
 	const [step, setStep] = useState<1 | 2>(1)
-	const methods = useForm<TRegisterInput, unknown, TRegisterValues>({
+
+	const form = useForm<TRegisterInput, unknown, TRegisterValues>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			clinicName: '',
@@ -37,30 +40,33 @@ export function useRegisterForm() {
 		},
 	})
 
-	const goToAdminStep = async () => {
-		if (await methods.trigger(CLINIC_FIELDS)) setStep(2)
+	const onNext = async () => {
+		if (await form.trigger(CLINIC_FIELDS)) setStep(2)
 	}
 
-	return {
-		methods,
-		step,
-		steps: [t('clinic'), t('administrator')].map((label, index) => ({
-			label,
-			number: `0${index + 1}`,
-			isDone: index + 1 <= step,
-			isCurrent: index + 1 === step,
-		})),
-		next: goToAdminStep,
-		/**
-		 * On the clinic step Enter means "next", it must not submit the whole form
-		 */
-		preventEnterOnFirstStep: (event: KeyboardEvent<HTMLFormElement>) => {
-			if (step !== 1 || event.key !== 'Enter') return
-			if ((event.target as HTMLElement).tagName !== 'INPUT') return
-			event.preventDefault()
-			goToAdminStep()
-		},
-		back: () => setStep(1),
-		submit: methods.handleSubmit(() => router.push(ROUTES.verify)),
+	const steps = [t('clinic'), t('administrator')].map((label, index) => ({
+		label,
+		number: `0${index + 1}`,
+		isDone: index + 1 <= step,
+		isCurrent: index + 1 === step,
+	}))
+
+	/**
+	 * On the clinic step Enter means "next", it must not submit the whole form
+	 */
+	const onKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
+		if (step !== 1 || event.key !== 'Enter') return
+
+		if ((event.target as HTMLElement).tagName !== 'INPUT') return
+
+		event.preventDefault()
+
+		onNext()
 	}
+
+	const onBack = () => setStep(1)
+
+	const onSubmit = form.handleSubmit(() => router.push(ROUTES.verify))
+
+	return { form, step, steps, onNext, onKeyDown, onBack, onSubmit }
 }

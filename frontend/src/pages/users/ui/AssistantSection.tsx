@@ -23,8 +23,11 @@ const ASSISTANT_CHAIRS = CHAIR_NUMBERS.slice(0, 3)
 
 export function AssistantSection() {
 	const t = useTranslations('UserForm')
+
 	const format = useFormat()
+
 	const { control, register } = useFormContext<TUserFormValues>()
+
 	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (

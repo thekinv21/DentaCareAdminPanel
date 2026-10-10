@@ -9,11 +9,16 @@ import { translateOptional } from '@/shared/lib/i18n'
  */
 export function useRoleLabels() {
 	const t = useTranslations('Role')
-	return {
-		text: (keyOrText: string) => translateOptional(t, keyOrText),
-		module: (key: string) => t(key),
-		access: (key: string) => t(key === 'none' ? 'noAccess' : key),
-		action: (key: string) => t(key),
-		color: (key: string) => t(key),
-	}
+
+	const text = (keyOrText: string) => translateOptional(t, keyOrText)
+
+	const moduleName = (key: string) => t(key)
+
+	const access = (key: string) => t(key === 'none' ? 'noAccess' : key)
+
+	const action = (key: string) => t(key)
+
+	const color = (key: string) => t(key)
+
+	return { text, moduleName, access, action, color }
 }

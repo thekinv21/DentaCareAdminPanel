@@ -53,6 +53,7 @@ export const EMPTY_USER_VALUES: TUserFormValues = {
  */
 export function toFormValues(user: TUser): TUserFormValues {
 	const [firstName, lastName = ''] = user.fullName.split(' ')
+
 	return {
 		...EMPTY_USER_VALUES,
 		type: user.type,

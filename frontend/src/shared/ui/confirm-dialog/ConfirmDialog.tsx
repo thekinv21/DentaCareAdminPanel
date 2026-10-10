@@ -25,15 +25,21 @@ type TConfirmDialogProps = {
 
 export function ConfirmDialog({ request, onClose }: TConfirmDialogProps) {
 	const t = useTranslations('Confirm')
+
 	const model = useConfirmDialog(request, onClose)
+
 	const titleId = useId()
+
 	const tone = CONFIRM_TONE[request.tone ?? 'danger']
+
 	const Icon = tone.icon
+
 	const isCritical = request.tone === 'critical'
-	useConfirmKeys(model.close, model.confirm)
+
+	useConfirmKeys(model.onClose, model.onConfirm)
 
 	return (
-		<Overlay onBackdrop={model.close}>
+		<Overlay onBackdrop={model.onClose}>
 			<div
 				role='alertdialog'
 				aria-modal='true'
@@ -74,7 +80,7 @@ export function ConfirmDialog({ request, onClose }: TConfirmDialogProps) {
 						size='sm'
 						aria-label={t('close')}
 						aria-disabled={model.pending}
-						onClick={model.close}
+						onClick={model.onClose}
 					>
 						<X size={16} aria-hidden='true' />
 					</IconButton>

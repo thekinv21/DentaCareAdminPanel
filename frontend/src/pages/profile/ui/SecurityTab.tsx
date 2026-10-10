@@ -15,6 +15,7 @@ type TSecurityTabProps = { settings: TProfileSettingsModel }
 
 export function SecurityTab({ settings }: TSecurityTabProps) {
 	const t = useTranslations('Profile')
+
 	const { control } = useFormContext<TProfileFormValues>()
 
 	return (
@@ -41,7 +42,7 @@ export function SecurityTab({ settings }: TSecurityTabProps) {
 					<Button
 						size='sm'
 						className='text-danger'
-						onClick={settings.endOtherSessions}
+						onClick={settings.onEndOtherSessions}
 					>
 						{t('endAllExceptCurrent')}
 					</Button>

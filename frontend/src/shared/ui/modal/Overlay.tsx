@@ -17,8 +17,10 @@ type TOverlayProps = {
  */
 export function Overlay({ onBackdrop, children }: TOverlayProps) {
 	const layerRef = useRef<HTMLDivElement>(null)
+
 	// read before the dialog's autoFocus moves focus inside
 	const [opener] = useState(() => document.activeElement as HTMLElement | null)
+
 	useFocusTrap(layerRef, opener)
 
 	return createPortal(

@@ -11,8 +11,10 @@ const ONE_YEAR = 60 * 60 * 24 * 365
  */
 export function useChangeLocale() {
 	const router = useRouter()
+
 	return (locale: TLocale) => {
 		document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax`
+
 		router.refresh()
 	}
 }

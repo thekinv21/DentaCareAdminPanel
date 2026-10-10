@@ -23,14 +23,20 @@ import { useToast } from '@/shared/ui/toast'
  */
 export function useRoleCards() {
 	const t = useTranslations('Roles')
+
 	const labels = useRoleLabels()
+
 	const transferChoice = useRoleTransferChoice()
+
 	const confirm = useConfirm()
+
 	const toast = useToast()
+
 	const [roles, setRoles] = useState<TRole[]>(ROLES)
 
 	const copy = (role: TRole, name: string) => {
 		const copyName = t('copyName', { name })
+
 		setRoles(list => [
 			...list,
 			{
@@ -44,11 +50,13 @@ export function useRoleCards() {
 				members: [],
 			},
 		])
+
 		toast.show(t('roleCreatedNamed', { name: copyName }))
 	}
 
 	const remove = (role: TRole, name: string) => {
 		if (role.system) return
+
 		confirm({
 			tone: 'danger',
 			title: t('deleteRoleQuestion', { name }),
@@ -68,6 +76,7 @@ export function useRoleCards() {
 
 	const cards = roles.map(role => {
 		const name = labels.text(role.name)
+
 		return {
 			id: role.id,
 			name,
@@ -83,19 +92,18 @@ export function useRoleCards() {
 				total: PERMISSIONS_TOTAL,
 			}),
 			percent: Math.round((role.permissionCount / PERMISSIONS_TOTAL) * 100),
-			modules: role.modules.map(labels.module),
-			copy: () => copy(role, name),
-			remove: () => remove(role, name),
+			modules: role.modules.map(labels.moduleName),
+			onCopy: () => copy(role, name),
+			onDelete: () => remove(role, name),
 		}
 	})
 
-	return {
-		cards,
-		countText: t('rolesStaff', {
-			roles: roles.length,
-			staff: CLINIC_STAFF_COUNT,
-		}),
-	}
+	const countText = t('rolesStaff', {
+		roles: roles.length,
+		staff: CLINIC_STAFF_COUNT,
+	})
+
+	return { cards, countText }
 }
 
 export type TRoleCardView = ReturnType<typeof useRoleCards>['cards'][number]

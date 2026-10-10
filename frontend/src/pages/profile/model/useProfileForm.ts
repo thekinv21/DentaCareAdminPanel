@@ -23,6 +23,7 @@ const NAME_FIELDS = new Set(['lastName', 'firstName'])
  */
 export function useProfileForm() {
 	const t = useTranslations('Profile')
+
 	const format = useFormat()
 
 	// useForm reads the defaults only on the first render, so build them once
@@ -48,24 +49,24 @@ export function useProfileForm() {
 		[format, t],
 	)
 
-	const methods = useForm<TProfileFormValues>({
+	const form = useForm<TProfileFormValues>({
 		resolver: zodResolver(profileFormSchema),
 		defaultValues,
 	})
-	const { isDirty, isSubmitting, isSubmitSuccessful } = methods.formState
 
-	const submit = methods.handleSubmit(async values => {
+	const {
+		isDirty: dirty,
+		isSubmitting: saving,
+		isSubmitSuccessful: saved,
+	} = form.formState
+
+	const onSubmit = form.handleSubmit(async values => {
 		await mockRequest()
-		methods.reset({ ...values, password: EMPTY_PASSWORD })
-	})
-	const reset = () => methods.reset()
 
-	return {
-		methods,
-		saved: isSubmitSuccessful,
-		dirty: isDirty,
-		saving: isSubmitting,
-		submit,
-		reset,
-	}
+		form.reset({ ...values, password: EMPTY_PASSWORD })
+	})
+
+	const onReset = () => form.reset()
+
+	return { form, saved, dirty, saving, onSubmit, onReset }
 }

@@ -14,7 +14,9 @@ import type { TUserFormValues } from '../model/UserFormSchema'
 
 export function ScheduleSection() {
 	const t = useTranslations('UserForm')
+
 	const { control } = useFormContext<TUserFormValues>()
+
 	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (

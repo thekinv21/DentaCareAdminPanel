@@ -15,6 +15,7 @@ import { useIsEntryRoute } from '../model/useIsEntryRoute'
 
 export function AuthTopBar() {
 	const t = useTranslations('AuthPanel')
+
 	const isEntry = useIsEntryRoute()
 
 	return (

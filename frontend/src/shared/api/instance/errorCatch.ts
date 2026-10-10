@@ -23,5 +23,6 @@ export function isRetryableRequestError(error: unknown) {
 	if (axios.isCancel(error) || !axios.isAxiosError(error)) return false
 
 	const status = error.response?.status
+
 	return status === undefined || status === 429 || status >= 500
 }

@@ -19,6 +19,7 @@ export function SidebarProfileLink(props: TSidebarProfileLinkProps) {
 	const { initials, fullName, role, active } = props
 
 	const t = useTranslations('AdminSidebar')
+
 	return (
 		<Link
 			href={ROUTES.profile}

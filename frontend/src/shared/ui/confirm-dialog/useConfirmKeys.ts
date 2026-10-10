@@ -13,13 +13,17 @@ export function useConfirmKeys(onCancel: () => void, onConfirm: () => void) {
 			onCancel()
 			return
 		}
+
 		const target = event.target as HTMLElement
+
 		if (
 			event.key !== 'Enter' ||
 			target.closest('button, a, textarea, [role="radio"], [role="checkbox"]')
 		)
 			return false
+
 		event.preventDefault()
+
 		onConfirm()
 	})
 }

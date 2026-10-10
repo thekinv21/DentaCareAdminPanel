@@ -20,7 +20,9 @@ type TAdminStepProps = { onBack: () => void }
 
 export function AdminStep({ onBack }: TAdminStepProps) {
 	const t = useTranslations('Register')
+
 	const inputProps = useFieldProps<TRegisterInput>()
+
 	const agreeError = useFieldError('agree')
 
 	return (

@@ -31,7 +31,7 @@ export function SessionRow({ session }: TSessionRowProps) {
 				{session.lastActive}
 			</span>
 			{!session.isCurrent && (
-				<Button size='sm' onClick={session.end}>
+				<Button size='sm' onClick={session.onEnd}>
 					{t('endSession')}
 				</Button>
 			)}

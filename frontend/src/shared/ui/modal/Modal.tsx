@@ -49,9 +49,11 @@ export function Modal(props: TModalProps) {
 	} = props
 
 	const titleId = useId()
+
 	const close = () => {
 		if (!busy) onClose()
 	}
+
 	useEscapeKey(open, close)
 
 	if (!open) return null
@@ -94,6 +96,7 @@ export function Modal(props: TModalProps) {
 						onSubmit={event => {
 							// the dialog is portaled, but React still bubbles the event to parent forms
 							event.stopPropagation()
+
 							onSubmit(event)
 						}}
 					>

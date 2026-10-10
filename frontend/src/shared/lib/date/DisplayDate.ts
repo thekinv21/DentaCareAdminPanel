@@ -6,7 +6,9 @@ export const toIsoDate = (date: Date) => date.toISOString().slice(0, 10)
 
 export function addDays(iso: string, days: number): string {
 	const date = toUtcDate(iso)
+
 	date.setUTCDate(date.getUTCDate() + days)
+
 	return toIsoDate(date)
 }
 
@@ -16,6 +18,7 @@ export function addDays(iso: string, days: number): string {
 
 export function isValidIsoDate(iso: string): boolean {
 	const date = toUtcDate(iso)
+
 	return !Number.isNaN(date.getTime()) && toIsoDate(date) === iso
 }
 
@@ -32,7 +35,9 @@ export const isoToDisplayDate = (iso: string) =>
 
 export function displayDateToIso(text: string): string | null {
 	if (!DISPLAY_DATE_PATTERN.test(text)) return null
+
 	const iso = text.split('.').reverse().join('-')
+
 	return isValidIsoDate(iso) ? iso : null
 }
 

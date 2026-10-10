@@ -36,7 +36,9 @@ export function RowActions(props: TRowActionsProps) {
 	const { subject, onEdit, editHref, onDelete, children } = props
 
 	const t = useTranslations('Common')
+
 	const editLabel = t('editItem', { name: subject })
+
 	const editIcon = <Pencil size={16} aria-hidden='true' />
 
 	return (

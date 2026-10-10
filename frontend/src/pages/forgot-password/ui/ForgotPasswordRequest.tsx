@@ -15,9 +15,6 @@ type TForgotPasswordRequestProps = {
 	flow: ReturnType<typeof useForgotPassword>
 }
 
-/**
- * Phone number form that asks for a reset link
- */
 export function ForgotPasswordRequest({ flow }: TForgotPasswordRequestProps) {
 	const t = useTranslations('ForgotPassword')
 
@@ -28,8 +25,12 @@ export function ForgotPasswordRequest({ flow }: TForgotPasswordRequestProps) {
 				title={t('resetYourPassword')}
 				subtitle={t('enterThePhoneNumber')}
 			/>
-			<FormProvider {...flow.methods}>
-				<form noValidate onSubmit={flow.submit} className='flex flex-col gap-4'>
+			<FormProvider {...flow.form}>
+				<form
+					noValidate
+					onSubmit={flow.onSubmit}
+					className='flex flex-col gap-4'
+				>
 					<ForgotPasswordField />
 					<Button type='submit' variant='primary' size='lg' block>
 						{t('sendResetLink')}

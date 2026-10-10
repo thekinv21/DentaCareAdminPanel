@@ -20,14 +20,20 @@ export function useOverlayKey(
 
 	useEffect(() => {
 		if (!active) return
+
 		const layer = pushLayer()
+
 		const handle = (event: KeyboardEvent) => {
 			if (!isTopLayer(layer)) return
+
 			if (latestOnKey.current(event) !== false) event.stopPropagation()
 		}
+
 		document.addEventListener('keydown', handle)
+
 		return () => {
 			removeLayer(layer)
+
 			document.removeEventListener('keydown', handle)
 		}
 	}, [active])

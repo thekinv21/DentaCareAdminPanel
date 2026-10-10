@@ -14,6 +14,7 @@ type TToastViewProps = {
 
 export function ToastView({ toast, onUndo }: TToastViewProps) {
 	const t = useTranslations('Confirm')
+
 	return (
 		<div
 			role='status'

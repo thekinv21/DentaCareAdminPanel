@@ -24,7 +24,7 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 	const t = useTranslations('Confirm')
 	const toast = useToast()
 	const bulk = useBulkRun(request.bulk)
-	const fields = useForm<TConfirmFields>({
+	const form = useForm<TConfirmFields>({
 		defaultValues: {
 			choice: request.choice?.value ?? null,
 			reason: null,
@@ -36,7 +36,7 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		},
 	})
 	const [reason, reasonText, typed] = useWatch({
-		control: fields.control,
+		control: form.control,
 		name: ['reason', 'reasonText', 'typed'],
 	})
 	const [secondsLeft, setSecondsLeft] = useState(request.countdown ?? 0)
@@ -47,7 +47,9 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 
 	useEffect(() => {
 		if (secondsLeft <= 0) return
+
 		const timeoutId = setTimeout(() => setSecondsLeft(value => value - 1), 1000)
+
 		return () => clearTimeout(timeoutId)
 	}, [secondsLeft])
 
@@ -60,10 +62,14 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		isTypedCodeValid && isReasonGiven && secondsLeft <= 0 && !pending
 
 	const finish = async () => {
-		const { choice, reason, reasonText, options } = fields.getValues()
+		const { choice, reason, reasonText, options } = form.getValues()
+
 		await request.onConfirm?.({ choice, reason, reasonText, options })
+
 		bulk.settle()
+
 		close()
+
 		toast.show(
 			request.successText ?? t('done'),
 			request.undo && {
@@ -75,7 +81,9 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 
 	const attempt = async (step: () => Promise<boolean>) => {
 		setPending(true)
+
 		setError(null)
+
 		try {
 			if (await step()) {
 				bulkCompleted.current = true
@@ -88,8 +96,9 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		}
 	}
 
-	const confirm = () => {
+	const onConfirm = () => {
 		if (!canConfirm) return
+
 		attempt(() =>
 			bulkCompleted.current
 				? Promise.resolve(true)
@@ -101,32 +110,44 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		? `${request.pendingText ?? t('working')} ${bulk.done}/${bulk.total}`
 		: (request.pendingText ?? t('pleaseWait'))
 
+	const confirmLabel = pending
+		? pendingText
+		: error
+			? t('retry')
+			: secondsLeft > 0
+				? `${request.confirmText} · ${secondsLeft}`
+				: request.confirmText
+
+	const { control, register } = form
+	const showProgress = !!request.bulk && (pending || !!bulk.failed)
+
+	const onClose = () => !pending && close()
+	const onRetryFailed = () => attempt(bulk.retry)
+
+	const onFinishPartial = () => {
+		bulk.settle()
+
+		close()
+
+		toast.show(t('processedOf', { done: bulk.done, total: bulk.total }), {
+			tone: 'warning',
+		})
+	}
+
 	return {
 		pending,
 		error,
 		canConfirm,
-		confirm,
-		close: () => !pending && close(),
-		confirmLabel: pending
-			? pendingText
-			: error
-				? t('retry')
-				: secondsLeft > 0
-					? `${request.confirmText} · ${secondsLeft}`
-					: request.confirmText,
-		control: fields.control,
-		register: fields.register,
+		onConfirm,
+		onClose,
+		confirmLabel,
+		control,
+		register,
 		isTypedCodeValid,
 		bulk,
-		showProgress: !!request.bulk && (pending || !!bulk.failed),
-		retryFailed: () => attempt(bulk.retry),
-		finishPartial: () => {
-			bulk.settle()
-			close()
-			toast.show(t('processedOf', { done: bulk.done, total: bulk.total }), {
-				tone: 'warning',
-			})
-		},
+		showProgress,
+		onRetryFailed,
+		onFinishPartial,
 	}
 }
 

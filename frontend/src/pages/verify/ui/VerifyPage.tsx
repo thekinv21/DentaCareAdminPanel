@@ -14,6 +14,7 @@ import { useVerifyCode } from '../model/useVerifyCode'
 
 export function VerifyPage() {
 	const t = useTranslations('Verify')
+
 	const verify = useVerifyCode()
 
 	return (
@@ -32,7 +33,7 @@ export function VerifyPage() {
 			/>
 			<form
 				noValidate
-				onSubmit={verify.submit}
+				onSubmit={verify.onSubmit}
 				className='flex flex-col gap-4.5'
 			>
 				<fieldset className='m-0 border-0 p-0'>

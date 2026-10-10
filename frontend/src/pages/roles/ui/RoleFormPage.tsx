@@ -23,8 +23,10 @@ type TRoleFormPageProps = { params?: Promise<{ id: string }> }
 
 export function RoleFormPage({ params }: TRoleFormPageProps) {
 	const roleId = params ? use(params).id : undefined
+
 	const t = useTranslations('RoleForm')
-	const form = useRoleForm(roleId)
+
+	const model = useRoleForm(roleId)
 
 	return (
 		<>
@@ -37,37 +39,37 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 						>
 							{t('rolesAndAccess')}
 						</Link>{' '}
-						/ {form.breadcrumbLabel}
+						/ {model.breadcrumbLabel}
 					</>
 				}
-				title={form.title}
+				title={model.title}
 			/>
 			<PageContent>
-				<FormProvider {...form.methods}>
+				<FormProvider {...model.form}>
 					<form
 						noValidate
-						onSubmit={form.submit}
+						onSubmit={model.onSubmit}
 						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
 					>
 						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
 							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
-								<RoleBasics form={form} />
+								<RoleBasics model={model} />
 								<PermissionMatrix />
-								{form.isEdit && (
+								{model.isEdit && (
 									<RoleDangerZone
-										roleName={form.fallbackName}
-										membersCount={form.membersCount}
-										onDelete={form.remove}
+										roleName={model.fallbackName}
+										membersCount={model.membersCount}
+										onDelete={model.onDelete}
 									/>
 								)}
 							</div>
 							<RoleFormFooter
-								isEdit={form.isEdit}
-								saving={form.saving}
-								statusText={form.dirtyText}
+								isEdit={model.isEdit}
+								saving={model.saving}
+								statusText={model.dirtyText}
 							/>
 						</Card>
-						<RoleSummary form={form} />
+						<RoleSummary model={model} />
 					</form>
 				</FormProvider>
 			</PageContent>

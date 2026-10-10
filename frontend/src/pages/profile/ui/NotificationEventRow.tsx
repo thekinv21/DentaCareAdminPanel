@@ -44,6 +44,7 @@ type TChannelSwitchProps = {
 
 function ChannelSwitch({ eventId, channelId, ariaLabel }: TChannelSwitchProps) {
 	const { control } = useFormContext<TProfileFormValues>()
+
 	const { field } = useController({
 		control,
 		name: `notifications.${eventId}.${channelId}`,

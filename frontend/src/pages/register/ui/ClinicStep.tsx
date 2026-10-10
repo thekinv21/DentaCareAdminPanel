@@ -17,6 +17,7 @@ type TClinicStepProps = { onNext: () => void }
 
 export function ClinicStep({ onNext }: TClinicStepProps) {
 	const t = useTranslations('Register')
+
 	const inputProps = useFieldProps<TRegisterInput>()
 
 	return (

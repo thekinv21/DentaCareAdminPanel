@@ -18,31 +18,38 @@ const SUMMARY_ROWS = 8
  */
 export function useRoleSummary(fallbackName: string) {
 	const labels = useRoleLabels()
+
 	const { control } = useFormContext<TRoleFormValues>()
-	const [name, color, permissions, scope] = useWatch({
+
+	const [typedName, color, permissions, scope] = useWatch({
 		control,
 		name: ['name', 'color', 'permissions', 'scope'],
 	})
+
+	const name = typedName || fallbackName
+
 	const granted = countGranted(permissions)
 
-	return {
-		name: name || fallbackName,
-		color,
-		granted,
-		total: PERMISSIONS_TOTAL,
-		percent: Math.round((granted / PERMISSIONS_TOTAL) * 100),
-		rows: PERMISSION_MODULES.slice(0, SUMMARY_ROWS).map(permissionModule => {
+	const total = PERMISSIONS_TOTAL
+
+	const percent = Math.round((granted / total) * 100)
+
+	const rows = PERMISSION_MODULES.slice(0, SUMMARY_ROWS).map(
+		permissionModule => {
 			const grantedActions = permissionModule.actions.filter(action =>
 				permissions[permissionModule.id]?.includes(action),
 			)
+
 			return {
-				module: labels.module(permissionModule.name),
+				module: labels.moduleName(permissionModule.name),
 				actions: grantedActions.map(action =>
 					labels.action(action).toLowerCase(),
 				),
 				isOwnOnly:
 					scope[permissionModule.id] === 'own' && grantedActions.length > 0,
 			}
-		}),
-	}
+		},
+	)
+
+	return { name, color, granted, total, percent, rows }
 }

@@ -11,15 +11,15 @@ import { loginSchema, type TLoginValues } from './LoginSchema'
 
 export function useLoginForm() {
 	const router = useRouter()
-	const methods = useForm<TLoginValues>({
+
+	const form = useForm<TLoginValues>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: { method: 'phone', phone: '', password: '', remember: true },
 	})
-	const method = useWatch({ control: methods.control, name: 'method' })
 
-	return {
-		methods,
-		method,
-		submit: methods.handleSubmit(() => router.push(ROUTES.verify)),
-	}
+	const method = useWatch({ control: form.control, name: 'method' })
+
+	const onSubmit = form.handleSubmit(() => router.push(ROUTES.verify))
+
+	return { form, method, onSubmit }
 }

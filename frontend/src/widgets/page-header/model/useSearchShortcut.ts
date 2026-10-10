@@ -7,6 +7,7 @@ const noSubscription = () => () => {}
 
 export function useSearchShortcut() {
 	const inputRef = useRef<HTMLInputElement>(null)
+
 	const isApple = useSyncExternalStore(
 		noSubscription,
 		isApplePlatform,
@@ -16,13 +17,20 @@ export function useSearchShortcut() {
 	useEffect(() => {
 		const onKey = (event: KeyboardEvent) => {
 			if (event.key.toLowerCase() !== 'k') return
+
 			if (!(event.metaKey || event.ctrlKey)) return
+
 			event.preventDefault()
+
 			inputRef.current?.focus()
 		}
+
 		document.addEventListener('keydown', onKey)
+
 		return () => document.removeEventListener('keydown', onKey)
 	}, [])
 
-	return { inputRef, shortcutLabel: isApple ? '⌘K' : 'Ctrl K' }
+	const shortcutLabel = isApple ? '⌘K' : 'Ctrl K'
+
+	return { inputRef, shortcutLabel }
 }

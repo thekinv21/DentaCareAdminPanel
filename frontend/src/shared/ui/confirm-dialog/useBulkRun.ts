@@ -13,8 +13,11 @@ export type TBulkFailure = { item: TBulkItem; error: string }
  */
 export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 	const [done, setDone] = useState(0)
+
 	const [failed, setFailed] = useState<TBulkFailure[] | null>(null)
+
 	const succeeded = useRef<string[]>([])
+
 	const total = bulk?.items.length ?? 0
 
 	/**
@@ -22,11 +25,16 @@ export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 	 */
 	const run = async (items: TBulkItem[]) => {
 		if (!bulk) return true
+
 		const offset = total - items.length
+
 		// a full run starts over; a retry keeps the items that already succeeded
 		if (offset === 0) succeeded.current = []
+
 		const failures: TBulkFailure[] = []
+
 		setFailed(null)
+
 		for (const [index, item] of items.entries()) {
 			try {
 				await bulk.run(item)
@@ -36,20 +44,20 @@ export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 			}
 			setDone(offset + index + 1)
 		}
+
 		if (failures.length) {
 			setFailed(failures)
 			setDone(total - failures.length)
 		}
+
 		return failures.length === 0
 	}
 
-	return {
-		total,
-		done,
-		failed,
-		percent: total ? Math.round((done / total) * 100) : 0,
-		run,
-		retry: () => run(failed?.map(failure => failure.item) ?? []),
-		settle: () => bulk?.onDone?.(succeeded.current),
-	}
+	const percent = total ? Math.round((done / total) * 100) : 0
+
+	const retry = () => run(failed?.map(failure => failure.item) ?? [])
+
+	const settle = () => bulk?.onDone?.(succeeded.current)
+
+	return { total, done, failed, percent, run, retry, settle }
 }

@@ -20,7 +20,9 @@ type TLoginFieldsProps = { method: TLoginValues['method'] }
 
 export function LoginFields({ method }: TLoginFieldsProps) {
 	const t = useTranslations('Login')
+
 	const { register } = useFormContext<TLoginValues>()
+
 	const inputProps = useFieldProps<TLoginValues>()
 
 	return (

@@ -11,7 +11,9 @@ import { SidebarProfileLink } from './SidebarProfileLink'
 
 export function AdminSidebar() {
 	const t = useTranslations('AdminSidebar')
+
 	const user = useCurrentUser()
+
 	const { groups, profileActive } = useSidebarNav()
 
 	return (

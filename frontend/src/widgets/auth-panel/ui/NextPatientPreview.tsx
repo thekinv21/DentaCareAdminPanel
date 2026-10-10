@@ -13,7 +13,9 @@ import { PreviewTag } from './PreviewTag'
  */
 export function NextPatientPreview() {
 	const t = useTranslations('AuthPanel')
+
 	const format = useFormat()
+
 	const patientName = format.name(PREVIEW_APPOINTMENT.patientName)
 
 	return (

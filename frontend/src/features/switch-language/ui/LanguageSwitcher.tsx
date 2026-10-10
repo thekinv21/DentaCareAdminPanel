@@ -17,7 +17,7 @@ type TLanguageSwitcherProps = {
 export function LanguageSwitcher({
 	variant = 'compact',
 }: TLanguageSwitcherProps) {
-	const { rootRef, isOpen, toggle, options, current, pick, label } =
+	const { rootRef, isOpen, onToggle, options, current, onPick, label } =
 		useLanguageMenu()
 
 	return (
@@ -27,7 +27,7 @@ export function LanguageSwitcher({
 				aria-haspopup='listbox'
 				aria-expanded={isOpen}
 				aria-label={label}
-				onClick={toggle}
+				onClick={onToggle}
 				className={cn(
 					'inline-flex h-10 items-center gap-1.5 rounded-xl border border-line bg-surface text-ink transition-colors hover:bg-raised',
 					variant === 'compact' ? 'px-2.5' : 'px-3',
@@ -56,7 +56,7 @@ export function LanguageSwitcher({
 						<LanguageOption
 							key={option.id}
 							option={option}
-							onPick={() => pick(option.id)}
+							onPick={() => onPick(option.id)}
 						/>
 					))}
 				</ul>

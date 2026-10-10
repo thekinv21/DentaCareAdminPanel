@@ -12,6 +12,7 @@ import { ForgotPasswordSent } from './ForgotPasswordSent'
 
 export function ForgotPasswordPage() {
 	const t = useTranslations('ForgotPassword')
+
 	const flow = useForgotPassword()
 
 	return (
@@ -19,7 +20,7 @@ export function ForgotPasswordPage() {
 			{flow.isSent ? (
 				<ForgotPasswordSent
 					maskedPhone={flow.maskedPhone}
-					onChangeNumber={flow.changeNumber}
+					onChangeNumber={flow.onChangeNumber}
 				/>
 			) : (
 				<ForgotPasswordRequest flow={flow} />

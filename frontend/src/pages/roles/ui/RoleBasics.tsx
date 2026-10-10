@@ -19,11 +19,13 @@ import { FormSection } from '@/shared/ui/form-section'
 import type { TRoleFormValues } from '../model/RoleFormSchema'
 import type { TRoleFormModel } from '../model/useRoleForm'
 
-type TRoleBasicsProps = { form: TRoleFormModel }
+type TRoleBasicsProps = { model: TRoleFormModel }
 
-export function RoleBasics({ form }: TRoleBasicsProps) {
+export function RoleBasics({ model }: TRoleBasicsProps) {
 	const t = useTranslations('RoleForm')
+
 	const { control } = useFormContext<TRoleFormValues>()
+
 	const inputProps = useFieldProps<TRoleFormValues>()
 
 	return (
@@ -43,7 +45,7 @@ export function RoleBasics({ form }: TRoleBasicsProps) {
 						render={({ field }) => (
 							<ColorSwatches
 								aria-label={t('roleColor')}
-								swatches={form.colors}
+								swatches={model.colors}
 								value={field.value}
 								onChange={field.onChange}
 							/>
@@ -57,7 +59,7 @@ export function RoleBasics({ form }: TRoleBasicsProps) {
 						{...inputProps('description')}
 					/>
 				</Field>
-				{!form.isEdit && (
+				{!model.isEdit && (
 					<Field
 						as='div'
 						label={t('startFromPreset')}
@@ -69,9 +71,9 @@ export function RoleBasics({ form }: TRoleBasicsProps) {
 							render={({ field }) => (
 								<ChoiceChips
 									aria-label={t('preset')}
-									options={form.presets}
+									options={model.presets}
 									value={field.value}
-									onChange={form.applyPreset}
+									onChange={model.onPresetChange}
 								/>
 							)}
 						/>

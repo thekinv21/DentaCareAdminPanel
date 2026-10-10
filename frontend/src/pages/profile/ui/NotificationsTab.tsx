@@ -15,6 +15,7 @@ type TNotificationsTabProps = { settings: TProfileSettingsModel }
 
 export function NotificationsTab({ settings }: TNotificationsTabProps) {
 	const t = useTranslations('Profile')
+
 	const { register } = useFormContext<TProfileFormValues>()
 
 	return (

@@ -14,7 +14,8 @@ import { ClinicStep } from './ClinicStep'
 
 export function RegisterPage() {
 	const t = useTranslations('Register')
-	const form = useRegisterForm()
+
+	const model = useRegisterForm()
 
 	return (
 		<AuthStack>
@@ -26,7 +27,7 @@ export function RegisterPage() {
 				aria-label={t('registrationSteps')}
 				className='m-0 flex list-none gap-2 p-0'
 			>
-				{form.steps.map(step => (
+				{model.steps.map(step => (
 					<li
 						key={step.number}
 						aria-current={step.isCurrent ? 'step' : undefined}
@@ -49,17 +50,17 @@ export function RegisterPage() {
 					</li>
 				))}
 			</ol>
-			<FormProvider {...form.methods}>
+			<FormProvider {...model.form}>
 				<form
 					noValidate
-					onSubmit={form.submit}
-					onKeyDown={form.preventEnterOnFirstStep}
+					onSubmit={model.onSubmit}
+					onKeyDown={model.onKeyDown}
 					className='flex flex-col gap-4'
 				>
-					{form.step === 1 ? (
-						<ClinicStep onNext={form.next} />
+					{model.step === 1 ? (
+						<ClinicStep onNext={model.onNext} />
 					) : (
-						<AdminStep onBack={form.back} />
+						<AdminStep onBack={model.onBack} />
 					)}
 				</form>
 			</FormProvider>

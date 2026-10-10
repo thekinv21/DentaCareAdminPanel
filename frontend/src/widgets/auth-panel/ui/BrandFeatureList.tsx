@@ -5,6 +5,7 @@ import { BRAND_FEATURES } from '../config/BrandPanel'
 
 export function BrandFeatureList() {
 	const t = useTranslations('AuthPanel')
+
 	return (
 		<ul className='flex flex-wrap gap-2'>
 			{BRAND_FEATURES.map(feature => (

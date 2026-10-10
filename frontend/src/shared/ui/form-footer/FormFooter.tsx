@@ -24,6 +24,7 @@ export function FormFooter(props: TFormFooterProps) {
 	const { saved, savedLabel, dirty, saving, onReset } = props
 
 	const t = useTranslations('Common')
+
 	return (
 		<div className='flex shrink-0 items-center justify-end gap-2.5 border-t border-line pt-3.5'>
 			{saved && !dirty && (

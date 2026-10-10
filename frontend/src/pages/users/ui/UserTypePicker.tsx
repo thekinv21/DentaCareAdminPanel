@@ -30,7 +30,9 @@ type TUserTypePickerProps = { onChange: (type: TUserType) => void }
 
 export function UserTypePicker({ onChange }: TUserTypePickerProps) {
 	const t = useTranslations('UserForm')
+
 	const { control } = useFormContext<TUserFormValues>()
+
 	const currentType = useWatch({ control, name: 'type' })
 
 	return (
@@ -68,6 +70,7 @@ type TUserTypeCardProps = {
 
 function UserTypeCard({ type, isSelected, onSelect }: TUserTypeCardProps) {
 	const labels = useUserLabels()
+
 	const Icon = USER_TYPE_ICON[type]
 
 	return (

@@ -29,25 +29,34 @@ import { useUserDangerActions } from './useUserDangerActions'
  */
 export function useUserForm(userId?: string) {
 	const t = useTranslations('UserForm')
+
 	const labels = useUserLabels()
+
 	const format = useFormat()
+
 	const toast = useToast()
+
 	const router = useRouter()
+
 	const user = userId
 		? USERS.find(candidate => candidate.id === userId)
 		: undefined
+
 	// an unknown id must never open (and let the user edit) somebody else
 	if (userId && !user) notFound()
+
 	const isEdit = !!user
 
-	const methods = useForm<TUserFormValues>({
+	const form = useForm<TUserFormValues>({
 		resolver: zodResolver(userFormSchema),
 		defaultValues: user ? toFormValues(user) : EMPTY_USER_VALUES,
 	})
-	const type = useWatch({ control: methods.control, name: 'type' })
+
+	const type = useWatch({ control: form.control, name: 'type' })
 
 	const fullName = user ? format.name(user.fullName) : t('newEmployee')
-	const danger = useUserDangerActions({
+
+	const { onResetPassword, onDeactivate, onDelete } = useUserDangerActions({
 		subject: {
 			title: fullName,
 			subtitle: user ? `${labels.type(type)} · ${user.email}` : '',
@@ -55,43 +64,62 @@ export function useUserForm(userId?: string) {
 			tone: user?.tone,
 		},
 		phone: user?.phone ?? '',
-		onDeactivated: () => methods.setValue('switches.accountActive', false),
+		onDeactivated: () => form.setValue('switches.accountActive', false),
 		onDeleted: () => router.push(ROUTES.users),
 	})
 
+	const title = isEdit ? fullName : t('newUser')
+
+	const breadcrumbLabel = isEdit ? t('editing') : t('creating')
+
+	const saving = form.formState.isSubmitting
+
+	const onTypeChange = (next: TUserType) => {
+		form.setValue('type', next)
+
+		form.setValue(
+			'role',
+			next === 'chief' && isEdit ? 'owner' : USER_TYPE[next].role,
+		)
+	}
+
+	const visibleSections = {
+		medic: isMedic(type),
+		chief: type === 'chief',
+		assistant: type === 'assistant',
+		admin: type === 'admin',
+		accountant: type === 'accountant',
+		schedule: isMedic(type) || type === 'assistant',
+	}
+
+	const preview = {
+		name: fullName,
+		subtitle: user ? user.phone : t('fillNameAndPhone'),
+		initials: user ? getInitials(fullName) : '+',
+		tone: user?.tone ?? ('neutral' as const),
+	}
+
+	const onSubmit = form.handleSubmit(async () => {
+		await mockRequest()
+
+		toast.show(isEdit ? t('changesSaved') : t('userCreatedInviteSent'))
+
+		if (!isEdit) router.push(ROUTES.users)
+	})
+
 	return {
-		...danger,
-		methods,
+		form,
 		isEdit,
-		title: isEdit ? fullName : t('newUser'),
-		breadcrumbLabel: isEdit ? t('editing') : t('creating'),
-		changeType: (next: TUserType) => {
-			methods.setValue('type', next)
-			methods.setValue(
-				'role',
-				next === 'chief' && isEdit ? 'owner' : USER_TYPE[next].role,
-			)
-		},
-		visibleSections: {
-			medic: isMedic(type),
-			chief: type === 'chief',
-			assistant: type === 'assistant',
-			admin: type === 'admin',
-			accountant: type === 'accountant',
-			schedule: isMedic(type) || type === 'assistant',
-		},
-		preview: {
-			name: fullName,
-			subtitle: user ? user.phone : t('fillNameAndPhone'),
-			initials: user ? getInitials(fullName) : '+',
-			tone: user?.tone ?? ('neutral' as const),
-		},
-		saving: methods.formState.isSubmitting,
-		submit: methods.handleSubmit(async () => {
-			await mockRequest()
-			toast.show(isEdit ? t('changesSaved') : t('userCreatedInviteSent'))
-			if (!isEdit) router.push(ROUTES.users)
-		}),
+		title,
+		breadcrumbLabel,
+		onTypeChange,
+		visibleSections,
+		preview,
+		saving,
+		onSubmit,
+		onResetPassword,
+		onDeactivate,
+		onDelete,
 	}
 }
 

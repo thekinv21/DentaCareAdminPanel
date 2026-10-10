@@ -19,6 +19,7 @@ type TConfirmBulkListProps = {
  */
 export function ConfirmBulkList({ bulk }: TConfirmBulkListProps) {
 	const t = useTranslations('Confirm')
+
 	const hiddenCount = bulk.items.length - MAX_VISIBLE_ITEMS
 
 	return (

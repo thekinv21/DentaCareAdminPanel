@@ -13,19 +13,23 @@ const passwordChangeSchema = z
 	.superRefine((password, ctx) => {
 		// an empty "new password" means the user is not changing it
 		if (!password.next) return
+
 		if (!password.current)
 			ctx.addIssue({
 				code: 'custom',
 				path: ['current'],
 				message: 'enterYourPassword',
 			})
+
 		const strength = strongPasswordSchema.safeParse(password.next)
+
 		if (!strength.success)
 			ctx.addIssue({
 				code: 'custom',
 				path: ['next'],
 				message: 'passwordTooWeak',
 			})
+
 		if (password.repeat !== password.next)
 			ctx.addIssue({
 				code: 'custom',

@@ -21,9 +21,13 @@ type TUserPreviewProps = { preview: TUserFormModel['preview'] }
 
 export function UserPreview({ preview }: TUserPreviewProps) {
 	const t = useTranslations('UserForm')
+
 	const labels = useUserLabels()
+
 	const { control } = useFormContext<TUserFormValues>()
+
 	const [type, role] = useWatch({ control, name: ['type', 'role'] })
+
 	const access = useRoleAccess(role)
 
 	return (
@@ -72,6 +76,7 @@ type TAccessRowProps = {
 
 function AccessRow({ row }: TAccessRowProps) {
 	const t = useTranslations('UserForm')
+
 	const Icon = row.isAllowed ? Check : X
 
 	return (

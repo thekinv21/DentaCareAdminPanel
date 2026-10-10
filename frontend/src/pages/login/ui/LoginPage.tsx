@@ -8,6 +8,7 @@ import { LoginForm } from './LoginForm'
 
 export function LoginPage() {
 	const t = useTranslations('Login')
+
 	return (
 		<AuthStack>
 			<AuthHeading title={t('welcomeBack')} subtitle={t('signInToOpen')} />
