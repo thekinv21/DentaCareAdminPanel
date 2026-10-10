@@ -23,7 +23,14 @@ export function PageHeader(props: TPageHeaderProps) {
 	const { title, crumb, actions, tools, search = true } = props
 
 	const t = useTranslations('PageHeader')
+
 	const { inputRef, shortcutLabel } = useSearchShortcut()
+
+	/**
+	 * Will be get from backend service
+	 */
+
+	const unreadNotificationCount: number = 12
 
 	return (
 		<header className='flex shrink-0 items-center gap-2.5 px-1 pt-1 pb-3.5 max-mobile:flex-wrap'>
@@ -45,7 +52,7 @@ export function PageHeader(props: TPageHeaderProps) {
 			)}
 			{tools}
 			<LanguageSwitcher />
-			<NotificationsButton />
+			<NotificationsButton unreadNotificationCount={unreadNotificationCount} />
 			{actions}
 		</header>
 	)
