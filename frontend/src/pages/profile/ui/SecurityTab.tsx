@@ -2,18 +2,22 @@
 
 import { Monitor } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { Field, formGrid3, inputClass } from '@/shared/ui/field'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
-import type { ProfileSettingsModel } from '../model/useProfileSettings'
+import type { TProfileFormValues } from '../model/ProfileForm'
+import type { TProfileSettingsModel } from '../model/useProfileSettings'
 
-type TSecurityTabProps = { model: ProfileSettingsModel }
+type TSecurityTabProps = { model: TProfileSettingsModel }
 
 export function SecurityTab({ model }: TSecurityTabProps) {
 	const t = useTranslations('Profile')
+	const { control, register } = useFormContext<TProfileFormValues>()
+
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div>
@@ -25,8 +29,9 @@ export function SecurityTab({ model }: TSecurityTabProps) {
 						<input
 							className={inputClass}
 							type='password'
-							defaultValue='••••••••••'
+							placeholder='••••••••••'
 							autoComplete='current-password'
+							{...register('password.current')}
 						/>
 					</Field>
 					<Field label={t('newPassword')}>
@@ -35,6 +40,7 @@ export function SecurityTab({ model }: TSecurityTabProps) {
 							type='password'
 							placeholder={t('atLeast10Characters')}
 							autoComplete='new-password'
+							{...register('password.next')}
 						/>
 					</Field>
 					<Field label={t('repeatPassword')}>
@@ -43,6 +49,7 @@ export function SecurityTab({ model }: TSecurityTabProps) {
 							type='password'
 							placeholder={t('repeatPlaceholder')}
 							autoComplete='new-password'
+							{...register('password.repeat')}
 						/>
 					</Field>
 				</div>
@@ -53,12 +60,18 @@ export function SecurityTab({ model }: TSecurityTabProps) {
 
 			<div className='rounded-2xl border border-line px-3.5 py-1'>
 				{model.security.map(option => (
-					<ToggleRow
+					<Controller
 						key={option.id}
-						label={option.label}
-						hint={option.hint}
-						checked={option.checked}
-						onChange={option.flip}
+						control={control}
+						name={`prefs.${option.id}`}
+						render={({ field }) => (
+							<ToggleRow
+								label={option.label}
+								hint={option.hint}
+								checked={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				))}
 			</div>

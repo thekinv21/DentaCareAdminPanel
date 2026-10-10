@@ -2,6 +2,7 @@
 
 import { Download } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
@@ -25,11 +26,17 @@ export function ReportsPage() {
 				title={t('reports')}
 				search={false}
 				tools={
-					<Segmented
-						aria-label={t('period')}
-						options={report.ranges}
-						value={report.range}
-						onChange={report.setRange}
+					<Controller
+						control={report.filters.control}
+						name='range'
+						render={({ field }) => (
+							<Segmented
+								aria-label={t('period')}
+								options={report.ranges}
+								value={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				}
 				actions={

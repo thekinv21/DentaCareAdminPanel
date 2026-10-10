@@ -1,6 +1,6 @@
 import type { TSystemRoleId } from '@/entities/role/@x/user'
 
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 import type { TBranch, TUserType } from './Types'
 
@@ -13,7 +13,7 @@ export const USER_TYPE: Record<
 		label: string
 		plural: string
 		hint: string
-		tone: Tone
+		tone: TTone
 		role: TSystemRoleId
 	}
 > = {

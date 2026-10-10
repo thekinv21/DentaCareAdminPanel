@@ -13,16 +13,13 @@ import { Avatar } from '@/shared/ui/avatar'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Td } from '@/shared/ui/table'
 
-import type { PatientRowView } from '../model/usePatientsTable'
+import type { TPatientRowView } from '../model/usePatientsTable'
 
 export const checkboxClass = 'size-4.25 cursor-pointer accent-brand'
 
-type TPatientRowProps = {
-	row: PatientRowView
-	onToggle: () => void
-}
+type TPatientRowProps = { row: TPatientRowView }
 
-export function PatientRow({ row, onToggle }: TPatientRowProps) {
+export function PatientRow({ row }: TPatientRowProps) {
 	const t = useTranslations('Patients')
 	const cell = row.isSelected ? 'bg-brand-soft' : undefined
 
@@ -34,7 +31,7 @@ export function PatientRow({ row, onToggle }: TPatientRowProps) {
 					className={checkboxClass}
 					aria-label={`${t('select')} ${row.fullName}`}
 					checked={row.isSelected}
-					onChange={onToggle}
+					onChange={row.toggle}
 				/>
 			</Td>
 			<Td className={cell}>

@@ -8,11 +8,11 @@ import { CalendarDays, ChartColumn, Clock, CreditCard } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { ROUTES } from '@/shared/routes'
-import { type Tone, TONE_CLASS } from '@/shared/ui/badge'
+import { TONE_CLASS, type TTone } from '@/shared/ui/badge'
 import { ProgressBar } from '@/shared/ui/progress'
 import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 
-type TKpiIconProps = { tone: Tone; children: ReactNode }
+type TKpiIconProps = { tone: TTone; children: ReactNode }
 
 function KpiIcon({ tone, children }: TKpiIconProps) {
 	return (

@@ -1,6 +1,6 @@
 import type { TSystemRoleId } from '@/entities/role/@x/user'
 
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 export type TUserType =
 	'chief' | 'doctor' | 'assistant' | 'admin' | 'accountant'
@@ -21,6 +21,6 @@ export type TUser = {
 	phone: string
 	email: string
 	lastSeen: TLastSeen
-	tone: Tone
+	tone: TTone
 	active: boolean
 }

@@ -8,10 +8,10 @@ import { DOCTORS } from '@/entities/employee'
 import { useFormat } from '@/shared/lib/i18n'
 
 import { addDays, toDate, weekday } from '../lib/Dates'
-import { type CalendarEvent, eventsForDay } from '../lib/Schedule'
-import type { CalendarView } from './useCalendar'
+import { eventsForDay, type TCalendarEvent } from '../lib/Schedule'
+import type { TCalendarView } from './useCalendar'
 
-export interface CalendarColumn {
+export type TCalendarColumn = {
 	key: string
 	overline: string
 	title: string
@@ -19,14 +19,14 @@ export interface CalendarColumn {
 	aria: string
 	isToday: boolean
 	showNow: boolean
-	events: CalendarEvent[]
+	events: TCalendarEvent[]
 	onPick?: () => void
 }
 
-interface Options {
-	view: CalendarView
+type TCalendarColumnsOptions = {
+	view: TCalendarView
 	cursor: string
-	filter: (events: CalendarEvent[]) => CalendarEvent[]
+	filter: (events: TCalendarEvent[]) => TCalendarEvent[]
 	openDay: (iso: string) => void
 }
 
@@ -40,7 +40,7 @@ export function useCalendarColumns({
 	cursor,
 	filter,
 	openDay,
-}: Options): CalendarColumn[] {
+}: TCalendarColumnsOptions): TCalendarColumn[] {
 	const t = useTranslations('Appointments')
 	const format = useFormat()
 	if (view === 'month') return []

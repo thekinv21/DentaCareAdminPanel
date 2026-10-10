@@ -3,12 +3,12 @@
 import { useFormat } from '@/shared/lib/i18n'
 
 import { addDays, sameMonth, toDate, weekday } from '../lib/Dates'
-import type { CalendarView } from './useCalendar'
+import type { TCalendarView } from './useCalendar'
 
 /**
  * Heading of the visible range: a day, a Mon–Sat week or a month
  */
-export function useCalendarTitle(view: CalendarView, cursor: string) {
+export function useCalendarTitle(view: TCalendarView, cursor: string) {
 	const format = useFormat()
 
 	if (view === 'day') {

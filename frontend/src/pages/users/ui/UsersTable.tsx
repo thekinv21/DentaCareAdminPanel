@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { Card } from '@/shared/ui/card'
 import { SearchInput } from '@/shared/ui/search-input'
@@ -14,17 +15,25 @@ type TUsersTableProps = { table: TUsersTableModel }
 
 export function UsersTable({ table }: TUsersTableProps) {
 	const t = useTranslations('Users')
+	const { control, register } = table.filters
+
 	return (
 		<Card
 			as='section'
 			className='min-h-115 flex-auto animate-rise max-[720px]:flex-none'
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Segmented
-					aria-label={t('userType')}
-					options={table.types}
-					value={table.type}
-					onChange={table.setType}
+				<Controller
+					control={control}
+					name='type'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('userType')}
+							options={table.types}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 				<div className='flex items-center gap-2 max-[720px]:flex-wrap'>
 					<SearchInput
@@ -32,15 +41,20 @@ export function UsersTable({ table }: TUsersTableProps) {
 						placeholder={t('nameEmailOrPhone')}
 						size='sm'
 						className='w-56'
-						value={table.query}
-						onChange={event => table.setQuery(event.target.value)}
+						{...register('search')}
 					/>
-					<Segmented
-						aria-label={t('status')}
-						options={table.statuses}
-						value={table.status}
-						onChange={table.setStatus}
-						className='flex-nowrap'
+					<Controller
+						control={control}
+						name='status'
+						render={({ field }) => (
+							<Segmented
+								aria-label={t('status')}
+								options={table.statuses}
+								value={field.value}
+								onChange={field.onChange}
+								className='flex-nowrap'
+							/>
+						)}
 					/>
 				</div>
 			</div>

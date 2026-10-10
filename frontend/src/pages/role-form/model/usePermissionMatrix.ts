@@ -1,8 +1,11 @@
 'use client'
 
+import { useFormContext, useWatch } from 'react-hook-form'
+
 import {
 	PERMISSION_ACTIONS,
 	PERMISSION_MODULES,
+	PERMISSIONS_TOTAL,
 	type TPermissionAction,
 	type TPermissions,
 	useRoleLabels,
@@ -10,33 +13,29 @@ import {
 
 import type { TCheckState } from '@/shared/ui/checkbox'
 
-export type TScope = 'all' | 'own'
-
-type TMatrixOptions = {
-	permissions: TPermissions
-	setPermissions: (next: TPermissions) => void
-	scope: Record<string, TScope>
-	setScope: (module: string, value: TScope) => void
-}
+import { countGranted } from '../lib/GrantedCount'
+import type { TRoleFormValues, TScope } from './Schema'
 
 const triState = (values: boolean[]): TCheckState =>
 	values.every(Boolean) ? true : values.some(Boolean) ? 'mixed' : false
 
-const SUMMARY_ROWS = 8
-
 /**
- * Module × action checkbox grid with row/column toggles and a summary
+ * Module × action checkbox grid of the role form with row/column toggles and a summary
  */
-export function usePermissionMatrix(options: TMatrixOptions) {
-	const { permissions, setPermissions, scope, setScope } = options
-
+export function usePermissionMatrix() {
 	const labels = useRoleLabels()
+	const { control, setValue } = useFormContext<TRoleFormValues>()
+	const [permissions, scope] = useWatch({
+		control,
+		name: ['permissions', 'scope'],
+	})
+
 	const has = (module: string, action: TPermissionAction) =>
 		!!permissions[module]?.includes(action)
-
+	const setPermissions = (next: TPermissions) =>
+		setValue('permissions', next, { shouldDirty: true })
 	const setModule = (module: string, actions: TPermissionAction[]) =>
 		setPermissions({ ...permissions, [module]: actions })
-
 	const fill = (pick: (action: TPermissionAction) => boolean) =>
 		setPermissions(
 			Object.fromEntries(
@@ -44,11 +43,7 @@ export function usePermissionMatrix(options: TMatrixOptions) {
 			),
 		)
 
-	const total = PERMISSION_MODULES.reduce((n, m) => n + m.actions.length, 0)
-	const granted = PERMISSION_MODULES.reduce(
-		(n, m) => n + m.actions.filter(a => has(m.id, a)).length,
-		0,
-	)
+	const granted = countGranted(permissions)
 
 	const rows = PERMISSION_MODULES.map(module => {
 		const name = labels.module(module.name)
@@ -59,16 +54,16 @@ export function usePermissionMatrix(options: TMatrixOptions) {
 			hint: labels.module(module.hint),
 			scoped: !!module.scoped,
 			scope: scope[module.id] ?? 'all',
-			setScope: (value: TScope) => setScope(module.id, value),
+			setScope: (value: TScope) =>
+				setValue(`scope.${module.id}`, value, { shouldDirty: true }),
 			state,
 			toggleRow: () =>
 				setModule(module.id, state === true ? [] : module.actions),
 			cells: PERMISSION_ACTIONS.map(action => {
-				const available = module.actions.includes(action.id)
 				const on = has(module.id, action.id)
 				return {
 					id: action.id,
-					available,
+					available: module.actions.includes(action.id),
 					on,
 					label: `${name}: ${labels.action(action.label)}`,
 					toggle: () =>
@@ -107,26 +102,13 @@ export function usePermissionMatrix(options: TMatrixOptions) {
 		}
 	})
 
-	const summary = PERMISSION_MODULES.slice(0, SUMMARY_ROWS).map(module => {
-		const actions = module.actions.filter(a => has(module.id, a))
-		return {
-			module: labels.module(module.name),
-			actions: actions.map(a => labels.action(a).toLowerCase()),
-			own: scope[module.id] === 'own' && actions.length > 0,
-		}
-	})
-
 	return {
 		rows,
 		columns,
 		granted,
-		total,
-		percent: Math.round((granted / total) * 100),
-		summary,
+		total: PERMISSIONS_TOTAL,
 		allOn: () => fill(() => true),
 		allOff: () => fill(() => false),
 		viewOnly: () => fill(action => action === 'view'),
 	}
 }
-
-export type TPermissionMatrixModel = ReturnType<typeof usePermissionMatrix>

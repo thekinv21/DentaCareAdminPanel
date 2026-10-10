@@ -1,4 +1,4 @@
-import type { Appointment } from '../model/Types'
+import type { TAppointment } from '../model/Types'
 
 /**
  * Mock "today" (Friday, 9 October 2026) until the backend exposes /appointments
@@ -6,7 +6,7 @@ import type { Appointment } from '../model/Types'
 export const TODAY = '2026-10-09'
 export const NOW_TIME = '11:40'
 
-export const TODAY_APPOINTMENTS: Appointment[] = [
+export const TODAY_APPOINTMENTS: TAppointment[] = [
 	{
 		id: 'a1',
 		time: '09:30',

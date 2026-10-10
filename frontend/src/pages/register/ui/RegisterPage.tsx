@@ -3,6 +3,7 @@
 import Link from 'next/link'
 
 import { useTranslations } from 'next-intl'
+import { FormProvider } from 'react-hook-form'
 
 import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
@@ -50,13 +51,15 @@ export function RegisterPage() {
 					</li>
 				))}
 			</ol>
-			<form noValidate onSubmit={form.onSubmit} className='flex flex-col gap-4'>
-				{form.step === 1 ? (
-					<ClinicStep form={form} />
-				) : (
-					<AdminStep form={form} />
-				)}
-			</form>
+			<FormProvider {...form.methods}>
+				<form noValidate onSubmit={form.submit} className='flex flex-col gap-4'>
+					{form.step === 1 ? (
+						<ClinicStep onNext={form.next} />
+					) : (
+						<AdminStep onBack={form.back} />
+					)}
+				</form>
+			</FormProvider>
 			<p className='text-center text-sm leading-5.5 text-ink-muted'>
 				{t('alreadyHaveAnAccount')}{' '}
 				<Link

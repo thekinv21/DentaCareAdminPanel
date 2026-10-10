@@ -3,11 +3,11 @@
 import { useTranslations } from 'next-intl'
 
 import { mockRequest } from '@/shared/api'
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 
 type TDangerActionsOptions = {
-	subject: { title: string; subtitle: string; initials: string; tone?: Tone }
+	subject: { title: string; subtitle: string; initials: string; tone?: TTone }
 	phone: string
 	onDeactivated: () => void
 	onDeleted: () => void

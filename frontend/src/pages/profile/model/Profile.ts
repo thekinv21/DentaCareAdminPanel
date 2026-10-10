@@ -1,3 +1,41 @@
+export const PROFILE_FIELDS = [
+	{
+		name: 'lastName',
+		label: 'lastName',
+		value: 'kasymova',
+		autoComplete: 'family-name',
+	},
+	{
+		name: 'firstName',
+		label: 'firstName',
+		value: 'aigerim',
+		autoComplete: 'given-name',
+	},
+	{ name: 'position', label: 'position', value: 'chiefDentist' },
+	{ name: 'specialty', label: 'specialty', value: 'generalDentistEndodontist' },
+	{
+		name: 'phone',
+		label: 'phone',
+		value: '+996 555 701 441',
+		mono: true,
+		type: 'tel',
+	},
+	{
+		name: 'email',
+		label: 'Email',
+		value: 'a.kasymova@denta.kg',
+		type: 'email',
+	},
+	{
+		name: 'diploma',
+		label: 'diplomaCertificateNumber',
+		value: 'ksma20140912',
+		mono: true,
+	},
+] as const
+
+export type TProfileField = (typeof PROFILE_FIELDS)[number]['name']
+
 export const SECURITY_OPTIONS = [
 	{
 		id: 'tfa',

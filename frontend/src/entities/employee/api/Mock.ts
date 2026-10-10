@@ -1,9 +1,9 @@
-import type { Doctor, DoctorId, StaffMember } from '../model/Types'
+import type { TDoctor, TDoctorId, TStaffMember } from '../model/Types'
 
 /**
  * Mock data until the backend exposes /staff
  */
-export const DOCTORS: Record<DoctorId, Doctor> = {
+export const DOCTORS: Record<TDoctorId, TDoctor> = {
 	kas: {
 		id: 'kas',
 		shortName: 'Касымова А.',
@@ -37,7 +37,7 @@ export const CURRENT_USER = {
 	branch: 'bishkekAlaToo',
 }
 
-export const STAFF: StaffMember[] = [
+export const STAFF: TStaffMember[] = [
 	{
 		id: 's1',
 		fullName: 'Айгерим Касымова',

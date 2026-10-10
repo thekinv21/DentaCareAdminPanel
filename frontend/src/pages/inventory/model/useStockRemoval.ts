@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { mockRequest } from '@/shared/api'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 
-import type { StockItem } from './Stock'
+import type { TStockItem } from './Stock'
 
 /**
  * Deleting a stock position with "Undo" in the toast
@@ -26,7 +26,7 @@ export function useStockRemoval() {
 			return next
 		})
 
-	const remove = (item: StockItem, onDone?: () => void) =>
+	const remove = (item: TStockItem, onDone?: () => void) =>
 		confirm({
 			tone: 'danger',
 			title: t('deleteItemQuestion'),

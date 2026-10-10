@@ -1,53 +1,43 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 
-import { CHAIRS } from '../model/Clinic'
-
-const TEXT_FIELDS = [
-	{ label: 'clinicName', value: 'dentaAlaToo' },
-	{ label: 'legalEntity', value: 'dentaClinicLlc' },
-	{ label: 'tin', value: '02410202610153', mono: true },
-	{
-		label: 'kyrgyzMinistryOfHealth',
-		value: 'no0417MzValid',
-		mono: true,
-	},
-	{ label: 'address', value: 'n112ToktogulSt1st', wide: true },
-	{ label: 'receptionPhone', value: '+996 312 90 41 41', mono: true },
-	{ label: 'Email', value: 'info@denta.kg' },
-]
+import { CHAIRS, CLINIC_FIELDS } from '../model/Clinic'
+import type { TSettingsFormValues } from '../model/SettingsForm'
 
 export function ClinicSection() {
 	const t = useTranslations('Settings')
 	const format = useFormat()
+	const { register } = useFormContext<TSettingsFormValues>()
+
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div className={formGrid2}>
-				{TEXT_FIELDS.map(field => (
+				{CLINIC_FIELDS.map(field => (
 					<Field
-						key={field.label}
+						key={field.name}
 						label={translateOptional(t, field.label)}
-						className={field.wide ? 'col-span-full' : undefined}
+						className={'wide' in field ? 'col-span-full' : undefined}
 					>
 						<input
-							className={cn(inputClass, field.mono && 'font-mono')}
-							defaultValue={translateOptional(t, field.value)}
+							className={cn(inputClass, 'mono' in field && 'font-mono')}
+							{...register(`clinic.${field.name}`)}
 						/>
 					</Field>
 				))}
 				<Field label={t('timeZone')}>
-					<select className={inputClass}>
-						<option>{t('asiaBishkekUtc6')}</option>
+					<select className={inputClass} {...register('timeZone')}>
+						<option value='Asia/Bishkek'>{t('asiaBishkekUtc6')}</option>
 					</select>
 				</Field>
 				<Field label={t('currency')}>
-					<select className={inputClass}>
-						<option>{t('kyrgyzSomKgs')}</option>
+					<select className={inputClass} {...register('currency')}>
+						<option value='KGS'>{t('kyrgyzSomKgs')}</option>
 					</select>
 				</Field>
 			</div>

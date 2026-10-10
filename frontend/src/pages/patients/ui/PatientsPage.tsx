@@ -20,7 +20,7 @@ export function PatientsPage() {
 	const table = usePatientsTable({
 		removedIds: removal.removedIds,
 		onEdit: form.openEdit,
-		onRemove: patient => removal.remove(patient),
+		onRemove: removal.remove,
 		onBulkRemove: removal.bulkRemove,
 	})
 

@@ -82,11 +82,7 @@ export function PatientsTable({ table }: TPatientsTableProps) {
 					</thead>
 					<tbody>
 						{table.rows.map(row => (
-							<PatientRow
-								key={row.id}
-								row={row}
-								onToggle={() => table.toggleRow(row.id)}
-							/>
+							<PatientRow key={row.id} row={row} />
 						))}
 					</tbody>
 				</Table>

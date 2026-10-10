@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 
 import { APPOINTMENT_LEGEND, APPOINTMENT_STATUS } from './Status'
-import type { AppointmentStatus } from './Types'
+import type { TAppointmentStatus } from './Types'
 
 /**
  * Translated statuses, procedures and the status legend
@@ -11,7 +11,7 @@ import type { AppointmentStatus } from './Types'
 export function useAppointmentLabels() {
 	const t = useTranslations('Appointment')
 	return {
-		status: (status: AppointmentStatus) => t(APPOINTMENT_STATUS[status].label),
+		status: (status: TAppointmentStatus) => t(APPOINTMENT_STATUS[status].label),
 		/**
 		 * `key` is a procedure message key, e.g. "exam" or "filling36"
 		 */

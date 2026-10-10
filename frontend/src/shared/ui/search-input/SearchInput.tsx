@@ -1,17 +1,16 @@
-import type { InputHTMLAttributes } from 'react'
+import type { ComponentProps } from 'react'
 
 import { Search } from 'lucide-react'
 
 import { cn } from '@/shared/lib/cn'
 
-type TSearchInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
+type TSearchInputProps = Omit<ComponentProps<'input'>, 'size'> & {
 	label: string
 	/**
 	 * `sm` sits inside cards on a raised fill
 	 */
 	size?: 'sm' | 'md'
 	shortcut?: string
-	className?: string
 }
 
 export function SearchInput(props: TSearchInputProps) {

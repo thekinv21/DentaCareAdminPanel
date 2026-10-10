@@ -9,19 +9,19 @@ import {
 	useSyncExternalStore,
 } from 'react'
 
-export type ThemePreference = 'system' | 'light' | 'dark'
+export type TThemePreference = 'system' | 'light' | 'dark'
 
-interface ThemeContextValue {
-	theme: ThemePreference
-	setTheme: (theme: ThemePreference) => void
+type TThemeContextValue = {
+	theme: TThemePreference
+	setTheme: (theme: TThemePreference) => void
 }
 
 const STORAGE_KEY = 'denta-theme'
 const CHANGE_EVENT = 'denta-theme-change'
 
-const ThemeContext = createContext<ThemeContextValue | null>(null)
+const ThemeContext = createContext<TThemeContextValue | null>(null)
 
-function readStoredTheme(): ThemePreference {
+function readStoredTheme(): TThemePreference {
 	try {
 		const value = window.localStorage.getItem(STORAGE_KEY)
 		return value === 'light' || value === 'dark' ? value : 'system'
@@ -39,7 +39,7 @@ function subscribe(onChange: () => void) {
 	}
 }
 
-function setTheme(next: ThemePreference) {
+function setTheme(next: TThemePreference) {
 	try {
 		window.localStorage.setItem(STORAGE_KEY, next)
 	} catch {
@@ -48,7 +48,7 @@ function setTheme(next: ThemePreference) {
 	window.dispatchEvent(new Event(CHANGE_EVENT))
 }
 
-function applyTheme(theme: ThemePreference) {
+function applyTheme(theme: TThemePreference) {
 	const isDark =
 		theme === 'dark' ||
 		(theme === 'system' &&
@@ -80,7 +80,7 @@ export function ThemeProvider({ children }: TThemeProviderProps) {
 	return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
-export function useTheme(): ThemeContextValue {
+export function useTheme(): TThemeContextValue {
 	const context = useContext(ThemeContext)
 	if (!context) throw new Error('useTheme must be used inside ThemeProvider')
 	return context

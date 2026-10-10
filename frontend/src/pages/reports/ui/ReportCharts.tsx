@@ -8,10 +8,10 @@ import { Card, CardHeader } from '@/shared/ui/card'
 import { Legend } from '@/shared/ui/legend'
 import { ProgressBar } from '@/shared/ui/progress'
 
-import type { ReportModel } from '../model/useReport'
+import type { TReportModel } from '../model/useReport'
 import { RevenueChart } from './RevenueChart'
 
-type TReportChartsProps = { report: ReportModel }
+type TReportChartsProps = { report: TReportModel }
 
 export function ReportCharts({ report }: TReportChartsProps) {
 	const t = useTranslations('Reports')

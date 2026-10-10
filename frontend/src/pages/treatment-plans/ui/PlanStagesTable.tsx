@@ -4,27 +4,29 @@ import { Plus, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
+import { useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
-import { inputClass } from '@/shared/ui/field'
+import { FieldError, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import type { TPlanFormModel } from '../model/usePlanForm'
+import type { TPlanFormInput } from '../model/PlanFormSchema'
+import { usePlanStages } from '../model/usePlanStages'
 
 const cellInput = cn(inputClass, 'h-9 px-2.5')
+const numberInput = cn(cellInput, 'font-mono')
 
-type TPlanStagesTableProps = { form: TPlanFormModel }
-
-export function PlanStagesTable({ form }: TPlanStagesTableProps) {
+export function PlanStagesTable() {
 	const t = useTranslations('PlanForm')
-	const error = form.errorOf(form.stagesError)
+	const stages = usePlanStages()
+	const inputProps = useFieldProps<TPlanFormInput>()
 
 	return (
 		<FormSection
 			title={t('treatmentStages')}
 			aside={
-				<Button size='sm' onClick={form.addStage}>
+				<Button size='sm' onClick={stages.add}>
 					<Plus size={15} aria-hidden='true' />
 					{t('addStage')}
 				</Button>
@@ -47,62 +49,58 @@ export function PlanStagesTable({ form }: TPlanStagesTableProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{form.stages.map(stage => (
-							<tr key={stage.key}>
+						{stages.rows.map(({ key, index, sum, remove }) => (
+							<tr key={key}>
 								<Td mono className='text-ink-muted'>
-									{stage.index + 1}
+									{index + 1}
 								</Td>
 								<Td>
 									<input
 										className={cellInput}
 										aria-label={t('service')}
-										aria-invalid={form.cellInvalid(stage.index, 'service')}
-										{...form.register(`stages.${stage.index}.service`)}
+										{...inputProps(`stages.${index}.service`)}
 									/>
 								</Td>
 								<Td>
 									<input
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('tooth')}
-										{...form.register(`stages.${stage.index}.tooth`)}
+										{...inputProps(`stages.${index}.tooth`)}
 									/>
 								</Td>
 								<Td>
 									<input
 										inputMode='numeric'
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('quantity')}
-										aria-invalid={form.cellInvalid(stage.index, 'qty')}
-										{...form.register(`stages.${stage.index}.qty`)}
+										{...inputProps(`stages.${index}.qty`)}
 									/>
 								</Td>
 								<Td>
 									<input
 										inputMode='numeric'
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('price')}
-										aria-invalid={form.cellInvalid(stage.index, 'price')}
-										{...form.register(`stages.${stage.index}.price`)}
+										{...inputProps(`stages.${index}.price`)}
 									/>
 								</Td>
 								<Td>
 									<input
 										inputMode='numeric'
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('discountPercent')}
-										aria-invalid={form.cellInvalid(stage.index, 'discount')}
-										{...form.register(`stages.${stage.index}.discount`)}
+										{...inputProps(`stages.${index}.discount`)}
 									/>
 								</Td>
 								<Td mono nowrap align='right' className='font-semibold'>
-									{stage.sum}
+									{sum}
 								</Td>
 								<Td>
 									<IconButton
 										quiet
 										size='sm'
-										aria-label={`${t('deleteStage')} ${stage.index + 1}`}
-										onClick={stage.remove}
+										aria-label={`${t('deleteStage')} ${index + 1}`}
+										onClick={remove}
 										className='text-danger'
 									>
 										<Trash2 size={16} aria-hidden='true' />
@@ -113,9 +111,7 @@ export function PlanStagesTable({ form }: TPlanStagesTableProps) {
 					</tbody>
 				</Table>
 			</div>
-			{error && (
-				<span className='text-xs font-semibold text-danger'>{error}</span>
-			)}
+			<FieldError name='stages' />
 		</FormSection>
 	)
 }

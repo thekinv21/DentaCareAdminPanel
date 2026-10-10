@@ -5,6 +5,10 @@ export {
 	APPOINTMENT_LEGEND,
 	APPOINTMENT_STATUS,
 } from './model/Status'
-export type { Appointment, AppointmentStatus, DoctorKey } from './model/Types'
+export type {
+	TAppointment,
+	TAppointmentStatus,
+	TDoctorKey,
+} from './model/Types'
 export { AppointmentStatusBadge } from './ui/AppointmentStatusBadge'
 export { useAppointmentLabels } from './model/useAppointmentLabels'

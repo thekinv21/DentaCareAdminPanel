@@ -6,3 +6,5 @@ export {
 	inputLgClass,
 	textareaClass,
 } from './FieldClass'
+export { FieldError } from './FieldError'
+export { FormField } from './FormField'

@@ -2,6 +2,7 @@
 
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { Badge } from '@/shared/ui/badge'
 import { IconButton } from '@/shared/ui/icon-button'
@@ -14,16 +15,22 @@ type TServicesSectionProps = { services: TServicesModel }
 
 export function ServicesSection({ services }: TServicesSectionProps) {
 	const t = useTranslations('Settings')
-	const { category, setCategory, filters, rows } = services
+	const { filters, categories, rows } = services
 
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
-			<Segmented
-				aria-label={t('category')}
-				options={filters}
-				value={category}
-				onChange={setCategory}
-				className='self-start'
+			<Controller
+				control={filters.control}
+				name='category'
+				render={({ field }) => (
+					<Segmented
+						aria-label={t('category')}
+						options={categories}
+						value={field.value}
+						onChange={field.onChange}
+						className='self-start'
+					/>
+				)}
 			/>
 			<Table className='min-w-190'>
 				<thead>

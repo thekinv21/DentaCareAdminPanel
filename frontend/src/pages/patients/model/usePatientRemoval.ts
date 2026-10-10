@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-import type { Patient } from '@/entities/patient'
+import type { TPatient } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
 import { getInitials } from '@/shared/lib/format'
@@ -24,7 +24,7 @@ export function usePatientRemoval() {
 	const markRemoved = (ids: string[]) =>
 		setRemovedIds(current => new Set([...current, ...ids]))
 
-	const remove = (patient: Patient, onDone?: () => void) => {
+	const remove = (patient: TPatient, onDone?: () => void) => {
 		const name = format.name(patient.fullName)
 		confirm({
 			tone: 'critical',
@@ -53,7 +53,7 @@ export function usePatientRemoval() {
 		})
 	}
 
-	const bulkRemove = (patients: Patient[], onDone: () => void) => {
+	const bulkRemove = (patients: TPatient[], onDone: () => void) => {
 		const failOnce = new Set(patients.length > 2 ? [patients[1].id] : [])
 		confirm({
 			tone: 'danger',
@@ -85,5 +85,3 @@ export function usePatientRemoval() {
 
 	return { removedIds, remove, bulkRemove }
 }
-
-export type TPatientRemoval = ReturnType<typeof usePatientRemoval>

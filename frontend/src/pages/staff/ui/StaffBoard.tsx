@@ -1,16 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { Segmented } from '@/shared/ui/segmented'
 
-import type { StaffBoardModel } from '../model/useStaffBoard'
+import type { TStaffBoardModel } from '../model/useStaffBoard'
 import { RosterTable } from './RosterTable'
 import { TeamTable } from './TeamTable'
 
-type TStaffBoardProps = { board: StaffBoardModel }
+type TStaffBoardProps = { board: TStaffBoardModel }
 
 export function StaffBoard({ board }: TStaffBoardProps) {
 	const t = useTranslations('Staff')
@@ -28,11 +29,17 @@ export function StaffBoard({ board }: TStaffBoardProps) {
 					onChange={board.setView}
 				/>
 				{board.view === 'team' ? (
-					<Segmented
-						aria-label={t('role')}
-						options={board.roles}
-						value={board.role}
-						onChange={board.setRole}
+					<Controller
+						control={board.filters.control}
+						name='role'
+						render={({ field }) => (
+							<Segmented
+								aria-label={t('role')}
+								options={board.roles}
+								value={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				) : (
 					<div className='flex items-center gap-2'>

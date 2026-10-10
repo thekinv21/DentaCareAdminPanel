@@ -9,18 +9,17 @@ import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { ProgressBar } from '@/shared/ui/progress'
 
-import type { BillingModel } from '../model/useBilling'
-import { usePaymentForm } from '../model/usePaymentForm'
+import type { TPaymentModel } from '../model/usePayment'
+import { usePaymentDetails } from '../model/usePaymentDetails'
 import { useRevenueSplit } from '../model/useRevenueSplit'
 import { PaymentForm } from './PaymentForm'
 
-type TPaymentPanelProps = { billing: BillingModel }
+type TPaymentPanelProps = { payment: TPaymentModel }
 
-export function PaymentPanel({ billing }: TPaymentPanelProps) {
+export function PaymentPanel({ payment }: TPaymentPanelProps) {
 	const t = useTranslations('Billing')
-	const form = usePaymentForm(billing.invoice, billing.invoiceIndex)
+	const details = usePaymentDetails(payment)
 	const split = useRevenueSplit()
-	const amount = `${form.amount} ${t('som')}`
 
 	return (
 		<Card
@@ -29,7 +28,7 @@ export function PaymentPanel({ billing }: TPaymentPanelProps) {
 			className='max-w-110 flex-[1_1_320px] animate-rise max-[720px]:max-w-none'
 			style={{ animationDelay: '200ms' }}
 		>
-			{billing.done ? (
+			{payment.done ? (
 				<div
 					role='status'
 					className='flex animate-fade flex-col items-start gap-3.5'
@@ -42,9 +41,9 @@ export function PaymentPanel({ billing }: TPaymentPanelProps) {
 							{t('paymentAccepted')}
 						</h2>
 						<p className='text-[12.5px] leading-4.5 text-ink-muted'>
-							<span className='font-mono'>{amount}</span> · {form.methodName}{' '}
-							{t('invoiceInline')}{' '}
-							<span className='font-mono'>{billing.invoice.number}</span>
+							<span className='font-mono'>{details.amount}</span> ·{' '}
+							{details.methodName} {t('invoiceInline')}{' '}
+							<span className='font-mono'>{payment.invoice.number}</span>
 						</p>
 					</div>
 					<div className='flex w-full gap-2'>
@@ -55,16 +54,12 @@ export function PaymentPanel({ billing }: TPaymentPanelProps) {
 							{t('sendSms')}
 						</Button>
 					</div>
-					<Button size='sm' variant='ghost' onClick={billing.reset}>
+					<Button size='sm' variant='ghost' onClick={payment.restart}>
 						{t('newPayment')}
 					</Button>
 				</div>
 			) : (
-				<PaymentForm
-					invoice={billing.invoice}
-					form={form}
-					onConfirm={billing.confirm}
-				/>
+				<PaymentForm payment={payment} details={details} />
 			)}
 
 			<div className='flex flex-col gap-2.5 border-t border-line pt-3.5'>

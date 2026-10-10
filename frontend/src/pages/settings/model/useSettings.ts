@@ -3,70 +3,77 @@
 import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
+import { mockRequest } from '@/shared/api'
 import { translateOptional } from '@/shared/lib/i18n'
 
-import type { LanguageId } from './Communication'
-import { INITIAL_TOGGLES, type SectionId, SECTIONS } from './Sections'
+import { CLINIC_FIELDS } from './Clinic'
+import { BANK_DETAILS } from './Payments'
+import { SECTIONS, type TSectionId } from './Sections'
+import {
+	INITIAL_HOURS,
+	INITIAL_TOGGLES,
+	SMS_TEMPLATES,
+	type TSettingsFormValues,
+} from './SettingsForm'
 
-const BANKS = ['visa', 'mbank', 'komp', 'optima']
+const BANK_TOGGLES = BANK_DETAILS.map(bank => `toggles.${bank.id}` as const)
 
 /**
- * Active section, every on/off preference and the save/dirty state
+ * Active section and the settings form with its save/dirty state
  */
 export function useSettings() {
 	const t = useTranslations('Settings')
-	const [section, setSection] = useState<SectionId>('pay')
-	const [toggles, setToggles] = useState(INITIAL_TOGGLES)
-	const [defaultLanguage, setDefaultLanguageState] = useState<LanguageId>('ru')
-	const [saved, setSaved] = useState(false)
-	const [dirty, setDirty] = useState(false)
+	const [section, setSection] = useState<TSectionId>('pay')
 
-	const touch = () => {
-		setSaved(false)
-		setDirty(true)
-	}
-
+	const methods = useForm<TSettingsFormValues>({
+		defaultValues: {
+			clinic: Object.fromEntries(
+				CLINIC_FIELDS.map(field => [
+					field.name,
+					translateOptional(t, field.value),
+				]),
+			) as TSettingsFormValues['clinic'],
+			timeZone: 'Asia/Bishkek',
+			currency: 'KGS',
+			slotInterval: '15',
+			lunch: '13:00 – 14:00',
+			bookingWindow: 'next30',
+			hours: INITIAL_HOURS,
+			toggles: INITIAL_TOGGLES,
+			defaultLanguage: 'ru',
+			smsLanguage: 'patient',
+			dateFormat: 'dmy',
+			amountFormat: 'som',
+			templates: SMS_TEMPLATES,
+		},
+	})
+	const banksOn = useWatch({ control: methods.control, name: BANK_TOGGLES })
+	const { isDirty, isSubmitting, isSubmitSuccessful } = methods.formState
 	const current = SECTIONS.find(item => item.id === section) ?? SECTIONS[0]
 
 	return {
+		methods,
 		section,
 		sections: SECTIONS.map(item => ({
 			id: item.id,
 			label: t(item.label),
 			hint: translateOptional(t, item.hint),
 			selected: item.id === section,
-			badge:
-				item.id === 'pay' ? BANKS.filter(bank => toggles[bank]).length : null,
+			badge: item.id === 'pay' ? banksOn.filter(Boolean).length : null,
 		})),
-		selectSection: (id: SectionId) => {
-			setSection(id)
-			setSaved(false)
-		},
+		selectSection: setSection,
 		current: { label: t(current.label), description: t(current.description) },
-		toggles,
-		flip: (id: string) => {
-			setToggles(state => ({ ...state, [id]: !state[id] }))
-			touch()
-		},
-		defaultLanguage,
-		setDefaultLanguage: (id: LanguageId) => {
-			setDefaultLanguageState(id)
-			touch()
-		},
-		saved,
-		dirty,
-		save: () => {
-			setSaved(true)
-			setDirty(false)
-		},
-		reset: () => {
-			setToggles(INITIAL_TOGGLES)
-			setDefaultLanguageState('ru')
-			setSaved(false)
-			setDirty(false)
-		},
+		saved: isSubmitSuccessful,
+		dirty: isDirty,
+		saving: isSubmitting,
+		submit: methods.handleSubmit(async values => {
+			await mockRequest()
+			methods.reset(values)
+		}),
+		reset: () => methods.reset(),
 	}
 }
 
-export type SettingsModel = ReturnType<typeof useSettings>
+export type TSettingsModel = ReturnType<typeof useSettings>

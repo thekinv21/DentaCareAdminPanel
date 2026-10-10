@@ -1,12 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import {
-	type DoctorKey,
 	NOW_TIME,
+	type TDoctorKey,
 	TODAY,
 	useAppointmentLabels,
 } from '@/entities/appointment'
@@ -22,38 +21,55 @@ import {
 	toDate,
 	weekday,
 } from '../lib/Dates'
-import { type CalendarEvent, eventsForDay } from '../lib/Schedule'
+import { eventsForDay, type TCalendarEvent } from '../lib/Schedule'
 import { useCalendarColumns } from './useCalendarColumns'
 import { useCalendarTitle } from './useCalendarTitle'
 
-export type CalendarView = 'day' | 'week' | 'month'
+export type TCalendarView = 'day' | 'week' | 'month'
 
-const DOCTOR_KEYS: DoctorKey[] = ['kas', 'pet', 'tok']
+const DOCTOR_KEYS: TDoctorKey[] = ['kas', 'pet', 'tok']
 const A_MONDAY = '2026-10-05'
+
+/**
+ * Query of the calendar: visible range and the dentists shown in it
+ */
+type TCalendarQuery = {
+	view: TCalendarView
+	date: string
+	doctors: TDoctorKey[]
+}
 
 type TCalendarOptions = {
 	/**
 	 * Deleted or cancelled events that must disappear from the grid
 	 */
 	removedKeys: Set<string>
-	onOpenEvent: (event: CalendarEvent) => void
+	onOpenEvent: (event: TCalendarEvent) => void
 }
 
+/**
+ * Day/week/month calendar: visible range, dentist filter and the events in it
+ */
 export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 	const t = useTranslations('Appointments')
 	const labels = useAppointmentLabels()
 	const format = useFormat()
-	const [view, setView] = useState<CalendarView>('day')
-	const [cursor, setCursor] = useState(TODAY)
-	const [hidden, setHidden] = useState<Set<DoctorKey>>(new Set())
+	const filters = useForm<TCalendarQuery>({
+		defaultValues: { view: 'day', date: TODAY, doctors: DOCTOR_KEYS },
+	})
+	const [view, cursor, doctors] = useWatch({
+		control: filters.control,
+		name: ['view', 'date', 'doctors'],
+	})
+	const setCursor = (iso: string) => filters.setValue('date', iso)
 
-	const filter = (events: CalendarEvent[]) =>
+	const filter = (events: TCalendarEvent[]) =>
 		events.filter(
-			event => !hidden.has(event.doctorId) && !removedKeys.has(event.key),
+			event => doctors.includes(event.doctorId) && !removedKeys.has(event.key),
 		)
 
 	const openDay = (iso: string) => {
-		setView('day')
+		filters.setValue('view', 'day')
 		setCursor(iso)
 	}
 
@@ -81,23 +97,23 @@ export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 	)
 
 	const shift = (direction: 1 | -1) =>
-		setCursor(current =>
+		setCursor(
 			view === 'month'
-				? addMonths(current, direction)
-				: addDays(current, direction * (view === 'day' ? 1 : 7)),
+				? addMonths(cursor, direction)
+				: addDays(cursor, direction * (view === 'day' ? 1 : 7)),
 		)
 
-	const toggleDoctor = (key: DoctorKey) =>
-		setHidden(current => {
-			const next = new Set(current)
-			if (next.has(key)) next.delete(key)
-			else next.add(key)
-			return next
-		})
+	const toggleDoctor = (key: TDoctorKey) =>
+		filters.setValue(
+			'doctors',
+			doctors.includes(key)
+				? doctors.filter(doctor => doctor !== key)
+				: [...doctors, key],
+		)
 
 	return {
+		filters,
 		view,
-		setView,
 		views: [
 			{ id: 'day' as const, label: t('day') },
 			{ id: 'week' as const, label: t('week') },
@@ -119,7 +135,7 @@ export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 			key,
 			name: format.name(DOCTORS[key].shortName),
 			color: DOCTORS[key].color,
-			on: !hidden.has(key),
+			on: doctors.includes(key),
 			toggle: () => toggleDoctor(key),
 		})),
 		legend: [
@@ -132,4 +148,4 @@ export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 	}
 }
 
-export type CalendarModel = ReturnType<typeof useCalendar>
+export type TCalendarModel = ReturnType<typeof useCalendar>

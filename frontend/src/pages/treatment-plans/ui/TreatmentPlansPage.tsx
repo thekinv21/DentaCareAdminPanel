@@ -21,7 +21,7 @@ export function TreatmentPlansPage() {
 	const table = usePlansTable({
 		removedKeys: removal.removedKeys,
 		onEdit: form.openEdit,
-		onRemove: plan => removal.remove(plan),
+		onRemove: removal.remove,
 	})
 
 	return (

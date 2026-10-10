@@ -35,5 +35,3 @@ export function useFormat() {
 		}
 	}, [locale, t])
 }
-
-export type Format = ReturnType<typeof useFormat>

@@ -1,11 +1,11 @@
-import type { Patient } from '../model/Types'
+import type { TPatient } from '../model/Types'
 
 /**
  * Mock first page of the patient list until the backend exposes /patients
  */
 export const PATIENTS_TOTAL = 1284
 
-export const PATIENTS: Patient[] = [
+export const PATIENTS: TPatient[] = [
 	{
 		id: 'DN-20418',
 		fullName: 'Айгуль Тойчубекова',

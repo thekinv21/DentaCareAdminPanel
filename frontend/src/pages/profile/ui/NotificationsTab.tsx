@@ -1,18 +1,22 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 import { Switch } from '@/shared/ui/switch'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import type { ProfileSettingsModel } from '../model/useProfileSettings'
+import type { TProfileFormValues } from '../model/ProfileForm'
+import type { TProfileSettingsModel } from '../model/useProfileSettings'
 
-type TNotificationsTabProps = { model: ProfileSettingsModel }
+type TNotificationsTabProps = { model: TProfileSettingsModel }
 
 export function NotificationsTab({ model }: TNotificationsTabProps) {
 	const t = useTranslations('Profile')
+	const { control, register } = useFormContext<TProfileFormValues>()
+
 	return (
 		<div className='animate-fade pt-0.5 pb-2'>
 			<div className='overflow-x-auto'>
@@ -39,10 +43,16 @@ export function NotificationsTab({ model }: TNotificationsTabProps) {
 								{event.channels.map(channel => (
 									<Td key={channel.id} align='center'>
 										<span className='inline-flex align-middle'>
-											<Switch
-												checked={channel.checked}
-												onChange={channel.flip}
-												aria-label={channel.aria}
+											<Controller
+												control={control}
+												name={`prefs.${channel.pref}`}
+												render={({ field }) => (
+													<Switch
+														checked={field.value}
+														onChange={field.onChange}
+														aria-label={channel.aria}
+													/>
+												)}
 											/>
 										</span>
 									</Td>
@@ -56,13 +66,13 @@ export function NotificationsTab({ model }: TNotificationsTabProps) {
 				<Field label={t('doNotDisturb')}>
 					<input
 						className={cn(inputClass, 'font-mono')}
-						defaultValue='21:00 – 07:30'
+						{...register('doNotDisturb')}
 					/>
 				</Field>
 				<Field label={t('daySummary')}>
-					<select className={inputClass}>
-						<option>{t('at0745Daily')}</option>
-						<option>{t('dontSend')}</option>
+					<select className={inputClass} {...register('daySummary')}>
+						<option value='daily'>{t('at0745Daily')}</option>
+						<option value='never'>{t('dontSend')}</option>
 					</select>
 				</Field>
 			</div>

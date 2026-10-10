@@ -25,7 +25,7 @@ export function InventoryPage() {
 		removedSkus: removal.removedSkus,
 		onMove: movement.openFor,
 		onEdit: form.openEdit,
-		onRemove: item => removal.remove(item),
+		onRemove: removal.remove,
 	})
 
 	return (

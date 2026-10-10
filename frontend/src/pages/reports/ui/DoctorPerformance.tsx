@@ -7,9 +7,9 @@ import { Card, CardHeader } from '@/shared/ui/card'
 import { ProgressBar } from '@/shared/ui/progress'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { ReportModel } from '../model/useReport'
+import type { TReportModel } from '../model/useReport'
 
-type TDoctorPerformanceProps = { report: ReportModel }
+type TDoctorPerformanceProps = { report: TReportModel }
 
 export function DoctorPerformance({ report }: TDoctorPerformanceProps) {
 	const t = useTranslations('Reports')

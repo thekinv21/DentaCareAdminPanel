@@ -6,13 +6,13 @@ import {
 	Trash2,
 } from 'lucide-react'
 
-import type { ButtonVariant } from '@/shared/ui/button'
+import type { TButtonVariant } from '@/shared/ui/button'
 
 import type { TConfirmTone, TImpactTone } from './ConfirmTypes'
 
 export const CONFIRM_TONE: Record<
 	TConfirmTone,
-	{ icon: LucideIcon; iconClass: string; button: ButtonVariant; enter: string }
+	{ icon: LucideIcon; iconClass: string; button: TButtonVariant; enter: string }
 > = {
 	danger: {
 		icon: Trash2,

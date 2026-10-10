@@ -19,4 +19,4 @@ export const loginSchema = z.discriminatedUnion('method', [
 	}),
 ])
 
-export type LoginValues = z.infer<typeof loginSchema>
+export type TLoginValues = z.infer<typeof loginSchema>

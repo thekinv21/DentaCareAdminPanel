@@ -1,3 +1,30 @@
+export const CLINIC_FIELDS = [
+	{ name: 'clinicName', label: 'clinicName', value: 'dentaAlaToo' },
+	{ name: 'legalEntity', label: 'legalEntity', value: 'dentaClinicLlc' },
+	{ name: 'tin', label: 'tin', value: '02410202610153', mono: true },
+	{
+		name: 'license',
+		label: 'kyrgyzMinistryOfHealth',
+		value: 'no0417MzValid',
+		mono: true,
+	},
+	{
+		name: 'address',
+		label: 'address',
+		value: 'n112ToktogulSt1st',
+		wide: true,
+	},
+	{
+		name: 'phone',
+		label: 'receptionPhone',
+		value: '+996 312 90 41 41',
+		mono: true,
+	},
+	{ name: 'email', label: 'Email', value: 'info@denta.kg' },
+] as const
+
+export type TClinicField = (typeof CLINIC_FIELDS)[number]['name']
+
 export const CHAIRS = [
 	{ id: 'c1', name: 'restorativeDentistry', doctor: 'Касымова А.' },
 	{ id: 'c2', name: 'prosthodontics', doctor: 'Петров С.' },

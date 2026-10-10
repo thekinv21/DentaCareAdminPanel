@@ -1,9 +1,9 @@
-export type AppointmentStatus =
+export type TAppointmentStatus =
 	'done' | 'chair' | 'next' | 'confirmed' | 'pending' | 'noshow'
 
-export type DoctorKey = 'kas' | 'pet' | 'tok'
+export type TDoctorKey = 'kas' | 'pet' | 'tok'
 
-export interface Appointment {
+export type TAppointment = {
 	id: string
 	/**
 	 * "HH:MM", clinic local time
@@ -16,7 +16,7 @@ export interface Appointment {
 	patientId: string
 	patientName: string
 	procedure: string
-	doctorId: DoctorKey
+	doctorId: TDoctorKey
 	chair: number
-	status: AppointmentStatus
+	status: TAppointmentStatus
 }

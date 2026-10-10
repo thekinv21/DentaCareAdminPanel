@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
+import { useFormModal } from '@/shared/lib/form'
 import { useToast } from '@/shared/ui/toast'
 
-import { CATEGORY_LABEL, type StockItem } from './Stock'
+import { CATEGORY_LABEL, type TStockItem } from './Stock'
 import {
 	stockItemSchema,
 	type TStockItemInput,
@@ -34,75 +33,51 @@ const EMPTY: TStockItemInput = {
  * New/edit stock position in a modal
  */
 export function useStockItemForm(
-	onRemove: (item: StockItem, onDone: () => void) => void,
+	onRemove: (item: TStockItem, onDone: () => void) => void,
 ) {
 	const t = useTranslations('StockForm')
 	const tInventory = useTranslations('Inventory')
-	const tValidation = useTranslations('Validation')
 	const toast = useToast()
-	const [open, setOpen] = useState(false)
-	const [item, setItem] = useState<StockItem | null>(null)
 
-	const form = useForm<TStockItemInput, unknown, TStockItemValues>({
+	const methods = useForm<TStockItemInput, unknown, TStockItemValues>({
 		resolver: zodResolver(stockItemSchema),
 		defaultValues: EMPTY,
 	})
-	const values = useWatch({ control: form.control })
-	const { errors, isSubmitting } = form.formState
-
-	const openWith = (next: StockItem | null) => {
-		setItem(next)
-		form.reset(
-			next
+	const modal = useFormModal<TStockItem>(item =>
+		methods.reset(
+			item
 				? {
 						...EMPTY,
-						name: tInventory(next.name),
-						sku: next.sku,
-						unit: next.unit as TStockItemInput['unit'],
-						category: next.category,
-						quantity: String(next.quantity),
-						minimum: String(next.minimum),
+						name: tInventory(item.name),
+						sku: item.sku,
+						unit: item.unit as TStockItemInput['unit'],
+						category: item.category,
+						quantity: String(item.quantity),
+						minimum: String(item.minimum),
 						cost: '185',
-						supplier: next.supplier as TStockItemInput['supplier'],
-						expires: next.expires,
+						supplier: item.supplier as TStockItemInput['supplier'],
+						expires: item.expires,
 						place: t('defaultPlace'),
 					}
 				: EMPTY,
-		)
-		setOpen(true)
-	}
-	const close = () => setOpen(false)
+		),
+	)
+	const item = modal.item
 
 	return {
-		open,
-		isEdit: !!item,
+		...modal,
+		methods,
 		title: item ? tInventory(item.name) : t('newItem'),
 		subtitle: item
 			? `${item.sku} · ${tInventory(CATEGORY_LABEL[item.category])}`
 			: t('createSubtitle'),
-		openCreate: () => openWith(null),
-		openEdit: (next: StockItem) => openWith(next),
-		close,
-		values,
-		setUnit: (value: TStockItemInput['unit']) => form.setValue('unit', value),
-		setCategory: (value: TStockItemInput['category']) =>
-			form.setValue('category', value),
-		setAuto: (value: boolean) => form.setValue('autoWriteOff', value),
-		field: (name: keyof TStockItemInput) => ({
-			'aria-invalid': !!errors[name],
-			...form.register(name),
-		}),
-		errorOf: (name: keyof TStockItemInput) => {
-			const message = errors[name]?.message
-			return message ? tValidation(message) : undefined
-		},
-		saving: isSubmitting,
-		save: form.handleSubmit(async () => {
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
-			close()
+			modal.close()
 			toast.show(item ? t('itemUpdated') : t('itemAdded'))
 		}),
-		remove: () => item && onRemove(item, close),
+		remove: () => item && onRemove(item, modal.close),
 	}
 }
 

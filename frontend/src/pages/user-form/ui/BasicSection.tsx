@@ -1,103 +1,113 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
+import { useFieldProps } from '@/shared/lib/form'
 import { AffixInput } from '@/shared/ui/affix-input'
 import { ChoiceChips } from '@/shared/ui/choice-chips'
-import { Field, formGrid3, inputClass } from '@/shared/ui/field'
+import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 
 import { INTERFACE_LANGUAGES } from '../model/Options'
-import type { TUserFormModel } from '../model/useUserForm'
+import type { TUserFormValues } from '../model/Schema'
 
-type TBasicSectionProps = { form: TUserFormModel }
-
-export function BasicSection({ form }: TBasicSectionProps) {
+export function BasicSection() {
 	const t = useTranslations('UserForm')
+	const { control } = useFormContext<TUserFormValues>()
+	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (
 		<FormSection title={t('basicDetails')}>
 			<div className={formGrid3}>
-				<Field label={t('lastName')} required error={form.errorOf('lastName')}>
+				<FormField name='lastName' label={t('lastName')} required>
 					<input
 						className={inputClass}
 						placeholder={t('lastNamePlaceholder')}
-						{...form.field('lastName')}
+						{...inputProps('lastName')}
 					/>
-				</Field>
-				<Field
-					label={t('firstName')}
-					required
-					error={form.errorOf('firstName')}
-				>
+				</FormField>
+				<FormField name='firstName' label={t('firstName')} required>
 					<input
 						className={inputClass}
 						placeholder={t('firstNamePlaceholder')}
-						{...form.field('firstName')}
+						{...inputProps('firstName')}
 					/>
-				</Field>
+				</FormField>
 				<Field label={t('middleName')}>
 					<input
 						className={inputClass}
 						placeholder={t('optional')}
-						{...form.field('middleName')}
+						{...inputProps('middleName')}
 					/>
 				</Field>
-				<Field
+				<FormField
+					name='phone'
 					label={t('mobilePhone')}
 					required
 					hint={t('usedForLoginAndSms')}
-					error={form.errorOf('phone')}
 				>
 					<AffixInput
 						prefix='+996'
 						type='tel'
 						inputMode='tel'
 						placeholder='555 123 456'
-						{...form.field('phone')}
+						{...inputProps('phone')}
 					/>
-				</Field>
-				<Field label='Email' error={form.errorOf('email')}>
+				</FormField>
+				<FormField name='email' label='Email'>
 					<input
 						type='email'
 						className={inputClass}
 						placeholder='name@denta.kg'
-						{...form.field('email')}
+						{...inputProps('email')}
 					/>
-				</Field>
+				</FormField>
 				<Field label={t('birthDate')}>
 					<input
 						className={`${inputClass} font-mono`}
 						placeholder={t('datePlaceholder')}
-						{...form.field('birthDate')}
+						{...inputProps('birthDate')}
 					/>
 				</Field>
 				<Field label={t('branch')} required>
-					<select className={inputClass} {...form.field('branch')}>
+					<select className={inputClass} {...inputProps('branch')}>
 						<option value='alaToo'>{t('branchAlaToo')}</option>
 						<option value='jal'>{t('branchJal')}</option>
 					</select>
 				</Field>
 				<Field as='div' label={t('interfaceLanguage')}>
-					<ChoiceChips
-						aria-label={t('interfaceLanguage')}
-						options={INTERFACE_LANGUAGES.map(id => ({
-							id,
-							label: id.toUpperCase(),
-						}))}
-						value={form.choices.language}
-						onChange={value => form.choose('language', value)}
+					<Controller
+						control={control}
+						name='language'
+						render={({ field }) => (
+							<ChoiceChips
+								aria-label={t('interfaceLanguage')}
+								options={INTERFACE_LANGUAGES.map(id => ({
+									id,
+									label: id.toUpperCase(),
+								}))}
+								value={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				</Field>
 				<Field as='div' label={t('gender')}>
-					<ChoiceChips
-						aria-label={t('gender')}
-						options={[
-							{ id: 'm' as const, label: t('male') },
-							{ id: 'f' as const, label: t('female') },
-						]}
-						value={form.choices.gender}
-						onChange={value => form.choose('gender', value)}
+					<Controller
+						control={control}
+						name='gender'
+						render={({ field }) => (
+							<ChoiceChips
+								aria-label={t('gender')}
+								options={[
+									{ id: 'm' as const, label: t('male') },
+									{ id: 'f' as const, label: t('female') },
+								]}
+								value={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				</Field>
 			</div>

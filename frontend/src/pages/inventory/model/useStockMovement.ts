@@ -9,7 +9,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { mockRequest } from '@/shared/api'
 import { useToast } from '@/shared/ui/toast'
 
-import type { StockItem } from './Stock'
+import type { TStockItem } from './Stock'
 import {
 	movementSchema,
 	type TMovementInput,
@@ -23,53 +23,45 @@ const DEFAULT_QUANTITY: Record<TMovementType, string> = {
 	adj: '0',
 }
 
+function stockAfter(type: TMovementType, current: number, quantity: number) {
+	if (type === 'in') return current + quantity
+	if (type === 'out') return Math.max(0, current - quantity)
+	return quantity
+}
+
 /**
  * Stock in, write-off or count correction for one position
  */
 export function useStockMovement() {
 	const t = useTranslations('StockForm')
 	const tInventory = useTranslations('Inventory')
-	const tValidation = useTranslations('Validation')
 	const toast = useToast()
-	const [item, setItem] = useState<StockItem | null>(null)
+	const [item, setItem] = useState<TStockItem | null>(null)
 
-	const form = useForm<TMovementInput, unknown, TMovementValues>({
+	const methods = useForm<TMovementInput, unknown, TMovementValues>({
 		resolver: zodResolver(movementSchema),
 	})
-	const values = useWatch({ control: form.control })
-	const { errors, isSubmitting } = form.formState
-	const type = values.type ?? 'in'
-	const quantity = Number(values.quantity) || 0
+	const [type = 'in', quantity] = useWatch({
+		control: methods.control,
+		name: ['type', 'quantity'],
+	})
 	const current = item?.quantity ?? 0
-	const after =
-		type === 'in'
-			? current + quantity
-			: type === 'out'
-				? Math.max(0, current - quantity)
-				: quantity
-
-	const setType = (next: TMovementType) => {
-		form.setValue('type', next)
-		form.setValue(
-			'quantity',
-			next === 'adj' ? String(current) : DEFAULT_QUANTITY[next],
-		)
-		form.setValue('reason', t(`reasonDefault_${next}`))
-	}
 	const unit = item ? tInventory(item.unit) : ''
+	const close = () => setItem(null)
 
 	return {
+		methods,
 		open: !!item,
-		openFor: (next: StockItem) => {
+		openFor: (next: TStockItem) => {
 			setItem(next)
-			form.reset({
+			methods.reset({
 				type: 'in',
 				quantity: DEFAULT_QUANTITY.in,
 				date: '09.10.2026',
 				reason: t('reasonDefault_in'),
 			})
 		},
-		close: () => setItem(null),
+		close,
 		name: item ? tInventory(item.name) : '',
 		stockLine: item
 			? t('stockLine', {
@@ -78,18 +70,21 @@ export function useStockMovement() {
 				})
 			: '',
 		type,
-		setType,
+		changeType: (next: TMovementType) => {
+			methods.setValue('type', next)
+			methods.setValue(
+				'quantity',
+				next === 'adj' ? String(current) : DEFAULT_QUANTITY[next],
+			)
+			methods.setValue('reason', t(`reasonDefault_${next}`))
+		},
 		reasonLabel: t(`reasonLabel_${type}`),
-		after: `${after} ${unit}`,
-		register: form.register,
-		quantityError: errors.quantity?.message
-			? tValidation(errors.quantity.message)
-			: undefined,
-		saving: isSubmitting,
-		save: form.handleSubmit(async () => {
+		after: `${stockAfter(type, current, Number(quantity) || 0)} ${unit}`,
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async values => {
 			await mockRequest()
-			setItem(null)
-			toast.show(t(`movementDone_${type}`))
+			close()
+			toast.show(t(`movementDone_${values.type}`))
 		}),
 	}
 }

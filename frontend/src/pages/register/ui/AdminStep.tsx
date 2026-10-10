@@ -4,57 +4,50 @@ import { useTranslations } from 'next-intl'
 
 import { AuthField } from '@/widgets/auth-panel'
 
+import { useFieldError, useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { RegisterFormModel } from '../model/useRegisterForm'
+import type { TRegisterInput } from '../model/Schema'
 
 const linkClass = 'font-semibold text-brand no-underline hover:underline'
 
-type TAdminStepProps = { form: RegisterFormModel }
+type TAdminStepProps = { onBack: () => void }
 
-export function AdminStep({ form }: TAdminStepProps) {
+export function AdminStep({ onBack }: TAdminStepProps) {
 	const t = useTranslations('Register')
-	const agreeError = form.errorOf('agree')
+	const inputProps = useFieldProps<TRegisterInput>()
+	const agreeError = useFieldError('agree')
 
 	return (
 		<div className='flex animate-fade flex-col gap-4'>
-			<AuthField
-				id='fullName'
-				label={t('fullName')}
-				error={form.errorOf('fullName')}
-			>
+			<AuthField name='fullName' label={t('fullName')}>
 				<input
 					id='fullName'
 					autoComplete='name'
 					className={inputLgClass}
-					{...form.fieldProps('fullName')}
+					{...inputProps('fullName')}
 				/>
 			</AuthField>
 			<AuthField
-				id='mobile'
+				name='mobile'
 				label={t('mobilePhone')}
-				error={form.errorOf('mobile')}
 				hint={t('wellTextYouA')}
 			>
 				<PhoneInput
 					id='mobile'
 					placeholder='555 123 456'
-					{...form.fieldProps('mobile')}
+					{...inputProps('mobile')}
 				/>
 			</AuthField>
-			<AuthField
-				id='password'
-				label={t('password')}
-				error={form.errorOf('password')}
-			>
+			<AuthField name='password' label={t('password')}>
 				<PasswordInput
 					id='password'
 					autoComplete='new-password'
 					placeholder={t('atLeast10Characters')}
-					{...form.fieldProps('password')}
+					{...inputProps('password')}
 				/>
 			</AuthField>
 			<div className='flex flex-col gap-1.5'>
@@ -62,7 +55,7 @@ export function AdminStep({ form }: TAdminStepProps) {
 					<input
 						type='checkbox'
 						className='mt-px size-4.5 shrink-0 accent-brand'
-						{...form.fieldProps('agree')}
+						{...inputProps('agree')}
 					/>
 					<span>
 						{t('iAcceptThe')}{' '}
@@ -82,7 +75,7 @@ export function AdminStep({ form }: TAdminStepProps) {
 				)}
 			</div>
 			<div className='flex gap-2.5'>
-				<Button size='lg' onClick={form.back}>
+				<Button size='lg' onClick={onBack}>
 					{t('back')}
 				</Button>
 				<Button type='submit' variant='primary' size='lg' className='flex-1'>

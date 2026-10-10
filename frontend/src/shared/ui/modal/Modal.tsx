@@ -1,6 +1,11 @@
 'use client'
 
-import { type ReactNode, useCallback, useId } from 'react'
+import {
+	type FormEventHandler,
+	type ReactNode,
+	useCallback,
+	useId,
+} from 'react'
 
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -26,6 +31,11 @@ type TModalProps = {
 	 */
 	busy?: boolean
 	footer?: ReactNode
+	/**
+	 * Turns body and footer into a `<form>`; a `type='submit'` footer button
+	 * and Enter in a field both submit it
+	 */
+	onSubmit?: FormEventHandler<HTMLFormElement>
 	children: ReactNode
 }
 
@@ -33,8 +43,18 @@ type TModalProps = {
  * Dialog with a header, a scrolling body and a raised footer
  */
 export function Modal(props: TModalProps) {
-	const { open, onClose, title, subtitle, icon, wide, busy, footer, children } =
-		props
+	const {
+		open,
+		onClose,
+		title,
+		subtitle,
+		icon,
+		wide,
+		busy,
+		footer,
+		onSubmit,
+		children,
+	} = props
 
 	const t = useTranslations('Common')
 	const titleId = useId()
@@ -44,6 +64,20 @@ export function Modal(props: TModalProps) {
 	useEscapeKey(open, close)
 
 	if (!open) return null
+
+	const content = (
+		<>
+			<div className='flex min-h-0 flex-auto flex-col gap-4.5 overflow-auto px-5.5 py-4.5 scrollbar-thin'>
+				{children}
+			</div>
+			{footer && (
+				<div className='flex shrink-0 flex-wrap items-center gap-2.5 rounded-b-3xl border-t border-line bg-raised px-5.5 py-3.5'>
+					{footer}
+				</div>
+			)}
+		</>
+	)
+
 	return (
 		<Overlay onBackdrop={close}>
 			<div
@@ -78,13 +112,20 @@ export function Modal(props: TModalProps) {
 						<X size={16} aria-hidden='true' />
 					</IconButton>
 				</div>
-				<div className='flex min-h-0 flex-auto flex-col gap-4.5 overflow-auto px-5.5 py-4.5 scrollbar-thin'>
-					{children}
-				</div>
-				{footer && (
-					<div className='flex shrink-0 flex-wrap items-center gap-2.5 rounded-b-3xl border-t border-line bg-raised px-5.5 py-3.5'>
-						{footer}
-					</div>
+				{onSubmit ? (
+					<form
+						noValidate
+						className='contents'
+						onSubmit={event => {
+							// the dialog is portaled, but React still bubbles the event to parent forms
+							event.stopPropagation()
+							onSubmit(event)
+						}}
+					>
+						{content}
+					</form>
+				) : (
+					content
 				)}
 			</div>
 		</Overlay>

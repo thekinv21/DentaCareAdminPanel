@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { ROLES, useRoleLabels } from '@/entities/role'
 import {
@@ -18,8 +19,18 @@ import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 
-export type TTypeFilter = 'all' | TUserType
-export type TStatusFilter = 'all' | 'on' | 'off'
+type TTypeFilter = 'all' | TUserType
+
+/**
+ * Query of the user list: type tab, active/disabled status and search text
+ */
+type TUsersFilter = {
+	type: TTypeFilter
+	status: 'all' | 'on' | 'off'
+	search: string
+}
+
+const DEFAULT_FILTER: TUsersFilter = { type: 'all', status: 'all', search: '' }
 
 const TYPE_ORDER: TUserType[] = [
 	'doctor',
@@ -39,9 +50,11 @@ export function useUsersTable() {
 	const roleLabels = useRoleLabels()
 	const format = useFormat()
 	const confirm = useConfirm()
-	const [type, setType] = useState<TTypeFilter>('all')
-	const [status, setStatus] = useState<TStatusFilter>('all')
-	const [query, setQuery] = useState<string>('')
+	const filters = useForm<TUsersFilter>({ defaultValues: DEFAULT_FILTER })
+	const [type, status, search] = useWatch({
+		control: filters.control,
+		name: ['type', 'status', 'search'],
+	})
 	const [users, setUsers] = useState<TUser[]>(USERS)
 
 	const patch = (id: string, change: Partial<TUser>) =>
@@ -114,7 +127,7 @@ export function useUsersTable() {
 				),
 		})
 
-	const needle = query.trim().toLowerCase()
+	const needle = search.trim().toLowerCase()
 
 	const visible = users.filter(
 		user =>
@@ -155,22 +168,17 @@ export function useUsersTable() {
 		users.filter(u => filter === 'all' || u.type === filter).length
 
 	return {
-		type,
-		setType,
+		filters,
 		types: (['all', ...TYPE_ORDER] as TTypeFilter[]).map(id => ({
 			id,
 			label: id === 'all' ? t('all') : labels.typePlural(id),
 			count: count(id),
 		})),
-		status,
-		setStatus,
 		statuses: [
 			{ id: 'all' as const, label: t('all') },
 			{ id: 'on' as const, label: t('activeFilter') },
 			{ id: 'off' as const, label: t('disabledFilter') },
 		],
-		query,
-		setQuery,
 		rows,
 		countText: t('shownOf', { shown: rows.length, total: users.length }),
 		crumb: t('usersBranches', { n: users.length }),

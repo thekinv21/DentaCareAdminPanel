@@ -1,8 +1,8 @@
-export type PatientFlag = 'allergy' | 'recall' | 'plan' | 'foms' | 'new'
+export type TPatientFlag = 'allergy' | 'recall' | 'plan' | 'foms' | 'new'
 
-export type PatientSegment = 'today' | 'active' | 'debt' | 'recall'
+export type TPatientSegment = 'today' | 'active' | 'debt' | 'recall'
 
-export interface Patient {
+export type TPatient = {
 	id: string
 	fullName: string
 	age: string
@@ -18,6 +18,6 @@ export interface Patient {
 	 * Outstanding balance in som
 	 */
 	balance: number
-	flags: PatientFlag[]
-	segment: PatientSegment
+	flags: TPatientFlag[]
+	segment: TPatientSegment
 }

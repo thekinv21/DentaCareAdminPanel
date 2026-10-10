@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/cn'
 import { Card } from '@/shared/ui/card'
 
-import type { SettingsModel } from '../model/useSettings'
+import type { TSettingsModel } from '../model/useSettings'
 
-type TSettingsNavProps = Pick<SettingsModel, 'sections' | 'selectSection'>
+type TSettingsNavProps = Pick<TSettingsModel, 'sections' | 'selectSection'>
 
 export function SettingsNav({ sections, selectSection }: TSettingsNavProps) {
 	const t = useTranslations('Settings')

@@ -8,13 +8,13 @@ import { useConfirm } from '@/shared/ui/confirm-dialog'
 /**
  * Turning a bank on is instant; turning it off asks first (countdown + impact)
  */
-export function useBankSwitch(flip: (id: string) => void) {
+export function useBankSwitch() {
 	const t = useTranslations('ServiceForm')
 	const confirm = useConfirm()
 
-	return (id: string, name: string, on: boolean) => {
-		if (!on) {
-			flip(id)
+	return (name: string, next: boolean, apply: (next: boolean) => void) => {
+		if (next) {
+			apply(true)
 			return
 		}
 		confirm({
@@ -29,7 +29,7 @@ export function useBankSwitch(flip: (id: string) => void) {
 			confirmText: t('disable'),
 			pendingText: t('disabling'),
 			successText: t('bankDisabled', { name }),
-			onConfirm: () => mockRequest().then(() => flip(id)),
+			onConfirm: () => mockRequest().then(() => apply(false)),
 		})
 	}
 }

@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
 import {
-	type Locale,
 	LOCALE_META,
 	LOCALES,
+	type TLocale,
 	useChangeLocale,
 } from '@/shared/lib/i18n'
 
@@ -18,7 +18,8 @@ export function useLanguageMenu() {
 	const locale = useLocale()
 	const setLocale = useChangeLocale()
 	const t = useTranslations('LanguageSwitcher')
-	const [open, setOpen] = useState(false)
+
+	const [open, setOpen] = useState<boolean>(false)
 	const rootRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
@@ -43,15 +44,19 @@ export function useLanguageMenu() {
 		selected: id === locale,
 	}))
 
-	const pick = (id: Locale) => {
+	const pick = (id: TLocale): void => {
 		setOpen(false)
 		if (id !== locale) setLocale(id)
+	}
+
+	const toggle = () => {
+		setOpen(current => !current)
 	}
 
 	return {
 		rootRef,
 		open,
-		toggle: () => setOpen(current => !current),
+		toggle,
 		options,
 		current: LOCALE_META[locale],
 		pick,

@@ -2,10 +2,10 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-import { type Tone, TONE_CLASS } from './Tone'
+import { TONE_CLASS, type TTone } from './Tone'
 
 type TBadgeProps = {
-	tone?: Tone
+	tone?: TTone
 	dot?: boolean
 	className?: string
 	children: ReactNode

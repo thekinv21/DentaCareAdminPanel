@@ -1,10 +1,11 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { translateOptional } from '@/shared/lib/i18n'
-import type { ThemePreference } from '@/shared/lib/theme'
+import type { TThemePreference } from '@/shared/lib/theme'
 import {
 	Field,
 	formGrid2,
@@ -14,43 +15,35 @@ import {
 } from '@/shared/ui/field'
 import { RadioCard } from '@/shared/ui/radio-card'
 
-import type { ProfileSettingsModel } from '../model/useProfileSettings'
+import { PROFILE_FIELDS } from '../model/Profile'
+import type { TProfileFormValues } from '../model/ProfileForm'
+import type { TProfileSettingsModel } from '../model/useProfileSettings'
 
-const FIELDS = [
-	{ label: 'lastName', value: 'kasymova', autoComplete: 'family-name' },
-	{ label: 'firstName', value: 'aigerim', autoComplete: 'given-name' },
-	{ label: 'position', value: 'chiefDentist' },
-	{ label: 'specialty', value: 'generalDentistEndodontist' },
-	{ label: 'phone', value: '+996 555 701 441', mono: true, type: 'tel' },
-	{ label: 'Email', value: 'a.kasymova@denta.kg', type: 'email' },
-	{
-		label: 'diplomaCertificateNumber',
-		value: 'ksma20140912',
-		mono: true,
-	},
-]
-
-type TProfileTabProps = { model: ProfileSettingsModel }
+type TProfileTabProps = { model: TProfileSettingsModel }
 
 export function ProfileTab({ model }: TProfileTabProps) {
 	const t = useTranslations('Profile')
+	const { register } = useFormContext<TProfileFormValues>()
+
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div className={formGrid2}>
-				{FIELDS.map(field => (
-					<Field key={field.label} label={translateOptional(t, field.label)}>
+				{PROFILE_FIELDS.map(field => (
+					<Field key={field.name} label={translateOptional(t, field.label)}>
 						<input
-							className={cn(inputClass, field.mono && 'font-mono')}
-							type={field.type}
-							autoComplete={field.autoComplete}
-							defaultValue={translateOptional(t, field.value)}
+							className={cn(inputClass, 'mono' in field && 'font-mono')}
+							type={'type' in field ? field.type : undefined}
+							autoComplete={
+								'autoComplete' in field ? field.autoComplete : undefined
+							}
+							{...register(`profile.${field.name}`)}
 						/>
 					</Field>
 				))}
 				<Field label={t('defaultChair')}>
-					<select className={inputClass}>
-						<option>{t('chair1GeneralDentistry')}</option>
-						<option>{t('chair2Prosthodontics')}</option>
+					<select className={inputClass} {...register('defaultChair')}>
+						<option value='chair1'>{t('chair1GeneralDentistry')}</option>
+						<option value='chair2'>{t('chair2Prosthodontics')}</option>
 					</select>
 				</Field>
 			</div>
@@ -84,7 +77,7 @@ export function ProfileTab({ model }: TProfileTabProps) {
 						className={inputClass}
 						value={model.theme}
 						onChange={event =>
-							model.setTheme(event.target.value as ThemePreference)
+							model.setTheme(event.target.value as TThemePreference)
 						}
 					>
 						{model.themes.map(item => (
@@ -95,17 +88,14 @@ export function ProfileTab({ model }: TProfileTabProps) {
 					</select>
 				</Field>
 				<Field label={t('defaultScheduleView')}>
-					<select className={inputClass}>
-						<option>{t('week')}</option>
-						<option>{t('day')}</option>
-						<option>{t('month')}</option>
+					<select className={inputClass} {...register('scheduleView')}>
+						<option value='week'>{t('week')}</option>
+						<option value='day'>{t('day')}</option>
+						<option value='month'>{t('month')}</option>
 					</select>
 				</Field>
 				<Field label={t('signatureOnDocuments')} className='col-span-full'>
-					<textarea
-						className={textareaClass}
-						defaultValue={t('kasymovaABChief')}
-					/>
+					<textarea className={textareaClass} {...register('signature')} />
 				</Field>
 			</div>
 		</div>

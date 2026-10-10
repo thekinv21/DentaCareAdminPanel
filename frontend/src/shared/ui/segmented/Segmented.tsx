@@ -4,14 +4,14 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-export interface SegmentedOption<T extends string> {
+type TSegmentedOption<T extends string> = {
 	id: T
 	label: ReactNode
 	count?: ReactNode
 }
 
 type TSegmentedProps<T extends string> = {
-	options: SegmentedOption<T>[]
+	options: TSegmentedOption<T>[]
 	value: T
 	onChange: (value: T) => void
 	'aria-label': string

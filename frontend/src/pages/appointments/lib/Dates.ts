@@ -1,7 +1,7 @@
 /* ISO date helpers in UTC so the calendar does not drift with the browser time zone */
 
 export const toDate = (iso: string) => new Date(`${iso}T00:00:00Z`)
-export const toIso = (date: Date) => date.toISOString().slice(0, 10)
+const toIso = (date: Date) => date.toISOString().slice(0, 10)
 
 export function addDays(iso: string, days: number): string {
 	const date = toDate(iso)

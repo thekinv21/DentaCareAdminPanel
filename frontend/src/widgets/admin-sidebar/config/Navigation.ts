@@ -24,7 +24,7 @@ export type TNavItem = {
 	count?: { value: number; warning?: boolean }
 }
 
-export type TNavGroup = {
+type TNavGroup = {
 	label: string
 	items: TNavItem[]
 }

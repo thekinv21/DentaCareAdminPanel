@@ -1,7 +1,7 @@
-export type LanguageId = 'ru' | 'ky' | 'en'
+export type TLanguageId = 'ru' | 'ky' | 'en'
 
 export const LANGUAGES: {
-	id: LanguageId
+	id: TLanguageId
 	code: string
 	name: string
 	note: string

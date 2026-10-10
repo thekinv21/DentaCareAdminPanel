@@ -1,12 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
-import { forgotSchema, type ForgotValues } from './Schema'
+import { forgotSchema, type TForgotValues } from './Schema'
 
 function maskPhone(phone: string) {
 	const digits = phone.replace(/\D/g, '')
@@ -17,24 +14,16 @@ function maskPhone(phone: string) {
  * Phone form and the "link sent" state of password recovery
  */
 export function useForgotPassword() {
-	const tValidation = useTranslations('Validation')
-	const [sentTo, setSentTo] = useState<string | null>(null)
-	const form = useForm<ForgotValues>({
+	const methods = useForm<TForgotValues>({
 		resolver: zodResolver(forgotSchema),
 		defaultValues: { phone: '' },
 	})
-	const error = form.formState.errors.phone?.message
 
 	return {
-		sent: sentTo !== null,
-		maskedPhone: sentTo ? maskPhone(sentTo) : '',
-		phoneError: error ? tValidation(error) : undefined,
-		phoneProps: {
-			'aria-invalid': !!error,
-			'aria-describedby': error ? 'phone-error' : undefined,
-			...form.register('phone'),
-		},
-		onSubmit: form.handleSubmit(values => setSentTo(values.phone)),
-		changeNumber: () => setSentTo(null),
+		methods,
+		sent: methods.formState.isSubmitSuccessful,
+		maskedPhone: maskPhone(methods.getValues('phone')),
+		submit: methods.handleSubmit(() => {}),
+		changeNumber: () => methods.reset(methods.getValues()),
 	}
 }

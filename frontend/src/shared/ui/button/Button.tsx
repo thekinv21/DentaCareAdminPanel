@@ -1,10 +1,14 @@
 import type { ButtonHTMLAttributes } from 'react'
 
-import { buttonClass, type ButtonSize, type ButtonVariant } from './ButtonClass'
+import {
+	buttonClass,
+	type TButtonSize,
+	type TButtonVariant,
+} from './ButtonClass'
 
 type TButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-	variant?: ButtonVariant
-	size?: ButtonSize
+	variant?: TButtonVariant
+	size?: TButtonSize
 	block?: boolean
 }
 

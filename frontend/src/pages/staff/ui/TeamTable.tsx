@@ -9,9 +9,9 @@ import { Badge } from '@/shared/ui/badge'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { StaffBoardModel } from '../model/useStaffBoard'
+import type { TStaffBoardModel } from '../model/useStaffBoard'
 
-type TTeamTableProps = { people: StaffBoardModel['people'] }
+type TTeamTableProps = { people: TStaffBoardModel['people'] }
 
 export function TeamTable({ people }: TTeamTableProps) {
 	const t = useTranslations('Staff')

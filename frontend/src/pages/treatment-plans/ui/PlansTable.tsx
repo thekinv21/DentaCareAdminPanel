@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { ROUTES } from '@/shared/routes'
 import { Avatar } from '@/shared/ui/avatar'
@@ -21,7 +22,7 @@ type TPlansTableProps = { table: TPlansTableModel }
 
 export function PlansTable({ table }: TPlansTableProps) {
 	const t = useTranslations('TreatmentPlans')
-	const { filter, setFilter, filters, rows } = table
+	const { filters, statuses, rows } = table
 
 	return (
 		<Card
@@ -30,16 +31,23 @@ export function PlansTable({ table }: TPlansTableProps) {
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Segmented
-					aria-label={t('filterPlans')}
-					options={filters}
-					value={filter}
-					onChange={setFilter}
+				<Controller
+					control={filters.control}
+					name='status'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('filterPlans')}
+							options={statuses}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 				<SearchInput
 					label={t('patientOrTooth')}
 					size='sm'
 					className='basis-60'
+					{...filters.register('search')}
 				/>
 			</div>
 			<TableScroll className='min-h-0 flex-auto'>

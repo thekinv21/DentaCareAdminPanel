@@ -1,20 +1,20 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { Badge } from '@/shared/ui/badge'
 import { ToggleChips } from '@/shared/ui/choice-chips'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
-import { SwitchCard } from '@/shared/ui/switch-card'
 
 import { EXPORT_FORMATS, REPORT_BRANCHES, REPORTS } from '../model/Options'
-import type { TUserFormModel } from '../model/useUserForm'
+import type { TUserFormValues } from '../model/Schema'
+import { UserSwitch } from './UserSwitch'
 
-type TAccountantSectionProps = { form: TUserFormModel }
-
-export function AccountantSection({ form }: TAccountantSectionProps) {
+export function AccountantSection() {
 	const t = useTranslations('UserForm')
+	const { control, register } = useFormContext<TUserFormValues>()
 
 	return (
 		<FormSection
@@ -23,19 +23,25 @@ export function AccountantSection({ form }: TAccountantSectionProps) {
 			aside={<Badge tone='warning'>{t('accountantFields')}</Badge>}
 		>
 			<Field as='div' label={t('availableReports')}>
-				<ToggleChips
-					aria-label={t('reports')}
-					options={REPORTS.map(id => ({
-						id: id as string,
-						label: t(`report_${id}`),
-					}))}
-					value={form.choices.reports}
-					onChange={value => form.choose('reports', value)}
+				<Controller
+					control={control}
+					name='reports'
+					render={({ field }) => (
+						<ToggleChips
+							aria-label={t('reports')}
+							options={REPORTS.map(id => ({
+								id: id as string,
+								label: t(`report_${id}`),
+							}))}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 			</Field>
 			<div className={formGrid2}>
 				<Field label={t('exportFormat')}>
-					<select className={inputClass} {...form.field('exportFormat')}>
+					<select className={inputClass} {...register('exportFormat')}>
 						{EXPORT_FORMATS.map(item => (
 							<option key={item} value={item}>
 								{t(`format_${item}`)}
@@ -44,7 +50,7 @@ export function AccountantSection({ form }: TAccountantSectionProps) {
 					</select>
 				</Field>
 				<Field label={t('branchesInReports')}>
-					<select className={inputClass} {...form.field('reportBranches')}>
+					<select className={inputClass} {...register('reportBranches')}>
 						{REPORT_BRANCHES.map(item => (
 							<option key={item} value={item}>
 								{t(item)}
@@ -52,18 +58,16 @@ export function AccountantSection({ form }: TAccountantSectionProps) {
 						))}
 					</select>
 				</Field>
-				<SwitchCard
+				<UserSwitch
+					name='bank'
 					label={t('seeBankStatements')}
 					hint={t('seeBankStatementsHint')}
-					aria-label={t('bankStatements')}
-					checked={form.switches.bank}
-					onChange={form.flip('bank')}
+					ariaLabel={t('bankStatements')}
 				/>
-				<SwitchCard
+				<UserSwitch
+					name='close'
 					label={t('closeTillShift')}
 					hint={t('closeTillShiftHint')}
-					checked={form.switches.close}
-					onChange={form.flip('close')}
 				/>
 			</div>
 		</FormSection>

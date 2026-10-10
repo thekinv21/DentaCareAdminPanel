@@ -1,30 +1,29 @@
 'use client'
 
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { type Path, type PathValue, useForm, useWatch } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
-import { fromMinutes, TODAY, toMinutes } from '@/entities/appointment'
+import { TODAY } from '@/entities/appointment'
+import { DOCTORS } from '@/entities/employee'
+import { PATIENTS } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
+import { useFormModal } from '@/shared/lib/form'
+import { getInitials } from '@/shared/lib/format'
+import { useFormat } from '@/shared/lib/i18n'
+import { avatarTone } from '@/shared/ui/avatar'
 import { useToast } from '@/shared/ui/toast'
 
-import { type CalendarEvent, eventsForDay } from '../lib/Schedule'
+import type { TCalendarEvent } from '../lib/Schedule'
 import {
 	appointmentFormSchema,
 	BOOKING_SERVICES,
+	endTime,
+	EVENT_PATIENT,
 	isoToRu,
-	ruToIso,
 	type TAppointmentFormValues,
 } from './AppointmentFormSchema'
-import { useAppointmentView } from './useAppointmentView'
-
-/**
- * Patient picked for an event that isn't in the patient list (generated mock days)
- */
-export const EVENT_PATIENT = 'event'
 
 const draft = (): TAppointmentFormValues => ({
 	patientId: '',
@@ -42,7 +41,7 @@ const draft = (): TAppointmentFormValues => ({
 	sms2: false,
 })
 
-const fromEvent = (event: CalendarEvent): TAppointmentFormValues => ({
+const fromEvent = (event: TCalendarEvent): TAppointmentFormValues => ({
 	...draft(),
 	patientId: event.patientId ?? EVENT_PATIENT,
 	doctor: event.doctorId,
@@ -60,78 +59,63 @@ const fromEvent = (event: CalendarEvent): TAppointmentFormValues => ({
 })
 
 /**
- * New/edit appointment modal: form state, chair conflict and save
+ * New/edit appointment modal: the form, the chosen patient and save
  */
 export function useAppointmentForm() {
 	const t = useTranslations('AppointmentForm')
-	const tValidation = useTranslations('Validation')
+	const format = useFormat()
 	const toast = useToast()
-	const [open, setOpen] = useState(false)
-	const [event, setEvent] = useState<CalendarEvent | null>(null)
-	const [query, setQuery] = useState('')
 
-	const form = useForm<TAppointmentFormValues>({
+	const methods = useForm<TAppointmentFormValues>({
 		resolver: zodResolver(appointmentFormSchema),
 		defaultValues: draft(),
 	})
-	const values = useWatch({ control: form.control }) as TAppointmentFormValues
-	const { errors, isSubmitting, isSubmitted } = form.formState
+	const modal = useFormModal<TCalendarEvent>(event =>
+		methods.reset(event ? fromEvent(event) : draft()),
+	)
+	const event = modal.item
+	const [patientId, doctor, chair, start, duration] = useWatch({
+		control: methods.control,
+		name: ['patientId', 'doctor', 'chair', 'start', 'duration'],
+	})
 
-	const iso = ruToIso(values.date)
-	const startMin = toMinutes(values.start)
-	const endMin = startMin + values.duration
-	const busy = iso
-		? eventsForDay(iso).find(
-				other =>
-					other.chair === values.chair &&
-					other.key !== event?.key &&
-					toMinutes(other.time) < endMin &&
-					startMin < toMinutes(other.time) + other.duration,
-			)
-		: undefined
-
-	const openWith = (next: CalendarEvent | null) => {
-		setEvent(next)
-		setQuery('')
-		form.reset(next ? fromEvent(next) : draft())
-		setOpen(true)
-	}
-	const close = () => setOpen(false)
-	const view = useAppointmentView({ values, event, query, iso, endMin })
+	const found = PATIENTS.find(p => p.id === patientId)
+	const patientName = found
+		? format.name(found.fullName)
+		: event && patientId
+			? format.name(event.who)
+			: ''
 
 	return {
-		open,
-		event,
-		isEdit: !!event,
-		openCreate: () => openWith(null),
-		openEdit: openWith,
-		close,
-		values,
-		set: <K extends Path<TAppointmentFormValues>>(
-			name: K,
-			value: PathValue<TAppointmentFormValues, K>,
-		) => form.setValue(name, value, { shouldValidate: isSubmitted }),
-		field: (name: 'date' | 'tooth' | 'note') => form.register(name),
-		errorOf: (name: keyof TAppointmentFormValues) => {
-			const message = errors[name]?.message
-			return message ? tValidation(message) : undefined
-		},
-		query,
-		setQuery,
-		end: fromMinutes(endMin),
-		conflict: busy
-			? t('chairBusy', {
-					chair: busy.chair,
-					from: busy.time,
-					to: fromMinutes(toMinutes(busy.time) + busy.duration),
-					who: busy.who.replace(/\.$/, ''),
+		...modal,
+		methods,
+		title: event
+			? t('appointmentOf', { name: patientName })
+			: t('newAppointment'),
+		subtitle: event
+			? t('editSubtitle', {
+					chair,
+					doctor: format.name(DOCTORS[doctor].shortName),
+					from: start,
+					to: endTime(start, duration),
 				})
-			: undefined,
-		...view,
-		saving: isSubmitting,
-		save: form.handleSubmit(async () => {
+			: t('createSubtitle'),
+		patient: patientId
+			? {
+					name: patientName,
+					id: found?.id,
+					phone: found?.phone,
+					allergy: !!found?.flags.includes('allergy'),
+					initials: getInitials(patientName),
+					tone: found
+						? avatarTone(PATIENTS.indexOf(found))
+						: ('neutral' as const),
+				}
+			: null,
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
-			close()
+			modal.close()
 			toast.show(event ? t('appointmentUpdated') : t('appointmentCreated'))
 		}),
 	}

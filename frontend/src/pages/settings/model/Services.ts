@@ -1,6 +1,6 @@
-export type ServiceCategory = 'diag' | 'ther' | 'hyg' | 'surg' | 'orth'
+export type TServiceCategory = 'diag' | 'ther' | 'hyg' | 'surg' | 'orth'
 
-export const SERVICE_CATEGORY: Record<ServiceCategory, string> = {
+export const SERVICE_CATEGORY: Record<TServiceCategory, string> = {
 	diag: 'diagnostics',
 	ther: 'restorativeDentistry',
 	hyg: 'hygiene',
@@ -11,7 +11,7 @@ export const SERVICE_CATEGORY: Record<ServiceCategory, string> = {
 export type TServiceItem = {
 	code: string
 	name: string
-	category: ServiceCategory
+	category: TServiceCategory
 	minutes: number
 	price: number
 	foms: boolean

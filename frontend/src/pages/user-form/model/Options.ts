@@ -39,53 +39,16 @@ export const WORK_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
 
 export const INTERFACE_LANGUAGES = ['ru', 'ky', 'en'] as const
 
-export type TUserSwitch =
-	| 'invite'
-	| 'tfa'
-	| 'active'
-	| 'online'
-	| 'sign'
-	| 'stock'
-	| 'chart'
-	| 'cancel'
-	| 'refund'
-	| 'bank'
-	| 'close'
-
-export const DEFAULT_SWITCHES: Record<TUserSwitch, boolean> = {
-	invite: true,
-	tfa: true,
-	active: true,
-	online: true,
-	sign: false,
-	stock: true,
-	chart: false,
-	cancel: true,
-	refund: false,
-	bank: true,
-	close: true,
-}
-
-export type TUserChoices = {
-	language: (typeof INTERFACE_LANGUAGES)[number]
-	gender: 'm' | 'f'
-	specialties: string[]
-	duration: number
-	color: string
-	doctors: string[]
-	payments: string[]
-	reports: string[]
-	days: string[]
-}
-
-export const DEFAULT_CHOICES: TUserChoices = {
-	language: 'ru',
-	gender: 'm',
-	specialties: ['orth', 'impl'],
-	duration: 60,
-	color: '#1D5DA3',
-	doctors: ['pet'],
-	payments: ['visa', 'mbank', 'komp', 'opt'],
-	reports: ['rev', 'debt', 'bank'],
-	days: ['mon', 'tue', 'thu', 'fri', 'sat'],
-}
+export const USER_SWITCHES = [
+	'invite',
+	'tfa',
+	'active',
+	'online',
+	'sign',
+	'stock',
+	'chart',
+	'cancel',
+	'refund',
+	'bank',
+	'close',
+] as const

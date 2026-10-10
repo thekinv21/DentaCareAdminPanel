@@ -5,12 +5,12 @@ import { useTranslations } from 'next-intl'
 import { Card } from '@/shared/ui/card'
 import { Legend } from '@/shared/ui/legend'
 
-import type { CalendarModel } from '../model/useCalendar'
+import type { TCalendarModel } from '../model/useCalendar'
 import { CalendarToolbar } from './CalendarToolbar'
 import { MonthGrid } from './MonthGrid'
 import { TimeGrid } from './TimeGrid'
 
-type TAppointmentsCalendarProps = { calendar: CalendarModel }
+type TAppointmentsCalendarProps = { calendar: TCalendarModel }
 
 export function AppointmentsCalendar({ calendar }: TAppointmentsCalendarProps) {
 	const t = useTranslations('Appointments')

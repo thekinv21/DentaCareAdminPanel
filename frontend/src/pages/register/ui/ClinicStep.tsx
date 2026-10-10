@@ -6,70 +6,57 @@ import { useTranslations } from 'next-intl'
 import { AuthField } from '@/widgets/auth-panel'
 
 import { cn } from '@/shared/lib/cn'
+import { useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { RegisterFormModel } from '../model/useRegisterForm'
+import { CITIES, type TRegisterInput } from '../model/Schema'
 
-type TClinicStepProps = { form: RegisterFormModel }
+type TClinicStepProps = { onNext: () => void }
 
-export function ClinicStep({ form }: TClinicStepProps) {
+export function ClinicStep({ onNext }: TClinicStepProps) {
 	const t = useTranslations('Register')
+	const inputProps = useFieldProps<TRegisterInput>()
+
 	return (
 		<div className='flex animate-fade flex-col gap-4'>
-			<AuthField
-				id='clinicName'
-				label={t('clinicName')}
-				error={form.errorOf('clinicName')}
-			>
+			<AuthField name='clinicName' label={t('clinicName')}>
 				<input
 					id='clinicName'
 					className={inputLgClass}
 					placeholder={t('eGDentaAla')}
-					{...form.fieldProps('clinicName')}
+					{...inputProps('clinicName')}
 				/>
 			</AuthField>
 			<div className='grid grid-cols-[1fr_140px] gap-3'>
-				<AuthField id='city' label={t('city')}>
-					<select
-						id='city'
-						className={inputLgClass}
-						{...form.fieldProps('city')}
-					>
-						{form.cities.map(city => (
-							<option key={city.value} value={city.value}>
-								{city.label}
+				<AuthField name='city' label={t('city')}>
+					<select id='city' className={inputLgClass} {...inputProps('city')}>
+						{CITIES.map(city => (
+							<option key={city} value={city}>
+								{t(city)}
 							</option>
 						))}
 					</select>
 				</AuthField>
-				<AuthField
-					id='chairs'
-					label={t('chairs')}
-					error={form.errorOf('chairs')}
-				>
+				<AuthField name='chairs' label={t('chairs')}>
 					<input
 						id='chairs'
 						type='number'
 						min={1}
 						className={cn(inputLgClass, 'font-mono')}
-						{...form.fieldProps('chairs')}
+						{...inputProps('chairs')}
 					/>
 				</AuthField>
 			</div>
-			<AuthField
-				id='clinicPhone'
-				label={t('clinicPhone')}
-				error={form.errorOf('clinicPhone')}
-			>
+			<AuthField name='clinicPhone' label={t('clinicPhone')}>
 				<PhoneInput
 					id='clinicPhone'
 					placeholder='312 90 41 41'
-					{...form.fieldProps('clinicPhone')}
+					{...inputProps('clinicPhone')}
 				/>
 			</AuthField>
-			<Button variant='primary' size='lg' block onClick={form.next}>
+			<Button variant='primary' size='lg' block onClick={onNext}>
 				{t('continue')}
 				<ChevronRight size={18} aria-hidden='true' />
 			</Button>

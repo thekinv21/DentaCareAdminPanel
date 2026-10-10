@@ -8,6 +8,7 @@ import {
 	UserRoundCheck,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { type TUserType, USER_TYPES, useUserLabels } from '@/entities/user'
 
@@ -15,7 +16,7 @@ import { cn } from '@/shared/lib/cn'
 import { FormSection } from '@/shared/ui/form-section'
 import { ToothIcon } from '@/shared/ui/logo'
 
-import type { TUserFormModel } from '../model/useUserForm'
+import type { TUserFormValues } from '../model/Schema'
 
 const ICON: Record<TUserType, LucideIcon | typeof ToothIcon> = {
 	chief: Star,
@@ -25,11 +26,13 @@ const ICON: Record<TUserType, LucideIcon | typeof ToothIcon> = {
 	accountant: Calculator,
 }
 
-type TUserTypePickerProps = { form: TUserFormModel }
+type TUserTypePickerProps = { onChange: (type: TUserType) => void }
 
-export function UserTypePicker({ form }: TUserTypePickerProps) {
+export function UserTypePicker({ onChange }: TUserTypePickerProps) {
 	const t = useTranslations('UserForm')
 	const labels = useUserLabels()
+	const { control } = useFormContext<TUserFormValues>()
+	const current = useWatch({ control, name: 'type' })
 
 	return (
 		<FormSection
@@ -46,7 +49,7 @@ export function UserTypePicker({ form }: TUserTypePickerProps) {
 				className='grid grid-cols-5 gap-2.5 max-[1100px]:grid-cols-3 max-[720px]:grid-cols-2'
 			>
 				{USER_TYPES.map(type => {
-					const on = form.type === type
+					const on = current === type
 					const Icon = ICON[type]
 					return (
 						<button
@@ -54,7 +57,7 @@ export function UserTypePicker({ form }: TUserTypePickerProps) {
 							type='button'
 							role='radio'
 							aria-checked={on}
-							onClick={() => form.setType(type)}
+							onClick={() => onChange(type)}
 							className={cn(
 								'flex flex-col items-start gap-2 rounded-2xl p-3 text-left text-ink',
 								on

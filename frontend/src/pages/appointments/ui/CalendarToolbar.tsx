@@ -2,13 +2,14 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { Button } from '@/shared/ui/button'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 
-import type { CalendarModel } from '../model/useCalendar'
+import type { TCalendarModel } from '../model/useCalendar'
 
 const DOT: Record<string, string> = {
 	brand: 'bg-brand',
@@ -16,7 +17,7 @@ const DOT: Record<string, string> = {
 	accent: 'bg-accent',
 }
 
-type TCalendarToolbarProps = { calendar: CalendarModel }
+type TCalendarToolbarProps = { calendar: TCalendarModel }
 
 export function CalendarToolbar({ calendar }: TCalendarToolbarProps) {
 	const t = useTranslations('Appointments')
@@ -48,11 +49,17 @@ export function CalendarToolbar({ calendar }: TCalendarToolbarProps) {
 						{calendar.title}
 					</h2>
 				</div>
-				<Segmented
-					aria-label={t('view')}
-					options={calendar.views}
-					value={calendar.view}
-					onChange={calendar.setView}
+				<Controller
+					control={calendar.filters.control}
+					name='view'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('view')}
+							options={calendar.views}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 			</div>
 

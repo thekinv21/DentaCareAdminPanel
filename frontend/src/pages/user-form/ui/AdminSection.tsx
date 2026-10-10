@@ -1,21 +1,21 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { AffixInput } from '@/shared/ui/affix-input'
 import { Badge } from '@/shared/ui/badge'
 import { ToggleChips } from '@/shared/ui/choice-chips'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
-import { SwitchCard } from '@/shared/ui/switch-card'
 
 import { PAYMENT_CHANNELS, TILLS } from '../model/Options'
-import type { TUserFormModel } from '../model/useUserForm'
+import type { TUserFormValues } from '../model/Schema'
+import { UserSwitch } from './UserSwitch'
 
-type TAdminSectionProps = { form: TUserFormModel }
-
-export function AdminSection({ form }: TAdminSectionProps) {
+export function AdminSection() {
 	const t = useTranslations('UserForm')
+	const { control, register } = useFormContext<TUserFormValues>()
 
 	return (
 		<FormSection
@@ -24,22 +24,28 @@ export function AdminSection({ form }: TAdminSectionProps) {
 			aside={<Badge>{t('adminFields')}</Badge>}
 		>
 			<Field as='div' label={t('acceptsPaymentVia')}>
-				<ToggleChips
-					aria-label={t('paymentMethods')}
-					options={PAYMENT_CHANNELS.map(id => ({
-						id: id as string,
-						label: t(`channel_${id}`),
-					}))}
-					value={form.choices.payments}
-					onChange={value => form.choose('payments', value)}
+				<Controller
+					control={control}
+					name='payments'
+					render={({ field }) => (
+						<ToggleChips
+							aria-label={t('paymentMethods')}
+							options={PAYMENT_CHANNELS.map(id => ({
+								id: id as string,
+								label: t(`channel_${id}`),
+							}))}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 			</Field>
 			<div className={formGrid2}>
 				<Field label={t('discountWithoutApproval')} hint={t('discountHint')}>
-					<AffixInput suffix='%' {...form.field('discountLimit')} />
+					<AffixInput suffix='%' {...register('discountLimit')} />
 				</Field>
 				<Field label={t('till')}>
-					<select className={inputClass} {...form.field('till')}>
+					<select className={inputClass} {...register('till')}>
 						{TILLS.map(till => (
 							<option key={till} value={till}>
 								{t(till)}
@@ -47,18 +53,16 @@ export function AdminSection({ form }: TAdminSectionProps) {
 						))}
 					</select>
 				</Field>
-				<SwitchCard
+				<UserSwitch
+					name='cancel'
 					label={t('cancelAppointments')}
 					hint={t('cancelAppointmentsHint')}
-					aria-label={t('cancelAppointmentsShort')}
-					checked={form.switches.cancel}
-					onChange={form.flip('cancel')}
+					ariaLabel={t('cancelAppointmentsShort')}
 				/>
-				<SwitchCard
+				<UserSwitch
+					name='refund'
 					label={t('refunds')}
 					hint={t('refundsHint')}
-					checked={form.switches.refund}
-					onChange={form.flip('refund')}
 				/>
 			</div>
 		</FormSection>

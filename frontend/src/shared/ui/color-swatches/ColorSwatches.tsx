@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from 'react'
 
-export type TSwatch = { color: string; name: string }
+type TSwatch = { color: string; name: string }
 
 type TColorSwatchesProps = {
 	swatches: TSwatch[]

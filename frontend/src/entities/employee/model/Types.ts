@@ -1,9 +1,9 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
-export type DoctorId = 'kas' | 'pet' | 'tok'
+export type TDoctorId = 'kas' | 'pet' | 'tok'
 
-export interface Doctor {
-	id: DoctorId
+export type TDoctor = {
+	id: TDoctorId
 	/**
 	 * Short form used in schedules: "Касымова А."
 	 */
@@ -14,20 +14,20 @@ export interface Doctor {
 	 * Calendar color token
 	 */
 	color: 'brand' | 'info' | 'accent'
-	tone: Tone
+	tone: TTone
 }
 
-export type StaffRole = 'dentist' | 'assistant' | 'reception'
-export type StaffStatus = 'on' | 'off' | 'leave'
+export type TStaffRole = 'dentist' | 'assistant' | 'reception'
+export type TStaffStatus = 'on' | 'off' | 'leave'
 
-export interface StaffMember {
+export type TStaffMember = {
 	id: string
 	fullName: string
-	role: StaffRole
+	role: TStaffRole
 	specialty: string
-	status: StaffStatus
+	status: TStaffStatus
 	todayShift: string
 	workplace: string
 	phone: string
-	tone: Tone
+	tone: TTone
 }

@@ -13,6 +13,7 @@ import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
 import { useBilling } from '../model/useBilling'
 import { useInvoiceActions } from '../model/useInvoiceActions'
 import { useInvoiceForm } from '../model/useInvoiceForm'
+import { usePayment } from '../model/usePayment'
 import { InvoiceFormModal } from './InvoiceFormModal'
 import { InvoicesTable } from './InvoicesTable'
 import { PaymentPanel } from './PaymentPanel'
@@ -21,6 +22,7 @@ export function BillingPage() {
 	const t = useTranslations('Billing')
 	const methods = usePaymentMethods()
 	const form = useInvoiceForm()
+	const payment = usePayment()
 	const actions = useInvoiceActions(
 		invoice => methods.byId(invoice.method).name,
 	)
@@ -29,6 +31,7 @@ export function BillingPage() {
 		onEdit: form.openEdit,
 		onVoid: actions.voidInvoice,
 		onRefund: actions.refund,
+		onPay: payment.start,
 	})
 
 	return (
@@ -73,7 +76,7 @@ export function BillingPage() {
 				</StatGrid>
 				<section className='flex flex-[1_0_auto] flex-wrap items-stretch gap-4'>
 					<InvoicesTable billing={billing} />
-					<PaymentPanel billing={billing} />
+					<PaymentPanel payment={payment} />
 				</section>
 			</PageContent>
 			<InvoiceFormModal form={form} />

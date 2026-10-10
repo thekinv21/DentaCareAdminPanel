@@ -1,8 +1,8 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
-import type { InvoiceStatus, PaymentMethod, PaymentMethodId } from './Types'
+import type { TInvoiceStatus, TPaymentMethod, TPaymentMethodId } from './Types'
 
-export const PAYMENT_METHODS: Record<PaymentMethodId, PaymentMethod> = {
+export const PAYMENT_METHODS: Record<TPaymentMethodId, TPaymentMethod> = {
 	visa: {
 		id: 'visa',
 		kind: 'cardPosTerminal',
@@ -30,8 +30,8 @@ export const PAYMENT_METHODS: Record<PaymentMethodId, PaymentMethod> = {
 }
 
 export const INVOICE_STATUS: Record<
-	InvoiceStatus,
-	{ label: string; tone: Tone }
+	TInvoiceStatus,
+	{ label: string; tone: TTone }
 > = {
 	paid: { label: 'paid', tone: 'ok' },
 	partial: { label: 'partial', tone: 'info' },

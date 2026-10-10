@@ -8,12 +8,11 @@ import { FormSection } from '@/shared/ui/form-section'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import type { TPermissionMatrixModel } from '../model/usePermissionMatrix'
+import { usePermissionMatrix } from '../model/usePermissionMatrix'
 
-type TPermissionMatrixProps = { matrix: TPermissionMatrixModel }
-
-export function PermissionMatrix({ matrix }: TPermissionMatrixProps) {
+export function PermissionMatrix() {
 	const t = useTranslations('RoleForm')
+	const matrix = usePermissionMatrix()
 	const scopes = [
 		{ id: 'all' as const, label: t('scopeAll') },
 		{ id: 'own' as const, label: t('scopeOwn') },

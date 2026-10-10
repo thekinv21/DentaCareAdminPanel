@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { USER_TYPE, useUserLabels } from '@/entities/user'
 
@@ -10,16 +11,18 @@ import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
 import { Card } from '@/shared/ui/card'
 
+import type { TUserFormValues } from '../model/Schema'
 import { useRoleAccess } from '../model/useRoleAccess'
 import type { TUserFormModel } from '../model/useUserForm'
 
-type TUserPreviewProps = { form: TUserFormModel }
+type TUserPreviewProps = { preview: TUserFormModel['preview'] }
 
-export function UserPreview({ form }: TUserPreviewProps) {
+export function UserPreview({ preview }: TUserPreviewProps) {
 	const t = useTranslations('UserForm')
 	const labels = useUserLabels()
-	const access = useRoleAccess(form.role)
-	const { preview } = form
+	const { control } = useFormContext<TUserFormValues>()
+	const [type, role] = useWatch({ control, name: ['type', 'role'] })
+	const access = useRoleAccess(role)
 
 	return (
 		<Card
@@ -40,9 +43,7 @@ export function UserPreview({ form }: TUserPreviewProps) {
 					<div className='text-[12.5px] text-ink-muted'>{preview.sub}</div>
 				</div>
 				<div className='flex flex-wrap justify-center gap-1.5'>
-					<Badge tone={USER_TYPE[form.type].tone}>
-						{labels.type(form.type)}
-					</Badge>
+					<Badge tone={USER_TYPE[type].tone}>{labels.type(type)}</Badge>
 					<Badge>
 						{t('roleColon')} {access.name}
 					</Badge>

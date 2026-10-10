@@ -1,2 +1,2 @@
 export { ThemeProvider, useTheme } from './ThemeProvider'
-export type { ThemePreference } from './ThemeProvider'
+export type { TThemePreference } from './ThemeProvider'

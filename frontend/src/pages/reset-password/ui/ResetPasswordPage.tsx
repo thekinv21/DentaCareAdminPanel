@@ -4,15 +4,15 @@ import Link from 'next/link'
 
 import { Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { FormProvider } from 'react-hook-form'
 
-import { AuthField, AuthHeading, AuthStack } from '@/widgets/auth-panel'
+import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
 import { ROUTES } from '@/shared/routes'
 import { Button, buttonClass } from '@/shared/ui/button'
-import { PasswordInput } from '@/shared/ui/password-input'
 
 import { useResetPassword } from '../model/useResetPassword'
-import { PasswordStrength } from './PasswordStrength'
+import { ResetPasswordFields } from './ResetPasswordFields'
 
 export function ResetPasswordPage() {
 	const t = useTranslations('ResetPassword')
@@ -47,51 +47,18 @@ export function ResetPasswordPage() {
 				title={t('createANewPassword')}
 				subtitle={t('forAigerimKasymovasAccount')}
 			/>
-			<form
-				noValidate
-				onSubmit={reset.onSubmit}
-				className='flex flex-col gap-4'
-			>
-				<AuthField
-					id='password'
-					label={t('newPassword')}
-					error={reset.passwordError}
+			<FormProvider {...reset.methods}>
+				<form
+					noValidate
+					onSubmit={reset.submit}
+					className='flex flex-col gap-4'
 				>
-					<PasswordInput
-						id='password'
-						autoComplete='new-password'
-						placeholder={t('atLeast10Characters')}
-						{...reset.passwordProps}
-					/>
-				</AuthField>
-				<PasswordStrength
-					meter={reset.meter}
-					strength={reset.strength}
-					rules={reset.rules}
-				/>
-				<AuthField
-					id='confirm'
-					label={t('repeatPassword')}
-					error={reset.confirmError}
-				>
-					<PasswordInput
-						id='confirm'
-						autoComplete='new-password'
-						{...reset.confirmProps}
-					/>
-				</AuthField>
-				<label className='inline-flex cursor-pointer items-start gap-2.5 text-sm leading-5'>
-					<input
-						type='checkbox'
-						className='mt-px size-4.5 shrink-0 accent-brand'
-						{...reset.signOutProps}
-					/>
-					{t('signOutOfAll')}
-				</label>
-				<Button type='submit' variant='primary' size='lg' block>
-					{t('savePassword')}
-				</Button>
-			</form>
+					<ResetPasswordFields />
+					<Button type='submit' variant='primary' size='lg' block>
+						{t('savePassword')}
+					</Button>
+				</form>
+			</FormProvider>
 		</AuthStack>
 	)
 }

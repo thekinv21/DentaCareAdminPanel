@@ -2,6 +2,7 @@
 
 import { Download, Funnel } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { Button } from '@/shared/ui/button'
 import { SearchInput } from '@/shared/ui/search-input'
@@ -13,20 +14,29 @@ type TPatientsToolbarProps = { table: TPatientsTableModel }
 
 export function PatientsToolbar({ table }: TPatientsToolbarProps) {
 	const t = useTranslations('Patients')
+	const { control, register } = table.filters
+
 	return (
 		<>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Segmented
-					aria-label={t('segments')}
-					options={table.tabs}
-					value={table.tab}
-					onChange={table.setTab}
+				<Controller
+					control={control}
+					name='tab'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('segments')}
+							options={table.tabs}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
-				<div className='flex flex-wrap lg:flex-nowrap gap-2'>
+				<div className='flex flex-wrap gap-2 lg:flex-nowrap'>
 					<SearchInput
 						label={t('nameIdOrPhone')}
 						size='sm'
 						className='basis-60'
+						{...register('search')}
 					/>
 					<Button size='sm' className='h-9'>
 						<Funnel size={15} aria-hidden='true' />

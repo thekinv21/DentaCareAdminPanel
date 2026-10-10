@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl'
 import { Badge } from '@/shared/ui/badge'
 
 import { PATIENT_FLAG } from '../model/Flags'
-import type { PatientFlag } from '../model/Types'
+import type { TPatientFlag } from '../model/Types'
 
-type TPatientFlagBadgeProps = { flag: PatientFlag }
+type TPatientFlagBadgeProps = { flag: TPatientFlag }
 
 export function PatientFlagBadge({ flag }: TPatientFlagBadgeProps) {
 	const t = useTranslations('Patient')

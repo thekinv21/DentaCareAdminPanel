@@ -13,7 +13,7 @@ export const resetSchema = z
 		message: 'passwordsDontMatch',
 	})
 
-export type ResetValues = z.infer<typeof resetSchema>
+export type TResetValues = z.infer<typeof resetSchema>
 
 export const STRENGTH = [
 	{ label: 'tooSimple', color: 'bg-danger', text: 'text-danger' },

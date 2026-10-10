@@ -1,7 +1,10 @@
 import { z } from 'zod'
 
+export const INVOICE_BASES = ['plan', 'visit', 'none'] as const
+export const FOMS_OPTIONS = ['no', 'yes'] as const
+
 export const invoiceFormSchema = z.object({
-	basis: z.enum(['plan', 'visit', 'none']),
+	basis: z.enum(INVOICE_BASES),
 	dueDate: z
 		.string()
 		.trim()
@@ -16,7 +19,7 @@ export const invoiceFormSchema = z.object({
 		)
 		.min(1, 'addAtLeastOneItem'),
 	discount: z.coerce.number<string>().min(0).max(100, 'discountUpTo100'),
-	foms: z.enum(['no', 'yes']),
+	foms: z.enum(FOMS_OPTIONS),
 	sms: z.boolean(),
 })
 

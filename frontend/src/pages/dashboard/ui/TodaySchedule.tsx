@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Ellipsis } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { AppointmentStatusBadge } from '@/entities/appointment'
 
@@ -19,7 +20,7 @@ import { useTodaySchedule } from '../model/useTodaySchedule'
 
 export function TodaySchedule() {
 	const t = useTranslations('Dashboard')
-	const { filter, setFilter, filters, rows } = useTodaySchedule()
+	const { filters, phases, rows } = useTodaySchedule()
 
 	return (
 		<Card
@@ -31,11 +32,17 @@ export function TodaySchedule() {
 				title={t('todaysSchedule')}
 				description={t('n4Chairs3Dentists')}
 				actions={
-					<Segmented
-						aria-label={t('filter')}
-						options={filters}
-						value={filter}
-						onChange={setFilter}
+					<Controller
+						control={filters.control}
+						name='phase'
+						render={({ field }) => (
+							<Segmented
+								aria-label={t('filter')}
+								options={phases}
+								value={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				}
 			/>

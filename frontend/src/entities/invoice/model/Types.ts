@@ -1,7 +1,7 @@
-export type PaymentMethodId = 'visa' | 'mbank' | 'komp' | 'optima'
+export type TPaymentMethodId = 'visa' | 'mbank' | 'komp' | 'optima'
 
-export interface PaymentMethod {
-	id: PaymentMethodId
+export type TPaymentMethod = {
+	id: TPaymentMethodId
 	/**
 	 * Message key in the Invoice namespace
 	 */
@@ -16,9 +16,9 @@ export interface PaymentMethod {
 	barClass: string
 }
 
-export type InvoiceStatus = 'paid' | 'partial' | 'due' | 'overdue'
+export type TInvoiceStatus = 'paid' | 'partial' | 'due' | 'overdue'
 
-export interface Invoice {
+export type TInvoice = {
 	number: string
 	patientId: string
 	patientName: string
@@ -26,6 +26,6 @@ export interface Invoice {
 	dueDate: string
 	amount: number
 	balance: number
-	method: PaymentMethodId
-	status: InvoiceStatus
+	method: TPaymentMethodId
+	status: TInvoiceStatus
 }

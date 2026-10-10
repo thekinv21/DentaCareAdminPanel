@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl'
 import { Badge } from '@/shared/ui/badge'
 
 import { APPOINTMENT_STATUS } from '../model/Status'
-import type { AppointmentStatus } from '../model/Types'
+import type { TAppointmentStatus } from '../model/Types'
 
 type TAppointmentStatusBadgeProps = {
-	status: AppointmentStatus
+	status: TAppointmentStatus
 }
 
 export function AppointmentStatusBadge({

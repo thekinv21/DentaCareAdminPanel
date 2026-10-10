@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
-import { type Tone, TONE_CLASS } from '@/shared/ui/badge'
+import { TONE_CLASS, type TTone } from '@/shared/ui/badge'
 
 type TAvatarProps = {
 	initials: string
-	tone?: Tone
+	tone?: TTone
 	size?: number
 	className?: string
 	children?: ReactNode
@@ -37,11 +37,11 @@ export function Avatar(props: TAvatarProps) {
 	)
 }
 
-const AVATAR_TONES: Tone[] = ['brand', 'accent', 'info', 'ok', 'warning']
+const AVATAR_TONES: TTone[] = ['brand', 'accent', 'info', 'ok', 'warning']
 
 /**
  * Stable tint for list rows by index
  */
-export function avatarTone(index: number): Tone {
+export function avatarTone(index: number): TTone {
 	return AVATAR_TONES[index % AVATAR_TONES.length]
 }

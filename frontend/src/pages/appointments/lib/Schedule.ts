@@ -1,14 +1,14 @@
 import {
-	type AppointmentStatus,
-	type DoctorKey,
 	shortPersonName,
+	type TAppointmentStatus,
+	type TDoctorKey,
 	TODAY,
 	TODAY_APPOINTMENTS,
 } from '@/entities/appointment'
 
 import { toDate, weekday } from './Dates'
 
-export interface CalendarEvent {
+export type TCalendarEvent = {
 	key: string
 	/**
 	 * ISO day the event belongs to
@@ -19,9 +19,9 @@ export interface CalendarEvent {
 	who: string
 	what: string
 	patientId?: string
-	doctorId: DoctorKey
+	doctorId: TDoctorKey
 	chair: number
-	status: AppointmentStatus
+	status: TAppointmentStatus
 }
 
 /* Mock schedule: today is fixed, other days are generated deterministically */
@@ -66,9 +66,9 @@ const SLOTS = [
 	'16:00',
 	'17:00',
 ]
-const DOCTOR_KEYS: DoctorKey[] = ['kas', 'pet', 'tok']
+const DOCTOR_KEYS: TDoctorKey[] = ['kas', 'pet', 'tok']
 
-const TODAY_EVENTS: CalendarEvent[] = TODAY_APPOINTMENTS.map(a => ({
+const TODAY_EVENTS: TCalendarEvent[] = TODAY_APPOINTMENTS.map(a => ({
 	key: a.id,
 	date: TODAY,
 	time: a.time,
@@ -81,7 +81,7 @@ const TODAY_EVENTS: CalendarEvent[] = TODAY_APPOINTMENTS.map(a => ({
 	status: a.status,
 }))
 
-export function eventsForDay(iso: string): CalendarEvent[] {
+export function eventsForDay(iso: string): TCalendarEvent[] {
 	if (iso === TODAY) return TODAY_EVENTS
 	const dow = weekday(iso)
 	if (dow === 6) return []
@@ -90,7 +90,7 @@ export function eventsForDay(iso: string): CalendarEvent[] {
 	const day = date.getUTCDate() + date.getUTCMonth() * 31
 	const count = dow === 5 ? 3 : 5 + (day % 3)
 	const used = new Set<number>()
-	const events: CalendarEvent[] = []
+	const events: TCalendarEvent[] = []
 
 	for (let i = 0; i < count; i++) {
 		let slot = (day * 5 + i * 3) % SLOTS.length
@@ -101,7 +101,7 @@ export function eventsForDay(iso: string): CalendarEvent[] {
 		const doctorId = DOCTOR_KEYS[(day + i) % 3]
 		const chair =
 			doctorId === 'kas' ? 1 : doctorId === 'pet' ? 2 : i % 2 ? 3 : 4
-		const status: AppointmentStatus =
+		const status: TAppointmentStatus =
 			iso < TODAY
 				? (day + i) % 9 === 0
 					? 'noshow'

@@ -4,19 +4,12 @@ import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
 
-import type { ResetPasswordModel } from '../model/useResetPassword'
+import { usePasswordStrength } from '../model/usePasswordStrength'
 
-type TPasswordStrengthProps = Pick<
-	ResetPasswordModel,
-	'meter' | 'strength' | 'rules'
->
-
-export function PasswordStrength({
-	meter,
-	strength,
-	rules,
-}: TPasswordStrengthProps) {
+export function PasswordStrength() {
 	const t = useTranslations('ResetPassword')
+	const { meter, strength, rules } = usePasswordStrength()
+
 	return (
 		<>
 			<div className='-mt-2 flex flex-col gap-1.5'>

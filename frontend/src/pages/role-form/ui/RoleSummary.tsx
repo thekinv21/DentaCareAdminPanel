@@ -8,6 +8,7 @@ import { Avatar } from '@/shared/ui/avatar'
 import { Card } from '@/shared/ui/card'
 
 import type { TRoleFormModel } from '../model/useRoleForm'
+import { useRoleSummary } from '../model/useRoleSummary'
 
 const overlineClass =
 	'mb-2 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'
@@ -16,7 +17,7 @@ type TRoleSummaryProps = { form: TRoleFormModel }
 
 export function RoleSummary({ form }: TRoleSummaryProps) {
 	const t = useTranslations('RoleForm')
-	const { matrix } = form
+	const summary = useRoleSummary(form.fallbackName)
 
 	return (
 		<Card
@@ -26,29 +27,29 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 			<div className='flex items-center gap-3'>
 				<span
 					className='inline-flex size-11 shrink-0 items-center justify-center rounded-[13px] text-white'
-					style={{ background: form.color }}
+					style={{ background: summary.color }}
 				>
 					<ShieldCheck size={20} aria-hidden='true' />
 				</span>
 				<div>
 					<div className='font-display text-[17px] font-extrabold'>
-						{form.previewName}
+						{summary.name}
 					</div>
 					<div className='text-[12.5px] text-ink-muted'>
-						{t('permissionsOf', { n: matrix.granted, total: matrix.total })}
+						{t('permissionsOf', { n: summary.granted, total: summary.total })}
 					</div>
 				</div>
 			</div>
 			<div className='h-1.5 overflow-hidden rounded-full bg-sunken'>
 				<span
 					className='block h-full rounded-full transition-[width] duration-200'
-					style={{ width: `${matrix.percent}%`, background: form.color }}
+					style={{ width: `${summary.percent}%`, background: summary.color }}
 				/>
 			</div>
 			<div>
 				<div className={overlineClass}>{t('summary')}</div>
 				<ul className='flex flex-col gap-1.75 text-[13px]'>
-					{matrix.summary.map(row => (
+					{summary.rows.map(row => (
 						<li key={row.module} className='flex justify-between gap-2'>
 							<span className='font-semibold'>{row.module}</span>
 							<span className='text-right text-ink-muted'>

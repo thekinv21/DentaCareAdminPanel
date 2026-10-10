@@ -1,1 +1,1 @@
-export { formatNumber, formatSom, getInitials } from './Format'
+export { getInitials } from './Format'

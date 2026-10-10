@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Ban, Download, Pencil } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { InvoiceStatusBadge, PaymentMethodTile } from '@/entities/invoice'
 
@@ -16,9 +17,9 @@ import { IconButton } from '@/shared/ui/icon-button'
 import { Segmented } from '@/shared/ui/segmented'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { BillingModel } from '../model/useBilling'
+import type { TBillingModel } from '../model/useBilling'
 
-type TInvoicesTableProps = { billing: BillingModel }
+type TInvoicesTableProps = { billing: TBillingModel }
 
 export function InvoicesTable({ billing }: TInvoicesTableProps) {
 	const t = useTranslations('Billing')
@@ -28,11 +29,17 @@ export function InvoicesTable({ billing }: TInvoicesTableProps) {
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Segmented
-					aria-label={t('filterInvoices')}
-					options={billing.filters}
-					value={billing.filter}
-					onChange={billing.setFilter}
+				<Controller
+					control={billing.filters.control}
+					name='status'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('filterInvoices')}
+							options={billing.statuses}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
 				<Button size='sm'>
 					<Download size={15} aria-hidden='true' />

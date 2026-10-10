@@ -4,9 +4,9 @@ import { CircleAlert, Info, TriangleAlert } from 'lucide-react'
 
 import { cn } from '@/shared/lib/cn'
 
-type AlertTone = 'danger' | 'warning' | 'info' | 'ok'
+type TAlertTone = 'danger' | 'warning' | 'info' | 'ok'
 
-const TONE: Record<AlertTone, string> = {
+const TONE: Record<TAlertTone, string> = {
 	danger: 'bg-danger-soft text-danger',
 	warning: 'bg-warning-soft text-warning',
 	info: 'bg-info-soft text-info',
@@ -21,7 +21,7 @@ const ICON = {
 }
 
 type TAlertProps = {
-	tone?: AlertTone
+	tone?: TAlertTone
 	className?: string
 	children: ReactNode
 }

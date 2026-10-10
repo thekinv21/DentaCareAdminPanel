@@ -1,14 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
-import type { TSystemRoleId } from '@/entities/role'
 import {
 	type TUser,
 	type TUserType,
@@ -23,17 +20,12 @@ import { useFormat } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { useToast } from '@/shared/ui/toast'
 
-import {
-	DEFAULT_CHOICES,
-	DEFAULT_SWITCHES,
-	type TUserChoices,
-	type TUserSwitch,
-} from './Options'
 import { isMedic, type TUserFormValues, userFormSchema } from './Schema'
 import { useUserDangerActions } from './useUserDangerActions'
 
 const EMPTY: TUserFormValues = {
 	type: 'doctor',
+	role: USER_TYPE.doctor.role,
 	lastName: '',
 	firstName: '',
 	middleName: '',
@@ -41,17 +33,39 @@ const EMPTY: TUserFormValues = {
 	email: '',
 	birthDate: '',
 	branch: 'alaToo',
+	language: 'ru',
+	gender: 'm',
+	specialties: ['orth', 'impl'],
 	license: '',
 	experience: '',
 	revenuePercent: '30',
 	chair: 'chair1',
+	duration: 60,
+	color: '#1D5DA3',
+	doctors: ['pet'],
 	qualification: 'dentalAssistant',
+	payments: ['visa', 'mbank', 'komp', 'opt'],
 	discountLimit: '10',
 	till: 'till1',
+	reports: ['rev', 'debt', 'bank'],
 	exportFormat: 'xlsx',
 	reportBranches: 'allBranches',
+	days: ['mon', 'tue', 'thu', 'fri', 'sat'],
 	workStart: '09:00',
 	workEnd: '18:00',
+	switches: {
+		invite: true,
+		tfa: true,
+		active: true,
+		online: true,
+		sign: false,
+		stock: true,
+		chart: false,
+		cancel: true,
+		refund: false,
+		bank: true,
+		close: true,
+	},
 }
 
 /**
@@ -62,6 +76,7 @@ function valuesOf(user: TUser): TUserFormValues {
 	return {
 		...EMPTY,
 		type: user.type,
+		role: user.role,
 		lastName,
 		firstName,
 		middleName: 'Николаевич',
@@ -77,12 +92,11 @@ function valuesOf(user: TUser): TUserFormValues {
 }
 
 /**
- * Create/edit user form: validated fields, type-dependent sections, chips
- * and switches, plus the role that defines the permissions preview
+ * Create/edit user form: type-dependent sections, the role that defines the
+ * permissions preview, and the danger actions of an existing user
  */
 export function useUserForm(userId?: string) {
 	const t = useTranslations('UserForm')
-	const tValidation = useTranslations('Validation')
 	const labels = useUserLabels()
 	const format = useFormat()
 	const toast = useToast()
@@ -90,15 +104,11 @@ export function useUserForm(userId?: string) {
 	const user = userId ? (USERS.find(u => u.id === userId) ?? USERS[1]) : null
 	const isEdit = !!user
 
-	const form = useForm<TUserFormValues>({
+	const methods = useForm<TUserFormValues>({
 		resolver: zodResolver(userFormSchema),
 		defaultValues: user ? valuesOf(user) : EMPTY,
 	})
-	const { errors, isSubmitting } = form.formState
-	const type = useWatch({ control: form.control, name: 'type' })
-	const [role, setRole] = useState<TSystemRoleId | null>(user?.role ?? null)
-	const [choices, setChoices] = useState<TUserChoices>(DEFAULT_CHOICES)
-	const [switches, setSwitches] = useState(DEFAULT_SWITCHES)
+	const type = useWatch({ control: methods.control, name: 'type' })
 
 	const fullName = user ? format.name(user.fullName) : t('newEmployee')
 	const danger = useUserDangerActions({
@@ -109,18 +119,22 @@ export function useUserForm(userId?: string) {
 			tone: user?.tone,
 		},
 		phone: user?.phone ?? '',
-		onDeactivated: () => setSwitches(s => ({ ...s, active: false })),
+		onDeactivated: () => methods.setValue('switches.active', false),
 		onDeleted: () => router.push(ROUTES.users),
 	})
 
 	return {
+		...danger,
+		methods,
 		isEdit,
 		title: isEdit ? fullName : t('newUser'),
 		crumbTail: isEdit ? t('editing') : t('creating'),
-		type,
-		setType: (next: TUserType) => {
-			form.setValue('type', next)
-			setRole(null)
+		changeType: (next: TUserType) => {
+			methods.setValue('type', next)
+			methods.setValue(
+				'role',
+				next === 'chief' && isEdit ? 'owner' : USER_TYPE[next].role,
+			)
 		},
 		show: {
 			medic: isMedic(type),
@@ -130,35 +144,18 @@ export function useUserForm(userId?: string) {
 			accountant: type === 'accountant',
 			schedule: isMedic(type) || type === 'assistant',
 		},
-		role: role ?? (type === 'chief' && isEdit ? 'owner' : USER_TYPE[type].role),
-		setRole,
-		choices,
-		choose: <K extends keyof TUserChoices>(key: K, value: TUserChoices[K]) =>
-			setChoices(current => ({ ...current, [key]: value })),
-		switches,
-		flip: (key: TUserSwitch) => (value: boolean) =>
-			setSwitches(current => ({ ...current, [key]: value })),
-		field: (name: keyof TUserFormValues) => ({
-			'aria-invalid': !!errors[name],
-			...form.register(name),
-		}),
-		errorOf: (name: keyof TUserFormValues) => {
-			const message = errors[name]?.message
-			return message ? tValidation(message) : undefined
-		},
 		preview: {
 			name: fullName,
 			sub: user ? user.phone : t('fillNameAndPhone'),
 			initials: user ? getInitials(fullName) : '+',
 			tone: user?.tone ?? ('neutral' as const),
 		},
-		saving: isSubmitting,
-		save: form.handleSubmit(async () => {
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
 			toast.show(isEdit ? t('changesSaved') : t('userCreatedInviteSent'))
 			if (!isEdit) router.push(ROUTES.users)
 		}),
-		...danger,
 	}
 }
 

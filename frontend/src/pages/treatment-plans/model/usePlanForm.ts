@@ -1,78 +1,64 @@
 'use client'
 
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { DOCTORS } from '@/entities/employee'
 
 import { mockRequest } from '@/shared/api'
+import { useFormModal } from '@/shared/lib/form'
 import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
 import { useToast } from '@/shared/ui/toast'
 
-import { planTotals } from '../lib/PlanTotals'
 import {
 	DEFAULT_STAGES,
-	INSTALLMENT_MONTHS,
-	NEW_STAGE,
+	PLAN_DOCTORS,
 	planFormSchema,
 	type TPlanFormInput,
 	type TPlanFormValues,
 } from './PlanFormSchema'
-import type { TreatmentPlan } from './Plans'
+import type { TTreatmentPlan } from './Plans'
 
 const DOCTOR_BY_NAME = Object.fromEntries(
 	Object.values(DOCTORS).map(d => [d.shortName, d.id]),
-) as Record<string, 'kas' | 'pet' | 'tok'>
+) as Record<string, TPlanFormInput['doctor']>
 
 const NEW_PLAN_PATIENT = { name: 'Айгуль Тойчубекова', id: 'DN-20418' }
 
 /**
- * New/edit treatment plan: stages with live totals, ФОМС share and installments
+ * New/edit treatment plan in a modal
  */
 export function usePlanForm(
-	onRemove: (plan: TreatmentPlan, onDone: () => void) => void,
+	onRemove: (plan: TTreatmentPlan, onDone: () => void) => void,
 ) {
 	const t = useTranslations('PlanForm')
 	const tPlans = useTranslations('TreatmentPlans')
-	const tValidation = useTranslations('Validation')
 	const format = useFormat()
 	const toast = useToast()
-	const [open, setOpen] = useState(false)
-	const [plan, setPlan] = useState<TreatmentPlan | null>(null)
 
-	const form = useForm<TPlanFormInput, unknown, TPlanFormValues>({
+	const methods = useForm<TPlanFormInput, unknown, TPlanFormValues>({
 		resolver: zodResolver(planFormSchema),
 	})
-	const stages = useFieldArray({ control: form.control, name: 'stages' })
-	const watched = useWatch({ control: form.control })
-	const { errors, isSubmitting } = form.formState
-
-	const { lines, sum, discount, foms, total } = planTotals(watched.stages ?? [])
-
-	const translateStages = (list: TPlanFormInput['stages']) =>
-		list.map(stage => ({ ...stage, service: t(stage.service) }))
-
-	const openWith = (next: TreatmentPlan | null) => {
-		setPlan(next)
-		form.reset({
-			doctor: next ? (DOCTOR_BY_NAME[next.doctor] ?? 'kas') : 'kas',
-			name: next ? tPlans(next.title) : t('defaultPlanName'),
-			stages: translateStages(DEFAULT_STAGES),
-			payment: next ? 'full' : 'inst',
+	const modal = useFormModal<TTreatmentPlan>(plan =>
+		methods.reset({
+			doctor: plan ? (DOCTOR_BY_NAME[plan.doctor] ?? 'kas') : 'kas',
+			name: plan ? tPlans(plan.title) : t('defaultPlanName'),
+			stages: DEFAULT_STAGES.map(stage => ({
+				...stage,
+				service: t(stage.service),
+			})),
+			payment: plan ? 'full' : 'inst',
 			note: '',
-		})
-		setOpen(true)
-	}
-	const close = () => setOpen(false)
+		}),
+	)
+	const plan = modal.item
 	const patientName = format.name(plan?.patientName ?? NEW_PLAN_PATIENT.name)
 
 	return {
-		open,
-		isEdit: !!plan,
+		...modal,
+		methods,
 		title: plan ? t('planOf', { name: patientName }) : t('newPlan'),
 		subtitle: plan
 			? t('updatedToday', { plan: tPlans(plan.title) })
@@ -82,57 +68,21 @@ export function usePlanForm(
 			id: plan?.patientId ?? NEW_PLAN_PATIENT.id,
 			initials: getInitials(patientName),
 		},
-		doctorOptions: (['kas', 'pet', 'tok'] as const).map(id => ({
+		doctorOptions: PLAN_DOCTORS.map(id => ({
 			id,
 			label: format.name(DOCTORS[id].shortName),
 		})),
-		doctor: watched.doctor ?? 'kas',
-		setDoctor: (value: 'kas' | 'pet' | 'tok') => form.setValue('doctor', value),
-		payment: watched.payment ?? 'full',
-		setPayment: (value: 'full' | 'stage' | 'inst') =>
-			form.setValue('payment', value),
-		register: form.register,
-		cellInvalid: (
-			index: number,
-			name: 'service' | 'qty' | 'price' | 'discount',
-		) => !!errors.stages?.[index]?.[name],
-		stages: stages.fields.map((field, index) => ({
-			key: field.id,
-			index,
-			sum: format.som(lines[index]?.net ?? 0),
-			remove: () => stages.remove(index),
-		})),
-		addStage: () => stages.append(translateStages([NEW_STAGE])[0]),
-		stagesError: errors.stages?.root?.message ?? errors.stages?.message,
-		errorOf: (message?: string) => (message ? tValidation(message) : undefined),
-		nameError: errors.name?.message,
-		totals: {
-			sum: format.som(sum),
-			discount: discount ? `−${format.som(discount)}` : '—',
-			foms: foms ? `−${format.som(foms)}` : '—',
-			total: format.som(total),
-			installment:
-				watched.payment === 'inst'
-					? t('installmentLine', {
-							months: INSTALLMENT_MONTHS,
-							amount: format.som(Math.round(total / INSTALLMENT_MONTHS)),
-						})
-					: undefined,
-		},
-		close,
-		openCreate: () => openWith(null),
-		openEdit: (next: TreatmentPlan) => openWith(next),
-		saving: isSubmitting,
+		saving: methods.formState.isSubmitting,
 		saveDraft: () => {
-			close()
+			modal.close()
 			toast.show(t('draftSaved'))
 		},
-		save: form.handleSubmit(async () => {
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
-			close()
+			modal.close()
 			toast.show(plan ? t('planUpdated') : t('planSentBySms'))
 		}),
-		remove: () => plan && onRemove(plan, close),
+		remove: () => plan && onRemove(plan, modal.close),
 	}
 }
 

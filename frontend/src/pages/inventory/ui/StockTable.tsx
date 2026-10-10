@@ -2,6 +2,7 @@
 
 import { ArrowLeftRight, Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { Badge } from '@/shared/ui/badge'
@@ -19,7 +20,7 @@ type TStockTableProps = { table: TStockTableModel }
 
 export function StockTable({ table }: TStockTableProps) {
 	const t = useTranslations('Inventory')
-	const { filter, setFilter, filters, rows } = table
+	const { filters, categories, rows } = table
 
 	return (
 		<Card
@@ -28,13 +29,24 @@ export function StockTable({ table }: TStockTableProps) {
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Segmented
-					aria-label={t('category')}
-					options={filters}
-					value={filter}
-					onChange={setFilter}
+				<Controller
+					control={filters.control}
+					name='category'
+					render={({ field }) => (
+						<Segmented
+							aria-label={t('category')}
+							options={categories}
+							value={field.value}
+							onChange={field.onChange}
+						/>
+					)}
 				/>
-				<SearchInput label={t('nameOrSku')} size='sm' className='basis-56' />
+				<SearchInput
+					label={t('nameOrSku')}
+					size='sm'
+					className='basis-56'
+					{...filters.register('search')}
+				/>
 			</div>
 			<TableScroll className='min-h-0 flex-auto'>
 				<Table className='min-w-205'>

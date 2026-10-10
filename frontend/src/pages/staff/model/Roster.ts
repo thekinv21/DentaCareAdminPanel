@@ -1,8 +1,8 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
-export type ShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
+export type TShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
 
-export const SHIFT: Record<ShiftKey, { label: string; tone: Tone }> = {
+export const SHIFT: Record<TShiftKey, { label: string; tone: TTone }> = {
 	s1: { label: '08:30–17:30', tone: 'brand' },
 	s2: { label: '09:00–18:00', tone: 'brand' },
 	s3: { label: '08:00–16:00', tone: 'brand' },
@@ -19,7 +19,7 @@ export const WEEK_START = '2026-10-05'
 /**
  * Mock roster for week 41 until the backend exposes /schedule
  */
-export const ROSTER: { name: string; tone: Tone; days: ShiftKey[] }[] = [
+export const ROSTER: { name: string; tone: TTone; days: TShiftKey[] }[] = [
 	{
 		name: 'Айгерим Касымова',
 		tone: 'accent',

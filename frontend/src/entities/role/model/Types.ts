@@ -1,4 +1,4 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 export type TSystemRoleId =
 	'owner' | 'chief' | 'doctor' | 'assistant' | 'reception' | 'finance' | 'store'
@@ -21,7 +21,7 @@ export type TPermissionModule = {
 
 export type TPermissions = Record<string, TPermissionAction[]>
 
-export type TRoleMember = { initials: string; tone: Tone }
+type TRoleMember = { initials: string; tone: TTone }
 
 export type TRole = {
 	id: string

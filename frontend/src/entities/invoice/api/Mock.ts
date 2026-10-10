@@ -1,9 +1,9 @@
-import type { Invoice, PaymentMethodId } from '../model/Types'
+import type { TInvoice, TPaymentMethodId } from '../model/Types'
 
 /**
  * Mock invoices until the backend exposes /invoices
  */
-export const INVOICES: Invoice[] = [
+export const INVOICES: TInvoice[] = [
 	{
 		number: 'INV-26-0418',
 		patientId: 'DN-20418',
@@ -109,7 +109,7 @@ export const INVOICES: Invoice[] = [
  * October revenue split by payment method
  */
 export const REVENUE_BY_METHOD: {
-	method: PaymentMethodId
+	method: TPaymentMethodId
 	sum: number
 	percent: number
 }[] = [

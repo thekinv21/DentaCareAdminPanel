@@ -179,13 +179,13 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
   and destructure on the first line of the body, renaming a rest element to `rest`.
 
   ```tsx
-  type TBadgeProps = { tone?: Tone; children: ReactNode }
+  type TBadgeProps = { tone?: TTone; children: ReactNode }
 
   export function Badge({ tone = 'neutral', children }: TBadgeProps) {}
 
   type TButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  	variant?: ButtonVariant
-  	size?: ButtonSize
+  	variant?: TButtonVariant
+  	size?: TButtonSize
   	block?: boolean
   }
 
@@ -198,6 +198,30 @@ Forbidden segment names (Steiger `segments-by-purpose`): `components`, `hooks`, 
 - Client components go in separate files with the `"use client"` directive.
 - Loading states use `loading.tsx` (Suspense boundary) in root `app/`.
 - Error boundaries use `error.tsx` with `"use client"` in root `app/`.
+
+## Forms and filters (react-hook-form)
+
+Everything the user fills in or that becomes a request/query goes through react-hook-form — create/edit
+forms, settings pages, table filters, search boxes, sorting, calendar range, confirm-dialog reasons.
+`useState` is only for pure UI state (open tab, selected rows, modal target).
+
+- **Model hook owns the form**: `const methods = useForm<T>({ resolver: zodResolver(schema), defaultValues })`
+  and returns `methods`, `submit: methods.handleSubmit(...)`, `saving: methods.formState.isSubmitting`.
+  Create/edit modals use `useFormModal(item => methods.reset(...))` from `@/shared/lib/form`.
+- **UI**: wrap in `<FormProvider {...form.methods}>`; `Modal` takes `onSubmit` and renders a `<form>`
+  (submit button `type='submit'`, Enter submits). Field components read the form with
+  `useFormContext<T>()`; never pass custom `field()/errorOf()/set()` adapters.
+- **Inputs**: `useFieldProps<T>()` → `{...inputProps('name')}` (register + `aria-invalid` + `aria-describedby`).
+  Chips, switches, swatches: `<Controller control={control} name=... render={({ field }) => ... />}`.
+- **Errors**: `FormField name=...` (label + translated Zod message), `FieldError name=...` for controls with
+  their own label, `AuthField name=...` on auth screens. Zod messages are keys of the `Validation` namespace.
+- **Derived values** (totals, previews, conflicts) live in `model/use*.ts` hooks that call
+  `useWatch({ control, name: [...] })` close to where they are rendered.
+- **Filters**: `const filters = useForm<TQuery>({ defaultValues })` + `useWatch({ control: filters.control,
+  name: [...] })` in the table hook; the toolbar binds `Segmented` via `Controller` and `SearchInput` via
+  `filters.register('search')`.
+- **Save/dirty state** of settings-like pages comes from `formState` (`isDirty`, `isSubmitSuccessful`);
+  after a successful save call `methods.reset(values)` so "Cancel" returns to the last saved values.
 
 ## Testing
 

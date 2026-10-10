@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-export interface LegendItem {
+type TLegendItem = {
 	label: string
 	/**
 	 * Classes for the swatch (background/border)
@@ -12,7 +12,7 @@ export interface LegendItem {
 }
 
 type TLegendProps = {
-	items: LegendItem[]
+	items: TLegendItem[]
 	className?: string
 }
 

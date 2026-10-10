@@ -9,7 +9,7 @@ import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 
-import type { TreatmentPlan } from './Plans'
+import type { TTreatmentPlan } from './Plans'
 
 /**
  * Deleting a treatment plan; completed stages stay in the patient's history
@@ -20,7 +20,7 @@ export function usePlanRemoval() {
 	const confirm = useConfirm()
 	const [removedKeys, setRemovedKeys] = useState<Set<string>>(new Set())
 
-	const remove = (plan: TreatmentPlan, onDone?: () => void) => {
+	const remove = (plan: TTreatmentPlan, onDone?: () => void) => {
 		const name = format.name(plan.patientName)
 		confirm({
 			tone: 'danger',

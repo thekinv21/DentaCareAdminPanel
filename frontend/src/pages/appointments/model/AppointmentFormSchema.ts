@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { fromMinutes, toMinutes } from '@/entities/appointment'
+
 /**
  * Bookable services; `id` matches the procedure keys of calendar events
  */
@@ -32,6 +34,13 @@ export const SOURCES = [
 	'whatsapp',
 ] as const
 
+export const APPOINTMENT_DOCTORS = ['kas', 'pet', 'tok'] as const
+
+/**
+ * Patient id of an event whose patient isn't in the patient list (generated mock days)
+ */
+export const EVENT_PATIENT = 'event'
+
 export const FORM_STATUSES = [
 	{ id: 'confirmed', dot: 'bg-brand' },
 	{ id: 'pending', dot: 'bg-warning' },
@@ -42,7 +51,7 @@ export const FORM_STATUSES = [
 
 export const appointmentFormSchema = z.object({
 	patientId: z.string().min(1, 'selectPatient'),
-	doctor: z.enum(['kas', 'pet', 'tok']),
+	doctor: z.enum(APPOINTMENT_DOCTORS),
 	chair: z.number(),
 	date: z
 		.string()
@@ -67,3 +76,6 @@ export type TAppointmentFormValues = z.infer<typeof appointmentFormSchema>
 export const isoToRu = (iso: string) => iso.split('-').reverse().join('.')
 export const ruToIso = (ru: string) =>
 	/^\d{2}\.\d{2}\.\d{4}$/.test(ru) ? ru.split('.').reverse().join('-') : null
+
+export const endTime = (start: string, duration: number) =>
+	fromMinutes(toMinutes(start) + duration)

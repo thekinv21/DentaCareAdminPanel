@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl'
 import { Badge } from '@/shared/ui/badge'
 
 import { INVOICE_STATUS } from '../model/Maps'
-import type { InvoiceStatus } from '../model/Types'
+import type { TInvoiceStatus } from '../model/Types'
 
-type TInvoiceStatusBadgeProps = { status: InvoiceStatus }
+type TInvoiceStatusBadgeProps = { status: TInvoiceStatus }
 
 export function InvoiceStatusBadge({ status }: TInvoiceStatusBadgeProps) {
 	const t = useTranslations('Invoice')

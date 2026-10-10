@@ -13,8 +13,8 @@ import {
 	HOUR_HEIGHT,
 	placeEvents,
 } from '../lib/Layout'
-import type { CalendarEvent } from '../lib/Schedule'
-import type { CalendarColumn } from '../model/useCalendarColumns'
+import type { TCalendarEvent } from '../lib/Schedule'
+import type { TCalendarColumn } from '../model/useCalendarColumns'
 import { EventBlock } from './EventBlock'
 
 const NOW_TOP = ((toMinutes(NOW_TIME) - DAY_START) * HOUR_HEIGHT) / 60
@@ -35,9 +35,9 @@ const hourShift = (i: number) =>
 			: '-translate-y-1/2'
 
 type TTimeGridProps = {
-	columns: CalendarColumn[]
+	columns: TCalendarColumn[]
 	minColumn: number
-	onOpenEvent: (event: CalendarEvent) => void
+	onOpenEvent: (event: TCalendarEvent) => void
 }
 
 export function TimeGrid({ columns, minColumn, onOpenEvent }: TTimeGridProps) {

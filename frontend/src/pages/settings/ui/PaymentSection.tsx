@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 import { PaymentMethodTile, usePaymentMethods } from '@/entities/invoice'
 
@@ -11,15 +12,16 @@ import { Switch } from '@/shared/ui/switch'
 import { ToggleRow } from '@/shared/ui/toggle-row'
 
 import { BANK_DETAILS, PAYMENT_OPTIONS } from '../model/Payments'
+import type { TSettingsFormValues } from '../model/SettingsForm'
 import { useBankSwitch } from '../model/useBankSwitch'
-import type { SettingsModel } from '../model/useSettings'
 
-type TPaymentSectionProps = Pick<SettingsModel, 'toggles' | 'flip'>
-
-export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
+export function PaymentSection() {
 	const t = useTranslations('Settings')
 	const methods = usePaymentMethods()
-	const switchBank = useBankSwitch(flip)
+	const switchBank = useBankSwitch()
+	const { control } = useFormContext<TSettingsFormValues>()
+	const toggles = useWatch({ control, name: 'toggles' })
+
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
 			{BANK_DETAILS.map(bank => {
@@ -46,10 +48,16 @@ export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
 									{t(bank.description)}
 								</p>
 							</div>
-							<Switch
-								checked={on}
-								onChange={() => switchBank(bank.id, name, on)}
-								aria-label={`${t('acceptPayment')} ${name}`}
+							<Controller
+								control={control}
+								name={`toggles.${bank.id}`}
+								render={({ field }) => (
+									<Switch
+										checked={field.value}
+										onChange={next => switchBank(name, next, field.onChange)}
+										aria-label={`${t('acceptPayment')} ${name}`}
+									/>
+								)}
 							/>
 						</div>
 						{on && (
@@ -71,12 +79,18 @@ export function PaymentSection({ toggles, flip }: TPaymentSectionProps) {
 			})}
 			<div className='rounded-2xl border border-line px-3.5 py-1'>
 				{PAYMENT_OPTIONS.map(option => (
-					<ToggleRow
+					<Controller
 						key={option.id}
-						label={t(option.label)}
-						hint={t(option.hint)}
-						checked={toggles[option.id]}
-						onChange={() => flip(option.id)}
+						control={control}
+						name={`toggles.${option.id}`}
+						render={({ field }) => (
+							<ToggleRow
+								label={t(option.label)}
+								hint={t(option.hint)}
+								checked={field.value}
+								onChange={field.onChange}
+							/>
+						)}
 					/>
 				))}
 			</div>

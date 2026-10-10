@@ -1,6 +1,6 @@
-import type { PlanStatus } from './PlanStatus'
+import type { TPlanStatus } from './PlanStatus'
 
-export interface TreatmentPlan {
+export type TTreatmentPlan = {
 	patientId: string
 	patientName: string
 	title: string
@@ -8,7 +8,7 @@ export interface TreatmentPlan {
 	stepsDone: number
 	stepsTotal: number
 	value: number
-	status: PlanStatus
+	status: TPlanStatus
 	doctor: string
 	updated: string
 }
@@ -16,7 +16,7 @@ export interface TreatmentPlan {
 /**
  * Mock data until the backend exposes /treatment-plans
  */
-export const TREATMENT_PLANS: TreatmentPlan[] = [
+export const TREATMENT_PLANS: TTreatmentPlan[] = [
 	{
 		patientId: 'DN-20418',
 		patientName: 'Айгуль Тойчубекова',

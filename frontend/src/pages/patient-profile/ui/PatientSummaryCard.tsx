@@ -14,9 +14,9 @@ import { Button, buttonClass } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 
 import { PROFILE } from '../model/Profile'
-import type { ProfileTabsModel } from '../model/useProfileTabs'
+import type { TProfileTabsModel } from '../model/useProfileTabs'
 
-type TPatientSummaryCardProps = { tabs: ProfileTabsModel }
+type TPatientSummaryCardProps = { tabs: TProfileTabsModel }
 
 export function PatientSummaryCard({ tabs }: TPatientSummaryCardProps) {
 	const t = useTranslations('PatientProfile')

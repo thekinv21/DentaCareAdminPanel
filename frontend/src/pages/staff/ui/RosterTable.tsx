@@ -8,11 +8,11 @@ import { TONE_CLASS } from '@/shared/ui/badge'
 import { Legend } from '@/shared/ui/legend'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { StaffBoardModel } from '../model/useStaffBoard'
+import type { TStaffBoardModel } from '../model/useStaffBoard'
 
 type TRosterTableProps = {
-	roster: StaffBoardModel['roster']
-	weekDays: StaffBoardModel['weekDays']
+	roster: TStaffBoardModel['roster']
+	weekDays: TStaffBoardModel['weekDays']
 }
 
 export function RosterTable({ roster, weekDays }: TRosterTableProps) {

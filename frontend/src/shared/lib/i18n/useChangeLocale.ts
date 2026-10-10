@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { type Locale, LOCALE_COOKIE } from './Config'
+import { LOCALE_COOKIE, type TLocale } from './Config'
 
 const ONE_YEAR = 60 * 60 * 24 * 365
 
@@ -15,7 +15,7 @@ const ONE_YEAR = 60 * 60 * 24 * 365
 export function useChangeLocale() {
 	const router = useRouter()
 	return useCallback(
-		(locale: Locale) => {
+		(locale: TLocale) => {
 			document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax`
 			router.refresh()
 		},

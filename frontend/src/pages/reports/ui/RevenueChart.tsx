@@ -4,10 +4,10 @@ import { useFormat } from '@/shared/lib/i18n'
 
 import { CHART, chartY, GRID_VALUES } from '../lib/ChartGeometry'
 import { REVENUE_TARGET } from '../model/Report'
-import type { ReportModel } from '../model/useReport'
+import type { TReportModel } from '../model/useReport'
 
 type TRevenueChartProps = {
-	bars: ReportModel['bars']
+	bars: TReportModel['bars']
 	label: string
 }
 

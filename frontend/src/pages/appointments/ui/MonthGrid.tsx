@@ -2,14 +2,14 @@
 
 import { useTranslations } from 'next-intl'
 
-import type { AppointmentStatus } from '@/entities/appointment'
+import type { TAppointmentStatus } from '@/entities/appointment'
 
 import { cn } from '@/shared/lib/cn'
 import { useFormat } from '@/shared/lib/i18n'
 
-import type { CalendarModel } from '../model/useCalendar'
+import type { TCalendarModel } from '../model/useCalendar'
 
-const CHIP: Record<AppointmentStatus, string> = {
+const CHIP: Record<TAppointmentStatus, string> = {
 	done: 'bg-raised text-ink-muted',
 	chair: 'bg-brand text-on-brand',
 	next: 'bg-accent-soft text-accent',
@@ -20,11 +20,12 @@ const CHIP: Record<AppointmentStatus, string> = {
 
 const GRID = 'grid grid-cols-[repeat(7,minmax(110px,1fr))] gap-1.5'
 
-type TMonthGridProps = { calendar: CalendarModel }
+type TMonthGridProps = { calendar: TCalendarModel }
 
 export function MonthGrid({ calendar }: TMonthGridProps) {
 	const t = useTranslations('Appointments')
 	const format = useFormat()
+
 	return (
 		<div className='min-w-200 animate-fade'>
 			<div className='sticky top-0 z-6 bg-surface pb-2'>

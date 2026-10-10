@@ -3,6 +3,7 @@
 import Link from 'next/link'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { ROLES, type TSystemRoleId, useRoleLabels } from '@/entities/role'
 
@@ -13,89 +14,104 @@ import { Field, formGrid2 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 import { SwitchCard } from '@/shared/ui/switch-card'
 
-import type { TUserFormModel } from '../model/useUserForm'
+import type { TUserFormValues } from '../model/Schema'
+import { UserSwitch } from './UserSwitch'
 
 const ASSIGNABLE = ROLES.filter(role => role.id !== 'store')
 
-const ROLE_HINT: Record<string, string> = {
+const ROLE_HINT: Record<TSystemRoleId, string | null> = {
 	owner: 'ownerHint',
 	chief: 'chiefHint',
 	doctor: 'doctorHint',
 	assistant: 'assistantHint',
 	reception: 'receptionHint',
 	finance: 'financeHint',
+	store: null,
 }
 
-type TAccessSectionProps = { form: TUserFormModel }
+type TAccessSectionProps = {
+	isEdit: boolean
+	onResetPassword: () => void
+}
 
-export function AccessSection({ form }: TAccessSectionProps) {
+export function AccessSection({
+	isEdit,
+	onResetPassword,
+}: TAccessSectionProps) {
 	const t = useTranslations('UserForm')
 	const labels = useRoleLabels()
+	const { control } = useFormContext<TUserFormValues>()
 
 	return (
 		<FormSection title={t('access')}>
 			<div className={formGrid2}>
-				<Field
-					as='div'
-					label={t('role')}
-					required
-					className='col-span-full'
-					hint={
-						<>
-							{t(ROLE_HINT[form.role])} ·{' '}
-							<Link
-								href={ROUTES.roles}
-								className='font-semibold text-brand no-underline hover:underline'
+				<Controller
+					control={control}
+					name='role'
+					render={({ field }) => {
+						const hint = ROLE_HINT[field.value]
+						return (
+							<Field
+								as='div'
+								label={t('role')}
+								required
+								className='col-span-full'
+								hint={
+									<>
+										{hint && `${t(hint)} · `}
+										<Link
+											href={ROUTES.roles}
+											className='font-semibold text-brand no-underline hover:underline'
+										>
+											{t('configureRoles')}
+										</Link>
+									</>
+								}
 							>
-								{t('configureRoles')}
-							</Link>
-						</>
-					}
-				>
-					<ChoiceChips
-						aria-label={t('role')}
-						options={ASSIGNABLE.map(role => ({
-							id: role.id as TSystemRoleId,
-							label: labels.text(role.name),
-						}))}
-						value={form.role}
-						onChange={form.setRole}
-					/>
-				</Field>
+								<ChoiceChips
+									aria-label={t('role')}
+									options={ASSIGNABLE.map(role => ({
+										id: role.id as TSystemRoleId,
+										label: labels.text(role.name),
+									}))}
+									value={field.value}
+									onChange={field.onChange}
+								/>
+							</Field>
+						)
+					}}
+				/>
 				<Field as='div' label={t('signIn')}>
-					{form.isEdit ? (
+					{isEdit ? (
 						<SwitchCard
 							label={t('password')}
 							hint={t('changed64DaysAgo')}
 							action={
-								<Button size='sm' onClick={form.resetPassword}>
+								<Button size='sm' onClick={onResetPassword}>
 									{t('resetPassword')}
 								</Button>
 							}
 						/>
 					) : (
-						<SwitchCard
+						<UserSwitch
+							name='invite'
 							label={t('sendSmsInvite')}
 							hint={t('employeeSetsPassword')}
-							aria-label={t('sendInvite')}
-							checked={form.switches.invite}
-							onChange={form.flip('invite')}
+							ariaLabel={t('sendInvite')}
 						/>
 					)}
 				</Field>
 				<div className='flex flex-col gap-3.5 pt-5.5 max-[720px]:pt-0'>
-					<SwitchCard
+					<UserSwitch
+						name='tfa'
 						label={t('twoStepVerification')}
 						hint={t('smsCodeEveryLogin')}
-						checked={form.switches.tfa}
-						onChange={form.flip('tfa')}
 					/>
 				</div>
-				<SwitchCard
+				<UserSwitch
+					name='active'
 					label={t('active')}
 					hint={t('turnOffToCloseAccess')}
-					checked={form.switches.active}
-					onChange={form.flip('active')}
 				/>
 			</div>
 		</FormSection>

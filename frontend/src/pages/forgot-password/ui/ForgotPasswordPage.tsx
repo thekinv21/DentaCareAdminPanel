@@ -4,15 +4,16 @@ import Link from 'next/link'
 
 import { Check, LockKeyhole } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { FormProvider } from 'react-hook-form'
 
-import { AuthField, AuthHeading, AuthStack } from '@/widgets/auth-panel'
+import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
 import { ROUTES } from '@/shared/routes'
 import { Alert } from '@/shared/ui/alert'
 import { Button, buttonClass } from '@/shared/ui/button'
-import { PhoneInput } from '@/shared/ui/phone-input'
 
 import { useForgotPassword } from '../model/useForgotPassword'
+import { ForgotPasswordField } from './ForgotPasswordField'
 
 export function ForgotPasswordPage() {
 	const t = useTranslations('ForgotPassword')
@@ -58,28 +59,18 @@ export function ForgotPasswordPage() {
 						title={t('resetYourPassword')}
 						subtitle={t('enterThePhoneNumber')}
 					/>
-					<form
-						noValidate
-						onSubmit={flow.onSubmit}
-						className='flex flex-col gap-4'
-					>
-						<AuthField
-							id='phone'
-							label={t('phoneNumber')}
-							error={flow.phoneError}
-							hint={t('ifYouSignIn')}
+					<FormProvider {...flow.methods}>
+						<form
+							noValidate
+							onSubmit={flow.submit}
+							className='flex flex-col gap-4'
 						>
-							<PhoneInput
-								id='phone'
-								autoComplete='tel'
-								placeholder='555 123 456'
-								{...flow.phoneProps}
-							/>
-						</AuthField>
-						<Button type='submit' variant='primary' size='lg' block>
-							{t('sendResetLink')}
-						</Button>
-					</form>
+							<ForgotPasswordField />
+							<Button type='submit' variant='primary' size='lg' block>
+								{t('sendResetLink')}
+							</Button>
+						</form>
+					</FormProvider>
 				</div>
 			)}
 			<p className='text-center text-sm leading-5.5 text-ink-muted'>

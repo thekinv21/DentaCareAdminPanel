@@ -2,13 +2,17 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 
-type TFieldProps = {
+export type TFieldProps = {
 	label: ReactNode
 	hint?: ReactNode
 	/**
 	 * Display-ready error text; replaces the hint while present
 	 */
 	error?: string
+	/**
+	 * Id of the error text, referenced by the input's `aria-describedby`
+	 */
+	errorId?: string
 	required?: boolean
 	/**
 	 * `div` for groups of buttons (chips, swatches) that must not sit inside a label
@@ -26,6 +30,7 @@ export function Field(props: TFieldProps) {
 		label,
 		hint,
 		error,
+		errorId,
 		required,
 		as: Tag = 'label',
 		className,
@@ -40,7 +45,10 @@ export function Field(props: TFieldProps) {
 			</span>
 			{children}
 			{error ? (
-				<span className='text-xs leading-4 font-semibold text-danger'>
+				<span
+					id={errorId}
+					className='text-xs leading-4 font-semibold text-danger'
+				>
 					{error}
 				</span>
 			) : (

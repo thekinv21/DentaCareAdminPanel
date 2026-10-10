@@ -1,6 +1,6 @@
 import { fromMinutes, toMinutes } from '@/entities/appointment'
 
-import type { CalendarEvent } from './Schedule'
+import type { TCalendarEvent } from './Schedule'
 
 /* Layout of overlapping events in one column */
 
@@ -23,7 +23,7 @@ export const GRID_HOURS = [
 export const GRID_HEIGHT = (GRID_HOURS.length - 1) * HOUR_HEIGHT
 
 export type TPlacedEvent = {
-	event: CalendarEvent
+	event: TCalendarEvent
 	top: number
 	height: number
 	lane: number
@@ -31,7 +31,7 @@ export type TPlacedEvent = {
 	end: string
 }
 
-export function placeEvents(events: CalendarEvent[]): TPlacedEvent[] {
+export function placeEvents(events: TCalendarEvent[]): TPlacedEvent[] {
 	const px = HOUR_HEIGHT / 60
 	const items = events
 		.map(event => {

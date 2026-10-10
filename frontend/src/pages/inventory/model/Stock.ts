@@ -1,6 +1,6 @@
-export type StockCategory = 'anes' | 'cons' | 'rest' | 'endo' | 'impl'
+export type TStockCategory = 'anes' | 'cons' | 'rest' | 'endo' | 'impl'
 
-export const CATEGORY_LABEL: Record<StockCategory, string> = {
+export const CATEGORY_LABEL: Record<TStockCategory, string> = {
 	anes: 'anesthetics',
 	cons: 'consumables',
 	rest: 'fillingPlacement',
@@ -8,10 +8,10 @@ export const CATEGORY_LABEL: Record<StockCategory, string> = {
 	impl: 'implantology',
 }
 
-export interface StockItem {
+export type TStockItem = {
 	name: string
 	sku: string
-	category: StockCategory
+	category: TStockCategory
 	quantity: number
 	minimum: number
 	unit: string
@@ -26,7 +26,7 @@ export interface StockItem {
 /**
  * Mock data until the backend exposes /inventory
  */
-export const STOCK: StockItem[] = [
+export const STOCK: TStockItem[] = [
 	{
 		name: 'lidocaine2WithEpinephrine',
 		sku: 'ANS-0102',
@@ -131,9 +131,9 @@ export const STOCK: StockItem[] = [
 	},
 ]
 
-export type StockLevel = 'ok' | 'low' | 'critical'
+export type TStockLevel = 'ok' | 'low' | 'critical'
 
-export function stockLevel(item: StockItem): StockLevel {
+export function stockLevel(item: TStockItem): TStockLevel {
 	if (item.quantity < item.minimum * 0.5) return 'critical'
 	if (item.quantity < item.minimum) return 'low'
 	return 'ok'

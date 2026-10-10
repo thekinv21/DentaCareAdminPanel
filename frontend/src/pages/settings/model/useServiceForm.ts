@@ -1,12 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
+import { useFormModal } from '@/shared/lib/form'
 import { useToast } from '@/shared/ui/toast'
 
 import {
@@ -35,70 +34,44 @@ export function useServiceForm(
 ) {
 	const t = useTranslations('ServiceForm')
 	const tSettings = useTranslations('Settings')
-	const tValidation = useTranslations('Validation')
 	const toast = useToast()
-	const [open, setOpen] = useState(false)
-	const [service, setService] = useState<TServiceItem | null>(null)
 
-	const form = useForm<TServiceFormInput, unknown, TServiceFormValues>({
+	const methods = useForm<TServiceFormInput, unknown, TServiceFormValues>({
 		resolver: zodResolver(serviceFormSchema),
 		defaultValues: EMPTY,
 	})
-	const values = useWatch({ control: form.control })
-	const { errors, isSubmitting } = form.formState
-
-	const openWith = (next: TServiceItem | null) => {
-		setService(next)
-		form.reset(
-			next
+	const modal = useFormModal<TServiceItem>(service =>
+		methods.reset(
+			service
 				? {
-						name: tSettings(next.name),
-						code: next.code,
-						category: next.category,
-						price: String(next.price),
-						minutes: next.minutes,
+						name: tSettings(service.name),
+						code: service.code,
+						category: service.category,
+						price: String(service.price),
+						minutes: service.minutes,
 						materials: ['comp', 'bond', 'etch'],
-						foms: next.foms,
+						foms: service.foms,
 						online: true,
 					}
 				: EMPTY,
-		)
-		setOpen(true)
-	}
-	const close = () => setOpen(false)
+		),
+	)
+	const service = modal.item
 
 	return {
-		open,
-		isEdit: !!service,
+		...modal,
+		methods,
 		title: service ? tSettings(service.name) : t('newService'),
 		subtitle: service
 			? `${service.code} · ${tSettings(SERVICE_CATEGORY[service.category])}`
 			: t('createSubtitle'),
-		openCreate: () => openWith(null),
-		openEdit: (next: TServiceItem) => openWith(next),
-		close,
-		values,
-		setCategory: (value: TServiceFormInput['category']) =>
-			form.setValue('category', value),
-		setMinutes: (value: number) => form.setValue('minutes', value),
-		setMaterials: (value: string[]) => form.setValue('materials', value),
-		setFoms: (value: boolean) => form.setValue('foms', value),
-		setOnline: (value: boolean) => form.setValue('online', value),
-		field: (name: 'name' | 'code' | 'price') => ({
-			'aria-invalid': !!errors[name],
-			...form.register(name),
-		}),
-		errorOf: (name: 'name' | 'price') => {
-			const message = errors[name]?.message
-			return message ? tValidation(message) : undefined
-		},
-		saving: isSubmitting,
-		save: form.handleSubmit(async () => {
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
-			close()
+			modal.close()
 			toast.show(service ? t('serviceUpdated') : t('serviceAdded'))
 		}),
-		remove: () => service && onRemove(service, close),
+		remove: () => service && onRemove(service, modal.close),
 	}
 }
 

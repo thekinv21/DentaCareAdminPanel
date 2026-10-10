@@ -1,7 +1,7 @@
-import type { Locale } from './Config'
+import type { TLocale } from './Config'
 
 declare module 'next-intl' {
 	interface AppConfig {
-		Locale: Locale
+		Locale: TLocale
 	}
 }

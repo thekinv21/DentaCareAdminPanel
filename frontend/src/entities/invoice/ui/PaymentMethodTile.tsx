@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/cn'
 
 import { PAYMENT_METHODS } from '../model/Maps'
-import type { PaymentMethodId } from '../model/Types'
+import type { TPaymentMethodId } from '../model/Types'
 
 type TPaymentMethodTileProps = {
-	method: PaymentMethodId
+	method: TPaymentMethodId
 	size?: 'sm' | 'md' | 'lg'
 	className?: string
 }

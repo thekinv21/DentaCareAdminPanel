@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { useToast } from '@/shared/ui/toast'
 
@@ -13,6 +14,11 @@ const messageOf = (error: unknown) =>
 	error instanceof Error ? error.message : String(error)
 
 /**
+ * What the user fills in before confirming; everything but `typed` goes to `onConfirm`
+ */
+type TConfirmFields = TConfirmPayload & { typed: string }
+
+/**
  * Guards (typed code, reason, countdown), the pending request and its
  * outcome for one open confirmation dialog
  */
@@ -20,13 +26,21 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 	const t = useTranslations('Confirm')
 	const toast = useToast()
 	const bulk = useBulkRun(request.bulk)
-	const [choice, setChoice] = useState(request.choice?.value ?? null)
-	const [reason, setReason] = useState<string | null>(null)
-	const [reasonText, setReasonText] = useState('')
-	const [options, setOptions] = useState<Record<string, boolean>>(() =>
-		Object.fromEntries((request.options ?? []).map(o => [o.id, !!o.checked])),
-	)
-	const [typed, setTyped] = useState('')
+	const fields = useForm<TConfirmFields>({
+		defaultValues: {
+			choice: request.choice?.value ?? null,
+			reason: null,
+			reasonText: '',
+			options: Object.fromEntries(
+				(request.options ?? []).map(o => [o.id, !!o.checked]),
+			),
+			typed: '',
+		},
+	})
+	const [reason, reasonText, typed] = useWatch({
+		control: fields.control,
+		name: ['reason', 'reasonText', 'typed'],
+	})
 	const [left, setLeft] = useState(request.countdown ?? 0)
 	const [pending, setPending] = useState(false)
 	const [error, setError] = useState<string | null>(null)
@@ -42,10 +56,10 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		typed.trim().toUpperCase() === request.typeToConfirm.toUpperCase()
 	const reasonOk = !request.reasonRequired || !!reason || !!reasonText.trim()
 	const canConfirm = typeOk && reasonOk && left <= 0 && !pending
-	const payload: TConfirmPayload = { reason, reasonText, options, choice }
 
 	const finish = async () => {
-		await request.onConfirm?.(payload)
+		const { choice, reason, reasonText, options } = fields.getValues()
+		await request.onConfirm?.({ choice, reason, reasonText, options })
 		bulk.settle()
 		close()
 		toast.show(
@@ -91,18 +105,8 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 				: left > 0
 					? `${request.confirmText} · ${left}`
 					: request.confirmText,
-		choice,
-		setChoice,
-		reason,
-		toggleReason: (value: string) =>
-			setReason(current => (current === value ? null : value)),
-		reasonText,
-		setReasonText,
-		options,
-		toggleOption: (id: string) =>
-			setOptions(current => ({ ...current, [id]: !current[id] })),
-		typed,
-		setTyped,
+		control: fields.control,
+		register: fields.register,
 		typeOk,
 		bulk,
 		showProgress: !!request.bulk && (pending || !!bulk.failed),

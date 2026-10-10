@@ -1,120 +1,128 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller, useFormContext } from 'react-hook-form'
 
+import { useFieldProps } from '@/shared/lib/form'
 import { AffixInput } from '@/shared/ui/affix-input'
 import { ChoiceChips } from '@/shared/ui/choice-chips'
-import { Field, formGrid3, inputClass } from '@/shared/ui/field'
+import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 
-import type { TPatientFormModel } from '../model/usePatientForm'
+import type { TPatientFormValues } from '../model/PatientFormSchema'
 
-type TPatientPersonalFieldsProps = { form: TPatientFormModel }
+type TPatientPersonalFieldsProps = { duplicateError?: string }
 
-export function PatientPersonalFields({ form }: TPatientPersonalFieldsProps) {
+export function PatientPersonalFields({
+	duplicateError,
+}: TPatientPersonalFieldsProps) {
 	const t = useTranslations('PatientForm')
+	const { control } = useFormContext<TPatientFormValues>()
+	const inputProps = useFieldProps<TPatientFormValues>()
+
 	return (
 		<>
 			<FormSection title={t('personalDetails')}>
 				<div className={formGrid3}>
-					<Field
-						label={t('lastName')}
-						required
-						error={form.errorOf('lastName')}
-					>
+					<FormField name='lastName' label={t('lastName')} required>
 						<input
 							className={inputClass}
 							placeholder={t('lastName')}
-							{...form.field('lastName')}
+							{...inputProps('lastName')}
 						/>
-					</Field>
-					<Field
-						label={t('firstName')}
-						required
-						error={form.errorOf('firstName')}
-					>
+					</FormField>
+					<FormField name='firstName' label={t('firstName')} required>
 						<input
 							className={inputClass}
 							placeholder={t('firstName')}
-							{...form.field('firstName')}
+							{...inputProps('firstName')}
 						/>
-					</Field>
+					</FormField>
 					<Field label={t('middleName')}>
 						<input
 							className={inputClass}
 							placeholder={t('optional')}
-							{...form.field('middleName')}
+							{...inputProps('middleName')}
 						/>
 					</Field>
-					<Field
-						label={t('birthDate')}
-						required
-						error={form.errorOf('birthDate')}
-					>
+					<FormField name='birthDate' label={t('birthDate')} required>
 						<input
 							className={`${inputClass} font-mono`}
 							placeholder={t('datePlaceholder')}
-							{...form.field('birthDate')}
+							{...inputProps('birthDate')}
 						/>
-					</Field>
+					</FormField>
 					<Field as='div' label={t('gender')}>
-						<ChoiceChips
-							aria-label={t('gender')}
-							options={[
-								{ id: 'f' as const, label: t('female') },
-								{ id: 'm' as const, label: t('male') },
-							]}
-							value={form.values.gender ?? 'f'}
-							onChange={value => form.set('gender', value)}
+						<Controller
+							control={control}
+							name='gender'
+							render={({ field }) => (
+								<ChoiceChips
+									aria-label={t('gender')}
+									options={[
+										{ id: 'f' as const, label: t('female') },
+										{ id: 'm' as const, label: t('male') },
+									]}
+									value={field.value}
+									onChange={field.onChange}
+								/>
+							)}
 						/>
 					</Field>
-					<Field label={t('pin')} error={form.errorOf('pin')}>
+					<FormField name='pin' label={t('pin')}>
 						<input
 							className={`${inputClass} font-mono`}
 							placeholder={t('pinPlaceholder')}
-							{...form.field('pin')}
+							{...inputProps('pin')}
 						/>
-					</Field>
+					</FormField>
 				</div>
 			</FormSection>
 			<FormSection title={t('contacts')}>
 				<div className={formGrid3}>
-					<Field
+					<FormField
+						name='phone'
 						label={t('phone')}
 						required
-						error={form.errorOf('phone') ?? form.duplicateError}
+						error={duplicateError}
 					>
 						<AffixInput
 							prefix='+996'
 							type='tel'
 							inputMode='tel'
 							placeholder='555 123 456'
-							{...form.field('phone')}
+							{...inputProps('phone')}
 						/>
-					</Field>
-					<Field label='Email' error={form.errorOf('email')}>
+					</FormField>
+					<FormField name='email' label='Email'>
 						<input
 							className={inputClass}
 							placeholder='name@mail.kg'
-							{...form.field('email')}
+							{...inputProps('email')}
 						/>
-					</Field>
+					</FormField>
 					<Field as='div' label={t('smsLanguage')}>
-						<ChoiceChips
-							aria-label={t('smsLanguage')}
-							options={[
-								{ id: 'ru' as const, label: 'Русский' },
-								{ id: 'ky' as const, label: 'Кыргызча' },
-							]}
-							value={form.values.smsLanguage ?? 'ru'}
-							onChange={value => form.set('smsLanguage', value)}
+						<Controller
+							control={control}
+							name='smsLanguage'
+							render={({ field }) => (
+								<ChoiceChips
+									aria-label={t('smsLanguage')}
+									options={[
+										{ id: 'ru' as const, label: 'Русский' },
+										{ id: 'ky' as const, label: 'Кыргызча' },
+									]}
+									value={field.value}
+									onChange={field.onChange}
+								/>
+							)}
 						/>
 					</Field>
 					<Field label={t('address')} className='col-span-full'>
 						<input
 							className={inputClass}
 							placeholder={t('addressPlaceholder')}
-							{...form.field('address')}
+							{...inputProps('address')}
 						/>
 					</Field>
 				</div>

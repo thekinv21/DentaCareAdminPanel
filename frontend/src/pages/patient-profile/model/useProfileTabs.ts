@@ -4,9 +4,9 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-export type ProfileTab = 'chart' | 'plan' | 'history' | 'payments'
+export type TProfileTab = 'chart' | 'plan' | 'history' | 'payments'
 
-const TABS: { id: ProfileTab; label: string }[] = [
+const TABS: { id: TProfileTab; label: string }[] = [
 	{ id: 'chart', label: 'toothChart' },
 	{ id: 'plan', label: 'treatmentPlan' },
 	{ id: 'history', label: 'history' },
@@ -15,7 +15,7 @@ const TABS: { id: ProfileTab; label: string }[] = [
 
 export function useProfileTabs() {
 	const t = useTranslations('PatientProfile')
-	const [tab, setTab] = useState<ProfileTab>('chart')
+	const [tab, setTab] = useState<TProfileTab>('chart')
 	return {
 		tab,
 		setTab,
@@ -27,4 +27,4 @@ export function useProfileTabs() {
 	}
 }
 
-export type ProfileTabsModel = ReturnType<typeof useProfileTabs>
+export type TProfileTabsModel = ReturnType<typeof useProfileTabs>

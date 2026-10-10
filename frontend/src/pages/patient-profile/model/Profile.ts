@@ -1,6 +1,6 @@
-import type { PaymentMethodId } from '@/entities/invoice'
+import type { TPaymentMethodId } from '@/entities/invoice'
 
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 /**
  * Mock chart of one patient until the backend exposes /patients/:id
@@ -19,7 +19,7 @@ export const PLAN_STEPS: {
 	tooth: string
 	date: string
 	dateMuted?: boolean
-	status: { label: string; tone: Tone }
+	status: { label: string; tone: TTone }
 	price: number
 }[] = [
 	{
@@ -99,7 +99,7 @@ export const VISITS: {
 export const PAYMENTS: {
 	date: string
 	invoice: string
-	method: PaymentMethodId
+	method: TPaymentMethodId
 	methodLabel: string
 	amount: number
 }[] = [

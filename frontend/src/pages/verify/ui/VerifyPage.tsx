@@ -29,7 +29,11 @@ export function VerifyPage() {
 					</>
 				}
 			/>
-			<form onSubmit={verify.onSubmit} className='flex flex-col gap-4.5'>
+			<form
+				noValidate
+				onSubmit={verify.submit}
+				className='flex flex-col gap-4.5'
+			>
 				<fieldset className='m-0 border-0 p-0'>
 					<legend className='mb-2 text-[13px] leading-4.5 font-semibold'>
 						{t('verificationCode')}
@@ -55,8 +59,8 @@ export function VerifyPage() {
 				<label className='inline-flex cursor-pointer items-start gap-2.5 text-sm leading-5'>
 					<input
 						type='checkbox'
-						defaultChecked
 						className='mt-px size-4.5 shrink-0 accent-brand'
+						{...verify.rememberProps}
 					/>
 					{t('dontAskOnThis')}
 				</label>

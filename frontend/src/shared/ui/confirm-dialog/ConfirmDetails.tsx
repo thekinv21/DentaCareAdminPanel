@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { getInitials } from '@/shared/lib/format'
@@ -99,47 +100,55 @@ export function ConfirmDetails({ request, model }: TConfirmDetailsProps) {
 			{choice && (
 				<div className='flex flex-col gap-2'>
 					<span className={sectionLabelClass}>{choice.label}</span>
-					<div
-						role='radiogroup'
-						aria-label={choice.label}
-						className='grid gap-1.5'
-					>
-						{choice.items.map(item => {
-							const on = model.choice === item.id
-							return (
-								<button
-									key={item.id}
-									type='button'
-									role='radio'
-									aria-checked={on}
-									onClick={() => model.setChoice(item.id)}
-									className={cn(
-										'flex items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left text-ink',
-										on
-											? 'border-brand bg-brand-soft'
-											: 'border-line bg-surface',
-									)}
-								>
-									<span
-										className={cn(
-											'mt-px size-4.5 shrink-0 rounded-full bg-surface',
-											on
-												? 'border-[5px] border-brand'
-												: 'border-2 border-line-strong',
-										)}
-									/>
-									<span>
-										<span className='block font-semibold'>{item.label}</span>
-										{item.hint && (
-											<span className='block text-[12.5px] text-ink-muted'>
-												{item.hint}
+					<Controller
+						control={model.control}
+						name='choice'
+						render={({ field }) => (
+							<div
+								role='radiogroup'
+								aria-label={choice.label}
+								className='grid gap-1.5'
+							>
+								{choice.items.map(item => {
+									const on = field.value === item.id
+									return (
+										<button
+											key={item.id}
+											type='button'
+											role='radio'
+											aria-checked={on}
+											onClick={() => field.onChange(item.id)}
+											className={cn(
+												'flex items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left text-ink',
+												on
+													? 'border-brand bg-brand-soft'
+													: 'border-line bg-surface',
+											)}
+										>
+											<span
+												className={cn(
+													'mt-px size-4.5 shrink-0 rounded-full bg-surface',
+													on
+														? 'border-[5px] border-brand'
+														: 'border-2 border-line-strong',
+												)}
+											/>
+											<span>
+												<span className='block font-semibold'>
+													{item.label}
+												</span>
+												{item.hint && (
+													<span className='block text-[12.5px] text-ink-muted'>
+														{item.hint}
+													</span>
+												)}
 											</span>
-										)}
-									</span>
-								</button>
-							)
-						})}
-					</div>
+										</button>
+									)
+								})}
+							</div>
+						)}
+					/>
 				</div>
 			)}
 		</>

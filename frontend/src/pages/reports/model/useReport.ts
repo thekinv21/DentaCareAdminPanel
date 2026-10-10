@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { REVENUE_BY_METHOD, usePaymentMethods } from '@/entities/invoice'
 
@@ -14,11 +13,16 @@ import {
 	MONTHLY_REVENUE,
 	RANGE_KPI,
 	RANGE_LABEL,
-	type ReportRange,
 	REVENUE_TARGET,
+	type TReportRange,
 } from './Report'
 
 const TOP_SHARE = Math.max(...REVENUE_BY_METHOD.map(item => item.percent))
+
+/**
+ * Query of the report
+ */
+type TReportQuery = { range: TReportRange }
 
 /**
  * Report period switch and everything derived from it
@@ -27,7 +31,8 @@ export function useReport() {
 	const t = useTranslations('Reports')
 	const methods = usePaymentMethods()
 	const format = useFormat()
-	const [range, setRange] = useState<ReportRange>('year')
+	const filters = useForm<TReportQuery>({ defaultValues: { range: 'year' } })
+	const range = useWatch({ control: filters.control, name: 'range' })
 	const data = range === 'year' ? MONTHLY_REVENUE : MONTHLY_REVENUE.slice(6)
 	const total = data.reduce((sum, d) => sum + d.value, 0)
 	const place = barLayout(data.length)
@@ -52,8 +57,7 @@ export function useReport() {
 	})
 
 	return {
-		range,
-		setRange,
+		filters,
 		ranges: [
 			{ id: 'half' as const, label: t('n6Months') },
 			{ id: 'year' as const, label: t('n12Months') },
@@ -81,4 +85,4 @@ export function useReport() {
 	}
 }
 
-export type ReportModel = ReturnType<typeof useReport>
+export type TReportModel = ReturnType<typeof useReport>

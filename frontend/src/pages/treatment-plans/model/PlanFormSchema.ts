@@ -1,9 +1,12 @@
 import { z } from 'zod'
 
+export const PLAN_DOCTORS = ['kas', 'pet', 'tok'] as const
+export const PLAN_PAYMENTS = ['full', 'stage', 'inst'] as const
+
 const amount = z.coerce.number<string>().int().min(0, 'enterAmount')
 
 export const planFormSchema = z.object({
-	doctor: z.enum(['kas', 'pet', 'tok']),
+	doctor: z.enum(PLAN_DOCTORS),
 	name: z.string().trim().min(2, 'enterPlanName'),
 	stages: z
 		.array(
@@ -17,7 +20,7 @@ export const planFormSchema = z.object({
 			}),
 		)
 		.min(1, 'addAtLeastOneStage'),
-	payment: z.enum(['full', 'stage', 'inst']),
+	payment: z.enum(PLAN_PAYMENTS),
 	note: z.string().trim(),
 })
 

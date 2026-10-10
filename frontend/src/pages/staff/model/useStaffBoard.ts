@@ -3,12 +3,13 @@
 import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import {
 	STAFF,
 	STAFF_ROLE,
 	STAFF_STATUS,
-	type StaffRole,
+	type TStaffRole,
 } from '@/entities/employee'
 
 import { getInitials } from '@/shared/lib/format'
@@ -17,10 +18,15 @@ import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { ROSTER, SHIFT, TODAY_COLUMN, WEEK_DAYS } from './Roster'
 import type { TShiftTarget } from './useShiftForm'
 
-export type StaffView = 'team' | 'roster'
-export type RoleFilter = 'all' | StaffRole
+type TStaffView = 'team' | 'roster'
+type TRoleFilter = 'all' | TStaffRole
 
-const ROLES: { id: RoleFilter; label: string }[] = [
+/**
+ * Query of the team list
+ */
+type TTeamQuery = { role: TRoleFilter }
+
+const ROLES: { id: TRoleFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
 	{ id: 'dentist', label: 'dentists' },
 	{ id: 'assistant', label: 'assistants' },
@@ -34,8 +40,9 @@ export function useStaffBoard(onPickShift: (target: TShiftTarget) => void) {
 	const t = useTranslations('Staff')
 	const tEmployee = useTranslations('Employee')
 	const format = useFormat()
-	const [view, setView] = useState<StaffView>('team')
-	const [role, setRole] = useState<RoleFilter>('all')
+	const [view, setView] = useState<TStaffView>('team')
+	const filters = useForm<TTeamQuery>({ defaultValues: { role: 'all' } })
+	const role = useWatch({ control: filters.control, name: 'role' })
 
 	const people = STAFF.filter(
 		person => role === 'all' || person.role === role,
@@ -95,8 +102,7 @@ export function useStaffBoard(onPickShift: (target: TShiftTarget) => void) {
 			{ id: 'team' as const, label: t('team') },
 			{ id: 'roster' as const, label: t('shiftSchedule') },
 		],
-		role,
-		setRole,
+		filters,
 		roles: ROLES.map(option => ({ ...option, label: t(option.label) })),
 		people,
 		roster,
@@ -107,4 +113,4 @@ export function useStaffBoard(onPickShift: (target: TShiftTarget) => void) {
 	}
 }
 
-export type StaffBoardModel = ReturnType<typeof useStaffBoard>
+export type TStaffBoardModel = ReturnType<typeof useStaffBoard>

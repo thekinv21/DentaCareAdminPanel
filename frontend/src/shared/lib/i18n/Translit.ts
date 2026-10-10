@@ -37,8 +37,6 @@ const MAP: Record<string, string> = {
 	ү: 'u',
 }
 
-export const CYRILLIC = /[А-Яа-яЁёҢңӨөҮү]/
-
 /**
  * Latin spelling of Cyrillic text, used for people's names in English
  */

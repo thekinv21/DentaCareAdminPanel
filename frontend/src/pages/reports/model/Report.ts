@@ -1,4 +1,4 @@
-export type ReportRange = 'half' | 'year'
+export type TReportRange = 'half' | 'year'
 
 /**
  * Monthly revenue in thousands of som, October 2025 – September 2026
@@ -20,31 +20,31 @@ export const MONTHLY_REVENUE: { month: string; value: number }[] = [
 
 export const REVENUE_TARGET = 2000
 
-export const RANGE_LABEL: Record<ReportRange, string> = {
+export const RANGE_LABEL: Record<TReportRange, string> = {
 	year: 'october2025September2026',
 	half: 'aprilSeptember2026',
 }
 
 export const RANGE_KPI: Record<
-	ReportRange,
+	TReportRange,
 	{ revenueDelta: string; newPatients: string; newPatientsDelta: string }
 > = {
 	year: { revenueDelta: '+11%', newPatients: '412', newPatientsDelta: '+14%' },
 	half: { revenueDelta: '+9%', newPatients: '226', newPatientsDelta: '+18%' },
 }
 
-export interface DoctorPerformance {
+type TDoctorPerformance = {
 	initials: string
 	name: string
 	specialty: string
 	tone: 'accent' | 'info' | 'ok'
-	visits: Record<ReportRange, string>
-	revenue: Record<ReportRange, string>
+	visits: Record<TReportRange, string>
+	revenue: Record<TReportRange, string>
 	planConsent: number
 	chairLoad: number
 }
 
-export const DOCTOR_PERFORMANCE: DoctorPerformance[] = [
+export const DOCTOR_PERFORMANCE: TDoctorPerformance[] = [
 	{
 		initials: 'ak',
 		name: 'Айгерим Касымова',

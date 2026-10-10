@@ -4,27 +4,29 @@ import { Plus, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
+import { useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
-import { inputClass } from '@/shared/ui/field'
+import { FieldError, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Table, Td, Th } from '@/shared/ui/table'
 
-import type { TInvoiceFormModel } from '../model/useInvoiceForm'
+import type { TInvoiceFormInput } from '../model/InvoiceFormSchema'
+import { useInvoiceItems } from '../model/useInvoiceItems'
 
 const cellInput = cn(inputClass, 'h-9 px-2.5')
+const numberInput = cn(cellInput, 'font-mono')
 
-type TInvoiceItemsTableProps = { form: TInvoiceFormModel }
-
-export function InvoiceItemsTable({ form }: TInvoiceItemsTableProps) {
+export function InvoiceItemsTable() {
 	const t = useTranslations('InvoiceForm')
-	const error = form.errorOf(form.errors.items)
+	const items = useInvoiceItems()
+	const inputProps = useFieldProps<TInvoiceFormInput>()
 
 	return (
 		<FormSection
 			title={t('items')}
 			aside={
-				<Button size='sm' onClick={form.addItem}>
+				<Button size='sm' onClick={items.add}>
 					<Plus size={15} aria-hidden='true' />
 					{t('addService')}
 				</Button>
@@ -44,41 +46,39 @@ export function InvoiceItemsTable({ form }: TInvoiceItemsTableProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{form.items.map(item => (
-							<tr key={item.key}>
+						{items.rows.map(({ key, index, sum, remove }) => (
+							<tr key={key}>
 								<Td>
 									<input
 										className={cellInput}
 										aria-label={t('service')}
-										aria-invalid={item.invalid('name')}
-										{...form.register(`items.${item.index}.name`)}
+										{...inputProps(`items.${index}.name`)}
 									/>
 								</Td>
 								<Td>
 									<input
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('tooth')}
-										{...form.register(`items.${item.index}.tooth`)}
+										{...inputProps(`items.${index}.tooth`)}
 									/>
 								</Td>
 								<Td>
 									<input
 										inputMode='numeric'
-										className={cn(cellInput, 'font-mono')}
+										className={numberInput}
 										aria-label={t('price')}
-										aria-invalid={item.invalid('price')}
-										{...form.register(`items.${item.index}.price`)}
+										{...inputProps(`items.${index}.price`)}
 									/>
 								</Td>
 								<Td mono nowrap align='right' className='font-semibold'>
-									{item.sum}
+									{sum}
 								</Td>
 								<Td>
 									<IconButton
 										quiet
 										size='sm'
 										aria-label={t('removeItem')}
-										onClick={item.remove}
+										onClick={remove}
 										className='text-danger'
 									>
 										<Trash2 size={16} aria-hidden='true' />
@@ -89,9 +89,7 @@ export function InvoiceItemsTable({ form }: TInvoiceItemsTableProps) {
 					</tbody>
 				</Table>
 			</div>
-			{error && (
-				<span className='text-xs font-semibold text-danger'>{error}</span>
-			)}
+			<FieldError name='items' />
 		</FormSection>
 	)
 }

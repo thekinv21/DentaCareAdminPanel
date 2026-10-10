@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-import type { Invoice } from '@/entities/invoice'
+import type { TInvoice } from '@/entities/invoice'
 
 import { mockRequest } from '@/shared/api'
 import { getInitials } from '@/shared/lib/format'
@@ -14,20 +14,20 @@ import { useConfirm } from '@/shared/ui/confirm-dialog'
 /**
  * Voiding an unpaid invoice (reason required) and refunding a paid one
  */
-export function useInvoiceActions(methodName: (invoice: Invoice) => string) {
+export function useInvoiceActions(methodName: (invoice: TInvoice) => string) {
 	const t = useTranslations('InvoiceForm')
 	const format = useFormat()
 	const confirm = useConfirm()
 	const [voided, setVoided] = useState<Set<string>>(new Set())
 
-	const subject = (invoice: Invoice, sub: string) => {
+	const subject = (invoice: TInvoice, sub: string) => {
 		const name = format.name(invoice.patientName)
 		return { title: name, subtitle: sub, initials: getInitials(name) }
 	}
 
 	return {
 		voided,
-		voidInvoice: (invoice: Invoice) =>
+		voidInvoice: (invoice: TInvoice) =>
 			confirm({
 				tone: 'danger',
 				title: t('voidQuestion', { number: invoice.number }),
@@ -51,7 +51,7 @@ export function useInvoiceActions(methodName: (invoice: Invoice) => string) {
 						setVoided(current => new Set([...current, invoice.number])),
 					),
 			}),
-		refund: (invoice: Invoice) => {
+		refund: (invoice: TInvoice) => {
 			let attempts = 0
 			const amount = format.som(invoice.amount)
 			confirm({

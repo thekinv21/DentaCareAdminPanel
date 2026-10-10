@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 
 import type { TBulkItem, TConfirmOptions } from './ConfirmTypes'
 
-export type TBulkFailure = { item: TBulkItem; error: string }
+type TBulkFailure = { item: TBulkItem; error: string }
 
 const messageOf = (error: unknown) =>
 	error instanceof Error ? error.message : String(error)

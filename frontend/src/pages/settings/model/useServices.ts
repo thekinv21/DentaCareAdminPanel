@@ -1,21 +1,25 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { useFormat } from '@/shared/lib/i18n'
 
 import {
 	SERVICE_CATEGORY,
-	type ServiceCategory,
 	SERVICES,
+	type TServiceCategory,
 	type TServiceItem,
 } from './Services'
 
-type CategoryFilter = 'all' | Exclude<ServiceCategory, 'hyg'>
+type TCategoryFilter = 'all' | Exclude<TServiceCategory, 'hyg'>
 
-const FILTERS: { id: CategoryFilter; label: string }[] = [
+/**
+ * Query of the price list
+ */
+type TServicesQuery = { category: TCategoryFilter }
+
+const FILTERS: { id: TCategoryFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
 	{ id: 'diag', label: 'diagnostics' },
 	{ id: 'ther', label: 'restorativeDentistry' },
@@ -23,28 +27,28 @@ const FILTERS: { id: CategoryFilter; label: string }[] = [
 	{ id: 'orth', label: 'prosthodontics' },
 ]
 
-/**
- * Price list filtered by category
- */
 type TServicesOptions = {
 	removedCodes: Set<string>
 	onEdit: (service: TServiceItem) => void
 	onRemove: (service: TServiceItem) => void
 }
 
-export function useServices({
-	removedCodes,
-	onEdit,
-	onRemove,
-}: TServicesOptions) {
+/**
+ * Price list filtered by category
+ */
+export function useServices(options: TServicesOptions) {
+	const { removedCodes, onEdit, onRemove } = options
+
 	const t = useTranslations('Settings')
 	const format = useFormat()
-	const [category, setCategory] = useState<CategoryFilter>('all')
+	const filters = useForm<TServicesQuery>({
+		defaultValues: { category: 'all' },
+	})
+	const category = useWatch({ control: filters.control, name: 'category' })
 
 	return {
-		category,
-		setCategory,
-		filters: FILTERS.map(item => ({ ...item, label: t(item.label) })),
+		filters,
+		categories: FILTERS.map(item => ({ ...item, label: t(item.label) })),
 		rows: SERVICES.filter(
 			service =>
 				!removedCodes.has(service.code) &&

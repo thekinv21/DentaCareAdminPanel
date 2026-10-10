@@ -1,22 +1,22 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 export type TConfirmTone =
 	'danger' | 'critical' | 'warning' | 'success' | 'info'
 
 export type TImpactTone = 'danger' | 'warning' | 'ok' | 'neutral' | 'info'
 
-export type TConfirmSubject = {
+type TConfirmSubject = {
 	title: string
 	subtitle?: string
 	initials?: string
-	tone?: Tone
+	tone?: TTone
 }
 
 export type TBulkItem = {
 	id: string
 	name: string
 	initials?: string
-	tone?: Tone
+	tone?: TTone
 }
 
 export type TConfirmPayload = {

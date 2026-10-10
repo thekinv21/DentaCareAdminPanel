@@ -2,6 +2,7 @@
 
 import { Check, TriangleAlert } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Controller } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { ChoiceChips } from '@/shared/ui/choice-chips'
@@ -29,54 +30,64 @@ export function ConfirmGuards({ request, model }: TConfirmGuardsProps) {
 			{reasons && (
 				<div className='flex flex-col gap-2'>
 					<span className={sectionLabelClass}>{reasonLabel}</span>
-					<ChoiceChips
-						aria-label={reasonLabel}
-						options={reasons.map(reason => ({ id: reason, label: reason }))}
-						value={model.reason}
-						onChange={model.toggleReason}
+					<Controller
+						control={model.control}
+						name='reason'
+						render={({ field }) => (
+							<ChoiceChips
+								aria-label={reasonLabel}
+								options={reasons.map(reason => ({ id: reason, label: reason }))}
+								value={field.value}
+								onChange={value =>
+									field.onChange(field.value === value ? null : value)
+								}
+							/>
+						)}
 					/>
 					<textarea
 						className={cn(textareaClass, 'min-h-14')}
 						placeholder={t('commentOptional')}
-						value={model.reasonText}
-						onChange={event => model.setReasonText(event.target.value)}
+						{...model.register('reasonText')}
 					/>
 				</div>
 			)}
 			{!!options?.length && (
 				<div className='flex flex-col gap-0.5'>
-					{options.map(option => {
-						const on = !!model.options[option.id]
-						return (
-							<button
-								key={option.id}
-								type='button'
-								role='checkbox'
-								aria-checked={on}
-								onClick={() => model.toggleOption(option.id)}
-								className='flex items-start gap-2.5 border-0 bg-transparent py-1.5 text-left text-ink'
-							>
-								<span
-									className={cn(
-										'inline-flex size-5 shrink-0 items-center justify-center rounded-md border-[1.5px]',
-										on
-											? 'border-brand bg-brand text-on-brand'
-											: 'border-line-strong bg-surface text-transparent',
-									)}
+					{options.map(option => (
+						<Controller
+							key={option.id}
+							control={model.control}
+							name={`options.${option.id}`}
+							render={({ field: { value: on, onChange } }) => (
+								<button
+									type='button'
+									role='checkbox'
+									aria-checked={on}
+									onClick={() => onChange(!on)}
+									className='flex items-start gap-2.5 border-0 bg-transparent py-1.5 text-left text-ink'
 								>
-									<Check size={13} strokeWidth={3} aria-hidden='true' />
-								</span>
-								<span>
-									<span className='block font-semibold'>{option.label}</span>
-									{option.hint && (
-										<span className='block text-[12.5px] text-ink-muted'>
-											{option.hint}
-										</span>
-									)}
-								</span>
-							</button>
-						)
-					})}
+									<span
+										className={cn(
+											'inline-flex size-5 shrink-0 items-center justify-center rounded-md border-[1.5px]',
+											on
+												? 'border-brand bg-brand text-on-brand'
+												: 'border-line-strong bg-surface text-transparent',
+										)}
+									>
+										<Check size={13} strokeWidth={3} aria-hidden='true' />
+									</span>
+									<span>
+										<span className='block font-semibold'>{option.label}</span>
+										{option.hint && (
+											<span className='block text-[12.5px] text-ink-muted'>
+												{option.hint}
+											</span>
+										)}
+									</span>
+								</button>
+							)}
+						/>
+					))}
 				</div>
 			)}
 			{typeToConfirm && (
@@ -94,8 +105,7 @@ export function ConfirmGuards({ request, model }: TConfirmGuardsProps) {
 						autoComplete='off'
 						spellCheck={false}
 						placeholder={typeToConfirm}
-						value={model.typed}
-						onChange={event => model.setTyped(event.target.value)}
+						{...model.register('typed')}
 					/>
 				</label>
 			)}

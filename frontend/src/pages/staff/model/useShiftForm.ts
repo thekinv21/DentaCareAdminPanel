@@ -2,57 +2,49 @@
 
 import { useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
 import { useFormat } from '@/shared/lib/i18n'
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { useToast } from '@/shared/ui/toast'
 
-import { SHIFT, type ShiftKey, WEEK_START } from './Roster'
-
-export type TShiftType = 'work' | 'off' | 'leave' | 'sick' | 'cover'
-export type TShiftRepeat = 'once' | 'week' | '2w'
-
-export const SHIFT_TYPES: TShiftType[] = [
-	'work',
-	'off',
-	'leave',
-	'sick',
-	'cover',
-]
-export const SHIFT_REPEATS: TShiftRepeat[] = ['once', 'week', '2w']
-
-type TShiftDraft = {
-	type: TShiftType
-	from: string
-	to: string
-	chair: number
-	repeat: TShiftRepeat
-}
+import { SHIFT, type TShiftKey, WEEK_START } from './Roster'
+import { shiftFormSchema, type TShiftFormValues } from './ShiftFormSchema'
 
 export type TShiftTarget = {
 	name: string
 	initials: string
-	tone: Tone
+	tone: TTone
 	dayIndex: number
-	shift: ShiftKey
+	shift: TShiftKey
 }
 
-const typeOf = (shift: ShiftKey): TShiftType =>
-	shift === 'off'
-		? 'off'
-		: shift === 'leave'
-			? 'leave'
-			: shift === 'open'
-				? 'cover'
-				: 'work'
+const TYPE_OF_SHIFT: Partial<Record<TShiftKey, TShiftFormValues['type']>> = {
+	off: 'off',
+	leave: 'leave',
+	open: 'cover',
+}
 
 const addDays = (iso: string, days: number) => {
 	const date = new Date(`${iso}T00:00:00Z`)
 	date.setUTCDate(date.getUTCDate() + days)
 	return date.toISOString().slice(0, 10)
+}
+
+function valuesOf(target: TShiftTarget): TShiftFormValues {
+	const [from, to] = SHIFT[target.shift].label.split('–')
+	const isTime = /\d/.test(SHIFT[target.shift].label)
+	return {
+		type: TYPE_OF_SHIFT[target.shift] ?? 'work',
+		from: isTime ? from : '09:00',
+		to: isTime ? to : '18:00',
+		chair: 1,
+		repeat: 'once',
+	}
 }
 
 /**
@@ -64,8 +56,11 @@ export function useShiftForm() {
 	const toast = useToast()
 	const confirm = useConfirm()
 	const [target, setTarget] = useState<TShiftTarget | null>(null)
-	const [draft, setDraft] = useState<TShiftDraft | null>(null)
-	const [saving, setSaving] = useState(false)
+
+	const methods = useForm<TShiftFormValues>({
+		resolver: zodResolver(shiftFormSchema),
+	})
+	const type = useWatch({ control: methods.control, name: 'type' })
 
 	const day = target
 		? format.date(addDays(WEEK_START, target.dayIndex), {
@@ -77,33 +72,23 @@ export function useShiftForm() {
 	const close = () => setTarget(null)
 
 	return {
-		open: !!target && !!draft,
+		methods,
+		open: !!target,
 		target,
 		day,
-		draft,
-		change: (patch: Partial<TShiftDraft>) =>
-			setDraft(current => (current ? { ...current, ...patch } : current)),
+		isWork: type === 'work',
+		conflict: type && type !== 'work' ? t('conflictNote') : undefined,
 		openFor: (next: TShiftTarget) => {
-			const [from = '09:00', to = '18:00'] = SHIFT[next.shift].label.split('–')
 			setTarget(next)
-			setDraft({
-				type: typeOf(next.shift),
-				from: /\d/.test(from) ? from : '09:00',
-				to: /\d/.test(to) ? to : '18:00',
-				chair: 1,
-				repeat: 'once',
-			})
+			methods.reset(valuesOf(next))
 		},
 		close,
-		conflict: draft && draft.type !== 'work' ? t('conflictNote') : undefined,
-		saving,
-		save: async () => {
-			setSaving(true)
+		saving: methods.formState.isSubmitting,
+		submit: methods.handleSubmit(async () => {
 			await mockRequest()
-			setSaving(false)
 			close()
 			toast.show(t('scheduleUpdated'))
-		},
+		}),
 		remove: () =>
 			target &&
 			confirm({

@@ -1,4 +1,4 @@
-import type { Tone } from '@/shared/ui/badge'
+import type { TTone } from '@/shared/ui/badge'
 
 import {
 	SURFACES,
@@ -86,7 +86,7 @@ export function toothFlags(tooth: TToothState): TFlag[] {
 /**
  * Badges for the selected-tooth panel
  */
-type TTag = TFlag & { tone: Tone }
+type TTag = TFlag & { tone: TTone }
 
 export function toothTags(tooth: TToothState): TTag[] {
 	const tags = SURFACES.flatMap((surface): TTag[] => {
