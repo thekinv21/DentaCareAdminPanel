@@ -3,11 +3,15 @@
 import type { RowData } from '@tanstack/react-table'
 import { useTranslations } from 'next-intl'
 
-import type { TDataGridTable } from './Features'
+import {
+	clampPageSize,
+	PAGE_SIZE_OPTIONS,
+	type TDataGridTable,
+} from './Features'
 import { getPageItems } from './PageItems'
 
 /**
- * Range summary and page buttons of a data grid
+ * Range summary, page buttons and rows-per-page choice of a data grid
  */
 export function useDataGridPagination<TData extends RowData>(
 	table: TDataGridTable<TData>,
@@ -41,6 +45,11 @@ export function useDataGridPagination<TData extends RowData>(
 
 	const onPageChange = (index: number) => table.setPageIndex(index)
 
+	const pageSizes = PAGE_SIZE_OPTIONS
+
+	const onPageSizeChange = (size: number) =>
+		table.setPageSize(clampPageSize(size))
+
 	return {
 		summary,
 		pageIndex,
@@ -50,5 +59,8 @@ export function useDataGridPagination<TData extends RowData>(
 		onPrevious,
 		onNext,
 		onPageChange,
+		pageSize,
+		pageSizes,
+		onPageSizeChange,
 	}
 }

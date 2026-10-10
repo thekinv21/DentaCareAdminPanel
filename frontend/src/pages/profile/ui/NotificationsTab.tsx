@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
+import { Select } from '@/shared/ui/select'
 import { Table, Th } from '@/shared/ui/table'
 
 import type { TProfileFormValues } from '../model/ProfileFormSchema'
@@ -55,10 +56,10 @@ export function NotificationsTab({
 					/>
 				</Field>
 				<Field label={t('daySummary')}>
-					<select className={inputClass} {...register('daySummary')}>
+					<Select {...register('daySummary')}>
 						<option value='daily'>{dailyScheduleLabel}</option>
 						<option value='never'>{t('dontSend')}</option>
-					</select>
+					</Select>
 				</Field>
 			</div>
 		</div>

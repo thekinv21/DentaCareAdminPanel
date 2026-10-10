@@ -7,8 +7,9 @@ import { useFieldProps } from '@/shared/lib/form'
 import { AffixInput } from '@/shared/ui/affix-input'
 import { Badge } from '@/shared/ui/badge'
 import { ToggleChipsField } from '@/shared/ui/choice-chips'
-import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
+import { Field, FormField, formGrid2 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { Select } from '@/shared/ui/select'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import { PAYMENT_CHANNELS, TILLS } from '../model/Options'
@@ -47,13 +48,13 @@ export function AdminSection() {
 					<AffixInput suffix='%' {...inputProps('discountLimit')} />
 				</FormField>
 				<Field label={t('till')}>
-					<select className={inputClass} {...inputProps('till')}>
+					<Select {...inputProps('till')}>
 						{TILLS.map(till => (
 							<option key={till} value={till}>
 								{t(till)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<SwitchCardField
 					control={control}

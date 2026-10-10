@@ -10,6 +10,7 @@ import { useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PhoneInput } from '@/shared/ui/phone-input'
+import { Select } from '@/shared/ui/select'
 
 import { CITIES, type TRegisterInput } from '../model/RegisterSchema'
 
@@ -32,13 +33,13 @@ export function ClinicStep({ onNext }: TClinicStepProps) {
 			</AuthField>
 			<div className='grid grid-cols-[1fr_140px] gap-3'>
 				<AuthField name='city' label={t('city')}>
-					<select id='city' className={inputLgClass} {...inputProps('city')}>
+					<Select id='city' size='lg' {...inputProps('city')}>
 						{CITIES.map(city => (
 							<option key={city} value={city}>
 								{t(city)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</AuthField>
 				<AuthField name='chairs' label={t('chairs')}>
 					<input

@@ -16,6 +16,7 @@ import {
 	textareaClass,
 } from '@/shared/ui/field'
 import { RadioCard } from '@/shared/ui/radio-card'
+import { Select } from '@/shared/ui/select'
 
 import { PROFILE_FIELDS } from '../model/Profile'
 import type { TProfileFormValues } from '../model/ProfileFormSchema'
@@ -57,10 +58,10 @@ export function ProfileTab(props: TProfileTabProps) {
 					</FormField>
 				))}
 				<Field label={t('defaultChair')}>
-					<select className={inputClass} {...register('defaultChair')}>
+					<Select {...register('defaultChair')}>
 						<option value='chair1'>{t('chair1GeneralDentistry')}</option>
 						<option value='chair2'>{t('chair2Prosthodontics')}</option>
-					</select>
+					</Select>
 				</Field>
 			</div>
 
@@ -89,8 +90,7 @@ export function ProfileTab(props: TProfileTabProps) {
 
 			<div className={formGrid2}>
 				<Field label={t('theme')}>
-					<select
-						className={inputClass}
+					<Select
 						value={theme}
 						onChange={event =>
 							onThemeChange(event.target.value as TThemePreference)
@@ -101,14 +101,14 @@ export function ProfileTab(props: TProfileTabProps) {
 								{item.label}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<Field label={t('defaultScheduleView')}>
-					<select className={inputClass} {...register('scheduleView')}>
+					<Select {...register('scheduleView')}>
 						<option value='week'>{t('week')}</option>
 						<option value='day'>{t('day')}</option>
 						<option value='month'>{t('month')}</option>
-					</select>
+					</Select>
 				</Field>
 				<Field label={t('signatureOnDocuments')} className='col-span-full'>
 					<textarea className={textareaClass} {...register('signature')} />

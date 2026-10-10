@@ -27,7 +27,7 @@ export function UsersTable(props: TUsersTableProps) {
 	const { control, register } = form
 
 	return (
-		<Card as='section' className='animate-rise'>
+		<Card as='section' className='min-h-0 animate-rise'>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
 				<SegmentedField
 					control={control}

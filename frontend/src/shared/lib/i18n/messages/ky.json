@@ -693,6 +693,7 @@
 		"previousPage": "Мурунку барак",
 		"nextPage": "Кийинки барак",
 		"page": "{n}-барак",
-		"range": "{total} ичинен {from}–{to}"
+		"range": "{total} ичинен {from}–{to}",
+		"rowsPerPage": "Барактагы саптар"
 	}
 }

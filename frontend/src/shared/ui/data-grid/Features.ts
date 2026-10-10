@@ -52,3 +52,15 @@ export const createDataGridColumnHelper = <TData extends RowData>() =>
 	createColumnHelper<TDataGridFeatures, TData>()
 
 export const DEFAULT_PAGE_SIZE = 10
+
+/**
+ * Rows per page the user can pick: at least 5, at most 100
+ */
+export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50, 100]
+
+const MIN_PAGE_SIZE = PAGE_SIZE_OPTIONS[0]
+
+const MAX_PAGE_SIZE = PAGE_SIZE_OPTIONS[PAGE_SIZE_OPTIONS.length - 1]
+
+export const clampPageSize = (size: number) =>
+	Math.min(Math.max(size, MIN_PAGE_SIZE), MAX_PAGE_SIZE)

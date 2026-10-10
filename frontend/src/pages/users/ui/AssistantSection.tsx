@@ -7,8 +7,9 @@ import { useFieldProps } from '@/shared/lib/form'
 import { useFormat } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
 import { ToggleChipsField } from '@/shared/ui/choice-chips'
-import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
+import { Field, FormField, formGrid2 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { Select } from '@/shared/ui/select'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import {
@@ -57,25 +58,22 @@ export function AssistantSection() {
 			</FormField>
 			<div className={formGrid2}>
 				<Field label={t('mainChair')}>
-					<select
-						className={inputClass}
-						{...register('chair', { valueAsNumber: true })}
-					>
+					<Select {...register('chair', { valueAsNumber: true })}>
 						{ASSISTANT_CHAIRS.map(chair => (
 							<option key={chair} value={chair}>
 								{t(`chair${chair}`)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<Field label={t('qualification')}>
-					<select className={inputClass} {...inputProps('qualification')}>
+					<Select {...inputProps('qualification')}>
 						{QUALIFICATIONS.map(qualification => (
 							<option key={qualification} value={qualification}>
 								{t(qualification)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<SwitchCardField
 					control={control}

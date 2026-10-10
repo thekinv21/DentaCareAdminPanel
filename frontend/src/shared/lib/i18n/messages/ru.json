@@ -693,6 +693,7 @@
 		"previousPage": "Предыдущая страница",
 		"nextPage": "Следующая страница",
 		"page": "Страница {n}",
-		"range": "{from}–{to} из {total}"
+		"range": "{from}–{to} из {total}",
+		"rowsPerPage": "Строк на странице"
 	}
 }

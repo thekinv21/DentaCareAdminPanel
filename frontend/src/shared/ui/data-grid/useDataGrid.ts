@@ -13,6 +13,7 @@ import {
 import { matchesText } from '@/shared/lib/search'
 
 import {
+	clampPageSize,
 	DATA_GRID_FEATURES,
 	DEFAULT_PAGE_SIZE,
 	type TDataGridColumn,
@@ -50,7 +51,7 @@ export function useDataGrid<TData extends RowData>(
 
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
-		pageSize,
+		pageSize: clampPageSize(pageSize),
 	})
 
 	const query = JSON.stringify([search, filters])

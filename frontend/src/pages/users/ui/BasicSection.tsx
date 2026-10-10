@@ -10,6 +10,7 @@ import { AffixInput } from '@/shared/ui/affix-input'
 import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { Select } from '@/shared/ui/select'
 
 import type { TUserFormValues } from '../model/UserFormSchema'
 
@@ -74,10 +75,10 @@ export function BasicSection() {
 					/>
 				</Field>
 				<Field label={t('branch')} required>
-					<select className={inputClass} {...inputProps('branch')}>
+					<Select {...inputProps('branch')}>
 						<option value='alaToo'>{t('branchAlaToo')}</option>
 						<option value='jal'>{t('branchJal')}</option>
-					</select>
+					</Select>
 				</Field>
 				<Field as='div' label={t('interfaceLanguage')}>
 					<ChoiceChipsField

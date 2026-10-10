@@ -19,6 +19,7 @@ import {
 	inputClass,
 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { Select } from '@/shared/ui/select'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import { CHAIR_NUMBERS, SPECIALTIES, VISIT_DURATIONS } from '../model/Options'
@@ -70,16 +71,13 @@ export function MedicSection({ isChief }: TMedicSectionProps) {
 					/>
 				</FormField>
 				<Field label={t('defaultChair')}>
-					<select
-						className={inputClass}
-						{...register('chair', { valueAsNumber: true })}
-					>
+					<Select {...register('chair', { valueAsNumber: true })}>
 						{CHAIR_NUMBERS.map(chair => (
 							<option key={chair} value={chair}>
 								{t(`chair${chair}`)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<Field as='div' label={t('visitDuration')}>
 					<ChoiceChipsField

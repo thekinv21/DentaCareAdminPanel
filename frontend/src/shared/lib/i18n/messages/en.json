@@ -693,6 +693,7 @@
 		"previousPage": "Previous page",
 		"nextPage": "Next page",
 		"page": "Page {n}",
-		"range": "{from}–{to} of {total}"
+		"range": "{from}–{to} of {total}",
+		"rowsPerPage": "Rows per page"
 	}
 }

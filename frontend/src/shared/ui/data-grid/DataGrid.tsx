@@ -18,7 +18,8 @@ type TDataGridProps<TData extends RowData> = {
 }
 
 /**
- * Renders the current page of a `useDataGrid` table with the shared table styles
+ * Renders the current page of a `useDataGrid` table with the shared table styles.
+ * Inside a height-limited flex column the rows scroll under a sticky header
  */
 export function DataGrid<TData extends RowData>(props: TDataGridProps<TData>) {
 	const { table, emptyText, className, isRowMuted } = props
@@ -26,7 +27,7 @@ export function DataGrid<TData extends RowData>(props: TDataGridProps<TData>) {
 	const rows = table.getRowModel().rows
 
 	return (
-		<TableScroll>
+		<TableScroll className='min-h-0'>
 			<Table className={className}>
 				<thead>
 					{table.getHeaderGroups().map(group => (

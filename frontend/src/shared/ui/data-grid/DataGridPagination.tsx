@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
 import { IconButton } from '@/shared/ui/icon-button'
+import { Select } from '@/shared/ui/select'
 
 import type { TDataGridTable } from './Features'
 import { useDataGridPagination } from './useDataGridPagination'
@@ -28,10 +29,31 @@ export function DataGridPagination<TData extends RowData>({
 		onPrevious,
 		onNext,
 		onPageChange,
+		pageSize,
+		pageSizes,
+		onPageSizeChange,
 	} = useDataGridPagination(table)
 
 	return (
-		<nav aria-label={t('pagination')} className='flex items-center gap-3'>
+		<nav
+			aria-label={t('pagination')}
+			className='flex flex-wrap items-center gap-3'
+		>
+			<label className='flex items-center gap-2 whitespace-nowrap'>
+				{t('rowsPerPage')}
+				<Select
+					size='sm'
+					value={pageSize}
+					onChange={event => onPageSizeChange(Number(event.target.value))}
+					className='font-mono tabular-nums'
+				>
+					{pageSizes.map(size => (
+						<option key={size} value={size}>
+							{size}
+						</option>
+					))}
+				</Select>
+			</label>
 			<span className='whitespace-nowrap'>{summary}</span>
 			<div className='flex items-center gap-1'>
 				<IconButton

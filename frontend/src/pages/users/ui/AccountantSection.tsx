@@ -6,8 +6,9 @@ import { useFormContext } from 'react-hook-form'
 import { useFieldProps } from '@/shared/lib/form'
 import { Badge } from '@/shared/ui/badge'
 import { ToggleChipsField } from '@/shared/ui/choice-chips'
-import { Field, formGrid2, inputClass } from '@/shared/ui/field'
+import { Field, formGrid2 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { Select } from '@/shared/ui/select'
 import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import { EXPORT_FORMATS, REPORT_BRANCHES, REPORTS } from '../model/Options'
@@ -39,22 +40,22 @@ export function AccountantSection() {
 			</Field>
 			<div className={formGrid2}>
 				<Field label={t('exportFormat')}>
-					<select className={inputClass} {...inputProps('exportFormat')}>
+					<Select {...inputProps('exportFormat')}>
 						{EXPORT_FORMATS.map(exportFormat => (
 							<option key={exportFormat} value={exportFormat}>
 								{t(`format_${exportFormat}`)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<Field label={t('branchesInReports')}>
-					<select className={inputClass} {...inputProps('reportBranches')}>
+					<Select {...inputProps('reportBranches')}>
 						{REPORT_BRANCHES.map(branchScope => (
 							<option key={branchScope} value={branchScope}>
 								{t(branchScope)}
 							</option>
 						))}
-					</select>
+					</Select>
 				</Field>
 				<SwitchCardField
 					control={control}
