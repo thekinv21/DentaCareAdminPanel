@@ -1,64 +1,71 @@
+import type { TPaymentMethodId } from '@/entities/invoice'
+
 export const BANK_DETAILS: {
-	id: 'visa' | 'mbank' | 'komp' | 'optima'
+	id: TPaymentMethodId
 	description: string
-	meta: [string, string][]
+	/**
+	 * Connection details; a value is a message key or raw text
+	 */
+	details: { label: string; value: string }[]
 }[] = [
 	{
 		id: 'visa',
 		description: 'visaCardsViaThe',
-		meta: [
-			['terminal', 'POS · Ingenico Move/5000'],
-			['terminalId', 'TID 40811752'],
-			['acquirer', 'Optima Bank'],
-			['fee', '1,8 %'],
+		details: [
+			{ label: 'terminal', value: 'POS · Ingenico Move/5000' },
+			{ label: 'terminalId', value: 'TID 40811752' },
+			{ label: 'acquirer', value: 'Optima Bank' },
+			{ label: 'fee', value: '1,8 %' },
 		],
 	},
 	{
 		id: 'mbank',
 		description: 'qrPaymentAndTransfer',
-		meta: [
-			['merchant', 'DENTA-ALATOO'],
-			['ID', 'MB-0042-7781'],
-			['settlement', 'instant'],
-			['fee', '0,9 %'],
+		details: [
+			{ label: 'merchant', value: 'DENTA-ALATOO' },
+			{ label: 'ID', value: 'MB-0042-7781' },
+			{ label: 'settlement', value: 'instant' },
+			{ label: 'fee', value: '0,9 %' },
 		],
 	},
 	{
 		id: 'komp',
 		description: 'qrPaymentInThe',
-		meta: [
-			['merchant', 'DENTA KLINIK'],
-			['ID', 'KMP-33190'],
-			['settlement', 'duringTheDay'],
-			['fee', '1,0 %'],
+		details: [
+			{ label: 'merchant', value: 'DENTA KLINIK' },
+			{ label: 'ID', value: 'KMP-33190' },
+			{ label: 'settlement', value: 'duringTheDay' },
+			{ label: 'fee', value: '1,0 %' },
 		],
 	},
 	{
 		id: 'optima',
 		description: 'qrOptima24AndInstallments',
-		meta: [
-			['merchant', 'DENTA-01'],
-			['ID', 'OPT-778120'],
-			['installments', 'n3612Mo'],
-			['fee', '1,2 %'],
+		details: [
+			{ label: 'merchant', value: 'DENTA-01' },
+			{ label: 'ID', value: 'OPT-778120' },
+			{ label: 'installments', value: 'installmentMonths' },
+			{ label: 'fee', value: '1,2 %' },
 		],
 	},
 ]
 
 export const PAYMENT_OPTIONS = [
 	{
-		id: 'fiscal',
+		id: 'fiscalReceipt',
 		label: 'fiscalReceiptCashRegister',
 		hint: 'automaticallyIssueAReceipt',
 	},
 	{
-		id: 'prepay',
+		id: 'onlinePrepayment',
 		label: 'prepaymentForOnlineBooking',
-		hint: 'n30OfTheFirst',
+		hint: 'prepaymentHint',
 	},
 	{
-		id: 'split',
+		id: 'splitPayment',
 		label: 'splitPayment',
 		hint: 'forExamplePartVia',
 	},
-]
+] as const
+
+export type TPaymentOptionId = (typeof PAYMENT_OPTIONS)[number]['id']

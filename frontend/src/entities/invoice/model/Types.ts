@@ -22,7 +22,14 @@ export type TInvoice = {
 	number: string
 	patientId: string
 	patientName: string
+	/**
+	 * Service message key of the Invoice namespace
+	 */
 	service: string
+	tooth?: string
+	/**
+	 * "dd.mm" of the current year
+	 */
 	dueDate: string
 	amount: number
 	balance: number

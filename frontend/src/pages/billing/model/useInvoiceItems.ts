@@ -5,7 +5,9 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { useFormat } from '@/shared/lib/i18n'
 
-import { NEW_ITEM, type TInvoiceFormInput } from './InvoiceFormSchema'
+import type { TInvoiceFormInput } from './InvoiceFormSchema'
+
+const NEW_ITEM = { name: 'itemConsultation', tooth: '—', price: '1000' }
 
 /**
  * Editable service rows of the invoice form with their prices
@@ -27,3 +29,5 @@ export function useInvoiceItems() {
 		add: () => items.append({ ...NEW_ITEM, name: t(NEW_ITEM.name) }),
 	}
 }
+
+export type TInvoiceItemRow = ReturnType<typeof useInvoiceItems>['rows'][number]

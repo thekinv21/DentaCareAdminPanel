@@ -5,12 +5,11 @@ import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { usePaymentMethods } from '@/entities/invoice'
-
 import { Button } from '@/shared/ui/button'
-import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
+import { StatCard, StatDelta, StatGrid } from '@/shared/ui/stat-card'
 
 import { useBilling } from '../model/useBilling'
+import { useBillingSummary } from '../model/useBillingSummary'
 import { useInvoiceActions } from '../model/useInvoiceActions'
 import { useInvoiceForm } from '../model/useInvoiceForm'
 import { usePayment } from '../model/usePayment'
@@ -20,12 +19,10 @@ import { PaymentPanel } from './PaymentPanel'
 
 export function BillingPage() {
 	const t = useTranslations('Billing')
-	const methods = usePaymentMethods()
 	const form = useInvoiceForm()
 	const payment = usePayment()
-	const actions = useInvoiceActions(
-		invoice => methods.byId(invoice.method).name,
-	)
+	const actions = useInvoiceActions()
+	const summary = useBillingSummary()
 	const billing = useBilling({
 		voided: actions.voided,
 		onEdit: form.openEdit,
@@ -37,7 +34,7 @@ export function BillingPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('october2026AcceptedVia')}
+				crumb={t('pageCrumb')}
 				title={t('billing')}
 				actions={
 					<Button variant='primary' onClick={form.openCreate}>
@@ -49,29 +46,30 @@ export function BillingPage() {
 			<PageContent>
 				<StatGrid label={t('summary')}>
 					<StatCard
-						label={t('receivedInOctober')}
-						value='2 184 300'
+						label={t('receivedThisMonth')}
+						value={summary.received}
 						unit={t('som')}
 						footer={
 							<>
-								<Delta>+9%</Delta> {t('vsSeptember')}
+								<StatDelta>{summary.receivedChange}</StatDelta>{' '}
+								{t('vsPreviousMonth')}
 							</>
 						}
 					/>
 					<StatCard
 						label={t('amountDue')}
-						value='218 400'
+						value={summary.amountDue}
 						unit={t('som')}
 						delay={50}
-						footer={t('n23Patients')}
+						footer={summary.debtors}
 					/>
 					<StatCard
 						label={t('overdue')}
-						value='46 900'
+						value={summary.overdue}
 						unit={t('som')}
 						valueClass='text-danger'
 						delay={100}
-						footer={t('n6InvoicesOlderThan')}
+						footer={summary.overdueInvoices}
 					/>
 				</StatGrid>
 				<section className='flex flex-[1_0_auto] flex-wrap items-stretch gap-4'>

@@ -7,7 +7,7 @@ import {
 	type TToothState,
 } from './Teeth'
 
-/* Pure chart rules; every label here is a Russian source string for `t` */
+/* Pure chart rules; every label here is a message key of the DentalChart namespace */
 
 const KIND_PERMANENT = [
 	'',
@@ -40,15 +40,15 @@ const QUADRANT: Record<number, string> = {
 }
 
 /**
- * FDI number → parts of "Первый моляр, нижний правый"
+ * FDI number → parts of "First molar, lower right"
  */
-export function toothNameParts(n: number) {
-	const quadrant = Math.floor(n / 10)
-	const position = n % 10
-	const primary = quadrant >= 5
+export function toothNameParts(toothNumber: number) {
+	const quadrant = Math.floor(toothNumber / 10)
+	const position = toothNumber % 10
+	const isPrimary = quadrant >= 5
 	return {
-		kind: primary ? KIND_PRIMARY[position] : KIND_PERMANENT[position],
-		primary,
+		kind: isPrimary ? KIND_PRIMARY[position] : KIND_PERMANENT[position],
+		isPrimary,
 		quadrant: QUADRANT[quadrant],
 	}
 }

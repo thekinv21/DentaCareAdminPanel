@@ -1,3 +1,5 @@
 export { ChoiceChips } from './ChoiceChips'
 export type { TChipOption } from './ChoiceChips'
+export { ChoiceChipsField } from './ChoiceChipsField'
 export { ToggleChips } from './ToggleChips'
+export { ToggleChipsField } from './ToggleChipsField'

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 
 import { Card, CardHeader } from '@/shared/ui/card'
 
+import { CHART_UPDATED_ON } from '../api/Mock'
 import { useDentalChart } from '../model/useDentalChart'
 import { ChartSummary } from './ChartSummary'
 import { ChartToolbar } from './ChartToolbar'
@@ -13,29 +14,29 @@ import { ToothBoard } from './ToothBoard'
 
 export function DentalChart() {
 	const t = useTranslations('DentalChart')
-	const chart = useDentalChart()
+	const chartModel = useDentalChart()
 
 	return (
 		<Card as='section' aria-label={t('toothChart')} className='animate-fade'>
 			<CardHeader
 				title={t('toothChart')}
-				description={t('fdiNotationUpdated12')}
+				description={t('chartUpdatedOn', { date: CHART_UPDATED_ON })}
 				actions={
 					<DentitionSwitch
-						value={chart.dentition}
-						onChange={chart.switchDentition}
+						value={chartModel.dentition}
+						onChange={chartModel.switchDentition}
 					/>
 				}
 			/>
 
-			<ChartToolbar tool={chart.tool} onChange={chart.setTool} />
+			<ChartToolbar tool={chartModel.tool} onChange={chartModel.setTool} />
 
 			<div className='flex flex-wrap items-start gap-4'>
-				<ToothBoard chart={chart} />
-				<SelectedToothPanel chart={chart} />
+				<ToothBoard chartModel={chartModel} />
+				<SelectedToothPanel chartModel={chartModel} />
 			</div>
 
-			<ChartSummary counts={chart.counts} />
+			<ChartSummary counts={chartModel.counts} />
 		</Card>
 	)
 }

@@ -38,6 +38,7 @@ export const NAVIGATION: TNavGroup[] = [
 				href: ROUTES.appointments,
 				label: 'appointments',
 				icon: CalendarDays,
+				// mock counters until the backend sends them
 				count: { value: 28 },
 			},
 			{ href: ROUTES.patients, label: 'patients', icon: Users },

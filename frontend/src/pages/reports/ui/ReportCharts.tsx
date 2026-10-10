@@ -11,6 +11,8 @@ import { ProgressBar } from '@/shared/ui/progress'
 import type { TReportModel } from '../model/useReport'
 import { RevenueChart } from './RevenueChart'
 
+const ROW_DELAY_STEP_MS = 60
+
 type TReportChartsProps = { report: TReportModel }
 
 export function ReportCharts({ report }: TReportChartsProps) {
@@ -30,7 +32,7 @@ export function ReportCharts({ report }: TReportChartsProps) {
 								{ label: t('aboveTarget'), swatch: 'bg-brand' },
 								{ label: t('belowTarget'), swatch: 'bg-info' },
 								{
-									label: t('goal2000'),
+									label: report.revenueGoal,
 									swatch:
 										'h-0 w-3.5 rounded-none border-t-2 border-dashed border-accent',
 								},
@@ -50,27 +52,45 @@ export function ReportCharts({ report }: TReportChartsProps) {
 					description={t('shareOfRevenue')}
 				/>
 				<ul className='flex flex-col gap-3.5'>
-					{report.methods.map((method, index) => (
-						<li key={method.id}>
-							<div className='flex items-center justify-between gap-2'>
-								<span className='inline-flex items-center gap-2'>
-									<PaymentMethodTile method={method.id} size='sm' />
-									{method.name}
-								</span>
-								<span className='font-mono font-semibold'>
-									{method.percent}%
-								</span>
-							</div>
-							<ProgressBar
-								value={method.bar}
-								fillClass={method.barClass}
-								delay={index * 60}
-								className='mt-1.5'
-							/>
-						</li>
+					{report.paymentMethods.map((paymentMethod, index) => (
+						<PaymentMethodShare
+							key={paymentMethod.id}
+							paymentMethod={paymentMethod}
+							animationDelay={index * ROW_DELAY_STEP_MS}
+						/>
 					))}
 				</ul>
 			</Card>
 		</section>
+	)
+}
+
+type TPaymentMethodShareProps = {
+	paymentMethod: TReportModel['paymentMethods'][number]
+	animationDelay: number
+}
+
+function PaymentMethodShare({
+	paymentMethod,
+	animationDelay,
+}: TPaymentMethodShareProps) {
+	return (
+		<li>
+			<div className='flex items-center justify-between gap-2'>
+				<span className='inline-flex items-center gap-2'>
+					<PaymentMethodTile method={paymentMethod.id} size='sm' />
+					{paymentMethod.name}
+				</span>
+				<span className='font-mono font-semibold'>
+					{paymentMethod.percent}%
+				</span>
+			</div>
+			<ProgressBar
+				value={paymentMethod.barPercent}
+				fillClass={paymentMethod.barClass}
+				delay={animationDelay}
+				className='mt-1.5'
+			/>
+		</li>
 	)
 }

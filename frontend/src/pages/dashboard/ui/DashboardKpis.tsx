@@ -7,17 +7,23 @@ import Link from 'next/link'
 import { CalendarDays, ChartColumn, Clock, CreditCard } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
+import { cn } from '@/shared/lib/cn'
 import { ROUTES } from '@/shared/routes'
 import { TONE_CLASS, type TTone } from '@/shared/ui/badge'
 import { ProgressBar } from '@/shared/ui/progress'
-import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
+import { StatCard, StatDelta, StatGrid } from '@/shared/ui/stat-card'
+
+import { useDashboardKpis } from '../model/useDashboardKpis'
 
 type TKpiIconProps = { tone: TTone; children: ReactNode }
 
 function KpiIcon({ tone, children }: TKpiIconProps) {
 	return (
 		<span
-			className={`flex size-8.5 shrink-0 items-center justify-center rounded-[10px] ${TONE_CLASS[tone]}`}
+			className={cn(
+				'flex size-8.5 shrink-0 items-center justify-center rounded-[10px]',
+				TONE_CLASS[tone],
+			)}
 		>
 			{children}
 		</span>
@@ -26,11 +32,13 @@ function KpiIcon({ tone, children }: TKpiIconProps) {
 
 export function DashboardKpis() {
 	const t = useTranslations('Dashboard')
+	const kpis = useDashboardKpis()
+
 	return (
 		<StatGrid label={t('dailySummary')}>
 			<StatCard
 				label={t('appointmentsToday')}
-				value='28'
+				value={kpis.appointments}
 				icon={
 					<KpiIcon tone='brand'>
 						<CalendarDays size={17} aria-hidden='true' />
@@ -38,13 +46,14 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						<Delta>+4</Delta> {t('vsLastFriday9')}
+						<StatDelta>{kpis.appointmentsChange}</StatDelta>{' '}
+						{kpis.appointmentsComparison}
 					</>
 				}
 			/>
 			<StatCard
 				label={t('chairUtilization')}
-				value='86%'
+				value={kpis.utilization}
 				delay={50}
 				icon={
 					<KpiIcon tone='info'>
@@ -52,11 +61,14 @@ export function DashboardKpis() {
 					</KpiIcon>
 				}
 			>
-				<ProgressBar value={86} label={t('chairUtilization')} />
+				<ProgressBar
+					value={kpis.utilizationPercent}
+					label={t('chairUtilization')}
+				/>
 			</StatCard>
 			<StatCard
 				label={t('revenueToday')}
-				value='142 500'
+				value={kpis.revenue}
 				unit={t('som')}
 				delay={100}
 				icon={
@@ -66,13 +78,13 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						<Delta>+12%</Delta> {t('vsDailyAverage')}
+						<StatDelta>{kpis.revenueChange}</StatDelta> {t('vsDailyAverage')}
 					</>
 				}
 			/>
 			<StatCard
 				label={t('awaitingPayment')}
-				value='18 400'
+				value={kpis.awaitingPayment}
 				unit={t('som')}
 				delay={150}
 				icon={
@@ -82,7 +94,7 @@ export function DashboardKpis() {
 				}
 				footer={
 					<>
-						{t('n3Patients')}{' '}
+						{kpis.debtors}{' '}
 						<Link
 							href={ROUTES.billing}
 							className='font-semibold text-brand no-underline hover:underline'

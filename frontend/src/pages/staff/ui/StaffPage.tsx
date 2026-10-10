@@ -7,32 +7,34 @@ import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { Button } from '@/shared/ui/button'
 
+import { ON_SHIFT_NOW, TEAM_SIZE } from '../model/Roster'
 import { useShiftForm } from '../model/useShiftForm'
-import { useStaffBoard } from '../model/useStaffBoard'
+import { useStaffOverview } from '../model/useStaffOverview'
 import { ShiftModal } from './ShiftModal'
-import { StaffBoard } from './StaffBoard'
+import { StaffOverview } from './StaffOverview'
 
 export function StaffPage() {
 	const t = useTranslations('Staff')
-	const shift = useShiftForm()
-	const board = useStaffBoard(shift.openFor)
+	const shiftForm = useShiftForm()
+	const overview = useStaffOverview(shiftForm.openFor)
 
 	return (
 		<>
 			<PageHeader
-				crumb={t('n12Staff9On')}
+				crumb={t('pageCrumb', { total: TEAM_SIZE, onShift: ON_SHIFT_NOW })}
 				title={t('staff')}
 				actions={
-					<Button variant='primary'>
+					// staff invitations come with the backend
+					<Button variant='primary' disabled>
 						<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
 						{t('invite')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<StaffBoard board={board} />
+				<StaffOverview overview={overview} />
 			</PageContent>
-			<ShiftModal shift={shift} />
+			<ShiftModal shiftForm={shiftForm} />
 		</>
 	)
 }

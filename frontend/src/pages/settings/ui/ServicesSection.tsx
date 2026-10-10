@@ -1,15 +1,12 @@
 'use client'
 
-import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller } from 'react-hook-form'
 
-import { Badge } from '@/shared/ui/badge'
-import { IconButton } from '@/shared/ui/icon-button'
-import { Segmented } from '@/shared/ui/segmented'
-import { Table, Td, Th } from '@/shared/ui/table'
+import { SegmentedField } from '@/shared/ui/segmented'
+import { Table, Th } from '@/shared/ui/table'
 
 import type { TServicesModel } from '../model/useServices'
+import { ServiceRow } from './ServiceRow'
 
 type TServicesSectionProps = { services: TServicesModel }
 
@@ -19,18 +16,12 @@ export function ServicesSection({ services }: TServicesSectionProps) {
 
 	return (
 		<div className='flex animate-fade flex-col gap-3 pb-2'>
-			<Controller
+			<SegmentedField
 				control={filters.control}
 				name='category'
-				render={({ field }) => (
-					<Segmented
-						aria-label={t('category')}
-						options={categories}
-						value={field.value}
-						onChange={field.onChange}
-						className='self-start'
-					/>
-				)}
+				aria-label={t('category')}
+				options={categories}
+				className='self-start'
 			/>
 			<Table className='min-w-190'>
 				<thead>
@@ -48,45 +39,7 @@ export function ServicesSection({ services }: TServicesSectionProps) {
 				</thead>
 				<tbody>
 					{rows.map(row => (
-						<tr key={row.code}>
-							<Td mono nowrap className='text-ink-muted'>
-								{row.code}
-							</Td>
-							<Td className='font-semibold'>{row.name}</Td>
-							<Td>
-								<Badge>{row.category}</Badge>
-							</Td>
-							<Td mono nowrap align='right'>
-								{row.duration}
-							</Td>
-							<Td mono nowrap align='right' className='font-semibold'>
-								{row.price}
-							</Td>
-							<Td>
-								<Badge tone={row.foms.tone}>{row.foms.label}</Badge>
-							</Td>
-							<Td align='right' nowrap>
-								<span className='inline-flex gap-0.5'>
-									<IconButton
-										quiet
-										size='sm'
-										aria-label={`${t('change')} ${row.name}`}
-										onClick={row.edit}
-									>
-										<Pencil size={16} aria-hidden='true' />
-									</IconButton>
-									<IconButton
-										quiet
-										size='sm'
-										aria-label={`${t('deleteColon')} ${row.name}`}
-										onClick={row.remove}
-										className='text-danger'
-									>
-										<Trash2 size={16} aria-hidden='true' />
-									</IconButton>
-								</span>
-							</Td>
-						</tr>
+						<ServiceRow key={row.code} row={row} />
 					))}
 				</tbody>
 			</Table>

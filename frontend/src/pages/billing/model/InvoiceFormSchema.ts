@@ -1,14 +1,13 @@
 import { z } from 'zod'
 
+import { displayDateSchema } from '@/shared/lib/validation'
+
 export const INVOICE_BASES = ['plan', 'visit', 'none'] as const
 export const FOMS_OPTIONS = ['no', 'yes'] as const
 
 export const invoiceFormSchema = z.object({
 	basis: z.enum(INVOICE_BASES),
-	dueDate: z
-		.string()
-		.trim()
-		.regex(/^\d{2}\.\d{2}\.\d{4}$/, 'enterDateDdMmYyyy'),
+	dueDate: displayDateSchema,
 	items: z
 		.array(
 			z.object({
@@ -27,10 +26,3 @@ export type TInvoiceFormInput = z.input<typeof invoiceFormSchema>
 export type TInvoiceFormValues = z.output<typeof invoiceFormSchema>
 
 export const FOMS_SHARE = 0.3
-
-export const DEFAULT_ITEMS = [
-	{ name: 'itemRootCanal', tooth: '46', price: '9000' },
-	{ name: 'itemXRay', tooth: '46', price: '600' },
-]
-
-export const NEW_ITEM = { name: 'itemConsultation', tooth: '—', price: '1000' }

@@ -6,26 +6,24 @@ import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
-import { translateOptional } from '@/shared/lib/i18n'
+import { LOCALE_META, LOCALES, translateOptional } from '@/shared/lib/i18n'
 
 import { CLINIC_FIELDS } from './Clinic'
-import { BANK_DETAILS } from './Payments'
 import { SECTIONS, type TSectionId } from './Sections'
+import { SERVICES } from './Services'
 import {
 	INITIAL_HOURS,
-	INITIAL_TOGGLES,
+	INITIAL_SWITCHES,
 	SMS_TEMPLATES,
 	type TSettingsFormValues,
 } from './SettingsForm'
-
-const BANK_TOGGLES = BANK_DETAILS.map(bank => `toggles.${bank.id}` as const)
 
 /**
  * Active section and the settings form with its save/dirty state
  */
 export function useSettings() {
 	const t = useTranslations('Settings')
-	const [section, setSection] = useState<TSectionId>('pay')
+	const [section, setSection] = useState<TSectionId>('payment')
 
 	const methods = useForm<TSettingsFormValues>({
 		defaultValues: {
@@ -41,7 +39,7 @@ export function useSettings() {
 			lunch: '13:00 – 14:00',
 			bookingWindow: 'next30',
 			hours: INITIAL_HOURS,
-			toggles: INITIAL_TOGGLES,
+			...INITIAL_SWITCHES,
 			defaultLanguage: 'ru',
 			smsLanguage: 'patient',
 			dateFormat: 'dmy',
@@ -49,9 +47,19 @@ export function useSettings() {
 			templates: SMS_TEMPLATES,
 		},
 	})
-	const banksOn = useWatch({ control: methods.control, name: BANK_TOGGLES })
+	const banks = useWatch({ control: methods.control, name: 'banks' })
+	const connectedBanks = Object.values(banks).filter(Boolean).length
 	const { isDirty, isSubmitting, isSubmitSuccessful } = methods.formState
 	const current = SECTIONS.find(item => item.id === section) ?? SECTIONS[0]
+
+	const sectionHint: Record<TSectionId, string> = {
+		clinic: t('companyDetailsAddressChairs'),
+		hours: t('workingHoursHint'),
+		services: t('servicesCount', { n: SERVICES.length }),
+		payment: t('banksCount', { n: connectedBanks }),
+		languages: LOCALES.map(locale => LOCALE_META[locale].code).join(' · '),
+		notifications: t('smsAndEmail'),
+	}
 
 	return {
 		methods,
@@ -59,9 +67,9 @@ export function useSettings() {
 		sections: SECTIONS.map(item => ({
 			id: item.id,
 			label: t(item.label),
-			hint: translateOptional(t, item.hint),
-			selected: item.id === section,
-			badge: item.id === 'pay' ? banksOn.filter(Boolean).length : null,
+			hint: sectionHint[item.id],
+			isSelected: item.id === section,
+			badge: item.id === 'payment' ? connectedBanks : null,
 		})),
 		selectSection: setSection,
 		current: { label: t(current.label), description: t(current.description) },

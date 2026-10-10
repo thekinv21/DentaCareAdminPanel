@@ -1,8 +1,7 @@
-'use client'
-
 import { useTranslations } from 'next-intl'
 
-import { Overline } from './Overline'
+import { cn } from '@/shared/lib/cn'
+import { Overline } from '@/shared/ui/overline'
 
 type TQuadrantLabelsProps = {
 	/**
@@ -19,7 +18,10 @@ export function QuadrantLabels({ quadrants, position }: TQuadrantLabelsProps) {
 
 	return (
 		<Overline
-			className={`flex justify-between px-1.5 ${isUpper ? 'pb-1.5' : 'pt-1.5'}`}
+			className={cn(
+				'flex justify-between px-1.5',
+				isUpper ? 'pb-1.5' : 'pt-1.5',
+			)}
 		>
 			<span>
 				{isUpper

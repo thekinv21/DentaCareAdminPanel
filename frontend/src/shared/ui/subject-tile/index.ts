@@ -1,0 +1,1 @@
+export { SubjectTile } from './SubjectTile'

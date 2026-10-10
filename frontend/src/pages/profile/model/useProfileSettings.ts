@@ -13,13 +13,16 @@ import {
 import { type TThemePreference, useTheme } from '@/shared/lib/theme'
 
 import {
+	CURRENT_SESSION_ID,
 	NOTIFICATION_CHANNELS,
 	NOTIFICATION_EVENTS,
+	PROFILE_FACTS,
 	SECURITY_OPTIONS,
 	SESSIONS,
 } from './Profile'
 
 type TProfileTab = 'profile' | 'security' | 'notifications'
+type TSession = (typeof SESSIONS)[number]
 
 const LANGUAGE_NOTE = {
 	ru: 'default',
@@ -41,7 +44,21 @@ export function useProfileSettings() {
 	const setLocale = useChangeLocale()
 	const { theme, setTheme } = useTheme()
 	const [tab, setTab] = useState<TProfileTab>('profile')
-	const [ended, setEnded] = useState<string[]>([])
+	const [endedSessionIds, setEndedSessionIds] = useState<string[]>([])
+
+	const lastActiveText = ({ lastActive }: TSession) => {
+		if (lastActive.kind === 'now') return t('now')
+		if (lastActive.kind === 'date') return lastActive.date
+		return lastActive.kind === 'today'
+			? t('todayAt', { time: lastActive.time })
+			: t('yesterdayAt', { time: lastActive.time })
+	}
+
+	// values for the placeholders of the security texts
+	const securityParams = {
+		phone: PROFILE_FACTS.maskedPhone,
+		minutes: PROFILE_FACTS.autoLockMinutes,
+	}
 
 	return {
 		tab,
@@ -55,29 +72,34 @@ export function useProfileSettings() {
 			id,
 			...LOCALE_META[id],
 			note: t(LANGUAGE_NOTE[id]),
-			checked: id === locale,
+			isChecked: id === locale,
 			select: () => setLocale(id),
 		})),
 		theme,
 		themes: THEMES.map(item => ({ ...item, label: t(item.label) })),
 		setTheme,
+		passwordHint: t('passwordAgeHint', { days: PROFILE_FACTS.passwordAgeDays }),
+		dailyScheduleLabel: t('dailyScheduleAt', {
+			time: PROFILE_FACTS.dailyScheduleTime,
+		}),
 		security: SECURITY_OPTIONS.map(option => ({
 			id: option.id,
-			label: t(option.label),
-			hint: t(option.hint),
+			label: t(option.label, securityParams),
+			hint: t(option.hint, securityParams),
 		})),
-		sessions: SESSIONS.filter(session => !ended.includes(session.id)).map(
-			session => ({
-				...session,
-				where: t(session.where),
-				when: translateOptional(t, session.when),
-				current: session.id === 'cur',
-				end: () => setEnded(current => [...current, session.id]),
-			}),
-		),
+		sessions: SESSIONS.filter(
+			session => !endedSessionIds.includes(session.id),
+		).map(session => ({
+			id: session.id,
+			device: session.device,
+			place: t(session.place),
+			lastActive: lastActiveText(session),
+			isCurrent: session.id === CURRENT_SESSION_ID,
+			end: () => setEndedSessionIds(current => [...current, session.id]),
+		})),
 		endOtherSessions: () =>
-			setEnded(
-				SESSIONS.filter(session => session.id !== 'cur').map(
+			setEndedSessionIds(
+				SESSIONS.filter(session => session.id !== CURRENT_SESSION_ID).map(
 					session => session.id,
 				),
 			),
@@ -91,11 +113,12 @@ export function useProfileSettings() {
 			hint: t(event.hint),
 			channels: NOTIFICATION_CHANNELS.map(channel => ({
 				id: channel.id,
-				pref: `${event.id}_${channel.id}`,
-				aria: `${t(event.label)}: ${translateOptional(t, channel.aria)}`,
+				ariaLabel: `${t(event.label)}: ${translateOptional(t, channel.ariaLabel)}`,
 			})),
 		})),
 	}
 }
 
 export type TProfileSettingsModel = ReturnType<typeof useProfileSettings>
+export type TProfileSession = TProfileSettingsModel['sessions'][number]
+export type TProfileNotificationEvent = TProfileSettingsModel['events'][number]

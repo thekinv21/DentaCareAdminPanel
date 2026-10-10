@@ -8,6 +8,7 @@ import { LanguageSwitcher } from '@/features/switch-language'
 
 import { SearchInput } from '@/shared/ui/search-input'
 
+import { useSearchShortcut } from '../model/useSearchShortcut'
 import { NotificationsButton } from './NotificationsButton'
 
 type TPageHeaderProps = {
@@ -22,8 +23,10 @@ export function PageHeader(props: TPageHeaderProps) {
 	const { title, crumb, actions, tools, search = true } = props
 
 	const t = useTranslations('PageHeader')
+	const { inputRef, shortcutLabel } = useSearchShortcut()
+
 	return (
-		<header className='flex shrink-0 items-center gap-2.5 px-1 pt-1 pb-3.5 max-[720px]:flex-wrap'>
+		<header className='flex shrink-0 items-center gap-2.5 px-1 pt-1 pb-3.5 max-mobile:flex-wrap'>
 			<div className='min-w-0 flex-auto'>
 				{crumb && (
 					<div className='text-xs leading-4 text-ink-muted'>{crumb}</div>
@@ -35,8 +38,9 @@ export function PageHeader(props: TPageHeaderProps) {
 			{search && (
 				<SearchInput
 					label={t('searchPatientIdService')}
-					shortcut='Ctrl K'
-					className='flex-[0_1_300px] max-[720px]:order-3 max-[720px]:basis-full'
+					ref={inputRef}
+					shortcut={shortcutLabel}
+					className='flex-[0_1_300px] max-mobile:order-3 max-mobile:basis-full'
 				/>
 			)}
 			{tools}

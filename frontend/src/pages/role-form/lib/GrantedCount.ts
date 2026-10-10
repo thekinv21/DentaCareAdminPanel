@@ -5,6 +5,10 @@ import { PERMISSION_MODULES, type TPermissions } from '@/entities/role'
  */
 export const countGranted = (permissions: TPermissions) =>
 	PERMISSION_MODULES.reduce(
-		(n, m) => n + m.actions.filter(a => permissions[m.id]?.includes(a)).length,
+		(total, permissionModule) =>
+			total +
+			permissionModule.actions.filter(action =>
+				permissions[permissionModule.id]?.includes(action),
+			).length,
 		0,
 	)

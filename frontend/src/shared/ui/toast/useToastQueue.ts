@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
@@ -33,6 +33,8 @@ export function useToastQueue() {
 		toast.onUndo()
 		show(toast.undoText ?? t('actionUndone'))
 	}
+
+	useEffect(() => () => clearTimeout(timer.current), [])
 
 	const api = useMemo<TToastApi>(() => ({ show }), [show])
 	return { api, toast, undo }

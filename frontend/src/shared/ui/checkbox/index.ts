@@ -1,2 +1,5 @@
+export { CheckboxLabel } from './CheckboxLabel'
+export { CheckboxOption } from './CheckboxOption'
+export { CheckMark } from './CheckMark'
+export type { TCheckState } from './CheckMark'
 export { TriCheckbox } from './TriCheckbox'
-export type { TCheckState } from './TriCheckbox'

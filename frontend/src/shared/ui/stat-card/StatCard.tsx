@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '@/shared/lib/cn'
 import { Card } from '@/shared/ui/card'
+import { Overline } from '@/shared/ui/overline'
 
 type TStatCardProps = {
 	label: string
@@ -38,9 +39,7 @@ export function StatCard(props: TStatCardProps) {
 			style={{ animationDelay: `${delay}ms` }}
 		>
 			<div className='flex items-center justify-between gap-2.5'>
-				<span className='text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'>
-					{label}
-				</span>
+				<Overline as='span'>{label}</Overline>
 				{icon}
 			</div>
 			<div
@@ -79,11 +78,11 @@ export function StatGrid({ label, children }: TStatGridProps) {
 	)
 }
 
-type TDeltaProps = { children: ReactNode }
+type TStatDeltaProps = { children: ReactNode }
 
 /**
  * Green "+12%" delta used in StatCard footers
  */
-export function Delta({ children }: TDeltaProps) {
+export function StatDelta({ children }: TStatDeltaProps) {
 	return <span className='font-semibold text-success'>{children}</span>
 }

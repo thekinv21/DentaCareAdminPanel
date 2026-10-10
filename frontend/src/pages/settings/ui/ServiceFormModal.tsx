@@ -1,15 +1,13 @@
 'use client'
 
-import { Stethoscope, Trash2 } from 'lucide-react'
+import { Stethoscope } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller, FormProvider } from 'react-hook-form'
+import { FormProvider } from 'react-hook-form'
 
-import { Button } from '@/shared/ui/button'
-import { ToggleChips } from '@/shared/ui/choice-chips'
+import { ToggleChipsField } from '@/shared/ui/choice-chips'
 import { Field, formGrid2 } from '@/shared/ui/field'
-import { Modal } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
-import { SwitchCard } from '@/shared/ui/switch-card'
+import { Modal, ModalDeleteButton, ModalFooter } from '@/shared/ui/modal'
+import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import { SERVICE_MATERIALS } from '../model/ServiceFormSchema'
 import type { TServiceFormModel } from '../model/useServiceForm'
@@ -33,68 +31,44 @@ export function ServiceFormModal({ form }: TServiceFormModalProps) {
 				title={form.title}
 				subtitle={form.subtitle}
 				footer={
-					<>
-						{form.isEdit && (
-							<Button variant='dangerGhost' onClick={form.remove}>
-								<Trash2 size={16} aria-hidden='true' />
-								{t('deleteService')}
-							</Button>
-						)}
-						<span className='flex-1' />
-						<Button onClick={form.close}>{tCommon('cancel')}</Button>
-						<Button type='submit' variant='primary' aria-busy={form.saving}>
-							{form.saving && <Spinner />}
-							{form.saving
-								? tCommon('saving')
-								: form.isEdit
-									? tCommon('save')
-									: t('addService')}
-						</Button>
-					</>
+					<ModalFooter
+						onCancel={form.close}
+						saving={form.saving}
+						submitLabel={form.isEdit ? tCommon('save') : t('addService')}
+						leading={
+							form.isEdit && (
+								<ModalDeleteButton onClick={form.remove}>
+									{t('deleteService')}
+								</ModalDeleteButton>
+							)
+						}
+					/>
 				}
 			>
 				<ServiceBasics />
 				<Field as='div' label={t('materialsTemplate')}>
-					<Controller
+					<ToggleChipsField
 						control={control}
 						name='materials'
-						render={({ field }) => (
-							<ToggleChips
-								aria-label={t('materials')}
-								options={SERVICE_MATERIALS.map(id => ({
-									id: id as string,
-									label: t(`material_${id}`),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('materials')}
+						options={SERVICE_MATERIALS.map(material => ({
+							id: material,
+							label: t(`material_${material}`),
+						}))}
 					/>
 				</Field>
 				<div className={formGrid2}>
-					<Controller
+					<SwitchCardField
 						control={control}
 						name='foms'
-						render={({ field }) => (
-							<SwitchCard
-								label={t('coveredByFoms')}
-								hint={t('coveredByFomsHint')}
-								checked={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						label={t('coveredByFoms')}
+						hint={t('coveredByFomsHint')}
 					/>
-					<Controller
+					<SwitchCardField
 						control={control}
 						name='online'
-						render={({ field }) => (
-							<SwitchCard
-								label={t('onlineBooking')}
-								hint={t('onlineBookingHint')}
-								checked={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						label={t('onlineBooking')}
+						hint={t('onlineBookingHint')}
 					/>
 				</div>
 			</Modal>

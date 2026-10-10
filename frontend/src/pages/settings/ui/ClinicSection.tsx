@@ -7,12 +7,11 @@ import { cn } from '@/shared/lib/cn'
 import { translateOptional, useFormat } from '@/shared/lib/i18n'
 import { Field, formGrid2, inputClass } from '@/shared/ui/field'
 
-import { CHAIRS, CLINIC_FIELDS } from '../model/Clinic'
+import { CLINIC_CHAIRS, CLINIC_FIELDS } from '../model/Clinic'
 import type { TSettingsFormValues } from '../model/SettingsForm'
 
 export function ClinicSection() {
 	const t = useTranslations('Settings')
-	const format = useFormat()
 	const { register } = useFormContext<TSettingsFormValues>()
 
 	return (
@@ -48,23 +47,31 @@ export function ClinicSection() {
 				<p className='mb-2.5 text-[12.5px] leading-4.5 text-ink-muted'>
 					{t('usedInTheSchedule')}
 				</p>
-				<div className='grid grid-cols-4 gap-x-4 gap-y-3.5 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1'>
-					{CHAIRS.map(chair => (
-						<div
-							key={chair.id}
-							className='flex flex-col gap-1 rounded-[14px] border border-line p-3'
-						>
-							<span className='font-mono text-[12.5px] text-ink-muted'>
-								{t(chair.id)}
-							</span>
-							<span className='font-semibold'>{t(chair.name)}</span>
-							<span className='text-[12.5px] leading-4.5 text-ink-muted'>
-								{format.name(chair.doctor)}
-							</span>
-						</div>
+				<div className='grid grid-cols-4 gap-x-4 gap-y-3.5 max-laptop:grid-cols-2 max-mobile:grid-cols-1'>
+					{CLINIC_CHAIRS.map(chair => (
+						<ChairCard key={chair.number} chair={chair} />
 					))}
 				</div>
 			</div>
+		</div>
+	)
+}
+
+type TChairCardProps = { chair: (typeof CLINIC_CHAIRS)[number] }
+
+function ChairCard({ chair }: TChairCardProps) {
+	const t = useTranslations('Settings')
+	const format = useFormat()
+
+	return (
+		<div className='flex flex-col gap-1 rounded-[14px] border border-line p-3'>
+			<span className='font-mono text-[12.5px] text-ink-muted'>
+				{t('chairCode', { n: chair.number })}
+			</span>
+			<span className='font-semibold'>{t(chair.specialty)}</span>
+			<span className='text-[12.5px] leading-4.5 text-ink-muted'>
+				{chair.doctors.map(format.name).join(' / ')}
+			</span>
 		</div>
 	)
 }

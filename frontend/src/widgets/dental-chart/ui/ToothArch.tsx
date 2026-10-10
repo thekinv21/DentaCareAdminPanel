@@ -1,22 +1,45 @@
 import { cn } from '@/shared/lib/cn'
 
-import type { TDentalChartModel } from '../model/useDentalChart'
+import { HEALTHY_TOOTH, type TChartMap, type TSurface } from '../model/Teeth'
 import { ToothButton } from './ToothButton'
 
 type TToothArchProps = {
-	chart: TDentalChartModel
 	teeth: number[]
-	upper: boolean
+	isUpper: boolean
+	dentitionChart: TChartMap
+	selectedTooth: number
+	onPickTooth: (toothNumber: number) => void
+	onPickSurface: (toothNumber: number, surface: TSurface) => void
 }
 
-export function ToothArch({ chart, teeth, upper }: TToothArchProps) {
+/**
+ * One jaw: a row of teeth
+ */
+export function ToothArch(props: TToothArchProps) {
+	const {
+		teeth,
+		isUpper,
+		dentitionChart,
+		selectedTooth,
+		onPickTooth,
+		onPickSurface,
+	} = props
+
 	return (
 		<div
-			className={cn('grid gap-0.5', upper ? 'items-end' : 'items-start')}
+			className={cn('grid gap-0.5', isUpper ? 'items-end' : 'items-start')}
 			style={{ gridTemplateColumns: `repeat(${teeth.length}, minmax(0, 1fr))` }}
 		>
-			{teeth.map(n => (
-				<ToothButton key={n} chart={chart} n={n} upper={upper} />
+			{teeth.map(toothNumber => (
+				<ToothButton
+					key={toothNumber}
+					toothNumber={toothNumber}
+					isUpper={isUpper}
+					isSelected={toothNumber === selectedTooth}
+					toothState={dentitionChart[toothNumber] ?? HEALTHY_TOOTH}
+					onPickTooth={onPickTooth}
+					onPickSurface={onPickSurface}
+				/>
 			))}
 		</div>
 	)

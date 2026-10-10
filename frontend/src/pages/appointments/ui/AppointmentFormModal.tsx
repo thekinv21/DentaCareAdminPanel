@@ -1,12 +1,11 @@
 'use client'
 
-import { Ban, CalendarPlus, Trash2 } from 'lucide-react'
+import { Ban, CalendarPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { Button } from '@/shared/ui/button'
-import { Modal } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
+import { Modal, ModalDeleteButton, ModalFooter } from '@/shared/ui/modal'
 
 import type { TAppointmentFormModel } from '../model/useAppointmentForm'
 import { AppointmentDetailFields } from './AppointmentDetailFields'
@@ -38,40 +37,37 @@ export function AppointmentFormModal(props: TAppointmentFormModalProps) {
 				title={form.title}
 				subtitle={form.subtitle}
 				footer={
-					<>
-						{form.isEdit && (
-							<>
-								<Button variant='dangerGhost' onClick={onDelete}>
-									<Trash2 size={16} aria-hidden='true' />
-									{t('deleteAppointment')}
-								</Button>
-								<Button
-									variant='ghost'
-									className='text-warning'
-									onClick={onCancelVisit}
-								>
-									<Ban size={16} aria-hidden='true' />
-									{t('cancelVisit')}
-								</Button>
-							</>
-						)}
-						<span className='flex-1' />
-						<Button onClick={form.close}>{tCommon('cancel')}</Button>
-						<Button type='submit' variant='primary' aria-busy={form.saving}>
-							{form.saving && <Spinner />}
-							{form.saving
-								? tCommon('saving')
-								: form.isEdit
-									? tCommon('save')
-									: t('createAppointment')}
-						</Button>
-					</>
+					<ModalFooter
+						onCancel={form.close}
+						saving={form.saving}
+						submitLabel={form.isEdit ? tCommon('save') : t('createAppointment')}
+						leading={
+							form.isEdit && (
+								<>
+									<ModalDeleteButton onClick={onDelete}>
+										{t('deleteAppointment')}
+									</ModalDeleteButton>
+									<Button
+										variant='ghost'
+										className='text-warning'
+										onClick={onCancelVisit}
+									>
+										<Ban size={16} aria-hidden='true' />
+										{t('cancelVisit')}
+									</Button>
+								</>
+							)
+						}
+					/>
 				}
 			>
-				<div className='flex items-start gap-5 max-[900px]:flex-col'>
-					<div className='flex min-w-0 flex-1 flex-col gap-4 max-[900px]:w-full'>
+				<div className='flex items-start gap-5 max-tablet:flex-col'>
+					<div className='flex min-w-0 flex-1 flex-col gap-4 max-tablet:w-full'>
 						<AppointmentPatientPicker patient={form.patient} />
-						<AppointmentTimeFields eventKey={form.item?.key} />
+						<AppointmentTimeFields
+							eventKey={form.item?.key}
+							removedKeys={form.removedKeys}
+						/>
 						<AppointmentDetailFields isEdit={form.isEdit} />
 					</div>
 					<AppointmentSummary

@@ -1,128 +1,48 @@
-import type { TPlanStatus } from './PlanStatus'
+import type { TDoctorId } from '@/entities/employee'
+
+import type { TTone } from '@/shared/ui/badge'
+
+export type TPlanStatus =
+	'draft' | 'waiting' | 'approved' | 'progress' | 'done' | 'declined'
 
 export type TTreatmentPlan = {
+	id: string
 	patientId: string
 	patientName: string
+	/**
+	 * Message key of the TreatmentPlans namespace
+	 */
 	title: string
 	teeth: string
 	stepsDone: number
 	stepsTotal: number
 	value: number
 	status: TPlanStatus
-	doctor: string
+	doctorId: TDoctorId
+	/**
+	 * "dd.mm" of the current year, or a message key
+	 */
 	updated: string
 }
 
-/**
- * Mock data until the backend exposes /treatment-plans
- */
-export const TREATMENT_PLANS: TTreatmentPlan[] = [
+export const PLAN_STATUS: Record<TPlanStatus, { label: string; tone: TTone }> =
 	{
-		patientId: 'DN-20418',
-		patientName: 'Айгуль Тойчубекова',
-		title: 'endodonticsAndCrown',
-		teeth: '46 · 26 · 38 · 14',
-		stepsDone: 0,
-		stepsTotal: 5,
-		value: 40000,
-		status: 'approved',
-		doctor: 'Касымова А.',
-		updated: '12.09',
-	},
-	{
-		patientId: 'DN-20120',
-		patientName: 'Динара Жумабаева',
-		title: 'anteriorCrowns',
-		teeth: '11 · 21',
-		stepsDone: 2,
-		stepsTotal: 3,
-		value: 36000,
-		status: 'progress',
-		doctor: 'Петров С.',
-		updated: 'today',
-	},
-	{
-		patientId: 'DN-20402',
-		patientName: 'Бакыт Усенов',
-		title: 'implantAndBridge',
-		teeth: '36 · 37',
-		stepsDone: 0,
-		stepsTotal: 4,
-		value: 98000,
-		status: 'waiting',
-		doctor: 'Токтогулов Э.',
-		updated: 'today',
-	},
-	{
-		patientId: 'DN-19982',
-		patientName: 'Азамат Садыков',
-		title: 'implantPlacement',
-		teeth: '46',
-		stepsDone: 1,
-		stepsTotal: 3,
-		value: 52000,
-		status: 'progress',
-		doctor: 'Токтогулов Э.',
-		updated: '03.10',
-	},
-	{
-		patientId: 'DN-20356',
-		patientName: 'Елена Ковалёва',
-		title: 'fillings',
-		teeth: '36 · 24',
-		stepsDone: 2,
-		stepsTotal: 2,
-		value: 7000,
-		status: 'done',
-		doctor: 'Петров С.',
-		updated: 'today',
-	},
-	{
-		patientId: 'DN-20455',
-		patientName: 'Гульнара Мамытова',
-		title: 'ceramicVeneers',
-		teeth: '13 – 23',
-		stepsDone: 0,
-		stepsTotal: 6,
-		value: 132000,
-		status: 'waiting',
-		doctor: 'Петров С.',
-		updated: '06.10',
-	},
-	{
-		patientId: 'DN-20391',
-		patientName: 'Тимур Абдыкадыров',
-		title: 'wisdomTeethExtraction',
-		teeth: '38 · 48',
-		stepsDone: 0,
-		stepsTotal: 2,
-		value: 12000,
-		status: 'draft',
-		doctor: 'Токтогулов Э.',
-		updated: '07.10',
-	},
-	{
-		patientId: 'DN-19870',
-		patientName: 'Руслан Ким',
-		title: 'periodontalTreatment',
-		teeth: 'entireMouth',
-		stepsDone: 3,
-		stepsTotal: 4,
-		value: 21600,
-		status: 'progress',
-		doctor: 'Касымова А.',
-		updated: '01.10',
-	},
-	{
-		patientId: 'DN-20210',
-		patientName: 'Нурлан Алиев',
-		title: 'aligners',
-		teeth: 'bothJaws',
-		stepsDone: 0,
-		stepsTotal: 12,
-		value: 165000,
-		status: 'declined',
-		doctor: 'Касымова А.',
-		updated: '28.09',
-	},
-]
+		draft: { label: 'draft', tone: 'neutral' },
+		waiting: { label: 'awaitingConsent2', tone: 'warning' },
+		approved: { label: 'approved', tone: 'info' },
+		progress: { label: 'inProgress', tone: 'brand' },
+		done: { label: 'completed', tone: 'ok' },
+		declined: { label: 'declined', tone: 'danger' },
+	}
+
+export type TPlanFilter = 'all' | 'waiting' | 'progress' | 'closed'
+
+const FILTER_STATUSES: Record<Exclude<TPlanFilter, 'all'>, TPlanStatus[]> = {
+	waiting: ['waiting', 'draft'],
+	progress: ['progress', 'approved'],
+	closed: ['done', 'declined'],
+}
+
+export function matchesPlanFilter(plan: TTreatmentPlan, filter: TPlanFilter) {
+	return filter === 'all' || FILTER_STATUSES[filter].includes(plan.status)
+}

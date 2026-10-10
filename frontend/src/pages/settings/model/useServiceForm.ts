@@ -13,12 +13,12 @@ import {
 	type TServiceFormInput,
 	type TServiceFormValues,
 } from './ServiceFormSchema'
-import { SERVICE_CATEGORY, type TServiceItem } from './Services'
+import { SERVICE_CATEGORY_LABEL, type TServiceItem } from './Services'
 
-const EMPTY: TServiceFormInput = {
+const EMPTY_SERVICE_VALUES: TServiceFormInput = {
 	name: '',
 	code: 'T-16',
-	category: 'ther',
+	category: 'therapy',
 	price: '',
 	minutes: 60,
 	materials: [],
@@ -38,7 +38,7 @@ export function useServiceForm(
 
 	const methods = useForm<TServiceFormInput, unknown, TServiceFormValues>({
 		resolver: zodResolver(serviceFormSchema),
-		defaultValues: EMPTY,
+		defaultValues: EMPTY_SERVICE_VALUES,
 	})
 	const modal = useFormModal<TServiceItem>(service =>
 		methods.reset(
@@ -49,11 +49,11 @@ export function useServiceForm(
 						category: service.category,
 						price: String(service.price),
 						minutes: service.minutes,
-						materials: ['comp', 'bond', 'etch'],
+						materials: ['composite', 'adhesive', 'etchant'],
 						foms: service.foms,
 						online: true,
 					}
-				: EMPTY,
+				: EMPTY_SERVICE_VALUES,
 		),
 	)
 	const service = modal.item
@@ -63,7 +63,7 @@ export function useServiceForm(
 		methods,
 		title: service ? tSettings(service.name) : t('newService'),
 		subtitle: service
-			? `${service.code} · ${tSettings(SERVICE_CATEGORY[service.category])}`
+			? `${service.code} · ${tSettings(SERVICE_CATEGORY_LABEL[service.category])}`
 			: t('createSubtitle'),
 		saving: methods.formState.isSubmitting,
 		submit: methods.handleSubmit(async () => {

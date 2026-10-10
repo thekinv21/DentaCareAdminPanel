@@ -3,33 +3,33 @@ import type { TToothState } from '../model/Teeth'
 
 type TToothRootsProps = {
 	shape: TToothShape
-	state: TToothState
+	toothState: TToothState
 }
 
-export function ToothRoots({ shape, state }: TToothRootsProps) {
+export function ToothRoots({ shape, toothState }: TToothRootsProps) {
 	return (
 		<>
-			{shape.roots.map(d => (
+			{shape.roots.map(rootPath => (
 				<path
-					key={d}
-					d={d}
+					key={rootPath}
+					d={rootPath}
 					fill='var(--enamel-shade)'
 					stroke='var(--enamel-deep)'
 					strokeWidth='1'
 				/>
 			))}
-			{state.endo &&
-				shape.canals.map(d => (
+			{toothState.endo &&
+				shape.canals.map(canalPath => (
 					<path
-						key={d}
-						d={d}
+						key={canalPath}
+						d={canalPath}
 						stroke='var(--danger)'
 						strokeWidth='2.4'
 						strokeLinecap='round'
 						fill='none'
 					/>
 				))}
-			{state.implant && !state.missing && (
+			{toothState.implant && !toothState.missing && (
 				<>
 					<path
 						d={shape.implant.screw}

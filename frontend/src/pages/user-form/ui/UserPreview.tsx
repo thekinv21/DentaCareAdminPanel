@@ -1,5 +1,6 @@
 'use client'
 
+import { Check, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useFormContext, useWatch } from 'react-hook-form'
 
@@ -10,8 +11,9 @@ import { Alert } from '@/shared/ui/alert'
 import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
 import { Card } from '@/shared/ui/card'
+import { Overline } from '@/shared/ui/overline'
 
-import type { TUserFormValues } from '../model/Schema'
+import type { TUserFormValues } from '../model/UserFormSchema'
 import { useRoleAccess } from '../model/useRoleAccess'
 import type { TUserFormModel } from '../model/useUserForm'
 
@@ -27,7 +29,7 @@ export function UserPreview({ preview }: TUserPreviewProps) {
 	return (
 		<Card
 			as='aside'
-			className='w-75 shrink-0 gap-4 overflow-auto scrollbar-thin max-[1100px]:w-full'
+			className='w-75 shrink-0 gap-4 overflow-auto scrollbar-thin max-laptop:w-full'
 		>
 			<div className='flex flex-col items-center gap-2.5 pt-1.5 text-center'>
 				<Avatar
@@ -40,7 +42,7 @@ export function UserPreview({ preview }: TUserPreviewProps) {
 					<div className='font-display text-lg font-extrabold'>
 						{preview.name}
 					</div>
-					<div className='text-[12.5px] text-ink-muted'>{preview.sub}</div>
+					<div className='text-[12.5px] text-ink-muted'>{preview.subtitle}</div>
 				</div>
 				<div className='flex flex-wrap justify-center gap-1.5'>
 					<Badge tone={USER_TYPE[type].tone}>{labels.type(type)}</Badge>
@@ -50,31 +52,46 @@ export function UserPreview({ preview }: TUserPreviewProps) {
 				</div>
 			</div>
 			<div>
-				<div className='mb-2 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'>
-					{t('whatWillBeAvailable')}
-				</div>
+				<Overline className='mb-2'>{t('whatWillBeAvailable')}</Overline>
 				<ul className='flex flex-col gap-1.75 text-[13px]'>
 					{access.rows.map(row => (
-						<li key={row.module} className='flex items-start gap-2'>
-							<span
-								className={cn(
-									'w-4 shrink-0 text-center font-bold',
-									row.allowed ? 'text-success' : 'text-ink-subtle',
-								)}
-							>
-								{row.allowed ? '✓' : '×'}
-							</span>
-							<span>
-								<span className='font-semibold'>{row.module}</span>{' '}
-								<span className='text-ink-muted'>{row.access}</span>
-							</span>
-						</li>
+						<AccessRow key={row.module} row={row} />
 					))}
 				</ul>
 			</div>
-			<Alert tone='info' className='text-[13px] leading-4.75'>
+			<Alert tone='info' size='sm'>
 				{t('permissionsByRoleNote')}
 			</Alert>
 		</Card>
+	)
+}
+
+type TAccessRowProps = {
+	row: ReturnType<typeof useRoleAccess>['rows'][number]
+}
+
+function AccessRow({ row }: TAccessRowProps) {
+	const t = useTranslations('UserForm')
+	const Icon = row.isAllowed ? Check : X
+
+	return (
+		<li className='flex items-start gap-2'>
+			<Icon
+				size={16}
+				strokeWidth={2.6}
+				aria-hidden='true'
+				className={cn(
+					'mt-px shrink-0',
+					row.isAllowed ? 'text-success' : 'text-ink-subtle',
+				)}
+			/>
+			<span className='sr-only'>
+				{row.isAllowed ? t('accessAllowed') : t('accessDenied')}
+			</span>
+			<span>
+				<span className='font-semibold'>{row.module}</span>{' '}
+				<span className='text-ink-muted'>{row.access}</span>
+			</span>
+		</li>
 	)
 }

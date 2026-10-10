@@ -1,25 +1,17 @@
-import { fromMinutes, toMinutes } from '@/entities/appointment'
+import { CLINIC_OPENS_AT, fromMinutes, toMinutes } from '@/entities/appointment'
 
 import type { TCalendarEvent } from './Schedule'
 
 /* Layout of overlapping events in one column */
 
 export const HOUR_HEIGHT = 56
-export const DAY_START = toMinutes('08:00')
-export const GRID_HOURS = [
-	'08:00',
-	'09:00',
-	'10:00',
-	'11:00',
-	'12:00',
-	'13:00',
-	'14:00',
-	'15:00',
-	'16:00',
-	'17:00',
-	'18:00',
-	'19:00',
-]
+export const DAY_START = toMinutes(CLINIC_OPENS_AT)
+const FIRST_HOUR = 8
+const LAST_HOUR = 19
+export const GRID_HOURS = Array.from(
+	{ length: LAST_HOUR - FIRST_HOUR + 1 },
+	(_, index) => fromMinutes((FIRST_HOUR + index) * 60),
+)
 export const GRID_HEIGHT = (GRID_HOURS.length - 1) * HOUR_HEIGHT
 
 export type TPlacedEvent = {
@@ -32,13 +24,16 @@ export type TPlacedEvent = {
 }
 
 export function placeEvents(events: TCalendarEvent[]): TPlacedEvent[] {
-	const px = HOUR_HEIGHT / 60
+	const pixelsPerMinute = HOUR_HEIGHT / 60
 	const items = events
 		.map(event => {
 			const start = toMinutes(event.time) - DAY_START
 			return { event, start, finish: start + event.duration, lane: 0, lanes: 1 }
 		})
-		.sort((a, b) => a.start - b.start || b.finish - a.finish)
+		.sort(
+			(first, second) =>
+				first.start - second.start || second.finish - first.finish,
+		)
 
 	const laneEnds: number[] = []
 	items.forEach(item => {
@@ -52,15 +47,15 @@ export function placeEvents(events: TCalendarEvent[]): TPlacedEvent[] {
 	})
 	items.forEach(item => {
 		const overlapping = items.filter(
-			o => o.start < item.finish && item.start < o.finish,
+			other => other.start < item.finish && item.start < other.finish,
 		)
-		item.lanes = Math.max(...overlapping.map(o => o.lane)) + 1
+		item.lanes = Math.max(...overlapping.map(other => other.lane)) + 1
 	})
 
 	return items.map(item => ({
 		event: item.event,
-		top: item.start * px + 2,
-		height: item.event.duration * px - 4,
+		top: item.start * pixelsPerMinute + 2,
+		height: item.event.duration * pixelsPerMinute - 4,
 		lane: item.lane,
 		lanes: item.lanes,
 		end: fromMinutes(item.finish + DAY_START),

@@ -21,7 +21,7 @@ import { SecurityTab } from './SecurityTab'
 export function ProfilePage() {
 	const t = useTranslations('Profile')
 	const user = useCurrentUser()
-	const model = useProfileSettings()
+	const settings = useProfileSettings()
 	const form = useProfileForm()
 
 	return (
@@ -31,30 +31,34 @@ export function ProfilePage() {
 				title={t('myProfile')}
 			/>
 			<PageContent>
-				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-[720px]:flex-col'>
+				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
 					<ProfileSummary />
 					<FormProvider {...form.methods}>
 						<form noValidate onSubmit={form.submit} className='contents'>
 							<Card
 								as='section'
-								className='min-h-0 min-w-0 flex-auto max-[720px]:flex-none'
+								className='min-h-0 min-w-0 flex-auto max-mobile:flex-none'
 							>
 								<div className='flex flex-wrap items-center justify-between gap-2.5'>
 									<Segmented
 										aria-label={t('profileSection')}
-										options={model.tabs}
-										value={model.tab}
-										onChange={model.selectTab}
+										options={settings.tabs}
+										value={settings.tab}
+										onChange={settings.selectTab}
 									/>
 									<p className='text-[12.5px] leading-4.5 text-ink-muted'>
 										{t('lastSignInToday')}
 									</p>
 								</div>
-								<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-[720px]:overflow-visible'>
-									{model.tab === 'profile' && <ProfileTab model={model} />}
-									{model.tab === 'security' && <SecurityTab model={model} />}
-									{model.tab === 'notifications' && (
-										<NotificationsTab model={model} />
+								<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-mobile:overflow-visible'>
+									{settings.tab === 'profile' && (
+										<ProfileTab settings={settings} />
+									)}
+									{settings.tab === 'security' && (
+										<SecurityTab settings={settings} />
+									)}
+									{settings.tab === 'notifications' && (
+										<NotificationsTab settings={settings} />
 									)}
 								</div>
 								<FormFooter

@@ -19,7 +19,7 @@ export function AppointmentsCalendar({ calendar }: TAppointmentsCalendarProps) {
 		<Card
 			as='section'
 			aria-label={t('calendar')}
-			className='min-h-0 flex-auto animate-rise gap-3 px-4.5 py-4 max-[720px]:h-180 max-[720px]:flex-none'
+			className='min-h-0 flex-auto animate-rise gap-3 px-4.5 py-4 max-mobile:h-180 max-mobile:flex-none'
 		>
 			<CalendarToolbar calendar={calendar} />
 			<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 pb-1 scrollbar-thin'>
@@ -28,8 +28,9 @@ export function AppointmentsCalendar({ calendar }: TAppointmentsCalendarProps) {
 				) : (
 					<TimeGrid
 						columns={calendar.columns}
-						minColumn={calendar.view === 'day' ? 150 : 118}
+						minColumnWidth={calendar.view === 'day' ? 150 : 118}
 						onOpenEvent={calendar.openEvent}
+						onOpenDay={calendar.openDay}
 					/>
 				)}
 			</div>

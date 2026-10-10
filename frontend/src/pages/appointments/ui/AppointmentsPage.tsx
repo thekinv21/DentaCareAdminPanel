@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
+import { TODAY } from '@/entities/appointment'
+
+import { useFormat } from '@/shared/lib/i18n'
 import { Button } from '@/shared/ui/button'
 
 import { useAppointmentActions } from '../model/useAppointmentActions'
@@ -14,10 +17,16 @@ import { useRemovedAppointments } from '../model/useRemovedAppointments'
 import { AppointmentFormModal } from './AppointmentFormModal'
 import { AppointmentsCalendar } from './AppointmentsCalendar'
 
+/**
+ * ISO week of the mock "today"
+ */
+const CURRENT_WEEK_NUMBER = 41
+
 export function AppointmentsPage() {
 	const t = useTranslations('Appointments')
+	const format = useFormat()
 	const removed = useRemovedAppointments()
-	const form = useAppointmentForm()
+	const form = useAppointmentForm(removed.removedKeys)
 	const actions = useAppointmentActions({
 		form,
 		onRemove: removed.remove,
@@ -31,7 +40,14 @@ export function AppointmentsPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('week41TodayIs')}
+				crumb={t('pageCrumb', {
+					week: CURRENT_WEEK_NUMBER,
+					date: format.date(TODAY, {
+						weekday: 'long',
+						day: 'numeric',
+						month: 'long',
+					}),
+				})}
 				title={t('appointments')}
 				actions={
 					<Button variant='primary' onClick={form.openCreate}>

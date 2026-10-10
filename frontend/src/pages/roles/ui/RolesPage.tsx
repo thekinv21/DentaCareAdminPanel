@@ -12,12 +12,12 @@ import { Badge } from '@/shared/ui/badge'
 import { buttonClass } from '@/shared/ui/button'
 import { Card, CardHeader } from '@/shared/ui/card'
 
-import { useRoles } from '../model/useRoles'
+import { useRoleCards } from '../model/useRoleCards'
 import { RoleCard } from './RoleCard'
 
 export function RolesPage() {
 	const t = useTranslations('Roles')
-	const { cards, countText } = useRoles()
+	const { cards, countText } = useRoleCards()
 
 	return (
 		<>
@@ -41,7 +41,7 @@ export function RolesPage() {
 						description={t('rolesDefineAccessHint')}
 						actions={<Badge>{countText}</Badge>}
 					/>
-					<div className='grid grid-cols-3 gap-3.5 pb-1.5 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1'>
+					<div className='grid grid-cols-3 gap-3.5 pb-1.5 max-laptop:grid-cols-2 max-mobile:grid-cols-1'>
 						{cards.map(role => (
 							<RoleCard key={role.id} role={role} />
 						))}

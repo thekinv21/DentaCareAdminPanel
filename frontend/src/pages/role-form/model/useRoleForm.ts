@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
@@ -18,15 +18,17 @@ import {
 	type TRole,
 	type TRolePreset,
 	useRoleLabels,
+	useRoleTransferChoice,
 } from '@/entities/role'
 
 import { mockRequest } from '@/shared/api'
+import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { useToast } from '@/shared/ui/toast'
 
-import { roleFormSchema, type TRoleFormValues } from './Schema'
+import { roleFormSchema, type TRoleFormValues } from './RoleFormSchema'
 
 const PRESET_IDS = Object.keys(ROLE_PRESETS) as TRolePreset[]
 
@@ -41,11 +43,16 @@ const initialPermissions = (role: TRole): TPermissions =>
 export function useRoleForm(roleId?: string) {
 	const t = useTranslations('RoleForm')
 	const labels = useRoleLabels()
+	const transferChoice = useRoleTransferChoice()
 	const format = useFormat()
 	const confirm = useConfirm()
 	const toast = useToast()
 	const router = useRouter()
-	const role = roleId ? (ROLES.find(r => r.id === roleId) ?? ROLES[2]) : null
+	const role = roleId
+		? ROLES.find(candidate => candidate.id === roleId)
+		: undefined
+	// an unknown id must never open (and let the user edit) another role
+	if (roleId && !role) notFound()
 	const isEdit = !!role
 	const roleName = role ? labels.text(role.name) : ''
 
@@ -67,11 +74,11 @@ export function useRoleForm(roleId?: string) {
 		methods,
 		isEdit,
 		title: isEdit ? t('roleNamed', { name: roleName }) : t('newRole'),
-		crumbTail: isEdit ? t('editing') : t('creating'),
+		breadcrumbLabel: isEdit ? t('editing') : t('creating'),
 		fallbackName: isEdit ? roleName : t('newRole'),
-		colors: ROLE_COLORS.map(c => ({
-			color: c.color,
-			name: labels.color(c.name),
+		colors: ROLE_COLORS.map(swatch => ({
+			color: swatch.color,
+			name: labels.color(swatch.name),
 		})),
 		presets: PRESET_IDS.map(id => ({
 			id,
@@ -83,12 +90,15 @@ export function useRoleForm(roleId?: string) {
 				shouldDirty: true,
 			})
 		},
-		members: members.map(m => ({
-			name: format.name(m.name),
-			sub: labels.module(m.sub),
-			initials: m.initials,
-			tone: m.tone,
-		})),
+		members: members.map(member => {
+			const name = format.name(member.name)
+			return {
+				name,
+				subtitle: labels.module(member.sub),
+				initials: getInitials(name),
+				tone: member.tone,
+			}
+		}),
 		membersCount: role?.users ?? 0,
 		dirtyText: isDirty ? t('unsavedChanges') : t('appliesToAllWithRole'),
 		saving: isSubmitting,
@@ -103,19 +113,7 @@ export function useRoleForm(roleId?: string) {
 				tone: 'danger',
 				title: t('deleteRoleNamedQuestion', { name: roleName }),
 				description: t('deleteRoleChoiceDescription', { n: role?.users ?? 0 }),
-				choice: {
-					label: t('transferStaffTo'),
-					value: 'assistant',
-					items: [
-						{
-							id: 'assistant',
-							label: t('assistant'),
-							hint: t('noFinanceAccess'),
-						},
-						{ id: 'admin', label: t('admin'), hint: t('scheduleAndPatients') },
-						{ id: 'none', label: t('leaveWithoutRole'), hint: t('cantSignIn') },
-					],
-				},
+				choice: transferChoice,
 				impact: [
 					{
 						tone: 'warning',

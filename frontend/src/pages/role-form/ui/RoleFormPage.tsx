@@ -4,31 +4,27 @@ import { use } from 'react'
 
 import Link from 'next/link'
 
-import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { ROUTES } from '@/shared/routes'
-import { Button, buttonClass } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
-import { DangerZone } from '@/shared/ui/danger-zone'
-import { FormSection } from '@/shared/ui/form-section'
-import { Spinner } from '@/shared/ui/spinner'
 
 import { useRoleForm } from '../model/useRoleForm'
 import { PermissionMatrix } from './PermissionMatrix'
 import { RoleBasics } from './RoleBasics'
+import { RoleDangerZone } from './RoleDangerZone'
+import { RoleFormFooter } from './RoleFormFooter'
 import { RoleSummary } from './RoleSummary'
 
 type TRoleFormPageProps = { params?: Promise<{ id: string }> }
 
 export function RoleFormPage({ params }: TRoleFormPageProps) {
-	const id = params ? use(params).id : undefined
+	const roleId = params ? use(params).id : undefined
 	const t = useTranslations('RoleForm')
-	const tCommon = useTranslations('Common')
-	const form = useRoleForm(id)
+	const form = useRoleForm(roleId)
 
 	return (
 		<>
@@ -41,7 +37,7 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 						>
 							{t('rolesAndAccess')}
 						</Link>{' '}
-						/ {form.crumbTail}
+						/ {form.breadcrumbLabel}
 					</>
 				}
 				title={form.title}
@@ -51,45 +47,25 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 					<form
 						noValidate
 						onSubmit={form.submit}
-						className='flex min-h-0 flex-auto animate-rise gap-4 max-[1100px]:flex-col'
+						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
 					>
 						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
 							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
 								<RoleBasics form={form} />
 								<PermissionMatrix />
 								{form.isEdit && (
-									<FormSection title={t('dangerZone')} danger>
-										<DangerZone
-											title={t('deleteRoleNamed', { name: form.fallbackName })}
-											description={t('deleteRoleNote', {
-												n: form.membersCount,
-											})}
-											actions={
-												<Button variant='destructive' onClick={form.remove}>
-													<Trash2 size={16} aria-hidden='true' />
-													{t('deleteRole')}
-												</Button>
-											}
-										/>
-									</FormSection>
+									<RoleDangerZone
+										roleName={form.fallbackName}
+										membersCount={form.membersCount}
+										onDelete={form.remove}
+									/>
 								)}
 							</div>
-							<div className='flex shrink-0 flex-wrap items-center gap-2.5 rounded-b-[20px] border-t border-line bg-raised px-5.5 py-3.5'>
-								<span className='mr-auto text-[12.5px] text-ink-muted'>
-									{form.dirtyText}
-								</span>
-								<Link href={ROUTES.roles} className={buttonClass()}>
-									{tCommon('cancel')}
-								</Link>
-								<Button type='submit' variant='primary' aria-busy={form.saving}>
-									{form.saving && <Spinner />}
-									{form.saving
-										? tCommon('saving')
-										: form.isEdit
-											? t('saveChanges')
-											: t('createRole')}
-								</Button>
-							</div>
+							<RoleFormFooter
+								isEdit={form.isEdit}
+								saving={form.saving}
+								statusText={form.dirtyText}
+							/>
 						</Card>
 						<RoleSummary form={form} />
 					</form>

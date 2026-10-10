@@ -1,12 +1,13 @@
 import { z } from 'zod'
 
-export const PLAN_DOCTORS = ['kas', 'pet', 'tok'] as const
+import { DOCTOR_IDS } from '@/entities/employee'
+
+import { requiredNumberSchema } from '@/shared/lib/validation'
+
 export const PLAN_PAYMENTS = ['full', 'stage', 'inst'] as const
 
-const amount = z.coerce.number<string>().int().min(0, 'enterAmount')
-
 export const planFormSchema = z.object({
-	doctor: z.enum(PLAN_DOCTORS),
+	doctor: z.enum(DOCTOR_IDS),
 	name: z.string().trim().min(2, 'enterPlanName'),
 	stages: z
 		.array(
@@ -14,7 +15,7 @@ export const planFormSchema = z.object({
 				service: z.string().trim().min(1, 'enterService'),
 				tooth: z.string().trim(),
 				qty: z.coerce.number<string>().int().min(1, 'enterAmount'),
-				price: amount,
+				price: requiredNumberSchema,
 				discount: z.coerce.number<string>().min(0).max(100, 'discountUpTo100'),
 				foms: z.boolean(),
 			}),

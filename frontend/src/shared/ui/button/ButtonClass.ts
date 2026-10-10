@@ -5,7 +5,7 @@ export type TButtonVariant =
 	| 'secondary'
 	| 'ghost'
 	| 'danger'
-	| 'destructive'
+	| 'dangerOutline'
 	| 'warning'
 	| 'dangerGhost'
 export type TButtonSize = 'sm' | 'md' | 'lg'
@@ -32,9 +32,9 @@ const VARIANT: Record<TButtonVariant, string> = {
 	secondary:
 		'border-line-strong bg-surface text-ink hover:bg-raised active:shadow-press',
 	ghost: 'border-transparent bg-transparent text-ink hover:bg-raised',
-	danger: 'border-line bg-surface text-danger hover:bg-danger-soft',
-	destructive:
-		'border-transparent bg-danger text-white shadow-[0_8px_18px_-8px_rgba(185,47,39,0.6)] hover:bg-[#9e2620] active:shadow-press',
+	danger:
+		'border-transparent bg-danger text-white shadow-danger hover:bg-danger-strong active:shadow-press',
+	dangerOutline: 'border-line bg-surface text-danger hover:bg-danger-soft',
 	warning:
 		'border-transparent bg-warning text-white hover:brightness-95 active:shadow-press',
 	dangerGhost:

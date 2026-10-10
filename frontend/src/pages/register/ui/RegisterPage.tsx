@@ -1,11 +1,9 @@
 'use client'
 
-import Link from 'next/link'
-
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
-import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
+import { AuthHeading, AuthStack, AuthSwitchLink } from '@/widgets/auth-panel'
 
 import { cn } from '@/shared/lib/cn'
 import { ROUTES } from '@/shared/routes'
@@ -31,19 +29,19 @@ export function RegisterPage() {
 				{form.steps.map(step => (
 					<li
 						key={step.number}
-						aria-current={step.current ? 'step' : undefined}
+						aria-current={step.isCurrent ? 'step' : undefined}
 						className='flex flex-1 flex-col gap-2'
 					>
 						<span
 							className={cn(
 								'block h-1 rounded-full',
-								step.done ? 'bg-brand' : 'bg-line',
+								step.isDone ? 'bg-brand' : 'bg-line',
 							)}
 						/>
 						<span
 							className={cn(
 								'text-[13px] font-semibold',
-								step.current ? 'text-ink' : 'text-ink-muted',
+								step.isCurrent ? 'text-ink' : 'text-ink-muted',
 							)}
 						>
 							<span className='font-mono'>{step.number}</span> · {step.label}
@@ -52,7 +50,12 @@ export function RegisterPage() {
 				))}
 			</ol>
 			<FormProvider {...form.methods}>
-				<form noValidate onSubmit={form.submit} className='flex flex-col gap-4'>
+				<form
+					noValidate
+					onSubmit={form.submit}
+					onKeyDown={form.preventEnterOnFirstStep}
+					className='flex flex-col gap-4'
+				>
 					{form.step === 1 ? (
 						<ClinicStep onNext={form.next} />
 					) : (
@@ -60,15 +63,11 @@ export function RegisterPage() {
 					)}
 				</form>
 			</FormProvider>
-			<p className='text-center text-sm leading-5.5 text-ink-muted'>
-				{t('alreadyHaveAnAccount')}{' '}
-				<Link
-					href={ROUTES.login}
-					className='font-semibold text-brand no-underline hover:underline'
-				>
-					{t('signIn')}
-				</Link>
-			</p>
+			<AuthSwitchLink
+				question={t('alreadyHaveAnAccount')}
+				href={ROUTES.login}
+				linkLabel={t('signIn')}
+			/>
 		</AuthStack>
 	)
 }

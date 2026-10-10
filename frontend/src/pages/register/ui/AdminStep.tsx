@@ -6,13 +6,15 @@ import { AuthField } from '@/widgets/auth-panel'
 
 import { useFieldError, useFieldProps } from '@/shared/lib/form'
 import { Button } from '@/shared/ui/button'
+import { CheckboxLabel } from '@/shared/ui/checkbox'
 import { inputLgClass } from '@/shared/ui/field'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { TRegisterInput } from '../model/Schema'
+import type { TRegisterInput } from '../model/RegisterSchema'
 
-const linkClass = 'font-semibold text-brand no-underline hover:underline'
+// terms and privacy pages don't exist yet, so these are plain text for now
+const linkClass = 'font-semibold text-brand'
 
 type TAdminStepProps = { onBack: () => void }
 
@@ -51,23 +53,10 @@ export function AdminStep({ onBack }: TAdminStepProps) {
 				/>
 			</AuthField>
 			<div className='flex flex-col gap-1.5'>
-				<label className='inline-flex cursor-pointer items-start gap-2.5 text-sm leading-5'>
-					<input
-						type='checkbox'
-						className='mt-px size-4.5 shrink-0 accent-brand'
-						{...inputProps('agree')}
-					/>
-					<span>
-						{t('iAcceptThe')}{' '}
-						<a href='#' className={linkClass}>
-							{t('terms')}
-						</a>{' '}
-						·{' '}
-						<a href='#' className={linkClass}>
-							{t('privacy')}
-						</a>
-					</span>
-				</label>
+				<CheckboxLabel {...inputProps('agree')}>
+					{t('iAcceptThe')} <span className={linkClass}>{t('terms')}</span> ·{' '}
+					<span className={linkClass}>{t('privacy')}</span>
+				</CheckboxLabel>
 				{agreeError && (
 					<span id='agree-error' className='text-[12.5px] text-danger'>
 						{agreeError}

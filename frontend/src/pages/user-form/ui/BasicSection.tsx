@@ -1,16 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
+import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
+import { LOCALE_META, LOCALES } from '@/shared/lib/i18n'
 import { AffixInput } from '@/shared/ui/affix-input'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 
-import { INTERFACE_LANGUAGES } from '../model/Options'
-import type { TUserFormValues } from '../model/Schema'
+import type { TUserFormValues } from '../model/UserFormSchema'
 
 export function BasicSection() {
 	const t = useTranslations('UserForm')
@@ -55,7 +56,7 @@ export function BasicSection() {
 						{...inputProps('phone')}
 					/>
 				</FormField>
-				<FormField name='email' label='Email'>
+				<FormField name='email' label={t('email')}>
 					<input
 						type='email'
 						className={inputClass}
@@ -65,7 +66,7 @@ export function BasicSection() {
 				</FormField>
 				<Field label={t('birthDate')}>
 					<input
-						className={`${inputClass} font-mono`}
+						className={cn(inputClass, 'font-mono')}
 						placeholder={t('datePlaceholder')}
 						{...inputProps('birthDate')}
 					/>
@@ -77,37 +78,25 @@ export function BasicSection() {
 					</select>
 				</Field>
 				<Field as='div' label={t('interfaceLanguage')}>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='language'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('interfaceLanguage')}
-								options={INTERFACE_LANGUAGES.map(id => ({
-									id,
-									label: id.toUpperCase(),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('interfaceLanguage')}
+						options={LOCALES.map(locale => ({
+							id: locale,
+							label: LOCALE_META[locale].code,
+						}))}
 					/>
 				</Field>
 				<Field as='div' label={t('gender')}>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='gender'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('gender')}
-								options={[
-									{ id: 'm' as const, label: t('male') },
-									{ id: 'f' as const, label: t('female') },
-								]}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('gender')}
+						options={[
+							{ id: 'm' as const, label: t('male') },
+							{ id: 'f' as const, label: t('female') },
+						]}
 					/>
 				</Field>
 			</div>

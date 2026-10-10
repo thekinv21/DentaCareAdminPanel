@@ -1,51 +1,56 @@
-export type TLanguageId = 'ru' | 'ky' | 'en'
+import type { TLocale } from '@/shared/lib/i18n'
 
-export const LANGUAGES: {
-	id: TLanguageId
-	code: string
-	name: string
-	note: string
-}[] = [
-	{ id: 'ru', code: 'RU', name: 'Русский', note: 'primaryLanguage' },
-	{ id: 'ky', code: 'KY', name: 'Кыргызча', note: 'state' },
-	{ id: 'en', code: 'EN', name: 'English', note: 'forForeignPatients' },
-]
+/**
+ * Note under each language card of the "default language" choice
+ */
+export const LANGUAGE_NOTE: Record<TLocale, string> = {
+	ru: 'primaryLanguage',
+	ky: 'state',
+	en: 'forForeignPatients',
+}
 
 export const NOTIFICATIONS = [
 	{
-		id: 'n24',
+		id: 'dayBeforeReminder',
 		label: 'reminder24HoursBefore',
-		hint: 'toThePatientIn',
+		hint: 'toPatientInChartLanguage',
 		channel: 'SMS',
 	},
 	{
-		id: 'n2',
+		id: 'twoHoursBeforeReminder',
 		label: 'reminder2HoursBefore',
 		hint: 'firstVisitsOnly',
 		channel: 'SMS',
 	},
 	{
-		id: 'nwa',
+		id: 'bookingConfirmation',
 		label: 'appointmentConfirmation',
 		hint: 'immediatelyAfterBooking',
 		channel: 'WhatsApp',
 	},
 	{
-		id: 'nbd',
+		id: 'birthdayGreeting',
 		label: 'birthdayGreeting',
-		hint: 'with10OffProfessional',
+		hint: 'birthdayDiscountHint',
 		channel: 'SMS',
 	},
 	{
-		id: 'nstock',
+		id: 'lowStockAlert',
 		label: 'lowStockInInventory',
-		hint: 'toTheAdministratorAnd',
+		hint: 'toAdminAndChiefDentist',
 		channel: 'inApp',
 	},
 	{
-		id: 'nrev',
+		id: 'dailyRevenueReport',
 		label: 'dailyRevenueReport',
-		hint: 'at2000To',
+		hint: 'dailyReportHint',
 		channel: 'Email',
 	},
-]
+] as const
+
+export type TNotificationId = (typeof NOTIFICATIONS)[number]['id']
+
+/**
+ * Mock balance of the SMS gateway
+ */
+export const SMS_GATEWAY_BALANCE = { amount: 4280, messagesLeft: 3560 }

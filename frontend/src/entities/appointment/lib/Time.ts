@@ -2,17 +2,17 @@
  * "HH:MM" → minutes since midnight
  */
 export function toMinutes(time: string): number {
-	const [h, m] = time.split(':').map(Number)
-	return h * 60 + m
+	const [hours, minutes] = time.split(':').map(Number)
+	return hours * 60 + minutes
 }
 
 /**
  * Minutes since midnight → "HH:MM"
  */
 export function fromMinutes(total: number): string {
-	const h = Math.floor(total / 60)
-	const m = total % 60
-	return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+	const hours = Math.floor(total / 60)
+	const minutes = total % 60
+	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
 }
 
 /**

@@ -13,7 +13,13 @@ import { PageContent, PageHeader } from '@/widgets/page-header'
 import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 
-import { useProfileTabs } from '../model/useProfileTabs'
+import { safeDecode } from '../lib/SafeDecode'
+import { usePatientCard } from '../model/usePatientCard'
+import {
+	PATIENT_TABPANEL_ID,
+	patientTabId,
+	usePatientTabs,
+} from '../model/usePatientTabs'
 import { PatientSummaryCard } from './PatientSummaryCard'
 import { PaymentsSection } from './PaymentsSection'
 import { TreatmentPlanSection } from './TreatmentPlanSection'
@@ -24,9 +30,10 @@ type TPatientProfilePageProps = {
 }
 
 export function PatientProfilePage({ params }: TPatientProfilePageProps) {
-	const { id } = use(params)
+	const patientId = safeDecode(use(params).id)
 	const t = useTranslations('PatientProfile')
-	const tabs = useProfileTabs()
+	const patient = usePatientCard(patientId)
+	const tabs = usePatientTabs()
 
 	return (
 		<>
@@ -42,23 +49,31 @@ export function PatientProfilePage({ params }: TPatientProfilePageProps) {
 						<span aria-hidden='true' className='px-1.5'>
 							/
 						</span>
-						<span className='font-mono'>{decodeURIComponent(id)}</span>
+						<span className='font-mono'>{patientId}</span>
 					</nav>
 				}
 				title={t('patientRecord')}
 				actions={
-					<Button variant='primary'>
+					// starting a visit comes with the realtime queue
+					<Button variant='primary' disabled>
 						<Play size={15} fill='currentColor' aria-hidden='true' />
 						{t('startVisit')}
 					</Button>
 				}
 			/>
 			<PageContent>
-				<PatientSummaryCard tabs={tabs} />
-				{tabs.tab === 'chart' && <DentalChart />}
-				{tabs.tab === 'plan' && <TreatmentPlanSection />}
-				{tabs.tab === 'history' && <VisitHistorySection />}
-				{tabs.tab === 'payments' && <PaymentsSection />}
+				<PatientSummaryCard patient={patient} tabs={tabs} />
+				<div
+					id={PATIENT_TABPANEL_ID}
+					role='tabpanel'
+					aria-labelledby={patientTabId(tabs.tab)}
+					className='contents'
+				>
+					{tabs.tab === 'chart' && <DentalChart />}
+					{tabs.tab === 'plan' && <TreatmentPlanSection />}
+					{tabs.tab === 'history' && <VisitHistorySection />}
+					{tabs.tab === 'payments' && <PaymentsSection />}
+				</div>
 			</PageContent>
 		</>
 	)

@@ -1,3 +1,5 @@
+import type { TDoctorId } from '@/entities/employee'
+
 export type TReportRange = 'half' | 'year'
 
 /**
@@ -18,60 +20,78 @@ export const MONTHLY_REVENUE: { month: string; value: number }[] = [
 	{ month: 'sep', value: 2290 },
 ]
 
+/**
+ * Monthly revenue goal, thousands of som
+ */
 export const REVENUE_TARGET = 2000
 
+export const RANGE_MONTHS: Record<TReportRange, number> = { half: 6, year: 12 }
+
 export const RANGE_LABEL: Record<TReportRange, string> = {
-	year: 'october2025September2026',
-	half: 'aprilSeptember2026',
+	year: 'periodYear',
+	half: 'periodHalf',
 }
 
+/**
+ * Mock KPIs per period until the backend exposes /reports
+ */
 export const RANGE_KPI: Record<
 	TReportRange,
-	{ revenueDelta: string; newPatients: string; newPatientsDelta: string }
+	{
+		revenueChangePercent: number
+		newPatients: number
+		newPatientsChangePercent: number
+	}
 > = {
-	year: { revenueDelta: '+11%', newPatients: '412', newPatientsDelta: '+14%' },
-	half: { revenueDelta: '+9%', newPatients: '226', newPatientsDelta: '+18%' },
+	year: {
+		revenueChangePercent: 11,
+		newPatients: 412,
+		newPatientsChangePercent: 14,
+	},
+	half: {
+		revenueChangePercent: 9,
+		newPatients: 226,
+		newPatientsChangePercent: 18,
+	},
+}
+
+export const PERIOD_FACTS = {
+	averageBill: 4850,
+	averageBillChangePercent: 4,
+	noShowPercent: 4.8,
+	noShowChangePoints: -1.1,
 }
 
 type TDoctorPerformance = {
-	initials: string
-	name: string
-	specialty: string
-	tone: 'accent' | 'info' | 'ok'
-	visits: Record<TReportRange, string>
-	revenue: Record<TReportRange, string>
+	doctorId: TDoctorId
+	visits: Record<TReportRange, number>
+	/**
+	 * Millions of som
+	 */
+	revenue: Record<TReportRange, number>
 	planConsent: number
 	chairLoad: number
 }
 
 export const DOCTOR_PERFORMANCE: TDoctorPerformance[] = [
 	{
-		initials: 'ak',
-		name: 'Айгерим Касымова',
-		specialty: 'restorativeDentistryEndodontics',
-		tone: 'accent',
-		visits: { year: '1 284', half: '668' },
-		revenue: { year: 'n98M', half: 'n53M' },
+		doctorId: 'kas',
+		visits: { year: 1284, half: 668 },
+		revenue: { year: 9.8, half: 5.3 },
 		planConsent: 82,
 		chairLoad: 91,
 	},
 	{
-		initials: 'sp',
-		name: 'Сергей Петров',
-		specialty: 'prosthodontics',
-		tone: 'info',
-		visits: { year: '1 102', half: '561' },
-		revenue: { year: 'n81M', half: 'n42M' },
+		doctorId: 'pet',
+		visits: { year: 1102, half: 561 },
+		revenue: { year: 8.1, half: 4.2 },
 		planConsent: 76,
 		chairLoad: 84,
 	},
 	{
-		initials: 'et',
-		name: 'Эрмек Токтогулов',
-		specialty: 'surgeryImplantology',
-		tone: 'ok',
-		visits: { year: '968', half: '502' },
-		revenue: { year: 'n56M', half: 'n30M' },
+		doctorId: 'tok',
+		visits: { year: 968, half: 502 },
+		revenue: { year: 5.6, half: 3.0 },
 		planConsent: 71,
 		chairLoad: 78,
 	},

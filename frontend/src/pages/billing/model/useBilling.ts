@@ -3,7 +3,12 @@
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { INVOICES, type TInvoice, usePaymentMethods } from '@/entities/invoice'
+import {
+	INVOICES,
+	type TInvoice,
+	useInvoiceLabels,
+	usePaymentMethods,
+} from '@/entities/invoice'
 
 import { useFormat } from '@/shared/lib/i18n'
 
@@ -14,7 +19,7 @@ type TInvoiceFilter = 'all' | 'open' | 'overdue' | 'paid'
  */
 type TInvoiceQuery = { status: TInvoiceFilter }
 
-const FILTERS: { id: TInvoiceFilter; label: string }[] = [
+const STATUS_FILTERS: { id: TInvoiceFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
 	{ id: 'open', label: 'amountDue' },
 	{ id: 'overdue', label: 'overdueFilter' },
@@ -43,8 +48,8 @@ export function useBilling(options: TBillingOptions) {
 	const { voided, onEdit, onVoid, onRefund, onPay } = options
 
 	const t = useTranslations('Billing')
-	const tInvoice = useTranslations('Invoice')
-	const methods = usePaymentMethods()
+	const invoiceLabels = useInvoiceLabels()
+	const paymentMethods = usePaymentMethods()
 	const format = useFormat()
 	const filters = useForm<TInvoiceQuery>({ defaultValues: { status: 'all' } })
 	const status = useWatch({ control: filters.control, name: 'status' })
@@ -55,14 +60,14 @@ export function useBilling(options: TBillingOptions) {
 			return {
 				...invoice,
 				patientName: format.name(invoice.patientName),
-				service: tInvoice(invoice.service),
+				service: invoiceLabels.service(invoice),
 				amountText: format.som(invoice.amount),
 				balanceText: invoice.balance ? format.som(invoice.balance) : '—',
-				methodName: methods.byId(invoice.method).name,
-				overdue: invoice.status === 'overdue',
-				voided: isVoided,
-				payable: invoice.balance > 0 && !isVoided,
-				refundable: invoice.balance === 0 && !isVoided,
+				methodName: paymentMethods.byId(invoice.method).name,
+				isOverdue: invoice.status === 'overdue',
+				isVoided,
+				isPayable: invoice.balance > 0 && !isVoided,
+				isRefundable: invoice.balance === 0 && !isVoided,
 				edit: () => onEdit(invoice),
 				voidInvoice: () => onVoid(invoice),
 				refund: () => onRefund(invoice),
@@ -73,7 +78,7 @@ export function useBilling(options: TBillingOptions) {
 
 	return {
 		filters,
-		statuses: FILTERS.map(option => ({
+		statuses: STATUS_FILTERS.map(option => ({
 			id: option.id,
 			label: t(option.label),
 			count: INVOICES.filter(invoice => matchesFilter(invoice, option.id))
@@ -84,3 +89,5 @@ export function useBilling(options: TBillingOptions) {
 }
 
 export type TBillingModel = ReturnType<typeof useBilling>
+
+export type TInvoiceRow = TBillingModel['rows'][number]

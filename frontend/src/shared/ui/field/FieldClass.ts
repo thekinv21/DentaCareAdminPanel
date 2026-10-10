@@ -14,6 +14,6 @@ export const textareaClass =
  * Responsive form grids: 2 or 3 columns, one column on phones
  */
 export const formGrid2 =
-	'grid grid-cols-2 gap-x-4 gap-y-3.5 max-[720px]:grid-cols-1'
+	'grid grid-cols-2 gap-x-4 gap-y-3.5 max-mobile:grid-cols-1'
 export const formGrid3 =
-	'grid grid-cols-3 gap-x-4 gap-y-3.5 max-[1100px]:grid-cols-2 max-[720px]:grid-cols-1'
+	'grid grid-cols-3 gap-x-4 gap-y-3.5 max-laptop:grid-cols-2 max-mobile:grid-cols-1'

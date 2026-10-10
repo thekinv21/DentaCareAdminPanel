@@ -29,3 +29,4 @@ export function usePlanStages() {
 		add: () => stages.append({ ...NEW_STAGE, service: t(NEW_STAGE.service) }),
 	}
 }
+export type TPlanStageRow = ReturnType<typeof usePlanStages>['rows'][number]

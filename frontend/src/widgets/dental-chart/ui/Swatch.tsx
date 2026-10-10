@@ -8,5 +8,5 @@ export function Swatch({ className }: TSwatchProps) {
 	return <span className={cn('size-3.5 shrink-0 rounded', className)} />
 }
 
-export const swatchOf = (tool: TToolId) =>
+export const getToolSwatchClass = (tool: TToolId) =>
 	TOOLS.find(item => item.id === tool)?.swatch ?? ''

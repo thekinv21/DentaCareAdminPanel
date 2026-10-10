@@ -18,12 +18,29 @@ export type TFieldProps = {
 	 * `div` for groups of buttons (chips, swatches) that must not sit inside a label
 	 */
 	as?: 'label' | 'div'
+	/**
+	 * Id of the control: the label points to it instead of wrapping it
+	 */
+	htmlFor?: string
+	/**
+	 * Shown at the end of the label row, e.g. a "Forgot password?" link
+	 */
+	aside?: ReactNode
+	/**
+	 * `lg` is the bigger label of the auth screens
+	 */
+	size?: 'md' | 'lg'
 	className?: string
 	children: ReactNode
 }
 
+const LABEL_SIZE_CLASS = {
+	md: 'text-[12.5px] leading-4 text-ink-muted',
+	lg: 'text-[13px] leading-4.5 text-ink',
+}
+
 /**
- * Label wrapping its control, so clicking the label focuses the input
+ * Label with its control, a hint and the validation error
  */
 export function Field(props: TFieldProps) {
 	const {
@@ -32,17 +49,36 @@ export function Field(props: TFieldProps) {
 		error,
 		errorId,
 		required,
-		as: Tag = 'label',
+		as = 'label',
+		htmlFor,
+		aside,
+		size = 'md',
 		className,
 		children,
 	} = props
 
+	const Tag = htmlFor ? 'div' : as
+	const LabelTag = htmlFor ? 'label' : 'span'
+	const labelText = (
+		<LabelTag
+			htmlFor={htmlFor}
+			className={cn('font-semibold', LABEL_SIZE_CLASS[size])}
+		>
+			{label}
+			{required && <b className='font-bold text-danger'> *</b>}
+		</LabelTag>
+	)
+
 	return (
 		<Tag className={cn('flex min-w-0 flex-col gap-1.5', className)}>
-			<span className='text-[12.5px] leading-4 font-semibold text-ink-muted'>
-				{label}
-				{required && <b className='font-bold text-danger'> *</b>}
-			</span>
+			{aside ? (
+				<span className='flex items-baseline justify-between'>
+					{labelText}
+					{aside}
+				</span>
+			) : (
+				labelText
+			)}
 			{children}
 			{error ? (
 				<span

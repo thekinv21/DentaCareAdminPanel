@@ -17,13 +17,13 @@ export const CONFIRM_TONE: Record<
 	danger: {
 		icon: Trash2,
 		iconClass: 'bg-danger-soft text-danger',
-		button: 'destructive',
+		button: 'danger',
 		enter: 'enterDelete',
 	},
 	critical: {
 		icon: OctagonAlert,
 		iconClass: 'bg-danger text-white',
-		button: 'destructive',
+		button: 'danger',
 		enter: 'enterDelete',
 	},
 	warning: {
@@ -61,6 +61,3 @@ export const IMPACT_MARK: Record<TImpactTone, string> = {
 	neutral: '•',
 	info: '•',
 }
-
-export const sectionLabelClass =
-	'text-[11px] leading-3.5 font-bold tracking-[0.06em] text-ink-muted uppercase'

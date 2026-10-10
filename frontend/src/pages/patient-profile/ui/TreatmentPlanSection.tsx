@@ -10,6 +10,12 @@ import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
 import { useTreatmentPlan } from '../model/useTreatmentPlan'
 
+const TOTAL_STYLE = {
+	total: { box: 'bg-raised', text: 'text-ink-muted' },
+	coverage: { box: 'bg-info-soft', text: 'text-info' },
+	due: { box: 'bg-brand-soft', text: 'text-brand-strong' },
+}
+
 export function TreatmentPlanSection() {
 	const t = useTranslations('PatientProfile')
 	const plan = useTreatmentPlan()
@@ -18,7 +24,7 @@ export function TreatmentPlanSection() {
 		<Card as='section' className='animate-fade'>
 			<CardHeader
 				title={t('treatmentPlan')}
-				description={t('agreedWithPatient12')}
+				description={plan.agreement}
 				actions={<Button size='sm'>{t('bookRemaining')}</Button>}
 			/>
 			<TableScroll>
@@ -41,7 +47,10 @@ export function TreatmentPlanSection() {
 								</Td>
 								<Td className='font-semibold'>{step.procedure}</Td>
 								<Td mono>{step.tooth}</Td>
-								<Td nowrap className={cn(step.dateMuted && 'text-ink-muted')}>
+								<Td
+									nowrap
+									className={cn(step.isDateMissing && 'text-ink-muted')}
+								>
 									{step.date}
 								</Td>
 								<Td>
@@ -58,10 +67,15 @@ export function TreatmentPlanSection() {
 			<dl className='flex flex-wrap justify-end gap-2'>
 				{plan.totals.map(item => (
 					<div
-						key={item.label}
-						className={cn('min-w-35 rounded-xl px-3.5 py-2', item.box)}
+						key={item.kind}
+						className={cn(
+							'min-w-35 rounded-xl px-3.5 py-2',
+							TOTAL_STYLE[item.kind].box,
+						)}
 					>
-						<dt className={cn('text-[12.5px]', item.text)}>{item.label}</dt>
+						<dt className={cn('text-[12.5px]', TOTAL_STYLE[item.kind].text)}>
+							{item.label}
+						</dt>
 						<dd className='font-mono font-semibold'>{item.value}</dd>
 					</div>
 				))}

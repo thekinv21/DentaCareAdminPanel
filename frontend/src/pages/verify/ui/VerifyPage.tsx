@@ -7,6 +7,7 @@ import { AuthHeading, AuthStack } from '@/widgets/auth-panel'
 
 import { cn } from '@/shared/lib/cn'
 import { Button } from '@/shared/ui/button'
+import { CheckboxLabel } from '@/shared/ui/checkbox'
 import { inputLgClass } from '@/shared/ui/field'
 
 import { useVerifyCode } from '../model/useVerifyCode'
@@ -44,32 +45,26 @@ export function VerifyPage() {
 								key={cell.index}
 								inputMode='numeric'
 								autoComplete={cell.index === 0 ? 'one-time-code' : 'off'}
-								maxLength={1}
 								aria-label={`${t('digit')} ${cell.index + 1}`}
 								className={cn(
 									inputLgClass,
 									'h-15 p-0 text-center font-mono text-2xl font-semibold',
-									cell.filled && 'border-brand',
+									cell.isFilled && 'border-brand',
 								)}
 								{...cell.props}
 							/>
 						))}
 					</div>
 				</fieldset>
-				<label className='inline-flex cursor-pointer items-start gap-2.5 text-sm leading-5'>
-					<input
-						type='checkbox'
-						className='mt-px size-4.5 shrink-0 accent-brand'
-						{...verify.rememberProps}
-					/>
+				<CheckboxLabel {...verify.rememberProps}>
 					{t('dontAskOnThis')}
-				</label>
+				</CheckboxLabel>
 				<Button
 					type='submit'
 					variant='primary'
 					size='lg'
 					block
-					disabled={!verify.ready}
+					disabled={!verify.isComplete}
 				>
 					{t('verifyAndSignIn')}
 				</Button>
@@ -78,12 +73,10 @@ export function VerifyPage() {
 				<span>
 					{t('newCodeIn')} <span className='font-mono text-ink'>0:42</span>
 				</span>
-				<a
-					href='#'
-					className='font-semibold text-brand no-underline hover:underline'
-				>
+				{/* resending comes with the SMS gateway */}
+				<Button variant='ghost' size='sm' disabled className='text-brand'>
 					{t('getTheCodeBy')}
-				</a>
+				</Button>
 			</div>
 		</AuthStack>
 	)

@@ -1,13 +1,13 @@
 'use client'
 
-import { ClipboardList, Trash2 } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller, FormProvider } from 'react-hook-form'
+import { FormProvider } from 'react-hook-form'
 
 import { useFieldProps } from '@/shared/lib/form'
 import { Avatar } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import {
 	Field,
 	FormField,
@@ -15,8 +15,8 @@ import {
 	inputClass,
 	textareaClass,
 } from '@/shared/ui/field'
-import { Modal } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
+import { Modal, ModalDeleteButton, ModalFooter } from '@/shared/ui/modal'
+import { SubjectTile } from '@/shared/ui/subject-tile'
 
 import { PLAN_PAYMENTS, type TPlanFormInput } from '../model/PlanFormSchema'
 import type { TPlanFormModel } from '../model/usePlanForm'
@@ -48,51 +48,36 @@ export function PlanFormModal({ form }: TPlanFormModalProps) {
 				title={form.title}
 				subtitle={form.subtitle}
 				footer={
-					<>
-						{form.isEdit && (
-							<Button variant='dangerGhost' onClick={form.remove}>
-								<Trash2 size={16} aria-hidden='true' />
-								{t('deletePlan')}
-							</Button>
-						)}
-						<span className='flex-1' />
-						<Button onClick={form.close}>{tCommon('cancel')}</Button>
-						<Button onClick={form.saveDraft}>{t('saveDraft')}</Button>
-						<Button type='submit' variant='primary' aria-busy={form.saving}>
-							{form.saving && <Spinner />}
-							{form.saving
-								? tCommon('saving')
-								: form.isEdit
-									? tCommon('save')
-									: t('sendForApproval')}
-						</Button>
-					</>
+					<ModalFooter
+						onCancel={form.close}
+						saving={form.saving}
+						submitLabel={form.isEdit ? tCommon('save') : t('sendForApproval')}
+						leading={
+							form.isEdit && (
+								<ModalDeleteButton onClick={form.remove}>
+									{t('deletePlan')}
+								</ModalDeleteButton>
+							)
+						}
+						extra={<Button onClick={form.saveDraft}>{t('saveDraft')}</Button>}
+					/>
 				}
 			>
 				<div className={formGrid3}>
 					<Field as='div' label={t('patient')} required>
-						<div className='flex items-center gap-3 rounded-[14px] border-[1.5px] border-brand bg-brand-soft px-2.5 py-2'>
-							<Avatar initials={form.patient.initials} size={32} />
-							<div className='min-w-0 flex-1'>
-								<div className='truncate font-bold'>{form.patient.name}</div>
-								<div className='font-mono text-[11.5px] text-ink-muted'>
-									{form.patient.id}
-								</div>
-							</div>
-						</div>
+						<SubjectTile
+							compact
+							media={<Avatar initials={form.patient.initials} size={32} />}
+							title={form.patient.name}
+							caption={<span className='font-mono'>{form.patient.id}</span>}
+						/>
 					</Field>
 					<Field as='div' label={t('doctor')} required>
-						<Controller
+						<ChoiceChipsField
 							control={control}
 							name='doctor'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('doctor')}
-									options={form.doctorOptions}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
+							aria-label={t('doctor')}
+							options={form.doctorOptions}
 						/>
 					</Field>
 					<PlanNameField />
@@ -101,20 +86,14 @@ export function PlanFormModal({ form }: TPlanFormModalProps) {
 				<div className='flex flex-wrap items-start gap-4.5'>
 					<div className='flex flex-[1_1_320px] flex-col gap-3'>
 						<Field as='div' label={t('payment')}>
-							<Controller
+							<ChoiceChipsField
 								control={control}
 								name='payment'
-								render={({ field }) => (
-									<ChoiceChips
-										aria-label={t('payment')}
-										options={PLAN_PAYMENTS.map(id => ({
-											id,
-											label: t(PAYMENT_LABEL[id]),
-										}))}
-										value={field.value}
-										onChange={field.onChange}
-									/>
-								)}
+								aria-label={t('payment')}
+								options={PLAN_PAYMENTS.map(payment => ({
+									id: payment,
+									label: t(PAYMENT_LABEL[payment]),
+								}))}
 							/>
 						</Field>
 						<Field label={t('noteForPatient')}>

@@ -90,22 +90,28 @@ export const PERMISSION_MODULES: TPermissionModule[] = [
 	},
 ]
 
-export const PERMISSIONS_TOTAL = 37
+export const PERMISSIONS_TOTAL = PERMISSION_MODULES.reduce(
+	(sum, permissionModule) => sum + permissionModule.actions.length,
+	0,
+)
 
-const expand = (short: Record<string, string>): TPermissions => {
-	const letter: Record<string, TPermissionAction> = {
-		v: 'view',
-		c: 'create',
-		e: 'edit',
-		d: 'delete',
-	}
-	return Object.fromEntries(
-		Object.entries(short).map(([module, actions]) => [
-			module,
-			actions.split('').map(a => letter[a]),
+const ACTION_BY_LETTER: Record<string, TPermissionAction> = {
+	v: 'view',
+	c: 'create',
+	e: 'edit',
+	d: 'delete',
+}
+
+/**
+ * `{ appt: 'vce' }` → `{ appt: ['view', 'create', 'edit'] }`
+ */
+const expandPermissions = (shortCodes: Record<string, string>): TPermissions =>
+	Object.fromEntries(
+		Object.entries(shortCodes).map(([moduleId, letters]) => [
+			moduleId,
+			letters.split('').map(letter => ACTION_BY_LETTER[letter]),
 		]),
 	)
-}
 
 export type TRolePreset =
 	'blank' | 'doctor' | 'reception' | 'assistant' | 'finance'
@@ -120,7 +126,7 @@ export const ROLE_PRESETS: Record<
 	blank: { label: 'presetBlank', permissions: {} },
 	doctor: {
 		label: 'presetDoctor',
-		permissions: expand({
+		permissions: expandPermissions({
 			dash: 'v',
 			appt: 'vce',
 			pat: 've',
@@ -131,7 +137,7 @@ export const ROLE_PRESETS: Record<
 	},
 	reception: {
 		label: 'presetReception',
-		permissions: expand({
+		permissions: expandPermissions({
 			dash: 'v',
 			appt: 'vced',
 			pat: 'vce',
@@ -141,7 +147,7 @@ export const ROLE_PRESETS: Record<
 	},
 	assistant: {
 		label: 'presetAssistant',
-		permissions: expand({
+		permissions: expandPermissions({
 			dash: 'v',
 			appt: 'v',
 			pat: 'v',
@@ -151,6 +157,11 @@ export const ROLE_PRESETS: Record<
 	},
 	finance: {
 		label: 'presetFinance',
-		permissions: expand({ dash: 'v', bill: 'vced', rep: 'v', inv: 'v' }),
+		permissions: expandPermissions({
+			dash: 'v',
+			bill: 'vced',
+			rep: 'v',
+			inv: 'v',
+		}),
 	},
 }

@@ -4,74 +4,40 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { TODAY } from '@/entities/appointment'
 import { DOCTORS } from '@/entities/employee'
-import { PATIENTS } from '@/entities/patient'
+import { patientAvatarTone, PATIENTS } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
 import { useFormModal } from '@/shared/lib/form'
 import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
-import { avatarTone } from '@/shared/ui/avatar'
 import { useToast } from '@/shared/ui/toast'
 
 import type { TCalendarEvent } from '../lib/Schedule'
 import {
 	appointmentFormSchema,
-	BOOKING_SERVICES,
 	endTime,
-	EVENT_PATIENT,
-	isoToRu,
 	type TAppointmentFormValues,
 } from './AppointmentFormSchema'
-
-const draft = (): TAppointmentFormValues => ({
-	patientId: '',
-	doctor: 'kas',
-	chair: 1,
-	date: isoToRu(TODAY),
-	start: '12:30',
-	duration: 60,
-	services: ['exam'],
-	tooth: '',
-	source: 'phone',
-	status: 'confirmed',
-	note: '',
-	sms24: true,
-	sms2: false,
-})
-
-const fromEvent = (event: TCalendarEvent): TAppointmentFormValues => ({
-	...draft(),
-	patientId: event.patientId ?? EVENT_PATIENT,
-	doctor: event.doctorId,
-	chair: event.chair,
-	date: isoToRu(event.date),
-	start: event.time,
-	duration: event.duration,
-	services: [
-		BOOKING_SERVICES.find(s => event.what.startsWith(s.id))?.id ?? 'exam',
-	],
-	tooth: event.what.match(/\d{2}$/)?.[0] ?? '',
-	source: 'reception',
-	status: event.status === 'next' ? 'confirmed' : event.status,
-	sms2: true,
-})
+import {
+	emptyAppointmentValues,
+	valuesFromEvent,
+} from './AppointmentFormValues'
 
 /**
  * New/edit appointment modal: the form, the chosen patient and save
  */
-export function useAppointmentForm() {
+export function useAppointmentForm(removedKeys: Set<string>) {
 	const t = useTranslations('AppointmentForm')
 	const format = useFormat()
 	const toast = useToast()
 
 	const methods = useForm<TAppointmentFormValues>({
 		resolver: zodResolver(appointmentFormSchema),
-		defaultValues: draft(),
+		defaultValues: emptyAppointmentValues(),
 	})
 	const modal = useFormModal<TCalendarEvent>(event =>
-		methods.reset(event ? fromEvent(event) : draft()),
+		methods.reset(event ? valuesFromEvent(event) : emptyAppointmentValues()),
 	)
 	const event = modal.item
 	const [patientId, doctor, chair, start, duration] = useWatch({
@@ -79,16 +45,17 @@ export function useAppointmentForm() {
 		name: ['patientId', 'doctor', 'chair', 'start', 'duration'],
 	})
 
-	const found = PATIENTS.find(p => p.id === patientId)
-	const patientName = found
-		? format.name(found.fullName)
+	const listedPatient = PATIENTS.find(patient => patient.id === patientId)
+	const patientName = listedPatient
+		? format.name(listedPatient.fullName)
 		: event && patientId
-			? format.name(event.who)
+			? format.name(event.patientName)
 			: ''
 
 	return {
 		...modal,
 		methods,
+		removedKeys,
 		title: event
 			? t('appointmentOf', { name: patientName })
 			: t('newAppointment'),
@@ -103,12 +70,12 @@ export function useAppointmentForm() {
 		patient: patientId
 			? {
 					name: patientName,
-					id: found?.id,
-					phone: found?.phone,
-					allergy: !!found?.flags.includes('allergy'),
+					id: listedPatient?.id,
+					phone: listedPatient?.phone,
+					hasAllergy: !!listedPatient?.flags.includes('allergy'),
 					initials: getInitials(patientName),
-					tone: found
-						? avatarTone(PATIENTS.indexOf(found))
+					tone: listedPatient
+						? patientAvatarTone(listedPatient.id)
 						: ('neutral' as const),
 				}
 			: null,

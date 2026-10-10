@@ -4,10 +4,12 @@ import { useTranslations } from 'next-intl'
 import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
+import { useFieldProps } from '@/shared/lib/form'
 import { translateOptional } from '@/shared/lib/i18n'
 import type { TThemePreference } from '@/shared/lib/theme'
 import {
 	Field,
+	FormField,
 	formGrid2,
 	formGrid3,
 	inputClass,
@@ -16,29 +18,34 @@ import {
 import { RadioCard } from '@/shared/ui/radio-card'
 
 import { PROFILE_FIELDS } from '../model/Profile'
-import type { TProfileFormValues } from '../model/ProfileForm'
+import type { TProfileFormValues } from '../model/ProfileFormSchema'
 import type { TProfileSettingsModel } from '../model/useProfileSettings'
 
-type TProfileTabProps = { model: TProfileSettingsModel }
+type TProfileTabProps = { settings: TProfileSettingsModel }
 
-export function ProfileTab({ model }: TProfileTabProps) {
+export function ProfileTab({ settings }: TProfileTabProps) {
 	const t = useTranslations('Profile')
 	const { register } = useFormContext<TProfileFormValues>()
+	const inputProps = useFieldProps<TProfileFormValues>()
 
 	return (
 		<div className='flex animate-fade flex-col gap-5.5 pt-0.5 pb-2'>
 			<div className={formGrid2}>
 				{PROFILE_FIELDS.map(field => (
-					<Field key={field.name} label={translateOptional(t, field.label)}>
+					<FormField
+						key={field.name}
+						name={`profile.${field.name}`}
+						label={translateOptional(t, field.label)}
+					>
 						<input
 							className={cn(inputClass, 'mono' in field && 'font-mono')}
 							type={'type' in field ? field.type : undefined}
 							autoComplete={
 								'autoComplete' in field ? field.autoComplete : undefined
 							}
-							{...register(`profile.${field.name}`)}
+							{...inputProps(`profile.${field.name}`)}
 						/>
-					</Field>
+					</FormField>
 				))}
 				<Field label={t('defaultChair')}>
 					<select className={inputClass} {...register('defaultChair')}>
@@ -58,13 +65,13 @@ export function ProfileTab({ model }: TProfileTabProps) {
 					aria-label={t('interfaceLanguage')}
 					className={formGrid3}
 				>
-					{model.languages.map(language => (
+					{settings.languages.map(language => (
 						<RadioCard
 							key={language.id}
 							code={language.code}
 							title={language.name}
 							note={language.note}
-							checked={language.checked}
+							checked={language.isChecked}
 							onSelect={language.select}
 						/>
 					))}
@@ -75,12 +82,12 @@ export function ProfileTab({ model }: TProfileTabProps) {
 				<Field label={t('theme')}>
 					<select
 						className={inputClass}
-						value={model.theme}
+						value={settings.theme}
 						onChange={event =>
-							model.setTheme(event.target.value as TThemePreference)
+							settings.setTheme(event.target.value as TThemePreference)
 						}
 					>
-						{model.themes.map(item => (
+						{settings.themes.map(item => (
 							<option key={item.id} value={item.id}>
 								{item.label}
 							</option>

@@ -8,6 +8,7 @@ import { PageContent, PageHeader } from '@/widgets/page-header'
 import { Button } from '@/shared/ui/button'
 import { StatCard, StatGrid } from '@/shared/ui/stat-card'
 
+import { useInventorySummary } from '../model/useInventorySummary'
 import { useStockItemForm } from '../model/useStockItemForm'
 import { useStockMovement } from '../model/useStockMovement'
 import { useStockRemoval } from '../model/useStockRemoval'
@@ -18,6 +19,7 @@ import { StockTable } from './StockTable'
 
 export function InventoryPage() {
 	const t = useTranslations('Inventory')
+	const summary = useInventorySummary()
 	const removal = useStockRemoval()
 	const form = useStockItemForm(removal.remove)
 	const movement = useStockMovement()
@@ -31,7 +33,7 @@ export function InventoryPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('n186ItemsStockCount')}
+				crumb={summary.crumb}
 				title={t('inventory')}
 				actions={
 					<>
@@ -39,7 +41,8 @@ export function InventoryPage() {
 							<Plus size={17} strokeWidth={2.2} aria-hidden='true' />
 							{t('newItem')}
 						</Button>
-						<Button variant='primary'>
+						{/* supplier orders come with the backend */}
+						<Button variant='primary' disabled>
 							<ShoppingCart size={17} aria-hidden='true' />
 							{t('createOrder')}
 						</Button>
@@ -50,23 +53,23 @@ export function InventoryPage() {
 				<StatGrid label={t('summary')}>
 					<StatCard
 						label={t('belowMinimum')}
-						value='7'
+						value={summary.belowMinimum}
 						valueClass='text-warning'
-						footer={t('n3AlreadyOrdered')}
+						footer={summary.alreadyOrdered}
 					/>
 					<StatCard
 						label={t('expiresWithin30Days')}
-						value='4'
+						value={summary.expiringSoon}
 						valueClass='text-danger'
 						delay={50}
-						footer={t('totaling9280Som')}
+						footer={summary.expiringValue}
 					/>
 					<StatCard
 						label={t('inventoryValue')}
-						value='468 900'
+						value={summary.totalValue}
 						unit={t('som')}
 						delay={100}
-						footer={t('n6Categories')}
+						footer={summary.categories}
 					/>
 				</StatGrid>
 				<StockTable table={table} />

@@ -2,78 +2,47 @@
 
 import { Download, Funnel } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller } from 'react-hook-form'
 
 import { Button } from '@/shared/ui/button'
 import { SearchInput } from '@/shared/ui/search-input'
-import { Segmented } from '@/shared/ui/segmented'
+import { SegmentedField } from '@/shared/ui/segmented'
 
 import type { TPatientsTableModel } from '../model/usePatientsTable'
 
 type TPatientsToolbarProps = { table: TPatientsTableModel }
 
+/**
+ * Segment tabs, search and the list tools above the patient table
+ */
 export function PatientsToolbar({ table }: TPatientsToolbarProps) {
 	const t = useTranslations('Patients')
 	const { control, register } = table.filters
 
 	return (
-		<>
-			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Controller
-					control={control}
-					name='tab'
-					render={({ field }) => (
-						<Segmented
-							aria-label={t('segments')}
-							options={table.tabs}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+		<div className='flex flex-wrap items-center justify-between gap-2.5'>
+			<SegmentedField
+				control={control}
+				name='tab'
+				aria-label={t('segments')}
+				options={table.tabs}
+			/>
+			<div className='flex flex-wrap gap-2 lg:flex-nowrap'>
+				<SearchInput
+					label={t('nameIdOrPhone')}
+					size='sm'
+					className='basis-60'
+					{...register('search')}
 				/>
-				<div className='flex flex-wrap gap-2 lg:flex-nowrap'>
-					<SearchInput
-						label={t('nameIdOrPhone')}
-						size='sm'
-						className='basis-60'
-						{...register('search')}
-					/>
-					<Button size='sm' className='h-9'>
-						<Funnel size={15} aria-hidden='true' />
-						{t('dentist')}
-					</Button>
-					<Button size='sm' className='h-9'>
-						<Download size={15} aria-hidden='true' />
-						{t('export')}
-					</Button>
-				</div>
+				{/* the dentist filter and export come with the backend */}
+				<Button size='sm' className='h-9' disabled>
+					<Funnel size={15} aria-hidden='true' />
+					{t('dentist')}
+				</Button>
+				<Button size='sm' className='h-9' disabled>
+					<Download size={15} aria-hidden='true' />
+					{t('export')}
+				</Button>
 			</div>
-
-			{table.selectedCount > 0 && (
-				<div
-					role='status'
-					className='flex animate-pop flex-wrap items-center gap-2 rounded-xl bg-brand-soft py-1.5 pr-1.5 pl-3.5 text-brand-strong'
-				>
-					<span className='grow font-semibold'>
-						{t('selected')} {table.selectedCount}
-					</span>
-					<Button size='sm' variant='primary'>
-						{t('sendSms')}
-					</Button>
-					<Button size='sm'>{t('assignDentist')}</Button>
-					<Button size='sm' variant='destructive' onClick={table.bulkDelete}>
-						{t('deleteSelected')}
-					</Button>
-					<Button
-						size='sm'
-						variant='ghost'
-						className='text-brand-strong'
-						onClick={table.clearSelection}
-					>
-						{t('reset')}
-					</Button>
-				</div>
-			)}
-		</>
+		</div>
 	)
 }

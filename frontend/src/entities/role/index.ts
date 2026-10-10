@@ -15,9 +15,9 @@ export {
 } from './model/Permissions'
 export type { TRolePreset } from './model/Permissions'
 export { useRoleLabels } from './model/useRoleLabels'
+export { useRoleTransferChoice } from './model/useRoleTransferChoice'
 export type {
 	TPermissionAction,
-	TPermissionModule,
 	TPermissions,
 	TRole,
 	TSystemRoleId,

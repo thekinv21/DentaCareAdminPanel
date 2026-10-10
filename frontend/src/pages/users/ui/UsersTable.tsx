@@ -1,11 +1,10 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller } from 'react-hook-form'
 
 import { Card } from '@/shared/ui/card'
 import { SearchInput } from '@/shared/ui/search-input'
-import { Segmented } from '@/shared/ui/segmented'
+import { SegmentedField } from '@/shared/ui/segmented'
 import { Table, TableScroll, Th } from '@/shared/ui/table'
 
 import type { TUsersTableModel } from '../model/useUsersTable'
@@ -20,22 +19,16 @@ export function UsersTable({ table }: TUsersTableProps) {
 	return (
 		<Card
 			as='section'
-			className='min-h-115 flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-115 flex-auto animate-rise max-mobile:flex-none'
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Controller
+				<SegmentedField
 					control={control}
 					name='type'
-					render={({ field }) => (
-						<Segmented
-							aria-label={t('userType')}
-							options={table.types}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					aria-label={t('userType')}
+					options={table.types}
 				/>
-				<div className='flex items-center gap-2 max-[720px]:flex-wrap'>
+				<div className='flex items-center gap-2 max-mobile:flex-wrap'>
 					<SearchInput
 						label={t('searchUser')}
 						placeholder={t('nameEmailOrPhone')}
@@ -43,18 +36,12 @@ export function UsersTable({ table }: TUsersTableProps) {
 						className='w-56'
 						{...register('search')}
 					/>
-					<Controller
+					<SegmentedField
 						control={control}
 						name='status'
-						render={({ field }) => (
-							<Segmented
-								aria-label={t('status')}
-								options={table.statuses}
-								value={field.value}
-								onChange={field.onChange}
-								className='flex-nowrap'
-							/>
-						)}
+						aria-label={t('status')}
+						options={table.statuses}
+						className='flex-nowrap'
 					/>
 				</div>
 			</div>

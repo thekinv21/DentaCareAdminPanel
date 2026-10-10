@@ -1,27 +1,32 @@
 import { z } from 'zod'
 
-import { kgPhoneSchema } from '@/shared/lib/validation'
+import { DOCTOR_IDS } from '@/entities/employee'
 
-export const ALLERGIES = ['pen', 'lid', 'art', 'lat', 'iod', 'nsaid'] as const
+import { displayDateSchema, kgPhoneSchema } from '@/shared/lib/validation'
+
+export const ALLERGIES = [
+	'penicillin',
+	'lidocaine',
+	'articaine',
+	'latex',
+	'iodine',
+	'nsaids',
+] as const
 export const CONDITIONS = [
-	'diab',
-	'hyp',
-	'heart',
-	'asth',
-	'preg',
-	'anti',
+	'diabetes',
+	'hypertension',
+	'heartDisease',
+	'asthma',
+	'pregnancy',
+	'anticoagulants',
 ] as const
 export const INSURANCE = ['none', 'foms', 'dms'] as const
-export const PATIENT_DOCTORS = ['kas', 'pet', 'tok'] as const
 
 export const patientFormSchema = z.object({
 	lastName: z.string().trim().min(1, 'enterLastName'),
 	firstName: z.string().trim().min(1, 'enterFirstName'),
 	middleName: z.string().trim(),
-	birthDate: z
-		.string()
-		.trim()
-		.regex(/^\d{2}\.\d{2}\.\d{4}$/, 'enterDateDdMmYyyy'),
+	birthDate: displayDateSchema,
 	gender: z.enum(['f', 'm']),
 	pin: z
 		.string()
@@ -35,7 +40,7 @@ export const patientFormSchema = z.object({
 	conditions: z.array(z.string()),
 	insurance: z.enum(INSURANCE),
 	policy: z.string().trim(),
-	doctor: z.enum(PATIENT_DOCTORS),
+	doctor: z.enum(DOCTOR_IDS),
 	consent: z.boolean().refine(Boolean, 'consentRequired'),
 	smsReminders: z.boolean(),
 })

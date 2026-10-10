@@ -1,11 +1,22 @@
-export type TServiceCategory = 'diag' | 'ther' | 'hyg' | 'surg' | 'orth'
+export const SERVICE_CATEGORIES = [
+	'diagnostics',
+	'therapy',
+	'hygiene',
+	'surgery',
+	'prosthodontics',
+] as const
 
-export const SERVICE_CATEGORY: Record<TServiceCategory, string> = {
-	diag: 'diagnostics',
-	ther: 'restorativeDentistry',
-	hyg: 'hygiene',
-	surg: 'surgery',
-	orth: 'prosthodontics',
+export type TServiceCategory = (typeof SERVICE_CATEGORIES)[number]
+
+/**
+ * Message key of each category in the Settings namespace
+ */
+export const SERVICE_CATEGORY_LABEL: Record<TServiceCategory, string> = {
+	diagnostics: 'diagnostics',
+	therapy: 'restorativeDentistry',
+	hygiene: 'hygiene',
+	surgery: 'surgery',
+	prosthodontics: 'prosthodontics',
 }
 
 export type TServiceItem = {
@@ -21,7 +32,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'T-01',
 		name: 'consultationAndExam',
-		category: 'diag',
+		category: 'diagnostics',
 		minutes: 20,
 		price: 1500,
 		foms: true,
@@ -29,7 +40,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'D-02',
 		name: 'periapicalXRayRvg',
-		category: 'diag',
+		category: 'diagnostics',
 		minutes: 10,
 		price: 600,
 		foms: true,
@@ -37,7 +48,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'D-05',
 		name: 'singleJawCt',
-		category: 'diag',
+		category: 'diagnostics',
 		minutes: 20,
 		price: 3500,
 		foms: false,
@@ -45,7 +56,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'T-11',
 		name: 'lightCuredFilling',
-		category: 'ther',
+		category: 'therapy',
 		minutes: 60,
 		price: 6000,
 		foms: false,
@@ -53,7 +64,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'T-14',
 		name: 'rootCanal1Canal',
-		category: 'ther',
+		category: 'therapy',
 		minutes: 60,
 		price: 7500,
 		foms: false,
@@ -61,7 +72,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'T-15',
 		name: 'rootCanal3Canals',
-		category: 'ther',
+		category: 'therapy',
 		minutes: 120,
 		price: 18000,
 		foms: false,
@@ -69,7 +80,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'H-01',
 		name: 'professionalCleaningAirFlow',
-		category: 'hyg',
+		category: 'hygiene',
 		minutes: 60,
 		price: 4500,
 		foms: false,
@@ -77,7 +88,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'S-03',
 		name: 'simpleToothExtraction',
-		category: 'surg',
+		category: 'surgery',
 		minutes: 30,
 		price: 3000,
 		foms: true,
@@ -85,7 +96,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'S-07',
 		name: 'wisdomToothExtraction',
-		category: 'surg',
+		category: 'surgery',
 		minutes: 60,
 		price: 9000,
 		foms: false,
@@ -93,7 +104,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'S-12',
 		name: 'osstemImplantPlacement',
-		category: 'surg',
+		category: 'surgery',
 		minutes: 90,
 		price: 55000,
 		foms: false,
@@ -101,7 +112,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'O-04',
 		name: 'porcelainFusedToMetal',
-		category: 'orth',
+		category: 'prosthodontics',
 		minutes: 60,
 		price: 16000,
 		foms: false,
@@ -109,7 +120,7 @@ export const SERVICES: TServiceItem[] = [
 	{
 		code: 'O-06',
 		name: 'zirconiaCrown',
-		category: 'orth',
+		category: 'prosthodontics',
 		minutes: 60,
 		price: 28000,
 		foms: false,

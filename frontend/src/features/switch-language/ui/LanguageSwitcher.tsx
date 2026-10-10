@@ -1,10 +1,11 @@
 'use client'
 
-import { Check, ChevronDown, Globe } from 'lucide-react'
+import { ChevronDown, Globe } from 'lucide-react'
 
 import { cn } from '@/shared/lib/cn'
 
 import { useLanguageMenu } from '../model/useLanguageMenu'
+import { LanguageOption } from './LanguageOption'
 
 type TLanguageSwitcherProps = {
 	/**
@@ -16,7 +17,7 @@ type TLanguageSwitcherProps = {
 export function LanguageSwitcher({
 	variant = 'compact',
 }: TLanguageSwitcherProps) {
-	const { rootRef, open, toggle, options, current, pick, label } =
+	const { rootRef, isOpen, toggle, options, current, pick, label } =
 		useLanguageMenu()
 
 	return (
@@ -24,7 +25,7 @@ export function LanguageSwitcher({
 			<button
 				type='button'
 				aria-haspopup='listbox'
-				aria-expanded={open}
+				aria-expanded={isOpen}
 				aria-label={label}
 				onClick={toggle}
 				className={cn(
@@ -45,33 +46,18 @@ export function LanguageSwitcher({
 				)}
 			</button>
 
-			{open && (
+			{isOpen && (
 				<ul
 					role='listbox'
 					aria-label={label}
 					className='absolute top-11.5 right-0 z-30 min-w-52.5 animate-pop rounded-[14px] border border-line bg-surface p-1.5 shadow-float'
 				>
 					{options.map(option => (
-						<li key={option.id}>
-							<button
-								type='button'
-								role='option'
-								aria-selected={option.selected}
-								onClick={() => pick(option.id)}
-								className={cn(
-									'flex min-h-9.5 w-full items-center gap-2.5 rounded-[10px] border-0 bg-transparent px-2.5 text-left hover:bg-raised',
-									option.selected && 'font-semibold text-brand-strong',
-								)}
-							>
-								<span className='grow'>{option.name}</span>
-								<span className='font-mono text-[11px] text-ink-muted'>
-									{option.code}
-								</span>
-								<span className='w-3.5 text-brand'>
-									{option.selected && <Check size={14} aria-hidden='true' />}
-								</span>
-							</button>
-						</li>
+						<LanguageOption
+							key={option.id}
+							option={option}
+							onPick={() => pick(option.id)}
+						/>
 					))}
 				</ul>
 			)}

@@ -15,7 +15,7 @@ export function RevenueChart({ bars, label }: TRevenueChartProps) {
 	const format = useFormat()
 	return (
 		<svg
-			viewBox='0 0 640 250'
+			viewBox={`0 0 ${CHART.width} ${CHART.height}`}
 			role='img'
 			aria-label={label}
 			className='h-auto w-full overflow-visible'
@@ -31,7 +31,7 @@ export function RevenueChart({ bars, label }: TRevenueChartProps) {
 						strokeDasharray='3 4'
 					/>
 					<text
-						x='0'
+						x={CHART.axisLabelX}
 						y={chartY(value) + 4}
 						fontSize='11'
 						fill='var(--ink-subtle)'
@@ -49,7 +49,7 @@ export function RevenueChart({ bars, label }: TRevenueChartProps) {
 				stroke='var(--line-strong)'
 			/>
 			<text
-				x='30'
+				x={CHART.zeroLabelX}
 				y={CHART.base + 4}
 				fontSize='11'
 				fill='var(--ink-subtle)'
@@ -67,13 +67,13 @@ export function RevenueChart({ bars, label }: TRevenueChartProps) {
 						rx='5'
 						fill={bar.fill}
 						className='origin-bottom animate-growy transition-opacity duration-150 transform-fill hover:opacity-80'
-						style={{ animationDelay: `${bar.delay}ms` }}
+						style={{ animationDelay: `${bar.animationDelay}ms` }}
 					>
 						<title>{bar.title}</title>
 					</rect>
 					<text
 						x={bar.center}
-						y='230'
+						y={CHART.monthLabelY}
 						fontSize='11'
 						textAnchor='middle'
 						fill='var(--ink-subtle)'

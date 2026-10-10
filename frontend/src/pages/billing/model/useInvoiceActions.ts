@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-import type { TInvoice } from '@/entities/invoice'
+import { type TInvoice, usePaymentMethods } from '@/entities/invoice'
 
 import { mockRequest } from '@/shared/api'
 import { getInitials } from '@/shared/lib/format'
@@ -14,15 +14,18 @@ import { useConfirm } from '@/shared/ui/confirm-dialog'
 /**
  * Voiding an unpaid invoice (reason required) and refunding a paid one
  */
-export function useInvoiceActions(methodName: (invoice: TInvoice) => string) {
+export function useInvoiceActions() {
 	const t = useTranslations('InvoiceForm')
+	const paymentMethods = usePaymentMethods()
 	const format = useFormat()
 	const confirm = useConfirm()
 	const [voided, setVoided] = useState<Set<string>>(new Set())
 
-	const subject = (invoice: TInvoice, sub: string) => {
+	const methodName = (invoice: TInvoice) =>
+		paymentMethods.byId(invoice.method).name
+	const confirmSubject = (invoice: TInvoice, subtitle: string) => {
 		const name = format.name(invoice.patientName)
-		return { title: name, subtitle: sub, initials: getInitials(name) }
+		return { title: name, subtitle, initials: getInitials(name) }
 	}
 
 	return {
@@ -39,7 +42,7 @@ export function useInvoiceActions(methodName: (invoice: TInvoice) => string) {
 					t('reasonLateDiscount'),
 				],
 				reasonRequired: true,
-				subject: subject(
+				subject: confirmSubject(
 					invoice,
 					`${invoice.number} · ${format.som(invoice.amount)}`,
 				),
@@ -76,7 +79,10 @@ export function useInvoiceActions(methodName: (invoice: TInvoice) => string) {
 					],
 				},
 				countdown: 3,
-				subject: subject(invoice, `${invoice.number} · ${methodName(invoice)}`),
+				subject: confirmSubject(
+					invoice,
+					`${invoice.number} · ${methodName(invoice)}`,
+				),
 				confirmText: t('refundAmountButton', { amount }),
 				pendingText: t('sendingToBank'),
 				successText: t('refundSent'),

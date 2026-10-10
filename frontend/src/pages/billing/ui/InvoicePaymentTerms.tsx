@@ -1,14 +1,14 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
 import { AffixInput } from '@/shared/ui/affix-input'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, FormField, formGrid2 } from '@/shared/ui/field'
-import { SwitchCard } from '@/shared/ui/switch-card'
+import { SwitchCardField } from '@/shared/ui/switch-card'
 
 import {
 	FOMS_OPTIONS,
@@ -40,37 +40,25 @@ export function InvoicePaymentTerms() {
 						/>
 					</FormField>
 					<Field as='div' label={t('foms')}>
-						<Controller
+						<ChoiceChipsField
 							control={control}
 							name='foms'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('foms')}
-									options={FOMS_OPTIONS.map(id => ({
-										id,
-										label: t(FOMS_LABEL[id]),
-									}))}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
+							aria-label={t('foms')}
+							options={FOMS_OPTIONS.map(fomsOption => ({
+								id: fomsOption,
+								label: t(FOMS_LABEL[fomsOption]),
+							}))}
 						/>
 					</Field>
 				</div>
-				<Controller
+				<SwitchCardField
 					control={control}
 					name='sms'
-					render={({ field }) => (
-						<SwitchCard
-							label={t('sendBySms')}
-							hint={t('sendBySmsHint')}
-							checked={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					label={t('sendBySms')}
+					hint={t('sendBySmsHint')}
 				/>
 			</div>
-			<div className='flex w-70 flex-col gap-2 rounded-2xl border border-line bg-raised p-3.5 max-[720px]:w-full'>
+			<div className='flex w-70 flex-col gap-2 rounded-2xl border border-line bg-raised p-3.5 max-mobile:w-full'>
 				<div className={totalRow}>
 					<span className='text-ink-muted'>{t('amount')}</span>
 					<span className='font-mono'>{totals.sum}</span>

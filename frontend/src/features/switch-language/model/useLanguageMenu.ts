@@ -11,24 +11,21 @@ import {
 	useChangeLocale,
 } from '@/shared/lib/i18n'
 
-/**
- * Open/close state of the language dropdown; closes on outside click and Escape
- */
 export function useLanguageMenu() {
 	const locale = useLocale()
 	const setLocale = useChangeLocale()
 	const t = useTranslations('LanguageSwitcher')
 
-	const [open, setOpen] = useState<boolean>(false)
+	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const rootRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		if (!open) return
+		if (!isOpen) return
 		const onPointer = (event: PointerEvent) => {
-			if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+			if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false)
 		}
 		const onKey = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') setOpen(false)
+			if (event.key === 'Escape') setIsOpen(false)
 		}
 		document.addEventListener('pointerdown', onPointer)
 		document.addEventListener('keydown', onKey)
@@ -36,26 +33,26 @@ export function useLanguageMenu() {
 			document.removeEventListener('pointerdown', onPointer)
 			document.removeEventListener('keydown', onKey)
 		}
-	}, [open])
+	}, [isOpen])
 
 	const options = LOCALES.map(id => ({
 		id,
 		...LOCALE_META[id],
-		selected: id === locale,
+		isSelected: id === locale,
 	}))
 
 	const pick = (id: TLocale): void => {
-		setOpen(false)
+		setIsOpen(false)
 		if (id !== locale) setLocale(id)
 	}
 
 	const toggle = () => {
-		setOpen(current => !current)
+		setIsOpen(current => !current)
 	}
 
 	return {
 		rootRef,
-		open,
+		isOpen,
 		toggle,
 		options,
 		current: LOCALE_META[locale],
@@ -63,3 +60,7 @@ export function useLanguageMenu() {
 		label: t('interfaceLanguage'),
 	}
 }
+
+export type TLanguageOption = ReturnType<
+	typeof useLanguageMenu
+>['options'][number]

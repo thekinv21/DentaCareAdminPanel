@@ -1,46 +1,23 @@
 export type TSectionId =
-	'clinic' | 'hours' | 'services' | 'pay' | 'lang' | 'notif'
+	'clinic' | 'hours' | 'services' | 'payment' | 'languages' | 'notifications'
 
 export const SECTIONS: {
 	id: TSectionId
 	label: string
-	hint: string
 	description: string
 }[] = [
+	{ id: 'clinic', label: 'clinic', description: 'coreClinicDetailsFor' },
+	{ id: 'hours', label: 'workingHours', description: 'workingDaysAndHours' },
+	{ id: 'services', label: 'servicesAndPrices', description: 'priceListInSom' },
+	{ id: 'payment', label: 'payment', description: 'paymentMethodsVisaMbank' },
 	{
-		id: 'clinic',
-		label: 'clinic',
-		hint: 'companyDetailsAddressChairs',
-		description: 'coreClinicDetailsFor',
-	},
-	{
-		id: 'hours',
-		label: 'workingHours',
-		hint: 'monSat0800',
-		description: 'workingDaysAndHours',
-	},
-	{
-		id: 'services',
-		label: 'servicesAndPrices',
-		hint: 'n42Services',
-		description: 'priceListInSom',
-	},
-	{
-		id: 'pay',
-		label: 'payment',
-		hint: 'n4Banks',
-		description: 'paymentMethodsVisaMbank',
-	},
-	{
-		id: 'lang',
+		id: 'languages',
 		label: 'languages',
-		hint: 'RU · KY · EN',
 		description: 'languageOfTheInterface',
 	},
 	{
-		id: 'notif',
+		id: 'notifications',
 		label: 'notifications',
-		hint: 'smsAndEmail',
 		description: 'patientRemindersAndTeam',
 	},
 ]

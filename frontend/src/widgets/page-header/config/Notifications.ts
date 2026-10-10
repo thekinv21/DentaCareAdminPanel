@@ -1,0 +1,1 @@
+export const UNREAD_NOTIFICATIONS = 3

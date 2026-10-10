@@ -20,7 +20,7 @@ export function AuthTopBar() {
 	return (
 		<div className='flex min-h-11 shrink-0 items-center gap-3'>
 			{isEntry ? (
-				<div className='hidden items-center gap-2.5 max-[900px]:flex'>
+				<div className='hidden items-center gap-2.5 max-tablet:flex'>
 					<LogoMark />
 					<span className='font-display text-xl font-extrabold'>Denta</span>
 				</div>

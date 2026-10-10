@@ -12,10 +12,9 @@ import { Button } from '@/shared/ui/button'
 import { ChoiceChips } from '@/shared/ui/choice-chips'
 import { Field, formGrid2 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
-import { SwitchCard } from '@/shared/ui/switch-card'
+import { SwitchCard, SwitchCardField } from '@/shared/ui/switch-card'
 
-import type { TUserFormValues } from '../model/Schema'
-import { UserSwitch } from './UserSwitch'
+import type { TUserFormValues } from '../model/UserFormSchema'
 
 const ASSIGNABLE = ROLES.filter(role => role.id !== 'store')
 
@@ -28,6 +27,11 @@ const ROLE_HINT: Record<TSystemRoleId, string | null> = {
 	finance: 'financeHint',
 	store: null,
 }
+
+/**
+ * Mock password age until the backend sends it
+ */
+const PASSWORD_AGE_DAYS = 64
 
 type TAccessSectionProps = {
 	isEdit: boolean
@@ -85,7 +89,7 @@ export function AccessSection({
 					{isEdit ? (
 						<SwitchCard
 							label={t('password')}
-							hint={t('changed64DaysAgo')}
+							hint={t('editedDaysAgo', { days: PASSWORD_AGE_DAYS })}
 							action={
 								<Button size='sm' onClick={onResetPassword}>
 									{t('resetPassword')}
@@ -93,23 +97,26 @@ export function AccessSection({
 							}
 						/>
 					) : (
-						<UserSwitch
-							name='invite'
+						<SwitchCardField
+							control={control}
+							name='switches.sendInvite'
 							label={t('sendSmsInvite')}
 							hint={t('employeeSetsPassword')}
-							ariaLabel={t('sendInvite')}
+							aria-label={t('sendInvite')}
 						/>
 					)}
 				</Field>
-				<div className='flex flex-col gap-3.5 pt-5.5 max-[720px]:pt-0'>
-					<UserSwitch
-						name='tfa'
+				<div className='flex flex-col gap-3.5 pt-5.5 max-mobile:pt-0'>
+					<SwitchCardField
+						control={control}
+						name='switches.twoFactor'
 						label={t('twoStepVerification')}
 						hint={t('smsCodeEveryLogin')}
 					/>
 				</div>
-				<UserSwitch
-					name='active'
+				<SwitchCardField
+					control={control}
+					name='switches.accountActive'
 					label={t('active')}
 					hint={t('turnOffToCloseAccess')}
 				/>

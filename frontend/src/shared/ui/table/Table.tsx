@@ -6,6 +6,7 @@ import type {
 } from 'react'
 
 import { cn } from '@/shared/lib/cn'
+import { overlineClass } from '@/shared/ui/overline'
 
 type TTableScrollProps = {
 	className?: string
@@ -53,7 +54,8 @@ export function Th(props: TThProps) {
 		<th
 			scope={scope}
 			className={cn(
-				'sticky top-0 z-1 border-b border-line bg-surface p-2.5 text-[11px] leading-3.5 font-semibold tracking-[0.06em] whitespace-nowrap text-ink-muted uppercase',
+				'sticky top-0 z-1 border-b border-line bg-surface p-2.5 whitespace-nowrap text-ink-muted',
+				overlineClass,
 				align === 'left' && 'text-left',
 				align === 'center' && 'text-center',
 				align === 'right' && 'text-right',

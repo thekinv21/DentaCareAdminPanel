@@ -1,153 +1,70 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
-import { DOCTORS } from '@/entities/employee'
-
+import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
-import { useFormat } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
-import { ChoiceChips, ToggleChips } from '@/shared/ui/choice-chips'
-import {
-	Field,
-	FieldError,
-	formGrid2,
-	formGrid3,
-	inputClass,
-} from '@/shared/ui/field'
+import { ChoiceChipsField, ToggleChipsField } from '@/shared/ui/choice-chips'
+import { Field, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
-import { SwitchCard } from '@/shared/ui/switch-card'
 
-import {
-	ALLERGIES,
-	CONDITIONS,
-	INSURANCE,
-	PATIENT_DOCTORS,
-	type TPatientFormValues,
-} from '../model/PatientFormSchema'
+import type { TPatientFormValues } from '../model/PatientFormSchema'
+import { usePatientFormOptions } from '../model/usePatientFormOptions'
 
 export function PatientMedicalFields() {
 	const t = useTranslations('PatientForm')
-	const format = useFormat()
+	const options = usePatientFormOptions()
 	const { control } = useFormContext<TPatientFormValues>()
 	const inputProps = useFieldProps<TPatientFormValues>()
 
 	return (
-		<>
-			<FormSection
-				title={t('medicalDetails')}
-				aside={<Badge tone='danger'>{t('visibleToDoctor')}</Badge>}
-			>
-				<Field as='div' label={t('allergies')}>
-					<Controller
+		<FormSection
+			title={t('medicalDetails')}
+			aside={<Badge tone='danger'>{t('visibleToDoctor')}</Badge>}
+		>
+			<Field as='div' label={t('allergies')}>
+				<ToggleChipsField
+					control={control}
+					name='allergies'
+					aria-label={t('allergies')}
+					options={options.allergies}
+				/>
+			</Field>
+			<Field as='div' label={t('chronicConditions')}>
+				<ToggleChipsField
+					control={control}
+					name='conditions'
+					aria-label={t('conditions')}
+					options={options.conditions}
+				/>
+			</Field>
+			<div className={formGrid3}>
+				<Field as='div' label={t('insurance')}>
+					<ChoiceChipsField
 						control={control}
-						name='allergies'
-						render={({ field }) => (
-							<ToggleChips
-								aria-label={t('allergies')}
-								options={ALLERGIES.map(id => ({
-									id: id as string,
-									label: t(`allergy_${id}`),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						name='insurance'
+						aria-label={t('insurance')}
+						options={options.insurance}
 					/>
 				</Field>
-				<Field as='div' label={t('chronicConditions')}>
-					<Controller
-						control={control}
-						name='conditions'
-						render={({ field }) => (
-							<ToggleChips
-								aria-label={t('conditions')}
-								options={CONDITIONS.map(id => ({
-									id: id as string,
-									label: t(`condition_${id}`),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+				<Field label={t('policyNumber')}>
+					<input
+						className={cn(inputClass, 'font-mono')}
+						placeholder='—'
+						{...inputProps('policy')}
 					/>
 				</Field>
-				<div className={formGrid3}>
-					<Field as='div' label={t('insurance')}>
-						<Controller
-							control={control}
-							name='insurance'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('insurance')}
-									options={INSURANCE.map(id => ({
-										id,
-										label: t(`insurance_${id}`),
-									}))}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
-						/>
-					</Field>
-					<Field label={t('policyNumber')}>
-						<input
-							className={`${inputClass} font-mono`}
-							placeholder='—'
-							{...inputProps('policy')}
-						/>
-					</Field>
-					<Field as='div' label={t('treatingDoctor')}>
-						<Controller
-							control={control}
-							name='doctor'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('treatingDoctor')}
-									options={PATIENT_DOCTORS.map(id => ({
-										id,
-										label: format.name(DOCTORS[id].shortName),
-									}))}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
-						/>
-					</Field>
-				</div>
-			</FormSection>
-			<FormSection title={t('consents')}>
-				<div className={formGrid2}>
-					<div className='flex flex-col gap-1.5'>
-						<Controller
-							control={control}
-							name='consent'
-							render={({ field }) => (
-								<SwitchCard
-									label={t('dataConsent')}
-									hint={t('dataConsentHint')}
-									checked={field.value}
-									onChange={field.onChange}
-								/>
-							)}
-						/>
-						<FieldError name='consent' />
-					</div>
-					<Controller
+				<Field as='div' label={t('treatingDoctor')}>
+					<ChoiceChipsField
 						control={control}
-						name='smsReminders'
-						render={({ field }) => (
-							<SwitchCard
-								label={t('smsReminders')}
-								hint={t('smsRemindersHint')}
-								checked={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						name='doctor'
+						aria-label={t('treatingDoctor')}
+						options={options.doctors}
 					/>
-				</div>
-			</FormSection>
-		</>
+				</Field>
+			</div>
+		</FormSection>
 	)
 }

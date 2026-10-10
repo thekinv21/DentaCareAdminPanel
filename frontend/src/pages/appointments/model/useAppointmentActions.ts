@@ -11,7 +11,7 @@ import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { endTime } from './AppointmentFormSchema'
 import type { TAppointmentFormModel } from './useAppointmentForm'
 
-type TActionsOptions = {
+type TAppointmentActionsOptions = {
 	form: TAppointmentFormModel
 	onRemove: (key: string) => void
 	onRestore: (key: string) => void
@@ -24,23 +24,23 @@ export function useAppointmentActions({
 	form,
 	onRemove,
 	onRestore,
-}: TActionsOptions) {
+}: TAppointmentActionsOptions) {
 	const t = useTranslations('AppointmentForm')
 	const format = useFormat()
 	const confirm = useConfirm()
 	const event = form.item
 
-	const subject = (subtitle: string) => ({
+	const confirmSubject = (subtitle: string) => ({
 		title: form.patient?.name ?? '',
 		initials: form.patient?.initials,
 		tone: form.patient?.tone,
 		subtitle,
 	})
-	const done = () => {
+	const removeAndClose = () => {
 		if (event) onRemove(event.key)
 		form.close()
 	}
-	const current = () => {
+	const readFormSummary = () => {
 		const { start, duration, chair, doctor } = form.methods.getValues()
 		return {
 			start,
@@ -53,12 +53,12 @@ export function useAppointmentActions({
 	return {
 		remove: () => {
 			if (!event) return
-			const { start, end, chair, doctor } = current()
+			const { start, end, chair, doctor } = readFormSummary()
 			confirm({
 				tone: 'danger',
 				title: t('deleteAppointmentQuestion'),
 				description: t('deleteAppointmentDescription'),
-				subject: subject(`${start}–${end} · ${chair} · ${doctor}`),
+				subject: confirmSubject(`${start}–${end} · ${chair} · ${doctor}`),
 				confirmText: t('deleteAppointment'),
 				pendingText: t('deleting'),
 				successText: t('appointmentDeleted'),
@@ -66,16 +66,16 @@ export function useAppointmentActions({
 					onUndo: () => onRestore(event.key),
 					text: t('appointmentRestored'),
 				},
-				onConfirm: () => mockRequest().then(done),
+				onConfirm: () => mockRequest().then(removeAndClose),
 			})
 		},
 		cancelVisit: () => {
-			const { start, doctor } = current()
+			const { start, doctor } = readFormSummary()
 			confirm({
 				tone: 'warning',
 				title: t('cancelVisitQuestion'),
 				description: t('cancelVisitDescription'),
-				subject: subject(`${start} · ${doctor}`),
+				subject: confirmSubject(`${start} · ${doctor}`),
 				reasons: [
 					t('reasonPatientAsked'),
 					t('reasonDoctorSick'),
@@ -100,7 +100,7 @@ export function useAppointmentActions({
 				confirmText: t('cancelVisit'),
 				pendingText: t('cancelling'),
 				successText: t('visitCancelled'),
-				onConfirm: () => mockRequest().then(done),
+				onConfirm: () => mockRequest().then(removeAndClose),
 			})
 		},
 	}

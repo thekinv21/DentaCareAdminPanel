@@ -1,17 +1,8 @@
-/* ISO date helpers in UTC so the calendar does not drift with the browser time zone */
-
-export const toDate = (iso: string) => new Date(`${iso}T00:00:00Z`)
-const toIso = (date: Date) => date.toISOString().slice(0, 10)
-
-export function addDays(iso: string, days: number): string {
-	const date = toDate(iso)
-	date.setUTCDate(date.getUTCDate() + days)
-	return toIso(date)
-}
+import { addDays, toIsoDate, toUtcDate } from '@/shared/lib/date'
 
 export function addMonths(iso: string, months: number): string {
-	const date = toDate(iso)
-	return toIso(
+	const date = toUtcDate(iso)
+	return toIsoDate(
 		new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + months, 1)),
 	)
 }
@@ -19,14 +10,16 @@ export function addMonths(iso: string, months: number): string {
 /**
  * Monday = 0 … Sunday = 6
  */
-export const weekday = (iso: string) => (toDate(iso).getUTCDay() + 6) % 7
+
+export const weekday = (iso: string) => (toUtcDate(iso).getUTCDay() + 6) % 7
 
 /**
  * Days shown in a month grid: full weeks from the Monday before the 1st
  */
+
 export function monthGridDays(cursor: string): string[] {
-	const base = toDate(cursor)
-	const first = toIso(
+	const base = toUtcDate(cursor)
+	const first = toIsoDate(
 		new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), 1)),
 	)
 	const nextFirst = addMonths(first, 1)
@@ -41,5 +34,5 @@ export function monthGridDays(cursor: string): string[] {
 	return days
 }
 
-export const sameMonth = (a: string, b: string) =>
-	toDate(a).getUTCMonth() === toDate(b).getUTCMonth()
+export const sameMonth = (firstIso: string, secondIso: string) =>
+	toUtcDate(firstIso).getUTCMonth() === toUtcDate(secondIso).getUTCMonth()

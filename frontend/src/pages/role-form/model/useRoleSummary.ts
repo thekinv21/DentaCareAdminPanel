@@ -9,7 +9,7 @@ import {
 } from '@/entities/role'
 
 import { countGranted } from '../lib/GrantedCount'
-import type { TRoleFormValues } from './Schema'
+import type { TRoleFormValues } from './RoleFormSchema'
 
 const SUMMARY_ROWS = 8
 
@@ -31,14 +31,17 @@ export function useRoleSummary(fallbackName: string) {
 		granted,
 		total: PERMISSIONS_TOTAL,
 		percent: Math.round((granted / PERMISSIONS_TOTAL) * 100),
-		rows: PERMISSION_MODULES.slice(0, SUMMARY_ROWS).map(module => {
-			const actions = module.actions.filter(a =>
-				permissions[module.id]?.includes(a),
+		rows: PERMISSION_MODULES.slice(0, SUMMARY_ROWS).map(permissionModule => {
+			const grantedActions = permissionModule.actions.filter(action =>
+				permissions[permissionModule.id]?.includes(action),
 			)
 			return {
-				module: labels.module(module.name),
-				actions: actions.map(a => labels.action(a).toLowerCase()),
-				own: scope[module.id] === 'own' && actions.length > 0,
+				module: labels.module(permissionModule.name),
+				actions: grantedActions.map(action =>
+					labels.action(action).toLowerCase(),
+				),
+				isOwnOnly:
+					scope[permissionModule.id] === 'own' && grantedActions.length > 0,
 			}
 		}),
 	}

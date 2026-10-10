@@ -13,9 +13,12 @@ export function useAppointmentLabels() {
 	return {
 		status: (status: TAppointmentStatus) => t(APPOINTMENT_STATUS[status].label),
 		/**
-		 * `key` is a procedure message key, e.g. "exam" or "filling36"
+		 * `procedureKey` is a procedure message key, e.g. "filling"
 		 */
-		procedure: (key: string) => t(key),
+		procedure: (procedureKey: string, tooth?: string) =>
+			tooth
+				? t('procedureOnTooth', { procedure: t(procedureKey), tooth })
+				: t(procedureKey),
 		legend: APPOINTMENT_LEGEND.map(item => ({
 			label: t(APPOINTMENT_STATUS[item.status].label),
 			swatch: item.swatch,

@@ -1,11 +1,6 @@
 export { INVOICES, REVENUE_BY_METHOD } from './api/Mock'
-export { INVOICE_STATUS, PAYMENT_METHODS } from './model/Maps'
-export type {
-	TInvoice,
-	TInvoiceStatus,
-	TPaymentMethod,
-	TPaymentMethodId,
-} from './model/Types'
+export type { TInvoice, TPaymentMethodId } from './model/Types'
 export { InvoiceStatusBadge } from './ui/InvoiceStatusBadge'
 export { PaymentMethodTile } from './ui/PaymentMethodTile'
+export { useInvoiceLabels } from './model/useInvoiceLabels'
 export { usePaymentMethods } from './model/usePaymentMethods'

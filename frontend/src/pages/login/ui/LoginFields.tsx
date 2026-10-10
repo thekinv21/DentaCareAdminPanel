@@ -9,11 +9,12 @@ import { AuthField } from '@/widgets/auth-panel'
 
 import { useFieldProps } from '@/shared/lib/form'
 import { ROUTES } from '@/shared/routes'
+import { CheckboxLabel } from '@/shared/ui/checkbox'
 import { inputLgClass } from '@/shared/ui/field'
 import { PasswordInput } from '@/shared/ui/password-input'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import type { TLoginValues } from '../model/Schema'
+import type { TLoginValues } from '../model/LoginSchema'
 
 type TLoginFieldsProps = { method: TLoginValues['method'] }
 
@@ -66,14 +67,9 @@ export function LoginFields({ method }: TLoginFieldsProps) {
 				/>
 			</AuthField>
 
-			<label className='inline-flex min-h-6 cursor-pointer items-start gap-2.5 text-sm leading-5'>
-				<input
-					type='checkbox'
-					className='mt-px size-4.5 shrink-0 accent-brand'
-					{...register('remember')}
-				/>
+			<CheckboxLabel {...register('remember')}>
 				{t('rememberThisDeviceFor')}
-			</label>
+			</CheckboxLabel>
 		</>
 	)
 }

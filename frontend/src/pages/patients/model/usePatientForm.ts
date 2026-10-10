@@ -4,16 +4,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { PATIENTS, type TPatient } from '@/entities/patient'
+import { PATIENTS, type TPatient, usePatientLabels } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
 import { useFormModal } from '@/shared/lib/form'
-import { translateOptional, useFormat } from '@/shared/lib/i18n'
+import { useFormat } from '@/shared/lib/i18n'
 import { useToast } from '@/shared/ui/toast'
 
 import { patientFormSchema, type TPatientFormValues } from './PatientFormSchema'
 
-const EMPTY: TPatientFormValues = {
+const EMPTY_PATIENT_VALUES: TPatientFormValues = {
 	lastName: '',
 	firstName: '',
 	middleName: '',
@@ -36,24 +36,30 @@ const EMPTY: TPatientFormValues = {
 /**
  * Mock card details the list doesn't carry (until GET /patients/:id exists)
  */
-function valuesOf(patient: TPatient): TPatientFormValues {
-	const [firstName, lastName] = patient.fullName.split(' ')
+function toFormValues(patient: TPatient): TPatientFormValues {
+	const [firstName, lastName = ''] = patient.fullName.split(' ')
 	const hasFoms = patient.flags.includes('foms')
 	return {
-		...EMPTY,
+		...EMPTY_PATIENT_VALUES,
 		lastName,
 		firstName,
 		birthDate: '03.02.1992',
+		// mock guess from a Russian surname ending until the card has a gender field
 		gender: lastName.endsWith('а') ? 'f' : 'm',
 		pin: '20302199200518',
 		phone: patient.phone.replace('+996 ', ''),
 		address: 'г. Бишкек, мкр. Асанбай 14, кв. 22',
-		allergies: patient.flags.includes('allergy') ? ['pen'] : [],
+		allergies: patient.flags.includes('allergy') ? ['penicillin'] : [],
 		insurance: hasFoms ? 'foms' : 'none',
 		policy: hasFoms ? 'ФОМС 0417-228931' : '',
 		consent: true,
 	}
 }
+
+/**
+ * Id the backend would give a new record (mock)
+ */
+const NEXT_PATIENT_ID = 'DN-20419'
 
 const phoneDigits = (phone: string) => phone.replace(/\D/g, '').slice(-9)
 
@@ -64,25 +70,25 @@ export function usePatientForm(
 	onRemove: (patient: TPatient, onDone: () => void) => void,
 ) {
 	const t = useTranslations('PatientForm')
-	const tPatient = useTranslations('Patient')
+	const patientLabels = usePatientLabels()
 	const format = useFormat()
 	const toast = useToast()
 
 	const methods = useForm<TPatientFormValues>({
 		resolver: zodResolver(patientFormSchema),
-		defaultValues: EMPTY,
+		defaultValues: EMPTY_PATIENT_VALUES,
 	})
 	const modal = useFormModal<TPatient>(patient =>
-		methods.reset(patient ? valuesOf(patient) : EMPTY),
+		methods.reset(patient ? toFormValues(patient) : EMPTY_PATIENT_VALUES),
 	)
 	const patient = modal.item
 	const phone = useWatch({ control: methods.control, name: 'phone' })
 
 	const duplicate = PATIENTS.find(
-		p =>
-			p.id !== patient?.id &&
+		existing =>
+			existing.id !== patient?.id &&
 			!!phone &&
-			phoneDigits(p.phone) === phoneDigits(phone),
+			phoneDigits(existing.phone) === phoneDigits(phone),
 	)
 
 	return {
@@ -92,7 +98,7 @@ export function usePatientForm(
 		subtitle: patient
 			? t('recordOpened', {
 					id: patient.id,
-					date: translateOptional(tPatient, patient.lastVisit),
+					date: patientLabels.lastVisit(patient),
 				})
 			: t('numberAssignedAutomatically'),
 		duplicateError: duplicate
@@ -103,7 +109,9 @@ export function usePatientForm(
 			await mockRequest()
 			modal.close()
 			toast.show(
-				patient ? t('patientUpdated') : t('patientAdded', { id: 'DN-20419' }),
+				patient
+					? t('patientUpdated')
+					: t('patientAdded', { id: NEXT_PATIENT_ID }),
 			)
 		}),
 		remove: () => patient && onRemove(patient, modal.close),

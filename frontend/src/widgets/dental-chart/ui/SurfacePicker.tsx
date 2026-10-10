@@ -2,15 +2,19 @@
 
 import { useTranslations } from 'next-intl'
 
+import { Overline } from '@/shared/ui/overline'
+
 import { findingLabel } from '../model/ChartLogic'
 import { SURFACE_NAME, SURFACES } from '../model/Teeth'
 import type { TDentalChartModel } from '../model/useDentalChart'
-import { Overline } from './Overline'
 import { SurfaceButton } from './SurfaceButton'
 
-type TSurfacePickerProps = { chart: TDentalChartModel }
+type TSurfacePickerProps = { chartModel: TDentalChartModel }
 
-export function SurfacePicker({ chart }: TSurfacePickerProps) {
+/**
+ * Surfaces of the selected tooth; each click cycles healthy → caries → filling
+ */
+export function SurfacePicker({ chartModel }: TSurfacePickerProps) {
 	const t = useTranslations('DentalChart')
 
 	return (
@@ -18,15 +22,17 @@ export function SurfacePicker({ chart }: TSurfacePickerProps) {
 			<Overline className='mb-2'>{t('surfacesClickToChange')}</Overline>
 			<div role='group' aria-label={t('surfaces')} className='flex gap-1.5'>
 				{SURFACES.map(surface => {
-					const finding = chart.selectedState.surfaces[surface]
-					const state = t(finding ? findingLabel(finding) : 'normalSurface')
+					const finding = chartModel.selectedState.surfaces[surface]
+					const findingText = t(
+						finding ? findingLabel(finding) : 'normalSurface',
+					)
 					return (
 						<SurfaceButton
 							key={surface}
-							short={chart.surfaceShort(surface)}
-							label={`${t(SURFACE_NAME[surface])}: ${state}`}
+							abbreviation={chartModel.surfaceAbbreviation(surface)}
+							label={`${t(SURFACE_NAME[surface])}: ${findingText}`}
 							finding={finding}
-							onClick={() => chart.cycleSurface(surface)}
+							onClick={() => chartModel.cycleSurface(surface)}
 						/>
 					)
 				})}

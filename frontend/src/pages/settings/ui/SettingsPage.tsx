@@ -1,14 +1,16 @@
 'use client'
 
+import type { ComponentType } from 'react'
+
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { Button } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
 import { FormFooter } from '@/shared/ui/form-footer'
 
+import type { TSectionId } from '../model/Sections'
 import { useServiceForm } from '../model/useServiceForm'
 import { useServiceRemoval } from '../model/useServiceRemoval'
 import { useServices } from '../model/useServices'
@@ -20,7 +22,19 @@ import { NotificationsSection } from './NotificationsSection'
 import { PaymentSection } from './PaymentSection'
 import { ServiceFormModal } from './ServiceFormModal'
 import { ServicesSection } from './ServicesSection'
-import { SettingsNav } from './SettingsNav'
+import { SETTINGS_PANEL_ID, SettingsNav } from './SettingsNav'
+import { SettingsSectionHeader } from './SettingsSectionHeader'
+
+/**
+ * Sections that only edit the settings form; "services" also needs the price list
+ */
+const FORM_SECTION: Record<Exclude<TSectionId, 'services'>, ComponentType> = {
+	clinic: ClinicSection,
+	hours: HoursSection,
+	payment: PaymentSection,
+	languages: LanguageSection,
+	notifications: NotificationsSection,
+}
 
 export function SettingsPage() {
 	const t = useTranslations('Settings')
@@ -33,12 +47,13 @@ export function SettingsPage() {
 		onRemove: removal.remove,
 	})
 	const { section } = settings
+	const FormSection = section === 'services' ? null : FORM_SECTION[section]
 
 	return (
 		<>
 			<PageHeader crumb={t('clinicBishkekAlaToo')} title={t('settings')} />
 			<PageContent>
-				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-[720px]:flex-col'>
+				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
 					<SettingsNav
 						sections={settings.sections}
 						selectSection={settings.selectSection}
@@ -47,39 +62,23 @@ export function SettingsPage() {
 						<form noValidate onSubmit={settings.submit} className='contents'>
 							<Card
 								as='section'
-								className='min-h-0 min-w-0 flex-auto max-[720px]:flex-none'
+								id={SETTINGS_PANEL_ID}
+								role='tabpanel'
+								aria-labelledby={`settings-tab-${section}`}
+								className='min-h-0 min-w-0 flex-auto max-mobile:flex-none'
 							>
-								<div className='flex flex-wrap items-center justify-between gap-2.5'>
-									<div>
-										<h2 className='font-display text-[17px] leading-6 font-bold tracking-[-0.01em]'>
-											{settings.current.label}
-										</h2>
-										<p className='text-[12.5px] leading-4.5 text-ink-muted'>
-											{settings.current.description}
-										</p>
-									</div>
-									{section === 'services' && (
-										<div className='flex gap-2'>
-											<Button size='sm'>{t('importPriceList')}</Button>
-											<Button
-												size='sm'
-												variant='primary'
-												onClick={serviceForm.openCreate}
-											>
-												{t('addService')}
-											</Button>
-										</div>
-									)}
-								</div>
-								<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-[720px]:overflow-visible'>
-									{section === 'clinic' && <ClinicSection />}
-									{section === 'hours' && <HoursSection />}
-									{section === 'services' && (
+								<SettingsSectionHeader
+									current={settings.current}
+									onAddService={
+										section === 'services' ? serviceForm.openCreate : undefined
+									}
+								/>
+								<div className='-mx-4.5 min-h-0 flex-auto overflow-auto px-4.5 scrollbar-thin max-mobile:overflow-visible'>
+									{FormSection ? (
+										<FormSection />
+									) : (
 										<ServicesSection services={services} />
 									)}
-									{section === 'pay' && <PaymentSection />}
-									{section === 'lang' && <LanguageSection />}
-									{section === 'notif' && <NotificationsSection />}
 								</div>
 								<FormFooter
 									saved={settings.saved}

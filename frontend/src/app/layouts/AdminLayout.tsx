@@ -6,9 +6,9 @@ type TAdminLayoutProps = { children: ReactNode }
 
 export function AdminLayout({ children }: TAdminLayoutProps) {
 	return (
-		<div className='flex h-dvh min-h-150 gap-4 overflow-hidden p-4 max-[720px]:h-auto max-[720px]:flex-col max-[720px]:gap-2.5 max-[720px]:overflow-visible max-[720px]:p-2.5'>
+		<div className='flex h-dvh min-h-150 gap-4 overflow-hidden p-4 max-mobile:h-auto max-mobile:flex-col max-mobile:gap-2.5 max-mobile:overflow-visible max-mobile:p-2.5'>
 			<AdminSidebar />
-			<div className='flex h-full min-w-0 flex-auto flex-col max-[720px]:h-auto'>
+			<div className='flex h-full min-w-0 flex-auto flex-col max-mobile:h-auto'>
 				{children}
 			</div>
 		</div>

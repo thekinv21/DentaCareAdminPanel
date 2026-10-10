@@ -17,7 +17,9 @@ type TPaginationProps = {
 
 export function Pagination({ current, pages, onChange }: TPaginationProps) {
 	const t = useTranslations('Common')
-	const last = Math.max(...pages.filter((p): p is number => p !== null))
+	const lastPage = Math.max(
+		...pages.filter((page): page is number => page !== null),
+	)
 
 	return (
 		<nav aria-label={t('pages')} className='flex items-center gap-1'>
@@ -54,7 +56,7 @@ export function Pagination({ current, pages, onChange }: TPaginationProps) {
 			<IconButton
 				size='sm'
 				aria-label={t('forward')}
-				disabled={current >= last}
+				disabled={current >= lastPage}
 				onClick={() => onChange?.(current + 1)}
 			>
 				<ChevronRight size={15} aria-hidden='true' />

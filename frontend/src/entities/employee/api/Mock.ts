@@ -1,8 +1,16 @@
 import type { TDoctor, TDoctorId, TStaffMember } from '../model/Types'
 
-/**
- * Mock data until the backend exposes /staff
- */
+export const DOCTOR_IDS = ['kas', 'pet', 'tok'] as const satisfies TDoctorId[]
+
+export const CHAIR_NUMBERS = [1, 2, 3, 4] as const
+
+export const CHAIR_DOCTOR: Record<(typeof CHAIR_NUMBERS)[number], TDoctorId> = {
+	1: 'kas',
+	2: 'pet',
+	3: 'tok',
+	4: 'tok',
+}
+
 export const DOCTORS: Record<TDoctorId, TDoctor> = {
 	kas: {
 		id: 'kas',
@@ -32,7 +40,6 @@ export const DOCTORS: Record<TDoctorId, TDoctor> = {
 
 export const CURRENT_USER = {
 	fullName: 'Айгерим Касымова',
-	initials: 'ak',
 	role: 'chiefDentist',
 	branch: 'bishkekAlaToo',
 }

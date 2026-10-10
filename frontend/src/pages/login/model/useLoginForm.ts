@@ -7,11 +7,8 @@ import { useForm, useWatch } from 'react-hook-form'
 
 import { ROUTES } from '@/shared/routes'
 
-import { loginSchema, type TLoginValues } from './Schema'
+import { loginSchema, type TLoginValues } from './LoginSchema'
 
-/**
- * Sign-in form by phone or email; a valid form continues to the SMS step (no backend yet)
- */
 export function useLoginForm() {
 	const router = useRouter()
 	const methods = useForm<TLoginValues>({
@@ -23,7 +20,6 @@ export function useLoginForm() {
 	return {
 		methods,
 		method,
-		submitting: methods.formState.isSubmitting,
 		submit: methods.handleSubmit(() => router.push(ROUTES.verify)),
 	}
 }

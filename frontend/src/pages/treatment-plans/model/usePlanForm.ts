@@ -4,7 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
-import { DOCTORS } from '@/entities/employee'
+import { DOCTOR_IDS, DOCTORS } from '@/entities/employee'
+import { PATIENTS } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
 import { useFormModal } from '@/shared/lib/form'
@@ -14,22 +15,15 @@ import { useToast } from '@/shared/ui/toast'
 
 import {
 	DEFAULT_STAGES,
-	PLAN_DOCTORS,
 	planFormSchema,
 	type TPlanFormInput,
 	type TPlanFormValues,
 } from './PlanFormSchema'
 import type { TTreatmentPlan } from './Plans'
 
-const DOCTOR_BY_NAME = Object.fromEntries(
-	Object.values(DOCTORS).map(d => [d.shortName, d.id]),
-) as Record<string, TPlanFormInput['doctor']>
+const NEW_PLAN_PATIENT =
+	PATIENTS.find(patient => patient.id === 'DN-20418') ?? PATIENTS[0]
 
-const NEW_PLAN_PATIENT = { name: 'Айгуль Тойчубекова', id: 'DN-20418' }
-
-/**
- * New/edit treatment plan in a modal
- */
 export function usePlanForm(
 	onRemove: (plan: TTreatmentPlan, onDone: () => void) => void,
 ) {
@@ -43,7 +37,7 @@ export function usePlanForm(
 	})
 	const modal = useFormModal<TTreatmentPlan>(plan =>
 		methods.reset({
-			doctor: plan ? (DOCTOR_BY_NAME[plan.doctor] ?? 'kas') : 'kas',
+			doctor: plan?.doctorId ?? 'kas',
 			name: plan ? tPlans(plan.title) : t('defaultPlanName'),
 			stages: DEFAULT_STAGES.map(stage => ({
 				...stage,
@@ -54,7 +48,10 @@ export function usePlanForm(
 		}),
 	)
 	const plan = modal.item
-	const patientName = format.name(plan?.patientName ?? NEW_PLAN_PATIENT.name)
+
+	const patientName: string = format.name(
+		plan?.patientName ?? NEW_PLAN_PATIENT.fullName,
+	)
 
 	return {
 		...modal,
@@ -68,9 +65,9 @@ export function usePlanForm(
 			id: plan?.patientId ?? NEW_PLAN_PATIENT.id,
 			initials: getInitials(patientName),
 		},
-		doctorOptions: PLAN_DOCTORS.map(id => ({
-			id,
-			label: format.name(DOCTORS[id].shortName),
+		doctorOptions: DOCTOR_IDS.map(doctorId => ({
+			id: doctorId,
+			label: format.name(DOCTORS[doctorId].shortName),
 		})),
 		saving: methods.formState.isSubmitting,
 		saveDraft: () => {

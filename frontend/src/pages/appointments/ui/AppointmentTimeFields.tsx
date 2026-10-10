@@ -1,12 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
 import { Alert } from '@/shared/ui/alert'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import {
 	Field,
 	FormField,
@@ -15,19 +15,18 @@ import {
 	inputClass,
 } from '@/shared/ui/field'
 
-import {
-	CHAIRS,
-	DURATIONS,
-	START_SLOTS,
-	type TAppointmentFormValues,
-} from '../model/AppointmentFormSchema'
+import type { TAppointmentFormValues } from '../model/AppointmentFormSchema'
 import { useAppointmentOptions } from '../model/useAppointmentOptions'
 import { useChairConflict } from '../model/useChairConflict'
 
-type TAppointmentTimeFieldsProps = { eventKey?: string }
+type TAppointmentTimeFieldsProps = {
+	eventKey?: string
+	removedKeys: Set<string>
+}
 
 export function AppointmentTimeFields({
 	eventKey,
+	removedKeys,
 }: TAppointmentTimeFieldsProps) {
 	const t = useTranslations('AppointmentForm')
 
@@ -35,96 +34,63 @@ export function AppointmentTimeFields({
 	const inputProps = useFieldProps<TAppointmentFormValues>()
 
 	const options = useAppointmentOptions()
-	const conflict = useChairConflict(eventKey)
+	const conflict = useChairConflict({ eventKey, removedKeys })
 
 	return (
 		<>
 			<div className={formGrid2}>
 				<Field as='div' label={t('doctor')} required>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='doctor'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('doctor')}
-								options={options.doctors.map(d => ({
-									id: d.id,
-									label: d.label,
-									leading: (
-										<span className={cn('size-2 rounded-full', d.dot)} />
-									),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('doctor')}
+						options={options.doctors.map(doctor => ({
+							id: doctor.id,
+							label: doctor.label,
+							leading: (
+								<span className={cn('size-2 rounded-full', doctor.dotClass)} />
+							),
+						}))}
 					/>
 				</Field>
 				<Field as='div' label={t('chair')} required>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='chair'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('chair')}
-								options={CHAIRS.map(n => ({
-									id: n as number,
-									label: String(n),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-								chipClassName='min-w-12 justify-center'
-							/>
-						)}
+						aria-label={t('chair')}
+						options={options.chairs}
+						chipClassName='min-w-12 justify-center'
 					/>
 				</Field>
 			</div>
 			<div className={formGrid3}>
 				<FormField name='date' label={t('date')} required>
 					<input
-						className={`${inputClass} font-mono`}
+						className={cn(inputClass, 'font-mono')}
 						{...inputProps('date')}
 					/>
 				</FormField>
 				<Field as='div' label={t('start')} required>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='start'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('startTime')}
-								options={(START_SLOTS.includes(field.value)
-									? START_SLOTS
-									: [...START_SLOTS, field.value]
-								).map(time => ({ id: time, label: time }))}
-								value={field.value}
-								onChange={field.onChange}
-								chipClassName='px-2.25 font-mono'
-							/>
-						)}
+						aria-label={t('startTime')}
+						options={options.startSlots}
+						chipClassName='px-2.25 font-mono'
 					/>
 				</Field>
 				<Field as='div' label={t('duration')}>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='duration'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('duration')}
-								options={DURATIONS.map(min => ({
-									id: min as number,
-									label: t('minutes', { n: min }),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-								chipClassName='px-2.25'
-							/>
-						)}
+						aria-label={t('duration')}
+						options={options.durations}
+						chipClassName='px-2.25'
 					/>
 				</Field>
 			</div>
 			{conflict && (
-				<Alert tone='warning' className='text-[13px] leading-4.75'>
+				<Alert tone='warning' size='sm'>
 					<b>{conflict}</b> {t('conflictHint')}
 				</Alert>
 			)}

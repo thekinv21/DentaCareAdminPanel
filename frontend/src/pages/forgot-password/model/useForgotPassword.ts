@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { forgotSchema, type TForgotValues } from './Schema'
+import { forgotSchema, type TForgotValues } from './ForgotPasswordSchema'
 
 function maskPhone(phone: string) {
 	const digits = phone.replace(/\D/g, '')
@@ -21,8 +21,9 @@ export function useForgotPassword() {
 
 	return {
 		methods,
-		sent: methods.formState.isSubmitSuccessful,
+		isSent: methods.formState.isSubmitSuccessful,
 		maskedPhone: maskPhone(methods.getValues('phone')),
+		// no backend yet: a valid phone simply shows the "link sent" state
 		submit: methods.handleSubmit(() => {}),
 		changeNumber: () => methods.reset(methods.getValues()),
 	}

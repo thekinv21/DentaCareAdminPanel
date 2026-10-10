@@ -18,39 +18,43 @@ import {
 /**
  * Translated names, accessible labels and badges for teeth and surfaces
  */
-export function useToothLabels(stateOf: (n: number) => TToothState) {
+export function useToothLabels() {
 	const t = useTranslations('DentalChart')
 
-	const surfaceShort = (surface: TSurface) => t(SURFACE_SHORT[surface])
+	const surfaceAbbreviation = (surface: TSurface) => t(SURFACE_SHORT[surface])
 
-	const toothName = (n: number) => {
-		const { kind, primary, quadrant } = toothNameParts(n)
-		return `${t(kind)}${primary ? ` (${t('primaryTooth')})` : ''}, ${t(quadrant)}`
+	const toothName = (toothNumber: number) => {
+		const { kind, isPrimary, quadrant } = toothNameParts(toothNumber)
+		return `${t(kind)}${isPrimary ? ` (${t('primaryTooth')})` : ''}, ${t(quadrant)}`
 	}
 
 	const withSurface = (label: string, surface?: TSurface, separator = ' ') =>
-		surface ? `${t(label)}${separator}${surfaceShort(surface)}` : t(label)
+		surface
+			? `${t(label)}${separator}${surfaceAbbreviation(surface)}`
+			: t(label)
 
 	return {
-		surfaceShort,
+		surfaceAbbreviation,
 		toothName,
-		toothLabel: (n: number) => {
-			const flags = toothFlags(stateOf(n)).map(flag =>
+		toothLabel: (toothNumber: number, toothState: TToothState) => {
+			const flags = toothFlags(toothState).map(flag =>
 				withSurface(flag.label, flag.surface),
 			)
 			const summary = flags.length ? flags.join(', ') : t('healthyTooth')
-			return `${t('tooth')} ${n}, ${toothName(n)}, ${summary}`
+			return `${t('tooth')} ${toothNumber}, ${toothName(toothNumber)}, ${summary}`
 		},
 		surfaceTitle: (
-			n: number,
+			toothState: TToothState,
 			surface: TSurface,
-			name = SURFACE_NAME[surface],
+			nameKey = SURFACE_NAME[surface],
 		) => {
-			const finding = stateOf(n).surfaces[surface]
-			return finding ? `${t(name)} · ${t(findingLabel(finding))}` : t(name)
+			const finding = toothState.surfaces[surface]
+			return finding
+				? `${t(nameKey)} · ${t(findingLabel(finding))}`
+				: t(nameKey)
 		},
-		tagsOf: (tooth: TToothState) =>
-			toothTags(tooth).map(tag => ({
+		tagsOf: (toothState: TToothState) =>
+			toothTags(toothState).map(tag => ({
 				tone: tag.tone,
 				label: withSurface(tag.label, tag.surface, ' · '),
 			})),

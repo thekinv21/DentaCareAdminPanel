@@ -1,32 +1,33 @@
 import { z } from 'zod'
 
+import {
+	displayDateSchema,
+	requiredNumberSchema,
+} from '@/shared/lib/validation'
+
+import { STOCK_CATEGORIES } from './Stock'
+
 export const STOCK_UNITS = ['pcs', 'cart', 'syr', 'pk', 'ml'] as const
-export const STOCK_CATEGORIES = [
-	'anes',
-	'cons',
-	'rest',
-	'endo',
-	'impl',
-	'hyg',
-] as const
 export const SUPPLIERS = [
 	'medsnabBishkek',
 	'dentAsia',
 	'implantServis',
 ] as const
 
-const count = z.coerce.number<string>().int().min(0, 'enterAmount')
-
 export const stockItemSchema = z.object({
 	name: z.string().trim().min(2, 'enterItemName'),
 	sku: z.string().trim(),
 	unit: z.enum(STOCK_UNITS),
 	category: z.enum(STOCK_CATEGORIES),
-	quantity: count,
-	minimum: count,
-	cost: z.string().trim(),
+	quantity: requiredNumberSchema,
+	minimum: requiredNumberSchema,
+	cost: z.string().trim().regex(/^\d*$/, 'enterWholeNumber'),
 	supplier: z.enum(SUPPLIERS),
-	expires: z.string().trim(),
+	// month and year of the batch, or empty / "—" for items without expiry
+	expires: z
+		.string()
+		.trim()
+		.regex(/^((0[1-9]|1[0-2])\.\d{4}|—)?$/, 'enterMonthYear'),
 	place: z.string().trim(),
 	autoWriteOff: z.boolean(),
 })
@@ -40,7 +41,7 @@ export type TMovementType = (typeof MOVEMENT_TYPES)[number]
 export const movementSchema = z.object({
 	type: z.enum(MOVEMENT_TYPES),
 	quantity: z.coerce.number<string>().int().min(1, 'enterAmount'),
-	date: z.string().trim(),
+	date: displayDateSchema,
 	reason: z.string().trim(),
 })
 

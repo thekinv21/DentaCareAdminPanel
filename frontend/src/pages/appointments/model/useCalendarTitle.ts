@@ -1,13 +1,11 @@
 'use client'
 
+import { addDays, toUtcDate } from '@/shared/lib/date'
 import { useFormat } from '@/shared/lib/i18n'
 
-import { addDays, sameMonth, toDate, weekday } from '../lib/Dates'
-import type { TCalendarView } from './useCalendar'
+import { sameMonth, weekday } from '../lib/Dates'
+import type { TCalendarView } from './CalendarQuery'
 
-/**
- * Heading of the visible range: a day, a Mon–Sat week or a month
- */
 export function useCalendarTitle(view: TCalendarView, cursor: string) {
 	const format = useFormat()
 
@@ -19,14 +17,14 @@ export function useCalendarTitle(view: TCalendarView, cursor: string) {
 		})
 	}
 	if (view === 'month') {
-		return `${format.date(cursor, { month: 'long' })} ${toDate(cursor).getUTCFullYear()}`
+		return `${format.date(cursor, { month: 'long' })} ${toUtcDate(cursor).getUTCFullYear()}`
 	}
 
 	const monday = addDays(cursor, -weekday(cursor))
 	const saturday = addDays(monday, 5)
 	const start = sameMonth(monday, saturday)
-		? String(toDate(monday).getUTCDate())
+		? String(toUtcDate(monday).getUTCDate())
 		: format.date(monday, { day: 'numeric', month: 'long' })
 	const end = format.date(saturday, { day: 'numeric', month: 'long' })
-	return `${start} – ${end} ${toDate(saturday).getUTCFullYear()}`
+	return `${start} – ${end} ${toUtcDate(saturday).getUTCFullYear()}`
 }

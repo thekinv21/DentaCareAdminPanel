@@ -7,12 +7,13 @@ import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
+import { addDays } from '@/shared/lib/date'
 import { useFormat } from '@/shared/lib/i18n'
 import type { TTone } from '@/shared/ui/badge'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { useToast } from '@/shared/ui/toast'
 
-import { SHIFT, type TShiftKey, WEEK_START } from './Roster'
+import { type TRosterShift, WEEK_START } from './Roster'
 import { shiftFormSchema, type TShiftFormValues } from './ShiftFormSchema'
 
 export type TShiftTarget = {
@@ -20,28 +21,17 @@ export type TShiftTarget = {
 	initials: string
 	tone: TTone
 	dayIndex: number
-	shift: TShiftKey
+	shift: TRosterShift
 }
 
-const TYPE_OF_SHIFT: Partial<Record<TShiftKey, TShiftFormValues['type']>> = {
-	off: 'off',
-	leave: 'leave',
-	open: 'cover',
-}
+const DEFAULT_HOURS = { from: '09:00', to: '18:00' }
 
-const addDays = (iso: string, days: number) => {
-	const date = new Date(`${iso}T00:00:00Z`)
-	date.setUTCDate(date.getUTCDate() + days)
-	return date.toISOString().slice(0, 10)
-}
-
-function valuesOf(target: TShiftTarget): TShiftFormValues {
-	const [from, to] = SHIFT[target.shift].label.split('–')
-	const isTime = /\d/.test(SHIFT[target.shift].label)
+function toFormValues(target: TShiftTarget): TShiftFormValues {
+	const hours = target.shift.hours ?? DEFAULT_HOURS
 	return {
-		type: TYPE_OF_SHIFT[target.shift] ?? 'work',
-		from: isTime ? from : '09:00',
-		to: isTime ? to : '18:00',
+		type: target.shift.kind,
+		from: hours.from,
+		to: hours.to,
 		chair: 1,
 		repeat: 'once',
 	}
@@ -73,14 +63,14 @@ export function useShiftForm() {
 
 	return {
 		methods,
-		open: !!target,
+		isOpen: !!target,
 		target,
 		day,
 		isWork: type === 'work',
 		conflict: type && type !== 'work' ? t('conflictNote') : undefined,
 		openFor: (next: TShiftTarget) => {
 			setTarget(next)
-			methods.reset(valuesOf(next))
+			methods.reset(toFormValues(next))
 		},
 		close,
 		saving: methods.formState.isSubmitting,

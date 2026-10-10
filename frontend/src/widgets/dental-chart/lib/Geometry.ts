@@ -24,12 +24,15 @@ export function centrePath(cy: number): string {
 /**
  * [left x, right x, tip x] per root
  */
-function rootSet(n: number, upper: boolean): [number, number, number][] {
-	const position = n % 10
-	const primary = Math.floor(n / 10) >= 5
-	if (primary) {
+function rootSet(
+	toothNumber: number,
+	isUpper: boolean,
+): [number, number, number][] {
+	const position = toothNumber % 10
+	const isPrimary = Math.floor(toothNumber / 10) >= 5
+	if (isPrimary) {
 		if (position >= 4) {
-			return upper
+			return isUpper
 				? [
 						[6, 17, 11],
 						[17.5, 24, 21],
@@ -43,7 +46,7 @@ function rootSet(n: number, upper: boolean): [number, number, number][] {
 		return [[14, 26, 20]]
 	}
 	if (position >= 6) {
-		return upper
+		return isUpper
 			? [
 					[5, 15, 9],
 					[15.5, 24.5, 20],
@@ -54,7 +57,7 @@ function rootSet(n: number, upper: boolean): [number, number, number][] {
 					[22, 34, 29],
 				]
 	}
-	if (position === 4 && upper)
+	if (position === 4 && isUpper)
 		return [
 			[8, 19, 13],
 			[21, 32, 27],
@@ -63,24 +66,24 @@ function rootSet(n: number, upper: boolean): [number, number, number][] {
 }
 
 export function rootPaths(
-	n: number,
-	upper: boolean,
+	toothNumber: number,
+	isUpper: boolean,
 ): { roots: string[]; canals: string[] } {
-	const set = rootSet(n, upper)
+	const set = rootSet(toothNumber, isUpper)
 	return {
 		roots: set.map(([left, right, tip]) =>
-			upper
+			isUpper
 				? `M${left} 66 C${left} 40 ${tip - 3} 14 ${tip} 6 C${tip + 3} 14 ${right} 40 ${right} 66 Z`
 				: `M${left} 30 C${left} 56 ${tip - 3} 82 ${tip} 90 C${tip + 3} 82 ${right} 56 ${right} 30 Z`,
 		),
 		canals: set.map(([, , tip]) =>
-			upper ? `M${tip} 58 L${tip} 14` : `M${tip} 38 L${tip} 82`,
+			isUpper ? `M${tip} 58 L${tip} 14` : `M${tip} 38 L${tip} 82`,
 		),
 	}
 }
 
-export function implantPaths(upper: boolean) {
-	return upper
+export function implantPaths(isUpper: boolean) {
+	return isUpper
 		? {
 				screw: 'M15 64 L15 18 Q20 8 25 18 L25 64 Z',
 				threads:

@@ -5,11 +5,15 @@ import type { KeyboardEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { PATIENTS } from '@/entities/patient'
+import {
+	patientAvatarTone,
+	PATIENTS,
+	usePatientLabels,
+} from '@/entities/patient'
 
 import { getInitials } from '@/shared/lib/format'
-import { translateOptional, useFormat } from '@/shared/lib/i18n'
-import { avatarTone } from '@/shared/ui/avatar'
+import { useFormat } from '@/shared/lib/i18n'
+import { matchesText } from '@/shared/lib/search'
 
 const MAX_RESULTS = 5
 
@@ -18,11 +22,10 @@ const MAX_RESULTS = 5
  */
 export function usePatientSearch() {
 	const t = useTranslations('AppointmentForm')
-	const tPatient = useTranslations('Patient')
+	const patientLabels = usePatientLabels()
 	const format = useFormat()
 	const search = useForm({ defaultValues: { query: '' } })
 	const query = useWatch({ control: search.control, name: 'query' })
-	const needle = query.trim().toLowerCase()
 
 	return {
 		inputProps: {
@@ -32,22 +35,24 @@ export function usePatientSearch() {
 				if (event.key === 'Enter') event.preventDefault()
 			},
 		},
-		results: PATIENTS.filter(
-			p =>
-				!needle ||
-				`${p.fullName} ${p.id} ${p.phone}`.toLowerCase().includes(needle),
+		results: PATIENTS.filter(patient =>
+			matchesText(`${patient.fullName} ${patient.id} ${patient.phone}`, query),
 		)
 			.slice(0, MAX_RESULTS)
-			.map((p, index) => {
-				const name = format.name(p.fullName)
+			.map(patient => {
+				const name = format.name(patient.fullName)
 				return {
-					id: p.id,
+					id: patient.id,
 					name,
-					phone: p.phone,
-					last: `${t('lastVisitShort')} ${translateOptional(tPatient, p.lastVisit)}`,
+					phone: patient.phone,
+					lastVisit: `${t('lastVisitShort')} ${patientLabels.lastVisit(patient)}`,
 					initials: getInitials(name),
-					tone: avatarTone(index),
+					tone: patientAvatarTone(patient.id),
 				}
 			}),
 	}
 }
+
+export type TPatientSearchResult = ReturnType<
+	typeof usePatientSearch
+>['results'][number]

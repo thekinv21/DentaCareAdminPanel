@@ -3,18 +3,19 @@
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
+import { matchesText } from '@/shared/lib/search'
 import type { TTone } from '@/shared/ui/badge'
 
+import { STOCK } from '../api/Mock'
+import { stockLevel, type TStockLevel } from '../lib/StockLevel'
 import {
 	CATEGORY_LABEL,
-	STOCK,
-	stockLevel,
+	STOCK_CATEGORIES,
 	type TStockCategory,
 	type TStockItem,
-	type TStockLevel,
 } from './Stock'
 
-type TStockFilter = 'all' | 'low' | Exclude<TStockCategory, 'impl'>
+type TStockFilter = 'all' | 'low' | TStockCategory
 
 /**
  * Query of the stock list: category/shortage tab and name or SKU search
@@ -23,27 +24,42 @@ type TStockQuery = { category: TStockFilter; search: string }
 
 const DEFAULT_QUERY: TStockQuery = { category: 'all', search: '' }
 
-const FILTERS: { id: TStockFilter; label: string }[] = [
+const CATEGORY_FILTERS: { id: TStockFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
 	{ id: 'low', label: 'low' },
-	{ id: 'anes', label: 'anesthetics' },
-	{ id: 'cons', label: 'consumables' },
-	{ id: 'rest', label: 'fillingPlacement' },
-	{ id: 'endo', label: 'endodontics' },
+	...STOCK_CATEGORIES.map(category => ({
+		id: category,
+		label: CATEGORY_LABEL[category],
+	})),
 ]
 
-const LEVEL: Record<TStockLevel, { label: string; tone: TTone; bar: string }> =
-	{
-		ok: { label: 'inStock', tone: 'ok', bar: 'bg-brand' },
-		low: { label: 'low', tone: 'warning', bar: 'bg-warning' },
-		critical: { label: 'critical', tone: 'danger', bar: 'bg-danger' },
-	}
+const STOCK_LEVEL_VIEW: Record<
+	TStockLevel,
+	{ label: string; tone: TTone; barClass: string }
+> = {
+	ok: { label: 'inStock', tone: 'ok', barClass: 'bg-brand' },
+	low: { label: 'low', tone: 'warning', barClass: 'bg-warning' },
+	critical: { label: 'critical', tone: 'danger', barClass: 'bg-danger' },
+}
+
+const MIN_VISIBLE_FILL = 4
+const FIRST_BAR_DELAY_MS = 240
+const BAR_DELAY_STEP_MS = 40
 
 function matchesCategory(item: TStockItem, category: TStockFilter) {
 	if (category === 'all') return true
 	if (category === 'low') return item.quantity < item.minimum
 	return item.category === category
 }
+
+/**
+ * A full bar means twice the minimum stock
+ */
+const fillPercent = (item: TStockItem) =>
+	Math.max(
+		MIN_VISIBLE_FILL,
+		Math.min(100, Math.round((item.quantity / (item.minimum * 2)) * 100)),
+	)
 
 type TStockTableOptions = {
 	removedSkus: Set<string>
@@ -64,32 +80,27 @@ export function useStockTable(options: TStockTableOptions) {
 		control: filters.control,
 		name: ['category', 'search'],
 	})
-	const needle = search.trim().toLowerCase()
 
 	const rows = STOCK.filter(
 		item =>
 			!removedSkus.has(item.sku) &&
 			matchesCategory(item, category) &&
-			(!needle || `${t(item.name)} ${item.sku}`.toLowerCase().includes(needle)),
+			matchesText(`${t(item.name)} ${item.sku}`, search),
 	).map((item, index) => {
-		const level = LEVEL[stockLevel(item)]
+		const level = STOCK_LEVEL_VIEW[stockLevel(item)]
 		const unit = t(item.unit)
 		return {
-			key: item.sku,
-			name: t(item.name),
 			sku: item.sku,
+			name: t(item.name),
 			category: t(CATEGORY_LABEL[item.category]),
 			quantity: `${item.quantity} ${unit}`,
 			minimum: `${t('minimum')} ${item.minimum} ${unit}`,
-			fill: Math.max(
-				4,
-				Math.min(100, Math.round((item.quantity / (item.minimum * 2)) * 100)),
-			),
-			fillClass: level.bar,
-			delay: 240 + index * 40,
+			fillPercent: fillPercent(item),
+			fillClass: level.barClass,
+			animationDelay: FIRST_BAR_DELAY_MS + index * BAR_DELAY_STEP_MS,
 			supplier: t(item.supplier),
 			expires: item.expires,
-			expiresSoon: !!item.expiresSoon,
+			isExpiringSoon: !!item.expiresSoon,
 			level: { label: t(level.label), tone: level.tone },
 			move: () => onMove(item),
 			edit: () => onEdit(item),
@@ -99,9 +110,13 @@ export function useStockTable(options: TStockTableOptions) {
 
 	return {
 		filters,
-		categories: FILTERS.map(option => ({ ...option, label: t(option.label) })),
+		categories: CATEGORY_FILTERS.map(option => ({
+			...option,
+			label: t(option.label),
+		})),
 		rows,
 	}
 }
 
 export type TStockTableModel = ReturnType<typeof useStockTable>
+export type TStockRow = TStockTableModel['rows'][number]

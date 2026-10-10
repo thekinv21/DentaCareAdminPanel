@@ -4,9 +4,11 @@
 
 /**
  * Denta design tokens (light). Values come from the Denta design system.
+ * `.theme-light` keeps a block light inside the dark theme (e.g. the auth brand panel).
  */
 
-:root {
+:root,
+.theme-light {
 	--canvas: #edf2f1;
 	--surface: #ffffff;
 	--raised: #f6f9f8;
@@ -27,6 +29,7 @@
 	--warning: #8a5600;
 	--warning-soft: #fff0c7;
 	--danger: #b92f27;
+	--danger-strong: #9e2620;
 	--danger-soft: #fce2df;
 	--info: #1d5da3;
 	--info-soft: #dfebfa;
@@ -52,6 +55,7 @@
 	--brand-sh:
 		inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -2px 0 rgba(0, 0, 0, 0.18),
 		0 8px 18px -8px rgba(10, 117, 112, 0.65);
+	--danger-sh: 0 8px 18px -8px rgba(185, 47, 39, 0.6);
 
 	color-scheme: light;
 }
@@ -77,6 +81,7 @@
 	--warning: #f2b544;
 	--warning-soft: #3a2a06;
 	--danger: #ff7a6e;
+	--danger-strong: #ff9a90;
 	--danger-soft: #3d1210;
 	--info: #73aef2;
 	--info-soft: #0f2742;
@@ -100,6 +105,7 @@
 	--brand-sh:
 		inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.2),
 		0 8px 20px -8px rgba(63, 208, 195, 0.45);
+	--danger-sh: 0 8px 18px -8px rgba(255, 122, 110, 0.45);
 
 	color-scheme: dark;
 }
@@ -125,6 +131,7 @@
 	--color-warning: var(--warning);
 	--color-warning-soft: var(--warning-soft);
 	--color-danger: var(--danger);
+	--color-danger-strong: var(--danger-strong);
 	--color-danger-soft: var(--danger-soft);
 	--color-info: var(--info);
 	--color-info-soft: var(--info-soft);
@@ -139,6 +146,7 @@
 	--shadow-float: var(--float);
 	--shadow-press: var(--press);
 	--shadow-brand: var(--brand-sh);
+	--shadow-danger: var(--danger-sh);
 
 	--font-display: var(--font-manrope), var(--font-golos), system-ui, sans-serif;
 	--font-sans:
@@ -147,6 +155,11 @@
 }
 
 @theme {
+	/* layout breakpoints, used as max-mobile:, max-tablet:, max-laptop: */
+	--breakpoint-mobile: 720px;
+	--breakpoint-tablet: 900px;
+	--breakpoint-laptop: 1100px;
+
 	--animate-rise: rise 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
 	--animate-pop: pop 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
 	--animate-fade: fade 260ms ease both;

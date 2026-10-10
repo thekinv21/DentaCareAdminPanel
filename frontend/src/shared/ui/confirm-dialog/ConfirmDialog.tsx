@@ -6,20 +6,17 @@ import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/shared/lib/cn'
-import { Button } from '@/shared/ui/button'
 import { IconButton } from '@/shared/ui/icon-button'
-import { Overlay, useEscapeKey } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
+import { Overlay } from '@/shared/ui/modal'
+import { Overline } from '@/shared/ui/overline'
 
 import { ConfirmDetails } from './ConfirmDetails'
+import { ConfirmFooter } from './ConfirmFooter'
 import { ConfirmGuards } from './ConfirmGuards'
 import { CONFIRM_TONE } from './ConfirmTone'
 import type { TConfirmOptions } from './ConfirmTypes'
 import { useConfirmDialog } from './useConfirmDialog'
-import { useEnterKey } from './useEnterKey'
-
-const kbdClass =
-	'rounded-[5px] border border-line bg-raised px-1.25 font-mono text-[10.5px] leading-4 text-ink-muted'
+import { useConfirmKeys } from './useConfirmKeys'
 
 type TConfirmDialogProps = {
 	request: TConfirmOptions
@@ -29,23 +26,22 @@ type TConfirmDialogProps = {
 export function ConfirmDialog({ request, onClose }: TConfirmDialogProps) {
 	const t = useTranslations('Confirm')
 	const model = useConfirmDialog(request, onClose)
-	const id = useId()
+	const titleId = useId()
 	const tone = CONFIRM_TONE[request.tone ?? 'danger']
 	const Icon = tone.icon
-	const critical = request.tone === 'critical'
-	useEscapeKey(true, model.close)
-	useEnterKey(model.confirm)
+	const isCritical = request.tone === 'critical'
+	useConfirmKeys(model.close, model.confirm)
 
 	return (
 		<Overlay onBackdrop={model.close}>
 			<div
 				role='alertdialog'
 				aria-modal='true'
-				aria-labelledby={`${id}-title`}
-				aria-describedby={`${id}-desc`}
+				aria-labelledby={`${titleId}-title`}
+				aria-describedby={`${titleId}-desc`}
 				className={cn(
 					'relative flex max-h-[calc(100dvh-48px)] w-full max-w-120 animate-pop flex-col gap-4 overflow-auto rounded-3xl border border-line bg-surface p-6 shadow-float scrollbar-thin',
-					critical && 'border-t-4 border-t-danger',
+					isCritical && 'border-t-4 border-t-danger',
 				)}
 			>
 				<div className='flex items-start gap-3.5'>
@@ -58,18 +54,18 @@ export function ConfirmDialog({ request, onClose }: TConfirmDialogProps) {
 						<Icon size={22} aria-hidden='true' />
 					</span>
 					<div className='flex min-w-0 flex-1 flex-col gap-1.5'>
-						{critical && (
-							<span className='text-[11px] leading-3.5 font-bold tracking-[0.06em] text-danger uppercase'>
+						{isCritical && (
+							<Overline as='span' tone='danger'>
 								{t('irreversible')}
-							</span>
+							</Overline>
 						)}
 						<h2
-							id={`${id}-title`}
+							id={`${titleId}-title`}
 							className='font-display text-xl leading-6.5 font-extrabold tracking-[-0.015em]'
 						>
 							{request.title}
 						</h2>
-						<p id={`${id}-desc`} className='leading-5.25 text-ink-muted'>
+						<p id={`${titleId}-desc`} className='leading-5.25 text-ink-muted'>
 							{request.description}
 						</p>
 					</div>
@@ -87,49 +83,7 @@ export function ConfirmDialog({ request, onClose }: TConfirmDialogProps) {
 				<ConfirmDetails request={request} model={model} />
 				<ConfirmGuards request={request} model={model} />
 
-				<div className='mt-1 flex items-center gap-2.5'>
-					<span
-						aria-hidden='true'
-						className='flex min-w-0 flex-1 items-center gap-x-3 overflow-hidden text-[11.5px] whitespace-nowrap text-ink-subtle max-[720px]:hidden'
-					>
-						<span>
-							<kbd className={kbdClass}>Esc</kbd> {t('escCancel')}
-						</span>
-						<span>
-							<kbd className={kbdClass}>Enter</kbd> {t(tone.enter)}
-						</span>
-					</span>
-					<div className='ml-auto flex shrink-0 gap-2.5'>
-						{model.bulk.failed ? (
-							<>
-								<Button onClick={model.finishPartial}>{t('done')}</Button>
-								<Button variant={tone.button} onClick={model.retryFailed}>
-									{t('retryFor', { n: model.bulk.failed.length })}
-								</Button>
-							</>
-						) : (
-							<>
-								<Button
-									autoFocus
-									onClick={model.close}
-									aria-disabled={model.pending}
-								>
-									{request.cancelText ?? t('cancel')}
-								</Button>
-								<Button
-									variant={tone.button}
-									onClick={model.confirm}
-									aria-busy={model.pending}
-									aria-disabled={!model.canConfirm && !model.pending}
-									className={cn(model.pending && 'pointer-events-none')}
-								>
-									{model.pending && <Spinner />}
-									{model.confirmLabel}
-								</Button>
-							</>
-						)}
-					</div>
-				</div>
+				<ConfirmFooter request={request} model={model} />
 			</div>
 		</Overlay>
 	)

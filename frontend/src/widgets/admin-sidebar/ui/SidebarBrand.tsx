@@ -6,9 +6,9 @@ type TSidebarBrandProps = {
 
 export function SidebarBrand({ branch }: TSidebarBrandProps) {
 	return (
-		<div className='flex items-center gap-2.5 border-b border-line px-1 pt-0.5 pb-3 max-[1100px]:justify-center max-[1100px]:px-0 max-[720px]:border-0 max-[720px]:p-0'>
+		<div className='flex items-center gap-2.5 border-b border-line px-1 pt-0.5 pb-3 max-laptop:justify-center max-laptop:px-0 max-mobile:border-0 max-mobile:p-0'>
 			<LogoMark />
-			<span className='min-w-0 grow max-[1100px]:hidden'>
+			<span className='min-w-0 grow max-laptop:hidden'>
 				<span className='block font-display text-lg leading-5.5 font-extrabold tracking-[-0.01em]'>
 					Denta
 				</span>

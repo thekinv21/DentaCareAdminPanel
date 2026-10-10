@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/button'
 import { inputLgClass } from '@/shared/ui/field'
 import { PhoneInput } from '@/shared/ui/phone-input'
 
-import { CITIES, type TRegisterInput } from '../model/Schema'
+import { CITIES, type TRegisterInput } from '../model/RegisterSchema'
 
 type TClinicStepProps = { onNext: () => void }
 
@@ -25,7 +25,7 @@ export function ClinicStep({ onNext }: TClinicStepProps) {
 				<input
 					id='clinicName'
 					className={inputLgClass}
-					placeholder={t('eGDentaAla')}
+					placeholder={t('clinicNamePlaceholder')}
 					{...inputProps('clinicName')}
 				/>
 			</AuthField>

@@ -6,6 +6,8 @@ import { getLocale } from 'next-intl/server'
 
 import { Providers } from '@/app/providers'
 
+import { ThemeScript } from '@/shared/lib/theme'
+
 import './globals.css'
 
 const manrope = Manrope({
@@ -43,7 +45,12 @@ export default async function RootLayout({ children }: TRootLayoutProps) {
 		<html
 			lang={locale}
 			className={`${manrope.variable} ${golos.variable} ${jetbrainsMono.variable} h-full`}
+			// ThemeScript adds the `dark` class before React hydrates
+			suppressHydrationWarning
 		>
+			<head>
+				<ThemeScript />
+			</head>
 			<body className='min-h-full' suppressHydrationWarning>
 				<NextIntlClientProvider>
 					<Providers>{children}</Providers>

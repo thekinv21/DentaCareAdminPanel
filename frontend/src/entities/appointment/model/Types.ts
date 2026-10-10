@@ -1,7 +1,7 @@
+import type { TDoctorId } from '@/entities/employee/@x/appointment'
+
 export type TAppointmentStatus =
 	'done' | 'chair' | 'next' | 'confirmed' | 'pending' | 'noshow'
-
-export type TDoctorKey = 'kas' | 'pet' | 'tok'
 
 export type TAppointment = {
 	id: string
@@ -15,8 +15,15 @@ export type TAppointment = {
 	duration: number
 	patientId: string
 	patientName: string
+	/**
+	 * Procedure message key, e.g. "filling"
+	 */
 	procedure: string
-	doctorId: TDoctorKey
+	/**
+	 * FDI number of the treated tooth
+	 */
+	tooth?: string
+	doctorId: TDoctorId
 	chair: number
 	status: TAppointmentStatus
 }

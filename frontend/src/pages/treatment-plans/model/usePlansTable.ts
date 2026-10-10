@@ -3,44 +3,49 @@
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
+import { DOCTORS } from '@/entities/employee'
+import { patientAvatarTone } from '@/entities/patient'
+
 import { getInitials } from '@/shared/lib/format'
 import { translateOptional, useFormat } from '@/shared/lib/i18n'
-import { avatarTone } from '@/shared/ui/avatar'
+import { matchesText } from '@/shared/lib/search'
 
-import { TREATMENT_PLANS, type TTreatmentPlan } from './Plans'
-import { matchesPlanFilter, PLAN_STATUS, type TPlanFilter } from './PlanStatus'
+import { TREATMENT_PLANS } from '../api/Mock'
+import {
+	matchesPlanFilter,
+	PLAN_STATUS,
+	type TPlanFilter,
+	type TTreatmentPlan,
+} from './Plans'
 
 /**
  * Query of the plan list: stage tab and patient/tooth search
  */
-type TPlansFilter = { status: TPlanFilter; search: string }
+type TPlansQuery = { status: TPlanFilter; search: string }
 
-const DEFAULT_FILTER: TPlansFilter = { status: 'all', search: '' }
+const DEFAULT_QUERY: TPlansQuery = { status: 'all', search: '' }
 
-const FILTERS: { id: TPlanFilter; label: string }[] = [
+const STATUS_FILTERS: { id: TPlanFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
 	{ id: 'waiting', label: 'waiting' },
 	{ id: 'progress', label: 'inProgress' },
 	{ id: 'closed', label: 'closed' },
 ]
 
-const BAR_CLASS: Partial<Record<TTreatmentPlan['status'], string>> = {
+const PROGRESS_BAR_CLASS: Partial<Record<TTreatmentPlan['status'], string>> = {
 	done: 'bg-success',
 	declined: 'bg-line-strong',
 }
 
-function matchesSearch(plan: TTreatmentPlan, search: string) {
-	const needle = search.trim().toLowerCase()
-	return (
-		!needle ||
-		`${plan.patientName} ${plan.patientId} ${plan.teeth}`
-			.toLowerCase()
-			.includes(needle)
-	)
-}
+/**
+ * A started plan always shows a sliver of progress
+ */
+const MIN_VISIBLE_PROGRESS = 4
+const FIRST_BAR_DELAY_MS = 240
+const BAR_DELAY_STEP_MS = 40
 
 type TPlansTableOptions = {
-	removedKeys: Set<string>
+	removedIds: Set<string>
 	onEdit: (plan: TTreatmentPlan) => void
 	onRemove: (plan: TTreatmentPlan) => void
 }
@@ -49,11 +54,11 @@ type TPlansTableOptions = {
  * Plan list filtered by stage and search, with progress and translated labels
  */
 export function usePlansTable(options: TPlansTableOptions) {
-	const { removedKeys, onEdit, onRemove } = options
+	const { removedIds, onEdit, onRemove } = options
 
 	const t = useTranslations('TreatmentPlans')
 	const format = useFormat()
-	const filters = useForm<TPlansFilter>({ defaultValues: DEFAULT_FILTER })
+	const filters = useForm<TPlansQuery>({ defaultValues: DEFAULT_QUERY })
 	const [status, search] = useWatch({
 		control: filters.control,
 		name: ['status', 'search'],
@@ -61,28 +66,33 @@ export function usePlansTable(options: TPlansTableOptions) {
 
 	const rows = TREATMENT_PLANS.filter(
 		plan =>
-			!removedKeys.has(plan.patientId) &&
+			!removedIds.has(plan.id) &&
 			matchesPlanFilter(plan, status) &&
-			matchesSearch(plan, search),
-	).map(plan => {
-		const index = TREATMENT_PLANS.indexOf(plan)
+			matchesText(
+				`${plan.patientName} ${plan.patientId} ${plan.teeth}`,
+				search,
+			),
+	).map((plan, index) => {
 		const planStatus = PLAN_STATUS[plan.status]
 		const patientName = format.name(plan.patientName)
 		return {
-			key: plan.patientId,
+			id: plan.id,
 			patientId: plan.patientId,
 			patientName,
 			initials: getInitials(patientName),
-			tone: avatarTone(index),
-			meta: `${plan.patientId} · ${format.name(plan.doctor)}`,
+			tone: patientAvatarTone(plan.patientId),
+			meta: `${plan.patientId} · ${format.name(DOCTORS[plan.doctorId].shortName)}`,
 			title: t(plan.title),
 			updated: `${t('updated')} ${translateOptional(t, plan.updated)}`,
 			teeth: translateOptional(t, plan.teeth),
 			progress: plan.stepsTotal
-				? Math.max(4, Math.round((plan.stepsDone / plan.stepsTotal) * 100))
+				? Math.max(
+						MIN_VISIBLE_PROGRESS,
+						Math.round((plan.stepsDone / plan.stepsTotal) * 100),
+					)
 				: 0,
-			progressDelay: 240 + index * 40,
-			progressClass: BAR_CLASS[plan.status] ?? 'bg-brand',
+			progressDelay: FIRST_BAR_DELAY_MS + index * BAR_DELAY_STEP_MS,
+			progressClass: PROGRESS_BAR_CLASS[plan.status] ?? 'bg-brand',
 			steps: t('of', { done: plan.stepsDone, total: plan.stepsTotal }),
 			value: format.som(plan.value),
 			status: { label: t(planStatus.label), tone: planStatus.tone },
@@ -93,7 +103,7 @@ export function usePlansTable(options: TPlansTableOptions) {
 
 	return {
 		filters,
-		statuses: FILTERS.map(option => ({
+		statuses: STATUS_FILTERS.map(option => ({
 			id: option.id,
 			label: t(option.label),
 			count: TREATMENT_PLANS.filter(plan => matchesPlanFilter(plan, option.id))
@@ -104,3 +114,4 @@ export function usePlansTable(options: TPlansTableOptions) {
 }
 
 export type TPlansTableModel = ReturnType<typeof usePlansTable>
+export type TPlanRow = TPlansTableModel['rows'][number]

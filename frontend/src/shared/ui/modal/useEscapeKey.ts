@@ -1,17 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useOverlayKey } from './useOverlayKey'
 
 /**
- * Calls `onEscape` on the Escape key while `active`
+ * Calls `onEscape` on the Escape key while `active` and this overlay is on top
  */
 export function useEscapeKey(active: boolean, onEscape: () => void) {
-	useEffect(() => {
-		if (!active) return
-		const onKey = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') onEscape()
-		}
-		document.addEventListener('keydown', onKey)
-		return () => document.removeEventListener('keydown', onKey)
-	}, [active, onEscape])
+	useOverlayKey(active, event => {
+		if (event.key !== 'Escape') return false
+		onEscape()
+	})
 }

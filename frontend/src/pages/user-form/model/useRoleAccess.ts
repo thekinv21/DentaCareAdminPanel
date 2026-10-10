@@ -12,15 +12,15 @@ import {
  */
 export function useRoleAccess(role: TSystemRoleId) {
 	const labels = useRoleLabels()
-	const info = ROLES.find(r => r.id === role)
+	const roleInfo = ROLES.find(candidate => candidate.id === role)
 	const access = role === 'store' ? [] : ROLE_ACCESS[role]
 
 	return {
-		name: info ? labels.text(info.name) : role,
+		name: roleInfo ? labels.text(roleInfo.name) : role,
 		rows: access.map(item => ({
 			module: labels.module(item.module),
 			access: labels.access(item.access),
-			allowed: item.access !== 'none',
+			isAllowed: item.access !== 'none',
 		})),
 	}
 }

@@ -2,14 +2,14 @@
 
 import { ReceiptText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller, FormProvider } from 'react-hook-form'
+import { FormProvider } from 'react-hook-form'
 
 import { Avatar } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, formGrid3 } from '@/shared/ui/field'
-import { Modal } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
+import { Modal, ModalFooter } from '@/shared/ui/modal'
+import { SubjectTile } from '@/shared/ui/subject-tile'
 
 import { INVOICE_BASES } from '../model/InvoiceFormSchema'
 import type { TInvoiceFormModel } from '../model/useInvoiceForm'
@@ -41,50 +41,37 @@ export function InvoiceFormModal({ form }: TInvoiceFormModalProps) {
 				title={form.title}
 				subtitle={form.subtitle}
 				footer={
-					<>
-						<span className='flex-1' />
-						<Button onClick={form.close}>{tCommon('cancel')}</Button>
-						{!form.isEdit && (
-							<Button onClick={form.submitOnly}>{t('createInvoice')}</Button>
-						)}
-						<Button type='submit' variant='primary' aria-busy={form.saving}>
-							{form.saving && <Spinner />}
-							{form.saving
-								? t('creating')
-								: form.isEdit
-									? tCommon('save')
-									: t('createAndCollect')}
-						</Button>
-					</>
+					<ModalFooter
+						onCancel={form.close}
+						saving={form.saving}
+						savingLabel={t('creating')}
+						submitLabel={form.isEdit ? tCommon('save') : t('createAndCollect')}
+						extra={
+							!form.isEdit && (
+								<Button onClick={form.submitOnly}>{t('createInvoice')}</Button>
+							)
+						}
+					/>
 				}
 			>
 				<div className={formGrid3}>
 					<Field as='div' label={t('patient')} required>
-						<div className='flex items-center gap-3 rounded-[14px] border-[1.5px] border-brand bg-brand-soft px-2.5 py-2'>
-							<Avatar initials={form.patient.initials} size={32} />
-							<div className='min-w-0 flex-1'>
-								<div className='truncate font-bold'>{form.patient.name}</div>
-								<div className='font-mono text-[11.5px] text-ink-muted'>
-									{form.patient.meta}
-								</div>
-							</div>
-						</div>
+						<SubjectTile
+							compact
+							media={<Avatar initials={form.patient.initials} size={32} />}
+							title={form.patient.name}
+							caption={<span className='font-mono'>{form.patient.meta}</span>}
+						/>
 					</Field>
 					<Field as='div' label={t('basis')}>
-						<Controller
+						<ChoiceChipsField
 							control={form.methods.control}
 							name='basis'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('basis')}
-									options={INVOICE_BASES.map(id => ({
-										id,
-										label: t(BASIS_LABEL[id]),
-									}))}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
+							aria-label={t('basis')}
+							options={INVOICE_BASES.map(basis => ({
+								id: basis,
+								label: t(BASIS_LABEL[basis]),
+							}))}
 						/>
 					</Field>
 					<InvoiceDueDateField />

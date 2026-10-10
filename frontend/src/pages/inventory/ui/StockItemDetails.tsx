@@ -47,9 +47,9 @@ export function StockItemDetails() {
 			</Field>
 			<Field label={t('supplier')}>
 				<select className={inputClass} {...inputProps('supplier')}>
-					{SUPPLIERS.map(id => (
-						<option key={id} value={id}>
-							{tInventory(id)}
+					{SUPPLIERS.map(supplier => (
+						<option key={supplier} value={supplier}>
+							{tInventory(supplier)}
 						</option>
 					))}
 				</select>

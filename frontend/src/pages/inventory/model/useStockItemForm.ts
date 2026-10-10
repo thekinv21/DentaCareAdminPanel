@@ -15,11 +15,11 @@ import {
 	type TStockItemValues,
 } from './StockFormSchema'
 
-const EMPTY: TStockItemInput = {
+const EMPTY_STOCK_ITEM: TStockItemInput = {
 	name: '',
 	sku: '',
 	unit: 'pcs',
-	category: 'cons',
+	category: 'consumables',
 	quantity: '0',
 	minimum: '',
 	cost: '',
@@ -41,13 +41,13 @@ export function useStockItemForm(
 
 	const methods = useForm<TStockItemInput, unknown, TStockItemValues>({
 		resolver: zodResolver(stockItemSchema),
-		defaultValues: EMPTY,
+		defaultValues: EMPTY_STOCK_ITEM,
 	})
 	const modal = useFormModal<TStockItem>(item =>
 		methods.reset(
 			item
 				? {
-						...EMPTY,
+						...EMPTY_STOCK_ITEM,
 						name: tInventory(item.name),
 						sku: item.sku,
 						unit: item.unit as TStockItemInput['unit'],
@@ -59,7 +59,7 @@ export function useStockItemForm(
 						expires: item.expires,
 						place: t('defaultPlace'),
 					}
-				: EMPTY,
+				: EMPTY_STOCK_ITEM,
 		),
 	)
 	const item = modal.item

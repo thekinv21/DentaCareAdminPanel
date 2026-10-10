@@ -1,17 +1,19 @@
+import type { TWeekDay } from '@/shared/lib/date'
+
 export const CLINIC_FIELDS = [
 	{ name: 'clinicName', label: 'clinicName', value: 'dentaAlaToo' },
 	{ name: 'legalEntity', label: 'legalEntity', value: 'dentaClinicLlc' },
 	{ name: 'tin', label: 'tin', value: '02410202610153', mono: true },
 	{
 		name: 'license',
-		label: 'kyrgyzMinistryOfHealth',
-		value: 'no0417MzValid',
+		label: 'healthMinistryLicense',
+		value: 'clinicLicense',
 		mono: true,
 	},
 	{
 		name: 'address',
 		label: 'address',
-		value: 'n112ToktogulSt1st',
+		value: 'clinicAddress',
 		wide: true,
 	},
 	{
@@ -25,23 +27,39 @@ export const CLINIC_FIELDS = [
 
 export type TClinicField = (typeof CLINIC_FIELDS)[number]['name']
 
-export const CHAIRS = [
-	{ id: 'c1', name: 'restorativeDentistry', doctor: 'Касымова А.' },
-	{ id: 'c2', name: 'prosthodontics', doctor: 'Петров С.' },
-	{ id: 'c3', name: 'surgery', doctor: 'Токтогулов Э.' },
+/**
+ * Treatment chairs of the clinic and who works at each
+ */
+export const CLINIC_CHAIRS = [
+	{ number: 1, specialty: 'restorativeDentistry', doctors: ['Касымова А.'] },
+	{ number: 2, specialty: 'prosthodontics', doctors: ['Петров С.'] },
+	{ number: 3, specialty: 'surgery', doctors: ['Токтогулов Э.'] },
 	{
-		id: 'c4',
-		name: 'hygieneSurgery',
-		doctor: 'Юсупова Д. / Токтогулов Э.',
+		number: 4,
+		specialty: 'hygieneSurgery',
+		doctors: ['Юсупова Д.', 'Токтогулов Э.'],
 	},
 ]
 
-export const WORK_DAYS = [
-	{ id: 'mon', name: 'monday', from: '08:00', to: '19:00' },
-	{ id: 'tue', name: 'tuesday', from: '08:00', to: '19:00' },
-	{ id: 'wed', name: 'wednesday', from: '08:00', to: '19:00' },
-	{ id: 'thu', name: 'thursday', from: '08:00', to: '19:00' },
-	{ id: 'fri', name: 'friday', from: '08:00', to: '19:00' },
-	{ id: 'sat', name: 'saturday', from: '09:00', to: '15:00' },
-	{ id: 'sun', name: 'sunday', from: '10:00', to: '14:00' },
-]
+/**
+ * Opening hours per week day; Sunday is a day off
+ */
+export const WORK_HOURS: Record<TWeekDay, { from: string; to: string }> = {
+	mon: { from: '08:00', to: '19:00' },
+	tue: { from: '08:00', to: '19:00' },
+	wed: { from: '08:00', to: '19:00' },
+	thu: { from: '08:00', to: '19:00' },
+	fri: { from: '08:00', to: '19:00' },
+	sat: { from: '09:00', to: '15:00' },
+	sun: { from: '09:00', to: '15:00' },
+}
+
+export const DAY_NAME: Record<TWeekDay, string> = {
+	mon: 'monday',
+	tue: 'tuesday',
+	wed: 'wednesday',
+	thu: 'thursday',
+	fri: 'friday',
+	sat: 'saturday',
+	sun: 'sunday',
+}

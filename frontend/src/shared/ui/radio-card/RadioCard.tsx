@@ -2,6 +2,8 @@
 
 import { cn } from '@/shared/lib/cn'
 
+import { RadioDot } from './RadioDot'
+
 type TRadioCardProps = {
 	code: string
 	title: string
@@ -38,14 +40,7 @@ export function RadioCard(props: TRadioCardProps) {
 					{note}
 				</span>
 			</span>
-			<span
-				className={cn(
-					'size-4.5 shrink-0 rounded-full',
-					checked
-						? 'border-[5px] border-brand bg-surface'
-						: 'border-2 border-line-strong',
-				)}
-			/>
+			<RadioDot checked={checked} />
 		</button>
 	)
 }

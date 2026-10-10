@@ -1,22 +1,14 @@
 'use client'
 
-import Link from 'next/link'
-
-import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Controller } from 'react-hook-form'
 
-import { ROUTES } from '@/shared/routes'
-import { Avatar } from '@/shared/ui/avatar'
-import { Badge } from '@/shared/ui/badge'
 import { Card } from '@/shared/ui/card'
-import { IconButton } from '@/shared/ui/icon-button'
-import { ProgressBar } from '@/shared/ui/progress'
 import { SearchInput } from '@/shared/ui/search-input'
-import { Segmented } from '@/shared/ui/segmented'
-import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
+import { SegmentedField } from '@/shared/ui/segmented'
+import { Table, TableScroll, Th } from '@/shared/ui/table'
 
 import type { TPlansTableModel } from '../model/usePlansTable'
+import { PlanRow } from './PlanRow'
 
 type TPlansTableProps = { table: TPlansTableModel }
 
@@ -27,21 +19,15 @@ export function PlansTable({ table }: TPlansTableProps) {
 	return (
 		<Card
 			as='section'
-			className='min-h-105 flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-105 flex-auto animate-rise max-mobile:flex-none'
 			style={{ animationDelay: '150ms' }}
 		>
 			<div className='flex flex-wrap items-center justify-between gap-2.5'>
-				<Controller
+				<SegmentedField
 					control={filters.control}
 					name='status'
-					render={({ field }) => (
-						<Segmented
-							aria-label={t('filterPlans')}
-							options={statuses}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					aria-label={t('filterPlans')}
+					options={statuses}
 				/>
 				<SearchInput
 					label={t('patientOrTooth')}
@@ -67,75 +53,7 @@ export function PlansTable({ table }: TPlansTableProps) {
 					</thead>
 					<tbody>
 						{rows.map(row => (
-							<tr key={row.key}>
-								<Td>
-									<div className='flex items-center gap-2.5'>
-										<Avatar initials={row.initials} tone={row.tone} />
-										<div className='min-w-0'>
-											<Link
-												href={ROUTES.patient(row.patientId)}
-												className='block font-semibold whitespace-nowrap text-ink no-underline hover:underline'
-											>
-												{row.patientName}
-											</Link>
-											<span className='font-mono text-[11.5px] whitespace-nowrap text-ink-muted'>
-												{row.meta}
-											</span>
-										</div>
-									</div>
-								</Td>
-								<Td>
-									<span className='font-semibold'>{row.title}</span>
-									<div className='text-[12.5px] leading-4.5 whitespace-nowrap text-ink-muted'>
-										{row.updated}
-									</div>
-								</Td>
-								<Td mono nowrap>
-									{row.teeth}
-								</Td>
-								<Td>
-									<div className='flex items-center gap-2.5'>
-										<ProgressBar
-											value={row.progress}
-											delay={row.progressDelay}
-											fillClass={row.progressClass}
-											className='grow'
-										/>
-										<span className='font-mono text-xs whitespace-nowrap text-ink-muted'>
-											{row.steps}
-										</span>
-									</div>
-								</Td>
-								<Td mono nowrap align='right' className='font-semibold'>
-									{row.value}
-								</Td>
-								<Td>
-									<Badge tone={row.status.tone}>{row.status.label}</Badge>
-								</Td>
-								<Td align='right' nowrap>
-									<span className='inline-flex gap-0.5'>
-										<IconButton
-											quiet
-											size='sm'
-											aria-label={`${t('editColon')} ${row.patientName}`}
-											title={t('edit')}
-											onClick={row.edit}
-										>
-											<Pencil size={16} aria-hidden='true' />
-										</IconButton>
-										<IconButton
-											quiet
-											size='sm'
-											aria-label={`${t('deleteColon')} ${row.patientName}`}
-											title={t('delete')}
-											onClick={row.remove}
-											className='text-danger'
-										>
-											<Trash2 size={16} aria-hidden='true' />
-										</IconButton>
-									</span>
-								</Td>
-							</tr>
+							<PlanRow key={row.id} row={row} />
 						))}
 					</tbody>
 				</Table>

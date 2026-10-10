@@ -1,49 +1,72 @@
+'use client'
+
+import { memo } from 'react'
+
 import { cn } from '@/shared/lib/cn'
 
-import type { TDentalChartModel } from '../model/useDentalChart'
+import type { TSurface, TToothState } from '../model/Teeth'
+import { useToothLabels } from '../model/useToothLabels'
 import { ToothSvg } from './ToothSvg'
 
 type TToothButtonProps = {
-	chart: TDentalChartModel
-	n: number
-	upper: boolean
+	toothNumber: number
+	isUpper: boolean
+	isSelected: boolean
+	toothState: TToothState
+	onPickTooth: (toothNumber: number) => void
+	onPickSurface: (toothNumber: number, surface: TSurface) => void
 }
 
-export function ToothButton({ chart, n, upper }: TToothButtonProps) {
-	const selected = chart.selected === n
-	const number = (
+/**
+ * One tooth of the chart. Memoized: a click re-renders only the teeth whose
+ * state or selection changed, not all 32 SVGs.
+ */
+export const ToothButton = memo(function ToothButton(props: TToothButtonProps) {
+	const {
+		toothNumber,
+		isUpper,
+		isSelected,
+		toothState,
+		onPickTooth,
+		onPickSurface,
+	} = props
+
+	const labels = useToothLabels()
+	const numberLabel = (
 		<span
 			className={cn(
 				'font-mono text-[11.5px] leading-3.5 font-semibold',
-				selected ? 'text-brand-strong' : 'text-ink-muted',
+				isSelected ? 'text-brand-strong' : 'text-ink-muted',
 			)}
 		>
-			{n}
+			{toothNumber}
 		</span>
 	)
 
 	return (
 		<button
 			type='button'
-			onClick={() => chart.pickTooth(n)}
-			aria-pressed={selected}
-			aria-label={chart.toothLabel(n)}
+			onClick={() => onPickTooth(toothNumber)}
+			aria-pressed={isSelected}
+			aria-label={labels.toothLabel(toothNumber, toothState)}
 			className={cn(
 				'flex min-w-0 flex-col items-center gap-0.75 rounded-xl border-0 px-px py-1 transition-[background-color,box-shadow] duration-150',
-				selected
+				isSelected
 					? 'bg-brand-soft shadow-[0_0_0_2px_var(--brand)]'
 					: 'bg-transparent hover:bg-raised',
 			)}
 		>
-			{!upper && number}
+			{!isUpper && numberLabel}
 			<ToothSvg
-				n={n}
-				upper={upper}
-				state={chart.stateOf(n)}
-				surfaceTitle={(surface, name) => chart.surfaceTitle(n, surface, name)}
-				onPickSurface={surface => chart.pickSurface(n, surface)}
+				toothNumber={toothNumber}
+				isUpper={isUpper}
+				toothState={toothState}
+				surfaceTitle={(surface, nameKey) =>
+					labels.surfaceTitle(toothState, surface, nameKey)
+				}
+				onPickSurface={surface => onPickSurface(toothNumber, surface)}
 			/>
-			{upper && number}
+			{isUpper && numberLabel}
 		</button>
 	)
-}
+})

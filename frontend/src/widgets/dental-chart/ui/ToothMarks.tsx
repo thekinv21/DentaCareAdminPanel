@@ -1,15 +1,15 @@
 import type { TToothState } from '../model/Teeth'
 
 type TToothMarksProps = {
-	state: TToothState
+	toothState: TToothState
 	cy: number
-	cross: string
+	crossPath: string
 }
 
-export function ToothMarks({ state, cy, cross }: TToothMarksProps) {
+export function ToothMarks({ toothState, cy, crossPath }: TToothMarksProps) {
 	return (
 		<>
-			{state.crown && (
+			{toothState.crown && (
 				<circle
 					cx='20'
 					cy={cy}
@@ -19,7 +19,7 @@ export function ToothMarks({ state, cy, cross }: TToothMarksProps) {
 					strokeWidth='3'
 				/>
 			)}
-			{state.plan && (
+			{toothState.plan && (
 				<circle
 					cx='20'
 					cy={cy}
@@ -30,9 +30,9 @@ export function ToothMarks({ state, cy, cross }: TToothMarksProps) {
 					strokeDasharray='3 2.5'
 				/>
 			)}
-			{state.extract && (
+			{toothState.extract && (
 				<path
-					d={cross}
+					d={crossPath}
 					stroke='var(--accent)'
 					strokeWidth='3'
 					strokeLinecap='round'

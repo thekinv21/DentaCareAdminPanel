@@ -16,9 +16,8 @@ export function ToastView({ toast, onUndo }: TToastViewProps) {
 	const t = useTranslations('Confirm')
 	return (
 		<div
-			key={toast.id}
 			role='status'
-			className='fixed right-6 bottom-6 z-70 flex min-w-80 animate-pop items-center gap-2.5 overflow-hidden rounded-2xl bg-ink py-2.5 pr-2.5 pl-3 font-semibold text-surface shadow-float max-[720px]:right-2.5 max-[720px]:left-2.5 max-[720px]:min-w-0'
+			className='fixed right-6 bottom-6 z-70 flex min-w-80 animate-pop items-center gap-2.5 overflow-hidden rounded-2xl bg-ink py-2.5 pr-2.5 pl-3 font-semibold text-surface shadow-float max-mobile:right-2.5 max-mobile:left-2.5 max-mobile:min-w-0'
 		>
 			<span
 				className={cn(

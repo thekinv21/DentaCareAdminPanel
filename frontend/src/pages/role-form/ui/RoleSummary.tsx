@@ -6,12 +6,10 @@ import { useTranslations } from 'next-intl'
 import { Alert } from '@/shared/ui/alert'
 import { Avatar } from '@/shared/ui/avatar'
 import { Card } from '@/shared/ui/card'
+import { Overline } from '@/shared/ui/overline'
 
 import type { TRoleFormModel } from '../model/useRoleForm'
 import { useRoleSummary } from '../model/useRoleSummary'
-
-const overlineClass =
-	'mb-2 text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'
 
 type TRoleSummaryProps = { form: TRoleFormModel }
 
@@ -22,7 +20,7 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 	return (
 		<Card
 			as='aside'
-			className='w-75 shrink-0 gap-4 overflow-auto scrollbar-thin max-[1100px]:w-full'
+			className='w-75 shrink-0 gap-4 overflow-auto scrollbar-thin max-laptop:w-full'
 		>
 			<div className='flex items-center gap-3'>
 				<span
@@ -47,14 +45,14 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 				/>
 			</div>
 			<div>
-				<div className={overlineClass}>{t('summary')}</div>
+				<Overline className='mb-2'>{t('summary')}</Overline>
 				<ul className='flex flex-col gap-1.75 text-[13px]'>
 					{summary.rows.map(row => (
 						<li key={row.module} className='flex justify-between gap-2'>
 							<span className='font-semibold'>{row.module}</span>
 							<span className='text-right text-ink-muted'>
 								{row.actions.length
-									? `${row.actions.join(', ')}${row.own ? ` · ${t('ownSuffix')}` : ''}`
+									? `${row.actions.join(', ')}${row.isOwnOnly ? ` · ${t('ownSuffix')}` : ''}`
 									: t('noAccess')}
 							</span>
 						</li>
@@ -63,9 +61,9 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 			</div>
 			{form.members.length > 0 && (
 				<div>
-					<div className={overlineClass}>
+					<Overline className='mb-2'>
 						{t('staffWithRole', { n: form.membersCount })}
-					</div>
+					</Overline>
 					<ul className='flex flex-col gap-2'>
 						{form.members.map(member => (
 							<li key={member.name} className='flex items-center gap-2.5'>
@@ -75,7 +73,7 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 										{member.name}
 									</span>
 									<span className='block text-xs text-ink-muted'>
-										{member.sub}
+										{member.subtitle}
 									</span>
 								</span>
 							</li>
@@ -83,7 +81,7 @@ export function RoleSummary({ form }: TRoleSummaryProps) {
 					</ul>
 				</div>
 			)}
-			<Alert tone='warning' className='text-[13px] leading-4.75'>
+			<Alert tone='warning' size='sm'>
 				{t('appliesOnNextLogin')}
 			</Alert>
 		</Card>

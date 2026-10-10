@@ -1,3 +1,6 @@
 export { Modal } from './Modal'
+export { ModalDeleteButton } from './ModalDeleteButton'
+export { ModalFooter } from './ModalFooter'
 export { Overlay } from './Overlay'
 export { useEscapeKey } from './useEscapeKey'
+export { useOverlayKey } from './useOverlayKey'

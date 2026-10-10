@@ -5,11 +5,17 @@ export type TPatientSegment = 'today' | 'active' | 'debt' | 'recall'
 export type TPatient = {
 	id: string
 	fullName: string
-	age: string
+	/**
+	 * Full years
+	 */
+	age: number
 	phone: string
+	/**
+	 * "dd.mm.yyyy"
+	 */
 	lastVisit: string
 	/**
-	 * Free text: a date, "Сегодня · 12:00" or empty when not booked
+	 * "dd.mm.yyyy", or "HH:MM" when `isNextVisitToday`; null when not booked
 	 */
 	nextVisit: string | null
 	isNextVisitToday: boolean

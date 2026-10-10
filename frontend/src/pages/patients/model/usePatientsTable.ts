@@ -1,67 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo } from 'react'
 
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
 import {
+	patientAvatarTone,
 	PATIENTS,
+	PATIENTS_TOTAL,
 	type TPatient,
-	type TPatientSegment,
+	usePatientLabels,
 } from '@/entities/patient'
 
 import { getInitials } from '@/shared/lib/format'
-import { translateOptional, useFormat } from '@/shared/lib/i18n'
-import { avatarTone } from '@/shared/ui/avatar'
+import { useFormat } from '@/shared/lib/i18n'
 
-type TPatientsTab = 'all' | Exclude<TPatientSegment, 'active'>
-type TSortKey = 'name' | 'balance'
-type TSort = { key: TSortKey; dir: 1 | -1 }
-
-/**
- * Query of the patient list: segment, search text and sorting
- */
-type TPatientsFilter = {
-	tab: TPatientsTab
-	search: string
-	sort: TSort | null
-}
-
-const DEFAULT_FILTER: TPatientsFilter = { tab: 'all', search: '', sort: null }
-
-const TABS: { id: TPatientsTab; label: string; count: string }[] = [
-	{ id: 'all', label: 'all', count: '1 284' },
-	{ id: 'today', label: 'today', count: '28' },
-	{ id: 'recall', label: 'followUpExam', count: '17' },
-	{ id: 'debt', label: 'withBalanceDue', count: '23' },
-]
-
-function matchesTab(patient: TPatient, tab: TPatientsTab) {
-	if (tab === 'all') return true
-	if (tab === 'today')
-		return patient.segment === 'today' || patient.isNextVisitToday
-	return patient.segment === tab
-}
-
-function matchesSearch(patient: TPatient, search: string) {
-	const needle = search.trim().toLowerCase()
-	return (
-		!needle ||
-		`${patient.fullName} ${patient.id} ${patient.phone}`
-			.toLowerCase()
-			.includes(needle)
-	)
-}
-
-function sortPatients(list: TPatient[], sort: TSort | null) {
-	if (!sort) return list
-	const compare =
-		sort.key === 'name'
-			? (a: TPatient, b: TPatient) => a.fullName.localeCompare(b.fullName, 'ru')
-			: (a: TPatient, b: TPatient) => a.balance - b.balance
-	return [...list].sort((a, b) => compare(a, b) * sort.dir)
-}
+import {
+	DEFAULT_PATIENTS_QUERY,
+	PAGE_SIZE,
+	PATIENT_TABS,
+	queryPatients,
+	type TPatientsQuery,
+	type TSortKey,
+} from './PatientsQuery'
+import { usePatientSelection } from './usePatientSelection'
 
 type TPatientsTableOptions = {
 	removedIds: Set<string>
@@ -70,6 +33,8 @@ type TPatientsTableOptions = {
 	onBulkRemove: (patients: TPatient[], onDone: () => void) => void
 }
 
+const LAST_PAGE = Math.ceil(PATIENTS_TOTAL / PAGE_SIZE)
+
 /**
  * Filtered, sorted patient rows and the row selection for bulk actions
  */
@@ -77,49 +42,42 @@ export function usePatientsTable(options: TPatientsTableOptions) {
 	const { removedIds, onEdit, onRemove, onBulkRemove } = options
 
 	const t = useTranslations('Patients')
-	const tPatient = useTranslations('Patient')
+	const patientLabels = usePatientLabels()
 	const format = useFormat()
-	const filters = useForm<TPatientsFilter>({ defaultValues: DEFAULT_FILTER })
+	const filters = useForm<TPatientsQuery>({
+		defaultValues: DEFAULT_PATIENTS_QUERY,
+	})
 	const [tab, search, sort] = useWatch({
 		control: filters.control,
 		name: ['tab', 'search', 'sort'],
 	})
-	const [selected, setSelected] = useState<Set<string>>(new Set())
 
-	const visible = sortPatients(
-		PATIENTS.filter(
-			p =>
-				!removedIds.has(p.id) && matchesTab(p, tab) && matchesSearch(p, search),
-		),
-		sort,
+	// the real register holds 1 284 patients: don't refilter on every checkbox click
+	const visiblePatients = useMemo(
+		() => queryPatients(PATIENTS, { tab, search, sort }, removedIds),
+		[tab, search, sort, removedIds],
 	)
-	const allSelected =
-		visible.length > 0 && visible.every(p => selected.has(p.id))
-	const clearSelection = () => setSelected(new Set())
+	const visibleIds = useMemo(
+		() => visiblePatients.map(patient => patient.id),
+		[visiblePatients],
+	)
+	const selection = usePatientSelection(visibleIds)
 
-	const rows = visible.map(patient => {
+	const rows = visiblePatients.map(patient => {
 		const name = format.name(patient.fullName)
 		return {
 			...patient,
 			fullName: name,
 			initials: getInitials(name),
-			tone: avatarTone(PATIENTS.indexOf(patient)),
-			age: tPatient(patient.age),
-			lastVisit: translateOptional(tPatient, patient.lastVisit),
-			nextVisit: patient.nextVisit
-				? translateOptional(tPatient, patient.nextVisit)
-				: t('unassigned'),
+			tone: patientAvatarTone(patient.id),
+			age: patientLabels.age(patient),
+			lastVisit: patientLabels.lastVisit(patient),
+			nextVisit: patientLabels.nextVisit(patient) ?? t('unassigned'),
 			hasNextVisit: !!patient.nextVisit,
 			doctor: format.name(patient.doctor),
 			balanceText: patient.balance ? format.som(patient.balance) : '—',
-			isSelected: selected.has(patient.id),
-			toggle: () =>
-				setSelected(current => {
-					const next = new Set(current)
-					if (next.has(patient.id)) next.delete(patient.id)
-					else next.add(patient.id)
-					return next
-				}),
+			isSelected: selection.selectedIds.has(patient.id),
+			toggle: () => selection.toggle(patient.id),
 			edit: () => onEdit(patient),
 			remove: () => onRemove(patient),
 		}
@@ -127,29 +85,37 @@ export function usePatientsTable(options: TPatientsTableOptions) {
 
 	return {
 		filters,
-		tabs: TABS.map(item => ({ ...item, label: t(item.label) })),
+		tabs: PATIENT_TABS.map(tabOption => ({
+			id: tabOption.id,
+			label: t(tabOption.label),
+			count: format.number(tabOption.count),
+		})),
 		rows,
-		selectedCount: selected.size,
-		allSelected,
-		toggleAll: () =>
-			setSelected(current => {
-				const next = new Set(current)
-				visible.forEach(p => (allSelected ? next.delete(p.id) : next.add(p.id)))
-				return next
-			}),
-		clearSelection,
+		selectedCount: selection.selectedIds.size,
+		isAllSelected: selection.isAllSelected,
+		toggleAll: selection.toggleAll,
+		clearSelection: selection.clear,
 		bulkDelete: () =>
 			onBulkRemove(
-				visible.filter(p => selected.has(p.id)),
-				clearSelection,
+				visiblePatients.filter(patient =>
+					selection.selectedIds.has(patient.id),
+				),
+				selection.clear,
 			),
 		toggleSort: (key: TSortKey) =>
 			filters.setValue('sort', {
 				key,
-				dir: sort?.key === key && sort.dir === 1 ? -1 : 1,
+				direction: sort?.key === key && sort.direction === 1 ? -1 : 1,
 			}),
-		ariaSort: (key: TSortKey) =>
-			sort?.key !== key ? 'none' : sort.dir === 1 ? 'ascending' : 'descending',
+		getAriaSort: (key: TSortKey) =>
+			sort?.key !== key
+				? 'none'
+				: sort.direction === 1
+					? 'ascending'
+					: 'descending',
+		shownRange: `1–${rows.length}`,
+		total: format.number(PATIENTS_TOTAL),
+		pages: [1, 2, 3, null, LAST_PAGE],
 	}
 }
 

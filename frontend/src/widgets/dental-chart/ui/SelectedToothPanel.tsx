@@ -9,40 +9,40 @@ import type { TDentalChartModel } from '../model/useDentalChart'
 import { SelectedToothHeader } from './SelectedToothHeader'
 import { SurfacePicker } from './SurfacePicker'
 
-type TSelectedToothPanelProps = { chart: TDentalChartModel }
+type TSelectedToothPanelProps = { chartModel: TDentalChartModel }
 
-export function SelectedToothPanel({ chart }: TSelectedToothPanelProps) {
+export function SelectedToothPanel({ chartModel }: TSelectedToothPanelProps) {
 	const t = useTranslations('DentalChart')
 
 	return (
 		<aside
 			aria-label={t('selectedTooth')}
-			className='flex max-w-90 min-w-0 flex-[1_1_280px] flex-col gap-3 rounded-[18px] border border-line bg-raised p-4 max-[720px]:max-w-none'
+			className='flex max-w-90 min-w-0 flex-[1_1_280px] flex-col gap-3 rounded-[18px] border border-line bg-raised p-4 max-mobile:max-w-none'
 		>
 			<SelectedToothHeader
-				number={chart.selected}
-				name={chart.toothName(chart.selected)}
+				toothNumber={chartModel.selectedTooth}
+				toothName={chartModel.selectedName}
 			/>
 
 			<div className='flex flex-wrap gap-1.5'>
-				{chart.tags.map(tag => (
+				{chartModel.selectedTags.map(tag => (
 					<Badge key={tag.label} tone={tag.tone}>
 						{tag.label}
 					</Badge>
 				))}
 			</div>
 
-			<SurfacePicker chart={chart} />
+			<SurfacePicker chartModel={chartModel} />
 
 			<p className='rounded-xl border border-line bg-surface px-3 py-2.5 text-[13px] leading-4.75'>
-				{chart.note}
+				{chartModel.selectedNote}
 			</p>
 
 			<div className='mt-auto flex gap-2'>
-				<Button size='sm' className='flex-1' onClick={chart.clearSelected}>
+				<Button size='sm' className='flex-1' onClick={chartModel.clearSelected}>
 					{t('clear')}
 				</Button>
-				<Button size='sm' variant='primary' className='flex-1'>
+				<Button size='sm' variant='primary' className='flex-1' disabled>
 					{t('addToTreatmentPlan')}
 				</Button>
 			</div>

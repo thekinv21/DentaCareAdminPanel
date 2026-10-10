@@ -13,7 +13,7 @@ export function PlanTotalsCard() {
 	const totals = usePlanTotals()
 
 	return (
-		<div className='flex w-75 flex-col gap-2 rounded-2xl border border-line bg-raised p-3.5 max-[720px]:w-full'>
+		<div className='flex w-75 flex-col gap-2 rounded-2xl border border-line bg-raised p-3.5 max-mobile:w-full'>
 			<div className={totalRow}>
 				<span className='text-ink-muted'>{t('total')}</span>
 				<span className='font-mono'>{totals.sum}</span>

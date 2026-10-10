@@ -15,7 +15,9 @@ type TFormFieldProps = Omit<TFieldProps, 'errorId'> & {
  * `Field` bound to the surrounding `FormProvider`: shows the field's error.
  * An explicit `error` (e.g. a server-side check) takes precedence.
  */
-export function FormField({ name, error, ...rest }: TFormFieldProps) {
+export function FormField(props: TFormFieldProps) {
+	const { name, error, ...rest } = props
+
 	const fieldError = useFieldError(name)
 	return (
 		<Field {...rest} error={error ?? fieldError} errorId={`${name}-error`} />

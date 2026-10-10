@@ -1,22 +1,31 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
+import { CHAIR_NUMBERS } from '@/entities/employee'
+
+import { useFieldProps } from '@/shared/lib/form'
 import { useFormat } from '@/shared/lib/i18n'
 import { Badge } from '@/shared/ui/badge'
-import { ToggleChips } from '@/shared/ui/choice-chips'
-import { Field, formGrid2, inputClass } from '@/shared/ui/field'
+import { ToggleChipsField } from '@/shared/ui/choice-chips'
+import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
+import { SwitchCardField } from '@/shared/ui/switch-card'
 
-import { ASSISTANT_DOCTORS, CHAIRS, QUALIFICATIONS } from '../model/Options'
-import type { TUserFormValues } from '../model/Schema'
-import { UserSwitch } from './UserSwitch'
+import { ASSISTANT_DOCTORS, QUALIFICATIONS } from '../model/Options'
+import type { TUserFormValues } from '../model/UserFormSchema'
+
+/**
+ * Chair 4 is the hygiene room, assistants work at 1–3
+ */
+const ASSISTANT_CHAIRS = CHAIR_NUMBERS.slice(0, 3)
 
 export function AssistantSection() {
 	const t = useTranslations('UserForm')
 	const format = useFormat()
 	const { control, register } = useFormContext<TUserFormValues>()
+	const inputProps = useFieldProps<TUserFormValues>()
 
 	return (
 		<FormSection
@@ -24,55 +33,55 @@ export function AssistantSection() {
 			title={t('workingWithDoctors')}
 			aside={<Badge tone='info'>{t('assistantFields')}</Badge>}
 		>
-			<Field
+			<FormField
+				name='doctors'
 				as='div'
 				label={t('assignedDoctors')}
 				required
 				hint={t('assignedDoctorsHint')}
 			>
-				<Controller
+				<ToggleChipsField
 					control={control}
 					name='doctors'
-					render={({ field }) => (
-						<ToggleChips
-							aria-label={t('assignedDoctors')}
-							options={ASSISTANT_DOCTORS.map(doc => ({
-								id: doc.id as string,
-								label: format.name(doc.name),
-							}))}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					aria-label={t('assignedDoctors')}
+					options={ASSISTANT_DOCTORS.map(doctor => ({
+						id: doctor.id,
+						label: format.name(doctor.name),
+					}))}
 				/>
-			</Field>
+			</FormField>
 			<div className={formGrid2}>
 				<Field label={t('mainChair')}>
-					<select className={inputClass} {...register('chair')}>
-						{CHAIRS.slice(0, 3).map(chair => (
+					<select
+						className={inputClass}
+						{...register('chair', { valueAsNumber: true })}
+					>
+						{ASSISTANT_CHAIRS.map(chair => (
 							<option key={chair} value={chair}>
-								{t(chair)}
+								{t(`chair${chair}`)}
 							</option>
 						))}
 					</select>
 				</Field>
 				<Field label={t('qualification')}>
-					<select className={inputClass} {...register('qualification')}>
-						{QUALIFICATIONS.map(item => (
-							<option key={item} value={item}>
-								{t(item)}
+					<select className={inputClass} {...inputProps('qualification')}>
+						{QUALIFICATIONS.map(qualification => (
+							<option key={qualification} value={qualification}>
+								{t(qualification)}
 							</option>
 						))}
 					</select>
 				</Field>
-				<UserSwitch
-					name='stock'
+				<SwitchCardField
+					control={control}
+					name='switches.writeOffMaterials'
 					label={t('writeOffMaterials')}
 					hint={t('writeOffMaterialsHint')}
-					ariaLabel={t('writeOffMaterialsShort')}
+					aria-label={t('writeOffMaterialsShort')}
 				/>
-				<UserSwitch
-					name='chart'
+				<SwitchCardField
+					control={control}
+					name='switches.markDentalChart'
 					label={t('markDentalChart')}
 					hint={t('markDentalChartHint')}
 				/>

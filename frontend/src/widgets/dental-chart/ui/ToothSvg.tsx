@@ -4,17 +4,22 @@ import { ToothCrown } from './ToothCrown'
 import { ToothRoots } from './ToothRoots'
 
 type TToothSvgProps = {
-	n: number
-	upper: boolean
-	state: TToothState
-	surfaceTitle: (surface: TSurface, anteriorName?: string) => string
+	toothNumber: number
+	isUpper: boolean
+	toothState: TToothState
+	surfaceTitle: (surface: TSurface, nameKey?: string) => string
 	onPickSurface: (surface: TSurface) => void
 }
 
 export function ToothSvg(props: TToothSvgProps) {
-	const { n, upper, state, surfaceTitle, onPickSurface } = props
+	const { toothNumber, isUpper, toothState, surfaceTitle, onPickSurface } =
+		props
 
-	const shape = toothShape(n, upper, !!(state.missing || state.implant))
+	const shape = toothShape(
+		toothNumber,
+		isUpper,
+		!!(toothState.missing || toothState.implant),
+	)
 
 	return (
 		<svg
@@ -22,11 +27,11 @@ export function ToothSvg(props: TToothSvgProps) {
 			aria-hidden='true'
 			className='block h-auto w-full max-w-11.5 overflow-visible'
 		>
-			<g opacity={state.missing ? 0.45 : 1}>
-				<ToothRoots shape={shape} state={state} />
+			<g opacity={toothState.missing ? 0.45 : 1}>
+				<ToothRoots shape={shape} toothState={toothState} />
 				<ToothCrown
 					shape={shape}
-					state={state}
+					toothState={toothState}
 					surfaceTitle={surfaceTitle}
 					onPickSurface={onPickSurface}
 				/>

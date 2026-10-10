@@ -13,7 +13,7 @@ import { buttonClass } from '@/shared/ui/button'
 import { Card, CardHeader } from '@/shared/ui/card'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import { PAYMENTS } from '../model/Profile'
+import { PAYMENTS } from '../model/PatientChart'
 
 export function PaymentsSection() {
 	const t = useTranslations('PatientProfile')

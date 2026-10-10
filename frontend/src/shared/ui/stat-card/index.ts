@@ -1,1 +1,1 @@
-export { Delta, StatCard, StatGrid } from './StatCard'
+export { StatDelta, StatCard, StatGrid } from './StatCard'

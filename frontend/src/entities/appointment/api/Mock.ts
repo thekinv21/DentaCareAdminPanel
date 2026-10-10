@@ -1,8 +1,5 @@
 import type { TAppointment } from '../model/Types'
 
-/**
- * Mock "today" (Friday, 9 October 2026) until the backend exposes /appointments
- */
 export const TODAY = '2026-10-09'
 export const NOW_TIME = '11:40'
 
@@ -35,7 +32,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 40,
 		patientId: 'DN-20356',
 		patientName: 'Елена Ковалёва',
-		procedure: 'filling36',
+		procedure: 'filling',
+		tooth: '36',
 		doctorId: 'pet',
 		chair: 2,
 		status: 'done',
@@ -57,7 +55,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 60,
 		patientId: 'DN-20120',
 		patientName: 'Динара Жумабаева',
-		procedure: 'crownTryIn21',
+		procedure: 'crownTryIn',
+		tooth: '21',
 		doctorId: 'pet',
 		chair: 2,
 		status: 'chair',
@@ -68,7 +67,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 90,
 		patientId: 'DN-20418',
 		patientName: 'Айгуль Тойчубекова',
-		procedure: 'rootCanalTreatment46',
+		procedure: 'rootCanalTreatment',
+		tooth: '46',
 		doctorId: 'kas',
 		chair: 1,
 		status: 'next',
@@ -79,7 +79,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 45,
 		patientId: 'DN-20391',
 		patientName: 'Тимур Абдыкадыров',
-		procedure: 'extraction38',
+		procedure: 'extraction',
+		tooth: '38',
 		doctorId: 'tok',
 		chair: 3,
 		status: 'confirmed',
@@ -101,7 +102,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 60,
 		patientId: 'DN-20077',
 		patientName: 'Жылдыз Осмонова',
-		procedure: 'filling15',
+		procedure: 'filling',
+		tooth: '15',
 		doctorId: 'kas',
 		chair: 1,
 		status: 'confirmed',
@@ -112,7 +114,8 @@ export const TODAY_APPOINTMENTS: TAppointment[] = [
 		duration: 90,
 		patientId: 'DN-20264',
 		patientName: 'Асель Орозова',
-		procedure: 'crown24',
+		procedure: 'crown',
+		tooth: '24',
 		doctorId: 'pet',
 		chair: 2,
 		status: 'confirmed',

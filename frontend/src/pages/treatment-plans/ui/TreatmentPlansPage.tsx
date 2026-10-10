@@ -6,20 +6,22 @@ import { useTranslations } from 'next-intl'
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { Button } from '@/shared/ui/button'
-import { Delta, StatCard, StatGrid } from '@/shared/ui/stat-card'
+import { StatCard, StatDelta, StatGrid } from '@/shared/ui/stat-card'
 
 import { usePlanForm } from '../model/usePlanForm'
 import { usePlanRemoval } from '../model/usePlanRemoval'
+import { usePlansSummary } from '../model/usePlansSummary'
 import { usePlansTable } from '../model/usePlansTable'
 import { PlanFormModal } from './PlanFormModal'
 import { PlansTable } from './PlansTable'
 
 export function TreatmentPlansPage() {
 	const t = useTranslations('TreatmentPlans')
+	const summary = usePlansSummary()
 	const removal = usePlanRemoval()
 	const form = usePlanForm(removal.remove)
 	const table = usePlansTable({
-		removedKeys: removal.removedKeys,
+		removedIds: removal.removedIds,
 		onEdit: form.openEdit,
 		onRemove: removal.remove,
 	})
@@ -40,24 +42,25 @@ export function TreatmentPlansPage() {
 				<StatGrid label={t('summary')}>
 					<StatCard
 						label={t('activePlans')}
-						value='64'
+						value={summary.activePlans}
 						footer={
 							<>
-								<Delta>+6</Delta> {t('startedInOctober')}
+								<StatDelta>{summary.startedThisMonth}</StatDelta>{' '}
+								{t('startedInOctober')}
 							</>
 						}
 					/>
 					<StatCard
 						label={t('awaitingConsent')}
-						value='9'
+						value={summary.awaitingConsent}
 						delay={50}
-						footer={t('totaling312400Som')}
+						footer={summary.awaitingConsentValue}
 					/>
 					<StatCard
 						label={t('patientConsent')}
-						value='78%'
+						value={summary.consent}
 						delay={100}
-						footer={t('last90DaysTarget')}
+						footer={summary.consentTarget}
 					/>
 				</StatGrid>
 				<PlansTable table={table} />

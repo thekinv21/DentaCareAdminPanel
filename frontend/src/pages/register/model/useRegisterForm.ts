@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { type KeyboardEvent, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -15,7 +15,7 @@ import {
 	registerSchema,
 	type TRegisterInput,
 	type TRegisterValues,
-} from './Schema'
+} from './RegisterSchema'
 
 /**
  * Two-step clinic sign-up; step 1 is validated before moving on (no backend yet)
@@ -37,17 +37,28 @@ export function useRegisterForm() {
 		},
 	})
 
+	const goToAdminStep = async () => {
+		if (await methods.trigger(CLINIC_FIELDS)) setStep(2)
+	}
+
 	return {
 		methods,
 		step,
 		steps: [t('clinic'), t('administrator')].map((label, index) => ({
 			label,
 			number: `0${index + 1}`,
-			done: index + 1 <= step,
-			current: index + 1 === step,
+			isDone: index + 1 <= step,
+			isCurrent: index + 1 === step,
 		})),
-		next: async () => {
-			if (await methods.trigger(CLINIC_FIELDS)) setStep(2)
+		next: goToAdminStep,
+		/**
+		 * On the clinic step Enter means "next", it must not submit the whole form
+		 */
+		preventEnterOnFirstStep: (event: KeyboardEvent<HTMLFormElement>) => {
+			if (step !== 1 || event.key !== 'Enter') return
+			if ((event.target as HTMLElement).tagName !== 'INPUT') return
+			event.preventDefault()
+			goToAdminStep()
 		},
 		back: () => setStep(1),
 		submit: methods.handleSubmit(() => router.push(ROUTES.verify)),

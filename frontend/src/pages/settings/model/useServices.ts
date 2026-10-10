@@ -6,25 +6,26 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useFormat } from '@/shared/lib/i18n'
 
 import {
-	SERVICE_CATEGORY,
+	SERVICE_CATEGORIES,
+	SERVICE_CATEGORY_LABEL,
 	SERVICES,
 	type TServiceCategory,
 	type TServiceItem,
 } from './Services'
 
-type TCategoryFilter = 'all' | Exclude<TServiceCategory, 'hyg'>
+type TCategoryFilter = 'all' | TServiceCategory
 
 /**
  * Query of the price list
  */
 type TServicesQuery = { category: TCategoryFilter }
 
-const FILTERS: { id: TCategoryFilter; label: string }[] = [
+const CATEGORY_FILTERS: { id: TCategoryFilter; label: string }[] = [
 	{ id: 'all', label: 'all' },
-	{ id: 'diag', label: 'diagnostics' },
-	{ id: 'ther', label: 'restorativeDentistry' },
-	{ id: 'surg', label: 'surgery' },
-	{ id: 'orth', label: 'prosthodontics' },
+	...SERVICE_CATEGORIES.map(category => ({
+		id: category,
+		label: SERVICE_CATEGORY_LABEL[category],
+	})),
 ]
 
 type TServicesOptions = {
@@ -48,7 +49,10 @@ export function useServices(options: TServicesOptions) {
 
 	return {
 		filters,
-		categories: FILTERS.map(item => ({ ...item, label: t(item.label) })),
+		categories: CATEGORY_FILTERS.map(item => ({
+			...item,
+			label: t(item.label),
+		})),
 		rows: SERVICES.filter(
 			service =>
 				!removedCodes.has(service.code) &&
@@ -56,7 +60,7 @@ export function useServices(options: TServicesOptions) {
 		).map(service => ({
 			code: service.code,
 			name: t(service.name),
-			category: t(SERVICE_CATEGORY[service.category]),
+			category: t(SERVICE_CATEGORY_LABEL[service.category]),
 			duration: `${service.minutes} ${t('min')}`,
 			price: format.som(service.price),
 			foms: {
@@ -70,3 +74,5 @@ export function useServices(options: TServicesOptions) {
 }
 
 export type TServicesModel = ReturnType<typeof useServices>
+
+export type TServiceRow = TServicesModel['rows'][number]

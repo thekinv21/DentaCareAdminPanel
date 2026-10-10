@@ -11,14 +11,20 @@ type TSwitchProps = {
 }
 
 export function Switch(props: TSwitchProps) {
-	const { checked, onChange, disabled, size = 'sm', ...rest } = props
+	const {
+		checked,
+		onChange,
+		disabled,
+		size = 'sm',
+		'aria-label': ariaLabel,
+	} = props
 
 	return (
 		<button
 			type='button'
 			role='switch'
 			aria-checked={checked}
-			aria-label={rest['aria-label']}
+			aria-label={ariaLabel}
 			disabled={disabled}
 			onClick={() => onChange(!checked)}
 			className={cn(

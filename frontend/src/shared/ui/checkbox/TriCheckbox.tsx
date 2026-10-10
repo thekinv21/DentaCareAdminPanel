@@ -1,10 +1,6 @@
 'use client'
 
-import { Check, Minus } from 'lucide-react'
-
-import { cn } from '@/shared/lib/cn'
-
-export type TCheckState = boolean | 'mixed'
+import { CheckMark, type TCheckState } from './CheckMark'
 
 type TTriCheckboxProps = {
 	checked: TCheckState
@@ -15,28 +11,24 @@ type TTriCheckboxProps = {
 /**
  * Checkbox with an indeterminate state, for "select the whole row/column"
  */
-export function TriCheckbox({ checked, onChange, ...rest }: TTriCheckboxProps) {
-	const on = checked !== false
-
+export function TriCheckbox({
+	checked,
+	onChange,
+	'aria-label': ariaLabel,
+}: TTriCheckboxProps) {
 	return (
 		<button
 			type='button'
 			role='checkbox'
 			aria-checked={checked}
-			aria-label={rest['aria-label']}
+			aria-label={ariaLabel}
 			onClick={onChange}
-			className={cn(
-				'inline-flex size-5 shrink-0 items-center justify-center rounded-md border-[1.5px] p-0 transition-colors duration-150',
-				on
-					? 'border-brand bg-brand text-on-brand'
-					: 'border-line-strong bg-surface text-transparent hover:border-brand',
-			)}
+			className='group inline-flex shrink-0 p-0'
 		>
-			{checked === 'mixed' ? (
-				<Minus size={13} strokeWidth={3} aria-hidden='true' />
-			) : (
-				<Check size={13} strokeWidth={3} aria-hidden='true' />
-			)}
+			<CheckMark
+				state={checked}
+				className={checked === false ? 'group-hover:border-brand' : undefined}
+			/>
 		</button>
 	)
 }

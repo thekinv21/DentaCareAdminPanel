@@ -14,7 +14,7 @@ export function ToastProvider({ children }: TToastProviderProps) {
 	return (
 		<ToastContext.Provider value={api}>
 			{children}
-			{toast && <ToastView toast={toast} onUndo={undo} />}
+			{toast && <ToastView key={toast.id} toast={toast} onUndo={undo} />}
 		</ToastContext.Provider>
 	)
 }

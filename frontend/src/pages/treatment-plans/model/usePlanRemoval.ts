@@ -18,7 +18,8 @@ export function usePlanRemoval() {
 	const t = useTranslations('TreatmentPlans')
 	const format = useFormat()
 	const confirm = useConfirm()
-	const [removedKeys, setRemovedKeys] = useState<Set<string>>(new Set())
+
+	const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
 
 	const remove = (plan: TTreatmentPlan, onDone?: () => void) => {
 		const name = format.name(plan.patientName)
@@ -36,11 +37,11 @@ export function usePlanRemoval() {
 			successText: t('planDeleted'),
 			onConfirm: () =>
 				mockRequest().then(() => {
-					setRemovedKeys(current => new Set([...current, plan.patientId]))
+					setRemovedIds(current => new Set([...current, plan.id]))
 					onDone?.()
 				}),
 		})
 	}
 
-	return { removedKeys, remove }
+	return { removedIds, remove }
 }

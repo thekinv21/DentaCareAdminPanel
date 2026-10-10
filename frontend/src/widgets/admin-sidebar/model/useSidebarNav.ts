@@ -18,13 +18,9 @@ export type TSidebarGroup = {
 }
 
 function isActive(pathname: string, href: string) {
-	if (href === ROUTES.dashboard) return pathname === href
 	return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-/**
- * Navigation groups with translated labels and the active route marked
- */
 export function useSidebarNav() {
 	const pathname = usePathname() ?? ''
 	const t = useTranslations('AdminSidebar')

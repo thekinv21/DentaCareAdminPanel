@@ -1,7 +1,13 @@
-import { type TClinicField, WORK_DAYS } from './Clinic'
-import type { TLanguageId } from './Communication'
+import type { TPaymentMethodId } from '@/entities/invoice'
 
-type TWorkDayId = (typeof WORK_DAYS)[number]['id']
+import { type TWeekDay, WEEK_DAYS } from '@/shared/lib/date'
+import type { TLocale } from '@/shared/lib/i18n'
+
+import { type TClinicField, WORK_HOURS } from './Clinic'
+import type { TNotificationId } from './Communication'
+import type { TPaymentOptionId } from './Payments'
+
+export const SLOT_INTERVALS = ['15', '30'] as const
 
 /**
  * Every clinic setting edited on the page; saved together with one request
@@ -10,46 +16,48 @@ export type TSettingsFormValues = {
 	clinic: Record<TClinicField, string>
 	timeZone: string
 	currency: string
-	slotInterval: '15' | '30'
+	slotInterval: (typeof SLOT_INTERVALS)[number]
 	lunch: string
 	bookingWindow: 'next30' | 'last14'
-	hours: Record<TWorkDayId, { open: boolean; from: string; to: string }>
+	hours: Record<TWeekDay, { open: boolean; from: string; to: string }>
+	banks: Record<TPaymentMethodId, boolean>
+	paymentOptions: Record<TPaymentOptionId, boolean>
 	/**
-	 * On/off switches of the payment, language and notification sections
+	 * Interface languages staff may pick in their profile
 	 */
-	toggles: Record<string, boolean>
-	defaultLanguage: TLanguageId
+	languages: Record<TLocale, boolean>
+	notifications: Record<TNotificationId, boolean>
+	defaultLanguage: TLocale
 	smsLanguage: 'patient' | 'ru' | 'ky'
 	dateFormat: 'dmy' | 'iso'
 	amountFormat: 'som' | 'kgs'
 	templates: { ru: string; ky: string }
 }
 
-export const INITIAL_TOGGLES: Record<string, boolean> = {
-	visa: true,
-	mbank: true,
-	komp: true,
-	optima: true,
-	fiscal: true,
-	prepay: false,
-	split: true,
-	l_ru: true,
-	l_ky: true,
-	l_en: true,
-	n24: true,
-	n2: true,
-	nwa: false,
-	nbd: true,
-	nstock: true,
-	nrev: true,
-}
-
 export const INITIAL_HOURS = Object.fromEntries(
-	WORK_DAYS.map(day => [
-		day.id,
-		{ open: day.id !== 'sun', from: day.from, to: day.to },
-	]),
+	WEEK_DAYS.map(day => [day, { open: day !== 'sun', ...WORK_HOURS[day] }]),
 ) as TSettingsFormValues['hours']
+
+export const INITIAL_SWITCHES: Pick<
+	TSettingsFormValues,
+	'banks' | 'paymentOptions' | 'languages' | 'notifications'
+> = {
+	banks: { visa: true, mbank: true, komp: true, optima: true },
+	paymentOptions: {
+		fiscalReceipt: true,
+		onlinePrepayment: false,
+		splitPayment: true,
+	},
+	languages: { ru: true, ky: true, en: true },
+	notifications: {
+		dayBeforeReminder: true,
+		twoHoursBeforeReminder: true,
+		bookingConfirmation: false,
+		birthdayGreeting: true,
+		lowStockAlert: true,
+		dailyRevenueReport: true,
+	},
+}
 
 export const SMS_TEMPLATES = {
 	ru: 'Здравствуйте, {имя}! Напоминаем о записи в Denta {дата} в {время}. Врач: {врач}. Ответьте 1 — подтвердить, 2 — перенести.',

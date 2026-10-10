@@ -1,15 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
+import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
 import { AffixInput } from '@/shared/ui/affix-input'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 
 import type { TPatientFormValues } from '../model/PatientFormSchema'
+import { usePatientFormOptions } from '../model/usePatientFormOptions'
 
 type TPatientPersonalFieldsProps = { duplicateError?: string }
 
@@ -19,6 +21,7 @@ export function PatientPersonalFields({
 	const t = useTranslations('PatientForm')
 	const { control } = useFormContext<TPatientFormValues>()
 	const inputProps = useFieldProps<TPatientFormValues>()
+	const options = usePatientFormOptions()
 
 	return (
 		<>
@@ -47,31 +50,22 @@ export function PatientPersonalFields({
 					</Field>
 					<FormField name='birthDate' label={t('birthDate')} required>
 						<input
-							className={`${inputClass} font-mono`}
+							className={cn(inputClass, 'font-mono')}
 							placeholder={t('datePlaceholder')}
 							{...inputProps('birthDate')}
 						/>
 					</FormField>
 					<Field as='div' label={t('gender')}>
-						<Controller
+						<ChoiceChipsField
 							control={control}
 							name='gender'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('gender')}
-									options={[
-										{ id: 'f' as const, label: t('female') },
-										{ id: 'm' as const, label: t('male') },
-									]}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
+							aria-label={t('gender')}
+							options={options.genders}
 						/>
 					</Field>
 					<FormField name='pin' label={t('pin')}>
 						<input
-							className={`${inputClass} font-mono`}
+							className={cn(inputClass, 'font-mono')}
 							placeholder={t('pinPlaceholder')}
 							{...inputProps('pin')}
 						/>
@@ -94,7 +88,7 @@ export function PatientPersonalFields({
 							{...inputProps('phone')}
 						/>
 					</FormField>
-					<FormField name='email' label='Email'>
+					<FormField name='email' label={t('email')}>
 						<input
 							className={inputClass}
 							placeholder='name@mail.kg'
@@ -102,20 +96,11 @@ export function PatientPersonalFields({
 						/>
 					</FormField>
 					<Field as='div' label={t('smsLanguage')}>
-						<Controller
+						<ChoiceChipsField
 							control={control}
 							name='smsLanguage'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('smsLanguage')}
-									options={[
-										{ id: 'ru' as const, label: 'Русский' },
-										{ id: 'ky' as const, label: 'Кыргызча' },
-									]}
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
+							aria-label={t('smsLanguage')}
+							options={options.smsLanguages}
 						/>
 					</Field>
 					<Field label={t('address')} className='col-span-full'>

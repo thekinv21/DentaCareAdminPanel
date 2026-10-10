@@ -13,11 +13,22 @@ type TProgressBarProps = {
 	 */
 	fillClass?: string
 	delay?: number
+	/**
+	 * `md` is the thicker bar of progress dialogs
+	 */
+	size?: 'sm' | 'md'
 	className?: string
 }
 
 export function ProgressBar(props: TProgressBarProps) {
-	const { value, label, fillClass = 'bg-brand', delay = 0, className } = props
+	const {
+		value,
+		label,
+		fillClass = 'bg-brand',
+		delay = 0,
+		size = 'sm',
+		className,
+	} = props
 
 	const style: CSSProperties = {
 		width: `${value}%`,
@@ -25,7 +36,11 @@ export function ProgressBar(props: TProgressBarProps) {
 	}
 	return (
 		<div
-			className={cn('h-1.5 overflow-hidden rounded-full bg-sunken', className)}
+			className={cn(
+				'overflow-hidden rounded-full bg-sunken',
+				size === 'sm' ? 'h-1.5' : 'h-2',
+				className,
+			)}
 			role={label ? 'progressbar' : undefined}
 			aria-label={label}
 			aria-valuenow={label ? Math.round(value) : undefined}
@@ -34,7 +49,7 @@ export function ProgressBar(props: TProgressBarProps) {
 		>
 			<span
 				className={cn(
-					'block h-full origin-left animate-grow rounded-full',
+					'block h-full origin-left animate-grow rounded-full transition-[width] duration-150 ease-linear',
 					fillClass,
 				)}
 				style={style}

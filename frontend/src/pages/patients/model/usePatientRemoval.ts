@@ -4,12 +4,11 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-import type { TPatient } from '@/entities/patient'
+import { patientAvatarTone, type TPatient } from '@/entities/patient'
 
 import { mockRequest } from '@/shared/api'
 import { getInitials } from '@/shared/lib/format'
 import { useFormat } from '@/shared/lib/i18n'
-import { avatarTone } from '@/shared/ui/avatar'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 
 /**
@@ -64,16 +63,16 @@ export function usePatientRemoval() {
 			progressText: t('deleted'),
 			successText: t('patientsDeleted'),
 			bulk: {
-				items: patients.map((patient, index) => ({
+				items: patients.map(patient => ({
 					id: patient.id,
 					name: format.name(patient.fullName),
-					tone: avatarTone(index),
+					tone: patientAvatarTone(patient.id),
 				})),
 				run: item => {
-					const fail = failOnce.delete(item.id)
+					const failureReason = failOnce.delete(item.id)
 						? t('hasOpenInvoice')
 						: undefined
-					return mockRequest(undefined, { delay: 160, fail })
+					return mockRequest(undefined, { delay: 160, fail: failureReason })
 				},
 				onDone: ids => {
 					markRemoved(ids)

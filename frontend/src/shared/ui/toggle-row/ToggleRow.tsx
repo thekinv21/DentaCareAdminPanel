@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 import { Switch } from '@/shared/ui/switch'
 
-type TToggleRowProps = {
+export type TToggleRowProps = {
 	label: string
 	hint?: ReactNode
 	checked: boolean

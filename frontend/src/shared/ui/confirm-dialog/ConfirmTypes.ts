@@ -19,6 +19,15 @@ export type TBulkItem = {
 	tone?: TTone
 }
 
+export type TConfirmImpact = {
+	tone?: TImpactTone
+	/**
+	 * Number shown in the mark instead of the tone's sign
+	 */
+	n?: number | string
+	text: string
+}
+
 export type TConfirmPayload = {
 	reason: string | null
 	reasonText: string
@@ -40,7 +49,7 @@ export type TConfirmOptions = {
 	/**
 	 * Consequences with numbers from the API
 	 */
-	impact?: { tone?: TImpactTone; n?: number | string; text: string }[]
+	impact?: TConfirmImpact[]
 	/**
 	 * Pick one variant, e.g. the new role for the staff of a deleted role
 	 */

@@ -1,17 +1,14 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { useFieldProps } from '@/shared/lib/form'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField } from '@/shared/ui/choice-chips'
 import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
 
-import {
-	STOCK_CATEGORIES,
-	STOCK_UNITS,
-	type TStockItemInput,
-} from '../model/StockFormSchema'
+import { STOCK_CATEGORIES } from '../model/Stock'
+import { STOCK_UNITS, type TStockItemInput } from '../model/StockFormSchema'
 
 /**
  * Name, SKU, unit and category of a stock position
@@ -43,34 +40,25 @@ export function StockItemBasics() {
 				/>
 			</Field>
 			<Field as='div' label={t('unit')}>
-				<Controller
+				<ChoiceChipsField
 					control={control}
 					name='unit'
-					render={({ field }) => (
-						<ChoiceChips
-							aria-label={t('unit')}
-							options={STOCK_UNITS.map(id => ({ id, label: t(`unit_${id}`) }))}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					aria-label={t('unit')}
+					options={STOCK_UNITS.map(unit => ({
+						id: unit,
+						label: t(`unit_${unit}`),
+					}))}
 				/>
 			</Field>
 			<Field as='div' label={t('category')} required className='col-span-full'>
-				<Controller
+				<ChoiceChipsField
 					control={control}
 					name='category'
-					render={({ field }) => (
-						<ChoiceChips
-							aria-label={t('category')}
-							options={STOCK_CATEGORIES.map(id => ({
-								id,
-								label: t(`category_${id}`),
-							}))}
-							value={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					aria-label={t('category')}
+					options={STOCK_CATEGORIES.map(category => ({
+						id: category,
+						label: t(`category_${category}`),
+					}))}
 				/>
 			</Field>
 		</div>

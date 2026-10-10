@@ -9,7 +9,7 @@ import { useForm, useWatch } from 'react-hook-form'
 
 import { ROUTES } from '@/shared/routes'
 
-import { CODE_LENGTH, type TVerifyValues, verifySchema } from './Schema'
+import { CODE_LENGTH, type TVerifyValues, verifySchema } from './VerifySchema'
 
 const onlyDigits = (value: string) => value.replace(/\D/g, '')
 
@@ -27,8 +27,23 @@ export function useVerifyCode() {
 	})
 	const code = useWatch({ control: methods.control, name: 'code' })
 	const inputs = useRef<(HTMLInputElement | null)[]>([])
-	const focus = (index: number) => inputs.current[index]?.focus()
+	const focus = (position: number) => inputs.current[position]?.focus()
 	const setCode = (next: string[]) => methods.setValue('code', next)
+
+	/**
+	 * Writes digits from `position` on; used by typing, OS autofill and paste
+	 */
+	const fillFrom = (position: number, digits: string) => {
+		const next = [...code]
+		digits
+			.slice(0, CODE_LENGTH - position)
+			.split('')
+			.forEach((digit, offset) => {
+				next[position + offset] = digit
+			})
+		setCode(next)
+		focus(Math.min(position + digits.length, CODE_LENGTH - 1))
+	}
 
 	const cellProps = (index: number) => ({
 		ref: (element: HTMLInputElement | null) => {
@@ -36,8 +51,15 @@ export function useVerifyCode() {
 		},
 		value: code[index],
 		onChange: (event: { target: { value: string } }) => {
-			const digit = onlyDigits(event.target.value).slice(-1)
-			setCode(code.map((d, i) => (i === index ? digit : d)))
+			const digits = onlyDigits(event.target.value)
+			// typing over a filled cell gives two digits: keep the new one
+			const isTypingOver = digits.length === 2 && !!code[index]
+			// a one-time code autofilled by the OS arrives whole in one cell
+			if (digits.length > 1 && !isTypingOver) return fillFrom(index, digits)
+			const digit = digits.slice(-1)
+			setCode(
+				code.map((current, position) => (position === index ? digit : current)),
+			)
 			if (digit && index < CODE_LENGTH - 1) focus(index + 1)
 		},
 		onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
@@ -51,7 +73,12 @@ export function useVerifyCode() {
 			)
 			if (!digits) return
 			event.preventDefault()
-			setCode(Array.from({ length: CODE_LENGTH }, (_, i) => digits[i] ?? ''))
+			setCode(
+				Array.from(
+					{ length: CODE_LENGTH },
+					(_, position) => digits[position] ?? '',
+				),
+			)
 			focus(Math.min(digits.length, CODE_LENGTH - 1))
 		},
 	})
@@ -59,10 +86,10 @@ export function useVerifyCode() {
 	return {
 		cells: code.map((digit, index) => ({
 			index,
-			filled: !!digit,
+			isFilled: !!digit,
 			props: cellProps(index),
 		})),
-		ready: code.every(Boolean),
+		isComplete: code.every(Boolean),
 		rememberProps: methods.register('rememberDevice'),
 		submit: methods.handleSubmit(() => router.push(ROUTES.dashboard)),
 	}

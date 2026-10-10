@@ -5,18 +5,14 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/shared/ui/button'
 import { TriCheckbox } from '@/shared/ui/checkbox'
 import { FormSection } from '@/shared/ui/form-section'
-import { Segmented } from '@/shared/ui/segmented'
-import { Table, Td, Th } from '@/shared/ui/table'
+import { Table, Th } from '@/shared/ui/table'
 
 import { usePermissionMatrix } from '../model/usePermissionMatrix'
+import { PermissionRow } from './PermissionRow'
 
 export function PermissionMatrix() {
 	const t = useTranslations('RoleForm')
 	const matrix = usePermissionMatrix()
-	const scopes = [
-		{ id: 'all' as const, label: t('scopeAll') },
-		{ id: 'own' as const, label: t('scopeOwn') },
-	]
 
 	return (
 		<FormSection
@@ -61,48 +57,7 @@ export function PermissionMatrix() {
 					</thead>
 					<tbody>
 						{matrix.rows.map(row => (
-							<tr key={row.id}>
-								<Td>
-									<div className='font-bold'>{row.name}</div>
-									<div className='text-xs text-ink-muted'>{row.hint}</div>
-								</Td>
-								{row.cells.map(cell => (
-									<Td key={cell.id} align='center'>
-										{cell.available ? (
-											<TriCheckbox
-												checked={cell.on}
-												onChange={cell.toggle}
-												aria-label={cell.label}
-											/>
-										) : (
-											<span className='text-ink-muted'>—</span>
-										)}
-									</Td>
-								))}
-								<Td align='center'>
-									{row.scoped ? (
-										<Segmented
-											aria-label={`${t('data')}: ${row.name}`}
-											size='sm'
-											options={scopes}
-											value={row.scope}
-											onChange={row.setScope}
-											className='mx-auto w-max'
-										/>
-									) : (
-										<span className='text-[12.5px] text-ink-muted'>
-											{t('wholeClinic')}
-										</span>
-									)}
-								</Td>
-								<Td align='center'>
-									<TriCheckbox
-										checked={row.state}
-										onChange={row.toggleRow}
-										aria-label={`${t('allPermissionsColon')} ${row.name}`}
-									/>
-								</Td>
-							</tr>
+							<PermissionRow key={row.id} row={row} scopes={matrix.scopes} />
 						))}
 					</tbody>
 				</Table>

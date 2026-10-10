@@ -16,7 +16,7 @@ import {
 } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 
-import type { TRoleFormValues } from '../model/Schema'
+import type { TRoleFormValues } from '../model/RoleFormSchema'
 import type { TRoleFormModel } from '../model/useRoleForm'
 
 type TRoleBasicsProps = { form: TRoleFormModel }

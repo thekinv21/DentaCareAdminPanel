@@ -17,9 +17,9 @@ export function AdminSidebar() {
 	return (
 		<aside
 			aria-label={t('menu')}
-			className='flex h-full w-61 shrink-0 flex-col gap-2 overflow-y-auto rounded-[22px] bg-surface px-3 py-3.5 shadow-clay-md scrollbar-none max-[1100px]:w-17 max-[1100px]:px-2 max-[1100px]:py-3 max-[720px]:h-auto max-[720px]:w-auto max-[720px]:flex-row max-[720px]:items-center max-[720px]:overflow-x-auto max-[720px]:rounded-2xl max-[720px]:p-2'
+			className='flex h-full w-61 shrink-0 flex-col gap-2 overflow-y-auto rounded-[22px] bg-surface px-3 py-3.5 shadow-clay-md scrollbar-none max-laptop:w-17 max-laptop:px-2 max-laptop:py-3 max-mobile:h-auto max-mobile:w-auto max-mobile:flex-row max-mobile:items-center max-mobile:overflow-x-auto max-mobile:rounded-2xl max-mobile:p-2'
 		>
-			<SidebarBrand branch={user?.branch} />
+			<SidebarBrand branch={user.branch} />
 			<SidebarNav groups={groups} label={t('mainMenu')} />
 			<SidebarProfileLink
 				initials={user.initials}

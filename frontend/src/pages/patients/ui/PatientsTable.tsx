@@ -3,15 +3,13 @@
 import { ChevronsUpDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-import { PATIENTS_TOTAL } from '@/entities/patient'
-
-import { useFormat } from '@/shared/lib/i18n'
 import { Card } from '@/shared/ui/card'
 import { Pagination } from '@/shared/ui/pagination'
 import { Table, TableScroll, Th } from '@/shared/ui/table'
 
 import type { TPatientsTableModel } from '../model/usePatientsTable'
-import { checkboxClass, PatientRow } from './PatientRow'
+import { PatientRow, rowCheckboxClass } from './PatientRow'
+import { PatientsBulkBar } from './PatientsBulkBar'
 import { PatientsToolbar } from './PatientsToolbar'
 
 type TSortButtonProps = {
@@ -36,14 +34,14 @@ type TPatientsTableProps = { table: TPatientsTableModel }
 
 export function PatientsTable({ table }: TPatientsTableProps) {
 	const t = useTranslations('Patients')
-	const format = useFormat()
 
 	return (
 		<Card
 			as='section'
-			className='min-h-105 flex-auto animate-rise max-[720px]:flex-none'
+			className='min-h-105 flex-auto animate-rise max-mobile:flex-none'
 		>
 			<PatientsToolbar table={table} />
+			<PatientsBulkBar table={table} />
 
 			<TableScroll className='min-h-0 flex-auto'>
 				<Table className='min-w-225'>
@@ -52,13 +50,13 @@ export function PatientsTable({ table }: TPatientsTableProps) {
 							<Th className='w-10'>
 								<input
 									type='checkbox'
-									className={checkboxClass}
+									className={rowCheckboxClass}
 									aria-label={t('selectAll')}
-									checked={table.allSelected}
+									checked={table.isAllSelected}
 									onChange={table.toggleAll}
 								/>
 							</Th>
-							<Th aria-sort={table.ariaSort('name')}>
+							<Th aria-sort={table.getAriaSort('name')}>
 								<SortButton
 									label={t('patient')}
 									onClick={() => table.toggleSort('name')}
@@ -68,7 +66,7 @@ export function PatientsTable({ table }: TPatientsTableProps) {
 							<Th>{t('lastVisit')}</Th>
 							<Th>{t('nextVisit')}</Th>
 							<Th>{t('dentist')}</Th>
-							<Th align='right' aria-sort={table.ariaSort('balance')}>
+							<Th align='right' aria-sort={table.getAriaSort('balance')}>
 								<SortButton
 									label={t('balanceDue')}
 									onClick={() => table.toggleSort('balance')}
@@ -91,13 +89,10 @@ export function PatientsTable({ table }: TPatientsTableProps) {
 			<div className='flex flex-wrap items-center justify-between gap-2.5 pt-0.5 text-[12.5px] text-ink-muted'>
 				<span>
 					{t('showing')}{' '}
-					<span className='font-mono text-ink'>1–{table.rows.length}</span>{' '}
-					{t('of')}{' '}
-					<span className='font-mono text-ink'>
-						{format.number(PATIENTS_TOTAL)}
-					</span>
+					<span className='font-mono text-ink'>{table.shownRange}</span>{' '}
+					{t('of')} <span className='font-mono text-ink'>{table.total}</span>
 				</span>
-				<Pagination current={1} pages={[1, 2, 3, null, 129]} />
+				<Pagination current={1} pages={table.pages} />
 			</div>
 		</Card>
 	)

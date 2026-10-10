@@ -1,58 +1,83 @@
 import type { TTone } from '@/shared/ui/badge'
 
-export type TShiftKey = 's1' | 's2' | 's3' | 's4' | 'off' | 'leave' | 'open'
+export type TShiftKind = 'work' | 'off' | 'leave' | 'cover'
 
-export const SHIFT: Record<TShiftKey, { label: string; tone: TTone }> = {
-	s1: { label: '08:30–17:30', tone: 'brand' },
-	s2: { label: '09:00–18:00', tone: 'brand' },
-	s3: { label: '08:00–16:00', tone: 'brand' },
-	s4: { label: '13:00–18:00', tone: 'brand' },
-	off: { label: 'dayOff', tone: 'neutral' },
-	leave: { label: 'leave', tone: 'accent' },
-	open: { label: 'replacement', tone: 'warning' },
+export type TRosterShift = {
+	kind: TShiftKind
+	/**
+	 * Working hours of a work shift
+	 */
+	hours?: { from: string; to: string }
 }
 
-export const WEEK_DAYS = ['mon5', 'tue6', 'wed7', 'thu8', 'fri9', 'sat10']
-export const TODAY_COLUMN = 4
+export const SHIFT_KIND: Record<TShiftKind, { label: string; tone: TTone }> = {
+	work: { label: 'shift', tone: 'brand' },
+	off: { label: 'dayOff', tone: 'neutral' },
+	leave: { label: 'leave', tone: 'accent' },
+	cover: { label: 'replacement', tone: 'warning' },
+}
+
+const shift = (from: string, to: string): TRosterShift => ({
+	kind: 'work',
+	hours: { from, to },
+})
+const DAY_OFF: TRosterShift = { kind: 'off' }
+const LEAVE: TRosterShift = { kind: 'leave' }
+const COVER: TRosterShift = { kind: 'cover' }
+
+const EARLY = shift('08:30', '17:30')
+const REGULAR = shift('09:00', '18:00')
+const MORNING = shift('08:00', '16:00')
+const AFTERNOON = shift('13:00', '18:00')
+
 export const WEEK_START = '2026-10-05'
+export const WEEK_NUMBER = 41
+export const WORK_DAYS_SHOWN = 6
+export const TODAY_COLUMN = 4
 
 /**
  * Mock roster for week 41 until the backend exposes /schedule
  */
-export const ROSTER: { name: string; tone: TTone; days: TShiftKey[] }[] = [
+export const ROSTER: { name: string; tone: TTone; days: TRosterShift[] }[] = [
 	{
 		name: 'Айгерим Касымова',
 		tone: 'accent',
-		days: ['s1', 's1', 's1', 's1', 's1', 'off'],
+		days: [EARLY, EARLY, EARLY, EARLY, EARLY, DAY_OFF],
 	},
 	{
 		name: 'Сергей Петров',
 		tone: 'info',
-		days: ['s2', 's2', 'off', 's2', 's2', 's4'],
+		days: [REGULAR, REGULAR, DAY_OFF, REGULAR, REGULAR, AFTERNOON],
 	},
 	{
 		name: 'Эрмек Токтогулов',
 		tone: 'ok',
-		days: ['s3', 's3', 's3', 's3', 's3', 'open'],
+		days: [MORNING, MORNING, MORNING, MORNING, MORNING, COVER],
 	},
 	{
 		name: 'Дария Юсупова',
 		tone: 'warning',
-		days: ['s4', 'off', 's4', 'off', 'off', 's4'],
+		days: [AFTERNOON, DAY_OFF, AFTERNOON, DAY_OFF, DAY_OFF, AFTERNOON],
 	},
 	{
 		name: 'Бермет Карасаева',
 		tone: 'brand',
-		days: ['s1', 's1', 's1', 's1', 's1', 'off'],
+		days: [EARLY, EARLY, EARLY, EARLY, EARLY, DAY_OFF],
 	},
 	{
 		name: 'Ирина Гусева',
 		tone: 'accent',
-		days: ['leave', 'leave', 'leave', 'leave', 'leave', 'off'],
+		days: [LEAVE, LEAVE, LEAVE, LEAVE, LEAVE, DAY_OFF],
 	},
 	{
 		name: 'Эльмира Танаева',
 		tone: 'ok',
-		days: ['s3', 's3', 's3', 's3', 's3', 'open'],
+		days: [MORNING, MORNING, MORNING, MORNING, MORNING, COVER],
 	},
 ]
+
+/**
+ * Mock team totals for the page subtitle
+ */
+export const TEAM_SIZE = 12
+export const ON_SHIFT_NOW = 9

@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 
+import { Overline } from '@/shared/ui/overline'
+
 import { useAppointmentSummary } from '../model/useAppointmentSummary'
 
 type TAppointmentSummaryProps = { patientName?: string; isEdit: boolean }
@@ -16,20 +18,18 @@ export function AppointmentSummary({
 	return (
 		<aside
 			aria-label={t('appointmentSummary')}
-			className='sticky top-0 flex w-65 shrink-0 flex-col gap-3 rounded-[18px] border border-line bg-raised p-4 max-[900px]:static max-[900px]:w-full'
+			className='sticky top-0 flex w-65 shrink-0 flex-col gap-3 rounded-[18px] border border-line bg-raised p-4 max-tablet:static max-tablet:w-full'
 		>
-			<div className='text-[11px] leading-3.5 font-semibold tracking-[0.06em] text-ink-muted uppercase'>
-				{t('summary')}
-			</div>
+			<Overline>{t('summary')}</Overline>
 			<div className='font-mono text-[22px] leading-7 font-extrabold'>
-				{summary.time}
+				{summary.timeRange}
 			</div>
 			<div className='text-[12.5px] text-ink-muted'>{summary.dateLong}</div>
 			<ul className='flex flex-col gap-2 border-t border-line pt-2.5 text-[13px]'>
-				{summary.rows.map(([label, value]) => (
-					<li key={label} className='flex justify-between gap-2'>
-						<span className='text-ink-muted'>{label}</span>
-						<span className='text-right font-semibold'>{value}</span>
+				{summary.rows.map(row => (
+					<li key={row.label} className='flex justify-between gap-2'>
+						<span className='text-ink-muted'>{row.label}</span>
+						<span className='text-right font-semibold'>{row.value}</span>
 					</li>
 				))}
 			</ul>

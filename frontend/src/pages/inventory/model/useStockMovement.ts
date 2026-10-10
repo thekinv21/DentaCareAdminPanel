@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { mockRequest } from '@/shared/api'
+import { MOCK_TODAY } from '@/shared/config'
+import { isoToDisplayDate } from '@/shared/lib/date'
 import { useToast } from '@/shared/ui/toast'
 
 import type { TStockItem } from './Stock'
@@ -23,9 +25,13 @@ const DEFAULT_QUANTITY: Record<TMovementType, string> = {
 	adj: '0',
 }
 
-function stockAfter(type: TMovementType, current: number, quantity: number) {
-	if (type === 'in') return current + quantity
-	if (type === 'out') return Math.max(0, current - quantity)
+function stockAfter(
+	type: TMovementType,
+	currentQuantity: number,
+	quantity: number,
+) {
+	if (type === 'in') return currentQuantity + quantity
+	if (type === 'out') return Math.max(0, currentQuantity - quantity)
 	return quantity
 }
 
@@ -45,7 +51,7 @@ export function useStockMovement() {
 		control: methods.control,
 		name: ['type', 'quantity'],
 	})
-	const current = item?.quantity ?? 0
+	const currentQuantity = item?.quantity ?? 0
 	const unit = item ? tInventory(item.unit) : ''
 	const close = () => setItem(null)
 
@@ -57,7 +63,7 @@ export function useStockMovement() {
 			methods.reset({
 				type: 'in',
 				quantity: DEFAULT_QUANTITY.in,
-				date: '09.10.2026',
+				date: isoToDisplayDate(MOCK_TODAY),
 				reason: t('reasonDefault_in'),
 			})
 		},
@@ -74,12 +80,12 @@ export function useStockMovement() {
 			methods.setValue('type', next)
 			methods.setValue(
 				'quantity',
-				next === 'adj' ? String(current) : DEFAULT_QUANTITY[next],
+				next === 'adj' ? String(currentQuantity) : DEFAULT_QUANTITY[next],
 			)
 			methods.setValue('reason', t(`reasonDefault_${next}`))
 		},
 		reasonLabel: t(`reasonLabel_${type}`),
-		after: `${stockAfter(type, current, Number(quantity) || 0)} ${unit}`,
+		stockAfterText: `${stockAfter(type, currentQuantity, Number(quantity) || 0)} ${unit}`,
 		saving: methods.formState.isSubmitting,
 		submit: methods.handleSubmit(async values => {
 			await mockRequest()

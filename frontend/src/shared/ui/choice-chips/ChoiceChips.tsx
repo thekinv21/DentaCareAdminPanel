@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/cn'
 
 import { chipClass } from './ChipClass'
+import { ChipContent } from './ChipContent'
 
 export type TChipOption<T extends string | number> = {
 	id: T
@@ -19,7 +20,7 @@ export type TChipOption<T extends string | number> = {
 	trailing?: ReactNode
 }
 
-type TChoiceChipsProps<T extends string | number> = {
+export type TChoiceChipsProps<T extends string | number> = {
 	options: TChipOption<T>[]
 	value: T | null
 	onChange: (value: T) => void
@@ -33,12 +34,18 @@ type TChoiceChipsProps<T extends string | number> = {
 export function ChoiceChips<T extends string | number>(
 	props: TChoiceChipsProps<T>,
 ) {
-	const { options, value, onChange, chipClassName, ...rest } = props
+	const {
+		options,
+		value,
+		onChange,
+		chipClassName,
+		'aria-label': ariaLabel,
+	} = props
 
 	return (
 		<div
 			role='radiogroup'
-			aria-label={rest['aria-label']}
+			aria-label={ariaLabel}
 			className='flex flex-wrap gap-1.5'
 		>
 			{options.map(option => (
@@ -50,13 +57,7 @@ export function ChoiceChips<T extends string | number>(
 					onClick={() => onChange(option.id)}
 					className={cn(chipClass, chipClassName)}
 				>
-					{option.leading}
-					{option.label}
-					{option.trailing && (
-						<span className='font-mono text-xs text-ink-muted'>
-							{option.trailing}
-						</span>
-					)}
+					<ChipContent option={option} />
 				</button>
 			))}
 		</div>

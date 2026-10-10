@@ -10,6 +10,8 @@ import { useFormat } from '@/shared/lib/i18n'
 import { mockQrPath } from '../lib/MockQr'
 import type { TPaymentModel } from './usePayment'
 
+const QR_VALID_FOR = '5:00'
+
 const METHOD_SEED: Record<TPaymentMethodId, number> = {
 	visa: 3,
 	mbank: 7,
@@ -32,22 +34,24 @@ export function usePaymentDetails(payment: TPaymentModel) {
 	const methodName = paymentMethods.byId(method).name
 
 	return {
-		methods: paymentMethods.all,
+		paymentMethods: paymentMethods.all,
 		methodName,
 		amount: `${format.number(Number(amount) || 0)} ${t('som')}`,
 		balance: `${format.number(payment.invoice.balance || payment.invoice.amount)} ${t('som')}`,
 		isCard,
-		qr: mockQrPath(METHOD_SEED[method] + payment.invoiceIndex * 5),
+		qrPath: mockQrPath(
+			METHOD_SEED[method] + Number(payment.invoice.number.slice(-2)) * 5,
+		),
 		hint: isCard
 			? {
 					title: t('tapOrInsertCard'),
-					text: t('theAmountHasBeen'),
+					text: t('amountSentToTerminal'),
 					status: t('terminalWaitingForCard'),
 				}
 			: {
-					title: t('scanTheQrIn', { bank: methodName }),
-					text: t('thePatientConfirmsThe'),
-					status: t('qrValidFor5'),
+					title: t('scanQrInBankApp', { bank: methodName }),
+					text: t('patientConfirmsInBank'),
+					status: t('qrValidFor', { time: QR_VALID_FOR }),
 				},
 	}
 }

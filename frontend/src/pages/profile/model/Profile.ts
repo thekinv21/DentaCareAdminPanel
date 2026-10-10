@@ -2,13 +2,13 @@ export const PROFILE_FIELDS = [
 	{
 		name: 'lastName',
 		label: 'lastName',
-		value: 'kasymova',
+		value: 'Касымова',
 		autoComplete: 'family-name',
 	},
 	{
 		name: 'firstName',
 		label: 'firstName',
-		value: 'aigerim',
+		value: 'Айгерим',
 		autoComplete: 'given-name',
 	},
 	{ name: 'position', label: 'position', value: 'chiefDentist' },
@@ -22,124 +22,135 @@ export const PROFILE_FIELDS = [
 	},
 	{
 		name: 'email',
-		label: 'Email',
+		label: 'email',
 		value: 'a.kasymova@denta.kg',
 		type: 'email',
 	},
 	{
 		name: 'diploma',
 		label: 'diplomaCertificateNumber',
-		value: 'ksma20140912',
+		value: 'sampleDiploma',
 		mono: true,
 	},
 ] as const
 
 export type TProfileField = (typeof PROFILE_FIELDS)[number]['name']
 
-export const SECURITY_OPTIONS = [
-	{
-		id: 'tfa',
-		label: 'twoStepVerification',
-		hint: 'smsCodeTo996',
-	},
-	{
-		id: 'newdev',
-		label: 'notifyOnSignIn',
-		hint: 'smsAndEmailRight',
-	},
-	{
-		id: 'autolock',
-		label: 'lockScreenAfter10',
-		hint: 'ifTheOfficeComputer',
-	},
-]
+/**
+ * Mock profile facts shown next to the form
+ */
+export const PROFILE_FACTS = {
+	maskedPhone: '+996 555 ••• 441',
+	chair: 1,
+	workingHours: { from: '08:30', to: '17:30' },
+	passwordAgeDays: 64,
+	autoLockMinutes: 10,
+	dailyScheduleTime: '07:45',
+	stats: [
+		{ value: 1284, label: 'patients' },
+		{ value: 12, label: 'yearsOfExperience' },
+		{ value: '94%', label: 'chairLoad' },
+	],
+}
 
-export const SESSIONS = [
+export const SECURITY_OPTIONS = [
+	{ id: 'twoFactor', label: 'twoStepVerification', hint: 'twoFactorHint' },
+	{ id: 'newDeviceAlert', label: 'notifyOnSignIn', hint: 'smsAndEmailRight' },
+	{ id: 'autoLock', label: 'autoLockAfter', hint: 'ifTheOfficeComputer' },
+] as const
+
+export type TSecurityOptionId = (typeof SECURITY_OPTIONS)[number]['id']
+
+export const CURRENT_SESSION_ID = 'current'
+
+export const SESSIONS: {
+	id: string
+	device: string
+	place: string
+	/**
+	 * When the session was last active: now, today/yesterday at a time, or a date
+	 */
+	lastActive:
+		| { kind: 'now' }
+		| { kind: 'today' | 'yesterday'; time: string }
+		| { kind: 'date'; date: string }
+}[] = [
 	{
-		id: 'cur',
+		id: CURRENT_SESSION_ID,
 		device: 'Chrome · Windows 11',
-		where: 'room1Bishkek212',
-		when: 'now',
+		place: 'sessionPlaceOffice',
+		lastActive: { kind: 'now' },
 	},
 	{
 		id: 'ipad',
 		device: 'Safari · iPad',
-		where: 'bishkek21242104',
-		when: 'today0810',
+		place: 'sessionPlaceClinic',
+		lastActive: { kind: 'today', time: '08:10' },
 	},
 	{
-		id: 'iph',
+		id: 'iphone',
 		device: 'Denta · iPhone 15',
-		where: 'bishkekBeelineKg',
-		when: 'yesterday2142',
+		place: 'sessionPlaceMobile',
+		lastActive: { kind: 'yesterday', time: '21:42' },
 	},
 	{
 		id: 'home',
 		device: 'Chrome · macOS',
-		where: 'bishkekAknet',
-		when: '05.10.2026',
+		place: 'sessionPlaceHome',
+		lastActive: { kind: 'date', date: '05.10.2026' },
 	},
 ]
 
 export const NOTIFICATION_EVENTS = [
 	{
-		id: 'a',
+		id: 'newAppointment',
 		label: 'newOnlineAppointment',
 		hint: 'patientBookedViaWebsite',
 	},
 	{
-		id: 'c',
+		id: 'cancellation',
 		label: 'appointmentCancellationOrReschedule',
 		hint: 'includingRepliesToSms',
 	},
+	{ id: 'payment', label: 'paymentReceived', hint: 'paymentChannels' },
+	{ id: 'lowStock', label: 'lowStockInInventory', hint: 'materialsYouUse' },
 	{
-		id: 'p',
-		label: 'paymentReceived',
-		hint: 'visaMbankKompanionOptima',
-	},
-	{
-		id: 's',
-		label: 'lowStockInInventory',
-		hint: 'materialsYouUse',
-	},
-	{
-		id: 'r',
+		id: 'weeklyReport',
 		label: 'weeklyReport',
 		hint: 'revenueAndUtilizationOn',
 	},
 	{
-		id: 'm',
+		id: 'messages',
 		label: 'messagesFromColleagues',
 		hint: 'treatmentPlanComments',
 	},
-]
+] as const
+
+export type TNotificationEventId = (typeof NOTIFICATION_EVENTS)[number]['id']
 
 export const NOTIFICATION_CHANNELS = [
-	{ id: 'app', label: 'inApp', aria: 'inTheApp' },
-	{ id: 'sms', label: 'SMS', aria: 'SMS' },
-	{ id: 'mail', label: 'Email', aria: 'email' },
-]
+	{ id: 'app', label: 'inApp', ariaLabel: 'inTheApp' },
+	{ id: 'sms', label: 'SMS', ariaLabel: 'SMS' },
+	{ id: 'email', label: 'Email', ariaLabel: 'email' },
+] as const
 
-export const INITIAL_PREFERENCES: Record<string, boolean> = {
-	tfa: true,
-	newdev: true,
-	autolock: true,
-	a_app: true,
-	a_sms: false,
-	a_mail: false,
-	c_app: true,
-	c_sms: true,
-	c_mail: false,
-	p_app: true,
-	p_sms: false,
-	p_mail: true,
-	s_app: true,
-	s_sms: false,
-	s_mail: false,
-	r_app: false,
-	r_sms: false,
-	r_mail: true,
-	m_app: true,
-	m_sms: false,
-	m_mail: false,
+export type TNotificationChannelId =
+	(typeof NOTIFICATION_CHANNELS)[number]['id']
+
+const channels = (app: boolean, sms: boolean, email: boolean) => ({
+	app,
+	sms,
+	email,
+})
+
+export const INITIAL_NOTIFICATIONS: Record<
+	TNotificationEventId,
+	Record<TNotificationChannelId, boolean>
+> = {
+	newAppointment: channels(true, false, false),
+	cancellation: channels(true, true, false),
+	payment: channels(true, false, true),
+	lowStock: channels(true, false, false),
+	weeklyReport: channels(false, false, true),
+	messages: channels(true, false, false),
 }

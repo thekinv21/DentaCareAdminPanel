@@ -1,18 +1,10 @@
 'use client'
 
-import {
-	type FormEventHandler,
-	type ReactNode,
-	useCallback,
-	useId,
-} from 'react'
-
-import { X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { type FormEventHandler, type ReactNode, useId } from 'react'
 
 import { cn } from '@/shared/lib/cn'
-import { IconButton } from '@/shared/ui/icon-button'
 
+import { ModalHeader } from './ModalHeader'
 import { Overlay } from './Overlay'
 import { useEscapeKey } from './useEscapeKey'
 
@@ -56,11 +48,10 @@ export function Modal(props: TModalProps) {
 		children,
 	} = props
 
-	const t = useTranslations('Common')
 	const titleId = useId()
-	const close = useCallback(() => {
+	const close = () => {
 		if (!busy) onClose()
-	}, [busy, onClose])
+	}
 	useEscapeKey(open, close)
 
 	if (!open) return null
@@ -89,29 +80,13 @@ export function Modal(props: TModalProps) {
 					wide ? 'max-w-230' : 'max-w-170',
 				)}
 			>
-				<div className='flex shrink-0 items-start gap-3.5 border-b border-line px-5.5 pt-5 pb-3.5'>
-					{icon && (
-						<span className='inline-flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-brand-soft text-brand-strong'>
-							{icon}
-						</span>
-					)}
-					<div className='min-w-0 flex-1'>
-						<h2
-							id={titleId}
-							className='font-display text-xl leading-6.5 font-extrabold tracking-[-0.015em]'
-						>
-							{title}
-						</h2>
-						{subtitle && (
-							<p className='text-[12.5px] leading-4.5 text-ink-muted'>
-								{subtitle}
-							</p>
-						)}
-					</div>
-					<IconButton quiet size='sm' aria-label={t('close')} onClick={close}>
-						<X size={16} aria-hidden='true' />
-					</IconButton>
-				</div>
+				<ModalHeader
+					titleId={titleId}
+					title={title}
+					subtitle={subtitle}
+					icon={icon}
+					onClose={close}
+				/>
 				{onSubmit ? (
 					<form
 						noValidate

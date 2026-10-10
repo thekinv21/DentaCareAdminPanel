@@ -8,15 +8,19 @@ import { TONE_CLASS } from '@/shared/ui/badge'
 import { Legend } from '@/shared/ui/legend'
 import { Table, TableScroll, Td, Th } from '@/shared/ui/table'
 
-import type { TStaffBoardModel } from '../model/useStaffBoard'
+import type {
+	TRosterMember,
+	TStaffOverviewModel,
+} from '../model/useStaffOverview'
 
 type TRosterTableProps = {
-	roster: TStaffBoardModel['roster']
-	weekDays: TStaffBoardModel['weekDays']
+	roster: TRosterMember[]
+	weekDays: TStaffOverviewModel['weekDays']
 }
 
 export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 	const t = useTranslations('Staff')
+
 	return (
 		<>
 			<TableScroll className='min-h-0 flex-auto animate-fade'>
@@ -27,7 +31,7 @@ export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 							{weekDays.map(day => (
 								<Th
 									key={day.label}
-									className={day.today ? 'text-brand-strong' : undefined}
+									className={day.isToday ? 'text-brand-strong' : undefined}
 								>
 									{day.label}
 								</Th>
@@ -35,32 +39,8 @@ export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{roster.map(row => (
-							<tr key={row.name}>
-								<Td>
-									<div className='flex items-center gap-2.5'>
-										<Avatar initials={row.initials} tone={row.tone} />
-										<span className='font-semibold whitespace-nowrap'>
-											{row.name}
-										</span>
-									</div>
-								</Td>
-								{row.days.map(day => (
-									<Td key={day.key}>
-										<button
-											type='button'
-											onClick={day.pick}
-											aria-label={day.aria}
-											className={cn(
-												'inline-flex h-7 min-w-23 items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap transition-shadow hover:shadow-[0_0_0_2px_var(--brand)]',
-												TONE_CLASS[day.tone],
-											)}
-										>
-											{day.label}
-										</button>
-									</Td>
-								))}
-							</tr>
+						{roster.map((member, index) => (
+							<RosterRow key={`${index}-${member.name}`} member={member} />
 						))}
 					</tbody>
 				</Table>
@@ -74,5 +54,35 @@ export function RosterTable({ roster, weekDays }: TRosterTableProps) {
 				]}
 			/>
 		</>
+	)
+}
+
+type TRosterRowProps = { member: TRosterMember }
+
+function RosterRow({ member }: TRosterRowProps) {
+	return (
+		<tr>
+			<Td>
+				<div className='flex items-center gap-2.5'>
+					<Avatar initials={member.initials} tone={member.tone} />
+					<span className='font-semibold whitespace-nowrap'>{member.name}</span>
+				</div>
+			</Td>
+			{member.days.map(day => (
+				<Td key={day.dayIndex}>
+					<button
+						type='button'
+						onClick={day.pick}
+						aria-label={day.ariaLabel}
+						className={cn(
+							'inline-flex h-7 min-w-23 items-center justify-center rounded-lg px-2 font-mono text-xs font-semibold whitespace-nowrap transition-shadow hover:shadow-[0_0_0_2px_var(--brand)]',
+							TONE_CLASS[day.tone],
+						)}
+					>
+						{day.label}
+					</button>
+				</Td>
+			))}
+		</tr>
 	)
 }

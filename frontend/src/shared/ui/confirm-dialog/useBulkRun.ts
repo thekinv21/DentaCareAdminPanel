@@ -2,12 +2,11 @@
 
 import { useRef, useState } from 'react'
 
+import { errorMessage } from '@/shared/lib/error'
+
 import type { TBulkItem, TConfirmOptions } from './ConfirmTypes'
 
-type TBulkFailure = { item: TBulkItem; error: string }
-
-const messageOf = (error: unknown) =>
-	error instanceof Error ? error.message : String(error)
+export type TBulkFailure = { item: TBulkItem; error: string }
 
 /**
  * Sequential bulk run with a progress counter and a retry of failed items
@@ -24,6 +23,8 @@ export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 	const run = async (items: TBulkItem[]) => {
 		if (!bulk) return true
 		const offset = total - items.length
+		// a full run starts over; a retry keeps the items that already succeeded
+		if (offset === 0) succeeded.current = []
 		const failures: TBulkFailure[] = []
 		setFailed(null)
 		for (const [index, item] of items.entries()) {
@@ -31,7 +32,7 @@ export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 				await bulk.run(item)
 				succeeded.current.push(item.id)
 			} catch (error) {
-				failures.push({ item, error: messageOf(error) })
+				failures.push({ item, error: errorMessage(error) })
 			}
 			setDone(offset + index + 1)
 		}
@@ -48,7 +49,7 @@ export function useBulkRun(bulk: TConfirmOptions['bulk']) {
 		failed,
 		percent: total ? Math.round((done / total) * 100) : 0,
 		run,
-		retry: () => run(failed?.map(f => f.item) ?? []),
+		retry: () => run(failed?.map(failure => failure.item) ?? []),
 		settle: () => bulk?.onDone?.(succeeded.current),
 	}
 }

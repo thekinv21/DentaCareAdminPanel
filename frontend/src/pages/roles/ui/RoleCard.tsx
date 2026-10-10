@@ -10,12 +10,14 @@ import { Avatar } from '@/shared/ui/avatar'
 import { Badge } from '@/shared/ui/badge'
 import { Button, buttonClass } from '@/shared/ui/button'
 
-import type { TRoleCard } from '../model/useRoles'
+import type { TRoleCardView } from '../model/useRoleCards'
 
-type TRoleCardProps = { role: TRoleCard }
+type TRoleCardProps = { role: TRoleCardView }
 
 export function RoleCard({ role }: TRoleCardProps) {
 	const t = useTranslations('Roles')
+	const tCommon = useTranslations('Common')
+
 	return (
 		<article className='flex flex-col gap-3 rounded-[18px] border border-line bg-surface p-4 transition-[box-shadow,border-color] duration-150 hover:border-line-strong hover:shadow-clay-sm'>
 			<div className='flex items-center gap-3'>
@@ -42,7 +44,7 @@ export function RoleCard({ role }: TRoleCardProps) {
 					<div className='flex'>
 						{role.members.map((member, index) => (
 							<Avatar
-								key={index}
+								key={`${index}-${member.initials}`}
 								initials={member.initials}
 								tone={member.tone}
 								size={28}
@@ -63,9 +65,9 @@ export function RoleCard({ role }: TRoleCardProps) {
 				/>
 			</div>
 			<div className='flex flex-wrap gap-1.25'>
-				{role.modules.map(module => (
-					<Badge key={module} tone='brand'>
-						{module}
+				{role.modules.map(moduleName => (
+					<Badge key={moduleName} tone='brand'>
+						{moduleName}
 					</Badge>
 				))}
 			</div>
@@ -89,7 +91,7 @@ export function RoleCard({ role }: TRoleCardProps) {
 					size='sm'
 					variant='dangerGhost'
 					onClick={role.remove}
-					aria-label={`${t('deleteColon')} ${role.name}`}
+					aria-label={tCommon('deleteItem', { name: role.name })}
 					aria-disabled={role.system}
 					title={role.system ? t('systemRoleCantBeDeleted') : t('deleteRole')}
 					className={role.system ? 'cursor-not-allowed opacity-40' : undefined}

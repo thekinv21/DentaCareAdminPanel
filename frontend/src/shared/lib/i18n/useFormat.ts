@@ -4,10 +4,9 @@ import { useMemo } from 'react'
 
 import { useLocale, useTranslations } from 'next-intl'
 
+import { isValidIsoDate, toUtcDate } from '../date'
 import { isLocale, LOCALE_META } from './Config'
 import { transliterate } from './Translit'
-
-const numbers = new Intl.NumberFormat('ru-RU')
 
 /**
  * Locale-aware formatters for amounts, dates and people's names
@@ -18,6 +17,7 @@ export function useFormat() {
 
 	return useMemo(() => {
 		const intl = isLocale(locale) ? LOCALE_META[locale].intl : locale
+		const numbers = new Intl.NumberFormat(intl)
 		return {
 			number: (value: number) => numbers.format(value),
 			som: (value: number) => `${numbers.format(value)} ${t('som')}`,
@@ -25,11 +25,15 @@ export function useFormat() {
 			 * People's names stay as written, transliterated for English
 			 */
 			name: (value: string) => (locale === 'en' ? transliterate(value) : value),
+			/**
+			 * An invalid ISO date renders as an empty string instead of throwing
+			 */
 			date: (iso: string, options: Intl.DateTimeFormatOptions) => {
+				if (!isValidIsoDate(iso)) return ''
 				const text = new Intl.DateTimeFormat(intl, {
 					timeZone: 'UTC',
 					...options,
-				}).format(new Date(`${iso}T00:00:00Z`))
+				}).format(toUtcDate(iso))
 				return text.charAt(0).toUpperCase() + text.slice(1)
 			},
 		}

@@ -1,14 +1,13 @@
 'use client'
 
-import { Trash2, UserRoundPlus } from 'lucide-react'
+import { UserRoundPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
-import { Button } from '@/shared/ui/button'
-import { Modal } from '@/shared/ui/modal'
-import { Spinner } from '@/shared/ui/spinner'
+import { Modal, ModalDeleteButton, ModalFooter } from '@/shared/ui/modal'
 
 import type { TPatientFormModel } from '../model/usePatientForm'
+import { PatientConsentFields } from './PatientConsentFields'
 import { PatientMedicalFields } from './PatientMedicalFields'
 import { PatientPersonalFields } from './PatientPersonalFields'
 
@@ -16,7 +15,6 @@ type TPatientFormModalProps = { form: TPatientFormModel }
 
 export function PatientFormModal({ form }: TPatientFormModalProps) {
 	const t = useTranslations('PatientForm')
-	const tCommon = useTranslations('Common')
 
 	return (
 		<FormProvider {...form.methods}>
@@ -30,28 +28,23 @@ export function PatientFormModal({ form }: TPatientFormModalProps) {
 				title={form.title}
 				subtitle={form.subtitle}
 				footer={
-					<>
-						{form.isEdit && (
-							<Button variant='dangerGhost' onClick={form.remove}>
-								<Trash2 size={16} aria-hidden='true' />
-								{t('deletePatient')}
-							</Button>
-						)}
-						<span className='flex-1' />
-						<Button onClick={form.close}>{tCommon('cancel')}</Button>
-						<Button type='submit' variant='primary' aria-busy={form.saving}>
-							{form.saving && <Spinner />}
-							{form.saving
-								? tCommon('saving')
-								: form.isEdit
-									? t('saveChanges')
-									: t('createRecord')}
-						</Button>
-					</>
+					<ModalFooter
+						onCancel={form.close}
+						saving={form.saving}
+						submitLabel={form.isEdit ? t('saveChanges') : t('createRecord')}
+						leading={
+							form.isEdit && (
+								<ModalDeleteButton onClick={form.remove}>
+									{t('deletePatient')}
+								</ModalDeleteButton>
+							)
+						}
+					/>
 				}
 			>
 				<PatientPersonalFields duplicateError={form.duplicateError} />
 				<PatientMedicalFields />
+				<PatientConsentFields />
 			</Modal>
 		</FormProvider>
 	)

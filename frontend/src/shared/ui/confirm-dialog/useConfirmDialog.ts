@@ -1,17 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
+import { errorMessage } from '@/shared/lib/error'
 import { useToast } from '@/shared/ui/toast'
 
 import type { TConfirmOptions, TConfirmPayload } from './ConfirmTypes'
 import { useBulkRun } from './useBulkRun'
-
-const messageOf = (error: unknown) =>
-	error instanceof Error ? error.message : String(error)
 
 /**
  * What the user fills in before confirming; everything but `typed` goes to `onConfirm`
@@ -32,7 +30,7 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 			reason: null,
 			reasonText: '',
 			options: Object.fromEntries(
-				(request.options ?? []).map(o => [o.id, !!o.checked]),
+				(request.options ?? []).map(option => [option.id, !!option.checked]),
 			),
 			typed: '',
 		},
@@ -41,21 +39,25 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		control: fields.control,
 		name: ['reason', 'reasonText', 'typed'],
 	})
-	const [left, setLeft] = useState(request.countdown ?? 0)
+	const [secondsLeft, setSecondsLeft] = useState(request.countdown ?? 0)
 	const [pending, setPending] = useState(false)
 	const [error, setError] = useState<string | null>(null)
+	// the bulk part already ran in full; a retry only repeats `onConfirm`
+	const bulkCompleted = useRef(false)
 
 	useEffect(() => {
-		if (left <= 0) return
-		const id = setTimeout(() => setLeft(value => value - 1), 1000)
-		return () => clearTimeout(id)
-	}, [left])
+		if (secondsLeft <= 0) return
+		const timeoutId = setTimeout(() => setSecondsLeft(value => value - 1), 1000)
+		return () => clearTimeout(timeoutId)
+	}, [secondsLeft])
 
-	const typeOk =
+	const isTypedCodeValid =
 		!request.typeToConfirm ||
 		typed.trim().toUpperCase() === request.typeToConfirm.toUpperCase()
-	const reasonOk = !request.reasonRequired || !!reason || !!reasonText.trim()
-	const canConfirm = typeOk && reasonOk && left <= 0 && !pending
+	const isReasonGiven =
+		!request.reasonRequired || !!reason || !!reasonText.trim()
+	const canConfirm =
+		isTypedCodeValid && isReasonGiven && secondsLeft <= 0 && !pending
 
 	const finish = async () => {
 		const { choice, reason, reasonText, options } = fields.getValues()
@@ -75,9 +77,12 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 		setPending(true)
 		setError(null)
 		try {
-			if (await step()) await finish()
+			if (await step()) {
+				bulkCompleted.current = true
+				await finish()
+			}
 		} catch (cause) {
-			setError(messageOf(cause))
+			setError(errorMessage(cause))
 		} finally {
 			setPending(false)
 		}
@@ -85,7 +90,11 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 
 	const confirm = () => {
 		if (!canConfirm) return
-		attempt(() => bulk.run(request.bulk?.items ?? []))
+		attempt(() =>
+			bulkCompleted.current
+				? Promise.resolve(true)
+				: bulk.run(request.bulk?.items ?? []),
+		)
 	}
 
 	const pendingText = request.bulk
@@ -102,12 +111,12 @@ export function useConfirmDialog(request: TConfirmOptions, close: () => void) {
 			? pendingText
 			: error
 				? t('retry')
-				: left > 0
-					? `${request.confirmText} · ${left}`
+				: secondsLeft > 0
+					? `${request.confirmText} · ${secondsLeft}`
 					: request.confirmText,
 		control: fields.control,
 		register: fields.register,
-		typeOk,
+		isTypedCodeValid,
 		bulk,
 		showProgress: !!request.bulk && (pending || !!bulk.failed),
 		retryFailed: () => attempt(bulk.retry),

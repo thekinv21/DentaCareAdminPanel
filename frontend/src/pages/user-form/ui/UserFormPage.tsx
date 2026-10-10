@@ -4,18 +4,13 @@ import { use } from 'react'
 
 import Link from 'next/link'
 
-import { Ban, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { ROUTES } from '@/shared/routes'
-import { Button, buttonClass } from '@/shared/ui/button'
 import { Card } from '@/shared/ui/card'
-import { DangerZone } from '@/shared/ui/danger-zone'
-import { FormSection } from '@/shared/ui/form-section'
-import { Spinner } from '@/shared/ui/spinner'
 
 import { useUserForm } from '../model/useUserForm'
 import { AccessSection } from './AccessSection'
@@ -25,16 +20,18 @@ import { AssistantSection } from './AssistantSection'
 import { BasicSection } from './BasicSection'
 import { MedicSection } from './MedicSection'
 import { ScheduleSection } from './ScheduleSection'
+import { UserDangerZone } from './UserDangerZone'
+import { UserFormFooter } from './UserFormFooter'
 import { UserPreview } from './UserPreview'
 import { UserTypePicker } from './UserTypePicker'
 
 type TUserFormPageProps = { params?: Promise<{ id: string }> }
 
 export function UserFormPage({ params }: TUserFormPageProps) {
-	const id = params ? use(params).id : undefined
+	const userId = params ? use(params).id : undefined
 	const t = useTranslations('UserForm')
-	const tCommon = useTranslations('Common')
-	const form = useUserForm(id)
+	const form = useUserForm(userId)
+	const sections = form.visibleSections
 
 	return (
 		<>
@@ -47,7 +44,7 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 						>
 							{t('users')}
 						</Link>{' '}
-						/ {form.crumbTail}
+						/ {form.breadcrumbLabel}
 					</>
 				}
 				title={form.title}
@@ -57,7 +54,7 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 					<form
 						noValidate
 						onSubmit={form.submit}
-						className='flex min-h-0 flex-auto animate-rise gap-4 max-[1100px]:flex-col'
+						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
 					>
 						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
 							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
@@ -67,51 +64,19 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 									isEdit={form.isEdit}
 									onResetPassword={form.resetPassword}
 								/>
-								{form.show.medic && <MedicSection isChief={form.show.chief} />}
-								{form.show.assistant && <AssistantSection />}
-								{form.show.admin && <AdminSection />}
-								{form.show.accountant && <AccountantSection />}
-								{form.show.schedule && <ScheduleSection />}
+								{sections.medic && <MedicSection isChief={sections.chief} />}
+								{sections.assistant && <AssistantSection />}
+								{sections.admin && <AdminSection />}
+								{sections.accountant && <AccountantSection />}
+								{sections.schedule && <ScheduleSection />}
 								{form.isEdit && (
-									<FormSection title={t('dangerZone')} danger>
-										<DangerZone
-											title={t('deleteUser')}
-											description={t('deleteUserNote')}
-											actions={
-												<>
-													<Button
-														variant='dangerGhost'
-														onClick={form.deactivate}
-													>
-														<Ban size={16} aria-hidden='true' />
-														{t('deactivate')}
-													</Button>
-													<Button variant='destructive' onClick={form.remove}>
-														<Trash2 size={16} aria-hidden='true' />
-														{t('delete')}
-													</Button>
-												</>
-											}
-										/>
-									</FormSection>
+									<UserDangerZone
+										onDeactivate={form.deactivate}
+										onDelete={form.remove}
+									/>
 								)}
 							</div>
-							<div className='flex shrink-0 flex-wrap items-center gap-2.5 rounded-b-[20px] border-t border-line bg-raised px-5.5 py-3.5'>
-								<span className='mr-auto text-[12.5px] text-ink-muted'>
-									{tCommon('requiredFieldsNote')}
-								</span>
-								<Link href={ROUTES.users} className={buttonClass()}>
-									{tCommon('cancel')}
-								</Link>
-								<Button type='submit' variant='primary' aria-busy={form.saving}>
-									{form.saving && <Spinner />}
-									{form.saving
-										? tCommon('saving')
-										: form.isEdit
-											? t('saveChanges')
-											: t('createUser')}
-								</Button>
-							</div>
+							<UserFormFooter isEdit={form.isEdit} saving={form.saving} />
 						</Card>
 						<UserPreview preview={form.preview} />
 					</form>

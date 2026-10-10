@@ -1,20 +1,14 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Controller, useFormContext } from 'react-hook-form'
-
-import { useAppointmentLabels } from '@/entities/appointment'
+import { useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
-import { ChoiceChips, ToggleChips } from '@/shared/ui/choice-chips'
+import { ChoiceChipsField, ToggleChipsField } from '@/shared/ui/choice-chips'
 import { Field, formGrid2, inputClass, textareaClass } from '@/shared/ui/field'
-import { SwitchCard } from '@/shared/ui/switch-card'
+import { SwitchCardField } from '@/shared/ui/switch-card'
 
-import {
-	FORM_STATUSES,
-	SOURCES,
-	type TAppointmentFormValues,
-} from '../model/AppointmentFormSchema'
+import type { TAppointmentFormValues } from '../model/AppointmentFormSchema'
 import { useAppointmentOptions } from '../model/useAppointmentOptions'
 
 type TAppointmentDetailFieldsProps = { isEdit: boolean }
@@ -24,70 +18,50 @@ export function AppointmentDetailFields({
 }: TAppointmentDetailFieldsProps) {
 	const t = useTranslations('AppointmentForm')
 
-	const labels = useAppointmentLabels()
 	const options = useAppointmentOptions()
-
 	const { control, register } = useFormContext<TAppointmentFormValues>()
 
 	return (
 		<>
 			<Field as='div' label={t('services')}>
-				<Controller
+				<ToggleChipsField
 					control={control}
 					name='services'
-					render={({ field }) => (
-						<ToggleChips
-							aria-label={t('services')}
-							options={options.services}
-							value={field.value}
-							onChange={field.onChange}
-							chipClassName='min-h-9 text-ink'
-						/>
-					)}
+					aria-label={t('services')}
+					options={options.services}
+					chipClassName='min-h-9 text-ink'
 				/>
 			</Field>
 			<div className={formGrid2}>
 				<Field label={t('tooth')} hint={t('toothHint')}>
 					<input
-						className={`${inputClass} font-mono`}
+						className={cn(inputClass, 'font-mono')}
 						placeholder={t('toothPlaceholder')}
 						{...register('tooth')}
 					/>
 				</Field>
 				<Field as='div' label={t('source')}>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='source'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('source')}
-								options={SOURCES.map(id => ({ id, label: t(`source_${id}`) }))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('source')}
+						options={options.sources}
 					/>
 				</Field>
 			</div>
 			{isEdit && (
 				<Field as='div' label={t('status')}>
-					<Controller
+					<ChoiceChipsField
 						control={control}
 						name='status'
-						render={({ field }) => (
-							<ChoiceChips
-								aria-label={t('status')}
-								options={FORM_STATUSES.map(s => ({
-									id: s.id,
-									label: labels.status(s.id),
-									leading: (
-										<span className={cn('size-2 rounded-full', s.dot)} />
-									),
-								}))}
-								value={field.value}
-								onChange={field.onChange}
-							/>
-						)}
+						aria-label={t('status')}
+						options={options.statuses.map(status => ({
+							id: status.id,
+							label: status.label,
+							leading: (
+								<span className={cn('size-2 rounded-full', status.dotClass)} />
+							),
+						}))}
 					/>
 				</Field>
 			)}
@@ -99,29 +73,17 @@ export function AppointmentDetailFields({
 				/>
 			</Field>
 			<div className={formGrid2}>
-				<Controller
+				<SwitchCardField
 					control={control}
-					name='sms24'
-					render={({ field }) => (
-						<SwitchCard
-							label={t('sms24')}
-							hint={t('inPatientLanguage')}
-							checked={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					name='smsDayBefore'
+					label={t('smsDayBefore')}
+					hint={t('inPatientLanguage')}
 				/>
-				<Controller
+				<SwitchCardField
 					control={control}
-					name='sms2'
-					render={({ field }) => (
-						<SwitchCard
-							label={t('sms2')}
-							hint={t('withAddressAndRoom')}
-							checked={field.value}
-							onChange={field.onChange}
-						/>
-					)}
+					name='smsTwoHoursBefore'
+					label={t('smsTwoHoursBefore')}
+					hint={t('withAddressAndRoom')}
 				/>
 			</div>
 		</>

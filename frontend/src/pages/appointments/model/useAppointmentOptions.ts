@@ -1,34 +1,70 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useFormContext, useWatch } from 'react-hook-form'
 
-import { useAppointmentLabels } from '@/entities/appointment'
-import { DOCTORS } from '@/entities/employee'
+import {
+	APPOINTMENT_DURATIONS,
+	useAppointmentLabels,
+} from '@/entities/appointment'
+import {
+	CHAIR_NUMBERS,
+	DOCTOR_DOT_CLASS,
+	DOCTOR_IDS,
+	DOCTORS,
+} from '@/entities/employee'
 
 import { useFormat } from '@/shared/lib/i18n'
 
-import { APPOINTMENT_DOCTORS, BOOKING_SERVICES } from './AppointmentFormSchema'
-
-const DOT = { brand: 'bg-brand', info: 'bg-info', accent: 'bg-accent' } as const
+import type { TAppointmentFormValues } from './AppointmentFormSchema'
+import {
+	BOOKING_SERVICES,
+	BOOKING_SOURCES,
+	FORM_STATUS_DOT_CLASS,
+	FORM_STATUSES,
+	START_SLOTS,
+} from './AppointmentOptions'
 
 /**
- * Translated dentist and service chips of the appointment form
+ * Translated chip options of the appointment form
  */
 export function useAppointmentOptions() {
 	const t = useTranslations('AppointmentForm')
 	const labels = useAppointmentLabels()
 	const format = useFormat()
+	const { control } = useFormContext<TAppointmentFormValues>()
+	const start = useWatch({ control, name: 'start' })
+
+	// an edited event can start outside the standard slots; keep its time selectable
+	const startSlots = START_SLOTS.includes(start)
+		? START_SLOTS
+		: [...START_SLOTS, start]
 
 	return {
-		doctors: APPOINTMENT_DOCTORS.map(id => ({
-			id,
-			label: format.name(DOCTORS[id].shortName),
-			dot: DOT[DOCTORS[id].color],
+		doctors: DOCTOR_IDS.map(doctorId => ({
+			id: doctorId,
+			label: format.name(DOCTORS[doctorId].shortName),
+			dotClass: DOCTOR_DOT_CLASS[DOCTORS[doctorId].color],
 		})),
-		services: BOOKING_SERVICES.map(s => ({
-			id: s.id as string,
-			label: labels.procedure(s.id),
-			trailing: s.price ? format.som(s.price) : t('byPlan'),
+		chairs: CHAIR_NUMBERS.map(chair => ({ id: chair, label: String(chair) })),
+		startSlots: startSlots.map(time => ({ id: time, label: time })),
+		durations: APPOINTMENT_DURATIONS.map(minutes => ({
+			id: minutes,
+			label: t('minutes', { n: minutes }),
+		})),
+		services: BOOKING_SERVICES.map(service => ({
+			id: service.id,
+			label: labels.procedure(service.id),
+			trailing: service.price ? format.som(service.price) : t('byPlan'),
+		})),
+		sources: BOOKING_SOURCES.map(source => ({
+			id: source,
+			label: t(`source_${source}`),
+		})),
+		statuses: FORM_STATUSES.map(status => ({
+			id: status,
+			label: labels.status(status),
+			dotClass: FORM_STATUS_DOT_CLASS[status],
 		})),
 	}
 }

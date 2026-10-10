@@ -3,14 +3,14 @@ import { cn } from '@/shared/lib/cn'
 import type { TSurfaceFinding } from '../model/Teeth'
 
 type TSurfaceButtonProps = {
-	short: string
+	abbreviation: string
 	label: string
 	finding?: TSurfaceFinding
 	onClick: () => void
 }
 
 export function SurfaceButton(props: TSurfaceButtonProps) {
-	const { short, label, finding, onClick } = props
+	const { abbreviation, label, finding, onClick } = props
 
 	return (
 		<button
@@ -26,7 +26,7 @@ export function SurfaceButton(props: TSurfaceButtonProps) {
 					'bg-surface text-ink-muted shadow-[inset_0_0_0_1px_var(--line-strong)]',
 			)}
 		>
-			{short}
+			{abbreviation}
 		</button>
 	)
 }

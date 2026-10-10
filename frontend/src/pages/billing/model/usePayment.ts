@@ -20,8 +20,7 @@ import {
  * Invoice the payment panel is collecting and its payment form
  */
 export function usePayment() {
-	const [invoiceIndex, setInvoiceIndex] = useState(0)
-	const invoice = INVOICES[invoiceIndex]
+	const [invoice, setInvoice] = useState<TInvoice>(INVOICES[0])
 	const methods = useForm<TPaymentFormInput, unknown, TPaymentFormValues>({
 		resolver: zodResolver(paymentFormSchema),
 		defaultValues: paymentDefaults(invoice),
@@ -30,11 +29,10 @@ export function usePayment() {
 	return {
 		methods,
 		invoice,
-		invoiceIndex,
-		done: methods.formState.isSubmitSuccessful,
+		isDone: methods.formState.isSubmitSuccessful,
 		saving: methods.formState.isSubmitting,
 		start: (next: TInvoice) => {
-			setInvoiceIndex(INVOICES.indexOf(next))
+			setInvoice(next)
 			methods.reset(paymentDefaults(next))
 		},
 		submit: methods.handleSubmit(() => mockRequest()),

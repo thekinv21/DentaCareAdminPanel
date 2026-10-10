@@ -1,19 +1,13 @@
 import { z } from 'zod'
 
-export const SERVICE_CATEGORIES = [
-	'diag',
-	'ther',
-	'hyg',
-	'surg',
-	'orth',
-] as const
-export const SERVICE_DURATIONS = [30, 45, 60, 90, 120] as const
+import { SERVICE_CATEGORIES } from './Services'
+
 export const SERVICE_MATERIALS = [
-	'comp',
-	'bond',
-	'etch',
-	'anes',
-	'glov',
+	'composite',
+	'adhesive',
+	'etchant',
+	'anesthetic',
+	'gloves',
 ] as const
 
 export const serviceFormSchema = z.object({

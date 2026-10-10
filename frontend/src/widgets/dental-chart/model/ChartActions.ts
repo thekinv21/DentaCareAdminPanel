@@ -24,7 +24,12 @@ export function applyTool(tooth: TToothState, tool: TToolId): TToothState {
 	}
 }
 
-export function summarize(chart: TChartMap) {
+export type TChartCounts = Record<
+	'car' | 'fill' | 'crown' | 'endo' | 'implant' | 'extract' | 'missing',
+	number
+>
+
+export function summarize(chart: TChartMap): TChartCounts {
 	const count = {
 		car: 0,
 		fill: 0,

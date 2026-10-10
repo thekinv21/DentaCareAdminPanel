@@ -1,43 +1,33 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { useTranslations } from 'next-intl'
 import { useForm, useWatch } from 'react-hook-form'
 
+import { NOW_TIME, TODAY, useAppointmentLabels } from '@/entities/appointment'
 import {
-	NOW_TIME,
-	type TDoctorKey,
-	TODAY,
-	useAppointmentLabels,
-} from '@/entities/appointment'
-import { DOCTORS } from '@/entities/employee'
+	DOCTOR_DOT_CLASS,
+	DOCTOR_IDS,
+	DOCTORS,
+	type TDoctorId,
+} from '@/entities/employee'
 
+import { addDays } from '@/shared/lib/date'
 import { useFormat } from '@/shared/lib/i18n'
 
-import {
-	addDays,
-	addMonths,
-	monthGridDays,
-	sameMonth,
-	toDate,
-	weekday,
-} from '../lib/Dates'
-import { eventsForDay, type TCalendarEvent } from '../lib/Schedule'
+import type { TCalendarEvent } from '../lib/Schedule'
+import type { TCalendarQuery } from './CalendarQuery'
 import { useCalendarColumns } from './useCalendarColumns'
+import { useCalendarMonthDays } from './useCalendarMonthDays'
+import { useCalendarNavigation } from './useCalendarNavigation'
 import { useCalendarTitle } from './useCalendarTitle'
 
-export type TCalendarView = 'day' | 'week' | 'month'
-
-const DOCTOR_KEYS: TDoctorKey[] = ['kas', 'pet', 'tok']
-const A_MONDAY = '2026-10-05'
-
 /**
- * Query of the calendar: visible range and the dentists shown in it
+ * Any Monday: the month grid header starts from it
  */
-type TCalendarQuery = {
-	view: TCalendarView
-	date: string
-	doctors: TDoctorKey[]
-}
+const A_MONDAY = '2026-10-05'
+const DAYS_PER_WEEK = 7
 
 type TCalendarOptions = {
 	/**
@@ -55,60 +45,37 @@ export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 	const labels = useAppointmentLabels()
 	const format = useFormat()
 	const filters = useForm<TCalendarQuery>({
-		defaultValues: { view: 'day', date: TODAY, doctors: DOCTOR_KEYS },
+		defaultValues: { view: 'day', date: TODAY, doctors: [...DOCTOR_IDS] },
 	})
 	const [view, cursor, doctors] = useWatch({
 		control: filters.control,
 		name: ['view', 'date', 'doctors'],
 	})
-	const setCursor = (iso: string) => filters.setValue('date', iso)
 
-	const filter = (events: TCalendarEvent[]) =>
-		events.filter(
-			event => doctors.includes(event.doctorId) && !removedKeys.has(event.key),
-		)
-
-	const openDay = (iso: string) => {
-		filters.setValue('view', 'day')
-		setCursor(iso)
-	}
-
-	const columns = useCalendarColumns({ view, cursor, filter, openDay })
+	const navigation = useCalendarNavigation(filters.setValue, view, cursor)
+	const columns = useCalendarColumns({ view, cursor, doctors, removedKeys })
+	const monthDays = useCalendarMonthDays({ view, cursor, doctors, removedKeys })
 	const title = useCalendarTitle(view, cursor)
+	const weekdayNames = useMemo(
+		() =>
+			Array.from({ length: DAYS_PER_WEEK }, (_, offset) => ({
+				dayIndex: offset,
+				label: format.date(addDays(A_MONDAY, offset), { weekday: 'short' }),
+			})),
+		[format],
+	)
 
-	const monthDays =
-		view === 'month'
-			? monthGridDays(cursor).map(iso => {
-					const inMonth = sameMonth(iso, cursor)
-					return {
-						iso,
-						day: toDate(iso).getUTCDate(),
-						inMonth,
-						isToday: iso === TODAY,
-						closed: inMonth && weekday(iso) === 6,
-						events: inMonth ? filter(eventsForDay(iso)) : [],
-					}
-				})
-			: []
-
-	const total = [...columns, ...monthDays].reduce(
+	const visibleCount = [...columns, ...monthDays].reduce(
 		(sum, item) => sum + item.events.length,
 		0,
 	)
 
-	const shift = (direction: 1 | -1) =>
-		setCursor(
-			view === 'month'
-				? addMonths(cursor, direction)
-				: addDays(cursor, direction * (view === 'day' ? 1 : 7)),
-		)
-
-	const toggleDoctor = (key: TDoctorKey) =>
+	const toggleDoctor = (doctorId: TDoctorId) =>
 		filters.setValue(
 			'doctors',
-			doctors.includes(key)
-				? doctors.filter(doctor => doctor !== key)
-				: [...doctors, key],
+			doctors.includes(doctorId)
+				? doctors.filter(selectedId => selectedId !== doctorId)
+				: [...doctors, doctorId],
 		)
 
 	return {
@@ -120,23 +87,18 @@ export function useCalendar({ removedKeys, onOpenEvent }: TCalendarOptions) {
 			{ id: 'month' as const, label: t('month') },
 		],
 		title,
-		total: t('totalAppointments', { n: total }),
-		prev: () => shift(-1),
-		next: () => shift(1),
-		goToday: () => setCursor(TODAY),
-		openDay,
+		total: t('totalAppointments', { n: visibleCount }),
+		...navigation,
 		openEvent: onOpenEvent,
 		columns,
 		monthDays,
-		weekdayNames: [0, 1, 2, 3, 4, 5, 6].map(i =>
-			format.date(addDays(A_MONDAY, i), { weekday: 'short' }),
-		),
-		doctors: DOCTOR_KEYS.map(key => ({
-			key,
-			name: format.name(DOCTORS[key].shortName),
-			color: DOCTORS[key].color,
-			on: doctors.includes(key),
-			toggle: () => toggleDoctor(key),
+		weekdayNames,
+		doctorFilters: DOCTOR_IDS.map(doctorId => ({
+			id: doctorId,
+			name: format.name(DOCTORS[doctorId].shortName),
+			dotClass: DOCTOR_DOT_CLASS[DOCTORS[doctorId].color],
+			isSelected: doctors.includes(doctorId),
+			toggle: () => toggleDoctor(doctorId),
 		})),
 		legend: [
 			...labels.legend,
