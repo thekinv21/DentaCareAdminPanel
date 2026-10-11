@@ -22,11 +22,10 @@ type TTypeFilter = 'all' | TUserType
 
 type TUsersQuery = {
 	type: TTypeFilter
-	status: 'all' | 'active' | 'disabled'
 	search: string
 }
 
-const DEFAULT_QUERY: TUsersQuery = { type: 'all', status: 'all', search: '' }
+const DEFAULT_QUERY: TUsersQuery = { type: 'all', search: '' }
 
 const TYPE_FILTERS: TTypeFilter[] = [
 	'all',
@@ -38,17 +37,6 @@ const TYPE_FILTERS: TTypeFilter[] = [
 ]
 
 const ROLE_BY_ID = new Map(ROLES.map(role => [role.id, role]))
-
-function toColumnFilters(type: TTypeFilter, status: TUsersQuery['status']) {
-	const filters = []
-
-	if (type !== 'all') filters.push({ id: 'type', value: type })
-
-	if (status !== 'all')
-		filters.push({ id: 'active', value: status === 'active' })
-
-	return filters
-}
 
 const getSearchText = (row: TUserRow) => row.searchText
 
@@ -75,9 +63,9 @@ export function useUsersTable(columns: TDataGridColumn<TUserRow>[]) {
 
 	const form = useForm<TUsersQuery>({ defaultValues: DEFAULT_QUERY })
 
-	const [type, status, search] = useWatch({
+	const [type, search] = useWatch({
 		control: form.control,
-		name: ['type', 'status', 'search'],
+		name: ['type', 'search'],
 	})
 
 	const users = actions.currentUsers
@@ -105,10 +93,6 @@ export function useUsersTable(columns: TDataGridColumn<TUserRow>[]) {
 				label: role ? roleLabels.text(role.name) : '',
 				color: role?.color,
 			},
-			branch: labels.branch(user.branch),
-			lastSeen: user.active
-				? labels.lastSeen(user.lastSeen)
-				: t('accessDisabled'),
 			isActive: user.active,
 			searchText: `${user.fullName} ${user.phone} ${user.email}`,
 			onToggleActive: () => actions.onToggleActive(user),
@@ -122,13 +106,7 @@ export function useUsersTable(columns: TDataGridColumn<TUserRow>[]) {
 		count: typeCounts[typeFilter] ?? 0,
 	}))
 
-	const statuses = [
-		{ id: 'all' as const, label: t('all') },
-		{ id: 'active' as const, label: t('activeFilter') },
-		{ id: 'disabled' as const, label: t('disabledFilter') },
-	]
-
-	const filters = toColumnFilters(type, status)
+	const filters = type === 'all' ? [] : [{ id: 'type', value: type }]
 
 	const { table } = useDataGrid({
 		data: rows,
@@ -140,7 +118,7 @@ export function useUsersTable(columns: TDataGridColumn<TUserRow>[]) {
 
 	const crumb = t('usersBranches', { n: users.length })
 
-	return { form, types, statuses, table, crumb }
+	return { form, types, table, crumb }
 }
 
 export type TUsersTableModel = ReturnType<typeof useUsersTable>

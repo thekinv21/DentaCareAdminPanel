@@ -23,28 +23,24 @@ export const PERMISSION_MODULES: TPermissionModule[] = [
 		name: 'appointments',
 		hint: 'scheduleAndVisits',
 		actions: ['view', 'create', 'edit', 'delete'],
-		scoped: true,
 	},
 	{
 		id: 'pat',
 		name: 'patients',
 		hint: 'recordsAndContacts',
 		actions: ['view', 'create', 'edit', 'delete'],
-		scoped: true,
 	},
 	{
 		id: 'chart',
 		name: 'dentalChart',
 		hint: 'toothMarks',
 		actions: ['view', 'edit'],
-		scoped: true,
 	},
 	{
 		id: 'plans',
 		name: 'treatmentPlans',
 		hint: 'approvalAndCost',
 		actions: ['view', 'create', 'edit', 'delete'],
-		scoped: true,
 	},
 	{
 		id: 'bill',
@@ -105,7 +101,9 @@ const ACTION_BY_LETTER: Record<string, TPermissionAction> = {
 /**
  * `{ appt: 'vce' }` → `{ appt: ['view', 'create', 'edit'] }`
  */
-const expandPermissions = (shortCodes: Record<string, string>): TPermissions =>
+export const expandPermissions = (
+	shortCodes: Record<string, string>,
+): TPermissions =>
 	Object.fromEntries(
 		Object.entries(shortCodes).map(([moduleId, letters]) => [
 			moduleId,
@@ -113,55 +111,25 @@ const expandPermissions = (shortCodes: Record<string, string>): TPermissions =>
 		]),
 	)
 
-export type TRolePreset =
-	'blank' | 'doctor' | 'reception' | 'assistant' | 'finance'
+/**
+ * Every action of every module
+ */
+export const ALL_PERMISSIONS: TPermissions = Object.fromEntries(
+	PERMISSION_MODULES.map(permissionModule => [
+		permissionModule.id,
+		permissionModule.actions,
+	]),
+)
 
 /**
- * Starting points for a new role
+ * Number of module actions switched on
  */
-export const ROLE_PRESETS: Record<
-	TRolePreset,
-	{ label: string; permissions: TPermissions }
-> = {
-	blank: { label: 'presetBlank', permissions: {} },
-	doctor: {
-		label: 'presetDoctor',
-		permissions: expandPermissions({
-			dash: 'v',
-			appt: 'vce',
-			pat: 've',
-			chart: 've',
-			plans: 'vce',
-			bill: 'v',
-		}),
-	},
-	reception: {
-		label: 'presetReception',
-		permissions: expandPermissions({
-			dash: 'v',
-			appt: 'vced',
-			pat: 'vce',
-			plans: 'v',
-			bill: 'vc',
-		}),
-	},
-	assistant: {
-		label: 'presetAssistant',
-		permissions: expandPermissions({
-			dash: 'v',
-			appt: 'v',
-			pat: 'v',
-			chart: 'e',
-			inv: 'vce',
-		}),
-	},
-	finance: {
-		label: 'presetFinance',
-		permissions: expandPermissions({
-			dash: 'v',
-			bill: 'vced',
-			rep: 'v',
-			inv: 'v',
-		}),
-	},
-}
+export const countGranted = (permissions: TPermissions) =>
+	PERMISSION_MODULES.reduce(
+		(total, permissionModule) =>
+			total +
+			permissionModule.actions.filter(action =>
+				permissions[permissionModule.id]?.includes(action),
+			).length,
+		0,
+	)

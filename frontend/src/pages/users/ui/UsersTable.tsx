@@ -13,15 +13,12 @@ import type { TUsersTableModel } from '../model/useUsersTable'
 type TUsersTableProps = {
 	form: TUsersTableModel['form']
 	types: TUsersTableModel['types']
-	statuses: TUsersTableModel['statuses']
 	table: TUsersTableModel['table']
 }
 
 const isRowMuted = (row: TUserRow) => !row.isActive
 
-export function UsersTable(props: TUsersTableProps) {
-	const { form, types, statuses, table } = props
-
+export function UsersTable({ form, types, table }: TUsersTableProps) {
 	const t = useTranslations('Users')
 
 	const { control, register } = form
@@ -35,31 +32,21 @@ export function UsersTable(props: TUsersTableProps) {
 					aria-label={t('userType')}
 					options={types}
 				/>
-				<div className='flex items-center gap-2 max-mobile:flex-wrap'>
-					<SearchInput
-						label={t('searchUser')}
-						placeholder={t('nameEmailOrPhone')}
-						size='sm'
-						className='w-56'
-						{...register('search')}
-					/>
-					<SegmentedField
-						control={control}
-						name='status'
-						aria-label={t('status')}
-						options={statuses}
-						className='flex-nowrap'
-					/>
-				</div>
+				<SearchInput
+					label={t('searchUser')}
+					placeholder={t('nameEmailOrPhone')}
+					size='sm'
+					className='w-56'
+					{...register('search')}
+				/>
 			</div>
 			<DataGrid
 				table={table}
 				emptyText={t('nobodyFound')}
-				className='min-w-245'
+				className='min-w-200'
 				isRowMuted={isRowMuted}
 			/>
-			<div className='flex flex-wrap items-center justify-between gap-2.5 text-[12.5px] text-ink-muted'>
-				<span>{t('deactivatedNote')}</span>
+			<div className='flex justify-end'>
 				<DataGridPagination table={table} />
 			</div>
 		</Card>

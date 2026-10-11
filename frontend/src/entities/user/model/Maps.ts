@@ -12,7 +12,6 @@ export const USER_TYPE: Record<
 	{
 		label: string
 		plural: string
-		hint: string
 		tone: TTone
 		role: TSystemRoleId
 	}
@@ -20,35 +19,30 @@ export const USER_TYPE: Record<
 	chief: {
 		label: 'chief',
 		plural: 'management',
-		hint: 'chiefHint',
 		tone: 'accent',
 		role: 'chief',
 	},
 	doctor: {
 		label: 'doctor',
 		plural: 'doctors',
-		hint: 'doctorHint',
 		tone: 'brand',
 		role: 'doctor',
 	},
 	assistant: {
 		label: 'assistant',
 		plural: 'assistants',
-		hint: 'assistantHint',
 		tone: 'info',
 		role: 'assistant',
 	},
 	admin: {
 		label: 'admin',
 		plural: 'admins',
-		hint: 'adminHint',
 		tone: 'neutral',
 		role: 'reception',
 	},
 	accountant: {
 		label: 'accountant',
 		plural: 'accounting',
-		hint: 'accountantHint',
 		tone: 'warning',
 		role: 'finance',
 	},

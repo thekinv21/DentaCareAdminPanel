@@ -16,7 +16,7 @@ export function UserFormFooter({ isEdit, saving }: TUserFormFooterProps) {
 	const tCommon = useTranslations('Common')
 
 	return (
-		<div className='flex shrink-0 flex-wrap items-center gap-2.5 rounded-b-[20px] border-t border-line bg-raised px-5.5 py-3.5'>
+		<div className='flex shrink-0 flex-wrap items-center gap-2.5 border-t border-line pt-3.5'>
 			<span className='mr-auto text-[12.5px] text-ink-muted'>
 				{tCommon('requiredFieldsNote')}
 			</span>

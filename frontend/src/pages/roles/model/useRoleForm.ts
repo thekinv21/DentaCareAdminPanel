@@ -6,50 +6,21 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 
-import {
-	DOCTOR_ROLE_MEMBERS,
-	DOCTOR_ROLE_PERMISSIONS,
-	DOCTOR_ROLE_SCOPE,
-	PERMISSIONS_TOTAL,
-	ROLE_COLORS,
-	ROLE_PRESETS,
-	ROLES,
-	type TPermissions,
-	type TRole,
-	type TRolePreset,
-	useRoleLabels,
-	useRoleTransferChoice,
-} from '@/entities/role'
+import { ROLE_COLORS, ROLES, useRoleLabels } from '@/entities/role'
 
 import { mockRequest } from '@/shared/api'
-import { getInitials } from '@/shared/lib/format'
-import { useFormat } from '@/shared/lib/i18n'
 import { ROUTES } from '@/shared/routes'
-import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { useToast } from '@/shared/ui/toast'
 
 import { roleFormSchema, type TRoleFormValues } from './RoleFormSchema'
 
-const PRESET_IDS = Object.keys(ROLE_PRESETS) as TRolePreset[]
-
-const initialPermissions = (role: TRole): TPermissions =>
-	role.id === 'doctor'
-		? DOCTOR_ROLE_PERMISSIONS
-		: (ROLE_PRESETS[role.id as TRolePreset]?.permissions ?? {})
-
 /**
- * Create/edit role: name, color, starting preset and the permission matrix
+ * Create/edit role: name, color, description and the permission matrix
  */
 export function useRoleForm(roleId?: string) {
 	const t = useTranslations('RoleForm')
 
 	const labels = useRoleLabels()
-
-	const transferChoice = useRoleTransferChoice()
-
-	const format = useFormat()
-
-	const confirm = useConfirm()
 
 	const toast = useToast()
 
@@ -72,105 +43,30 @@ export function useRoleForm(roleId?: string) {
 			name: roleName,
 			description: role ? labels.text(role.description) : '',
 			color: role?.color ?? ROLE_COLORS[1].color,
-			preset: 'blank',
-			permissions: role ? initialPermissions(role) : {},
-			scope: role?.id === 'doctor' ? DOCTOR_ROLE_SCOPE : {},
+			permissions: role?.permissions ?? {},
 		},
 	})
 
-	const { isDirty, isSubmitting: saving } = form.formState
-
-	const membersCount = role?.users ?? 0
+	const saving = form.formState.isSubmitting
 
 	const title = isEdit ? t('roleNamed', { name: roleName }) : t('newRole')
 
 	const breadcrumbLabel = isEdit ? t('editing') : t('creating')
-
-	const fallbackName = isEdit ? roleName : t('newRole')
-
-	const dirtyText = isDirty ? t('unsavedChanges') : t('appliesToAllWithRole')
 
 	const colors = ROLE_COLORS.map(swatch => ({
 		color: swatch.color,
 		name: labels.color(swatch.name),
 	}))
 
-	const presets = PRESET_IDS.map(id => ({
-		id,
-		label: labels.moduleName(ROLE_PRESETS[id].label),
-	}))
-
-	const onPresetChange = (id: TRolePreset) => {
-		form.setValue('preset', id)
-
-		form.setValue('permissions', ROLE_PRESETS[id].permissions, {
-			shouldDirty: true,
-		})
-	}
-
-	const members = (role?.id === 'doctor' ? DOCTOR_ROLE_MEMBERS : []).map(
-		member => {
-			const name = format.name(member.name)
-
-			return {
-				name,
-				subtitle: labels.moduleName(member.sub),
-				initials: getInitials(name),
-				tone: member.tone,
-			}
-		},
-	)
-
-	const onSubmit = form.handleSubmit(async values => {
+	const onSubmit = form.handleSubmit(async () => {
 		await mockRequest()
-
-		form.reset(values)
 
 		toast.show(isEdit ? t('rolePermissionsUpdated') : t('roleCreated'))
 
-		if (!isEdit) router.push(ROUTES.roles)
+		router.push(ROUTES.roles)
 	})
 
-	const onDelete = () =>
-		confirm({
-			tone: 'danger',
-			title: t('deleteRoleNamedQuestion', { name: roleName }),
-			description: t('deleteRoleChoiceDescription', { n: membersCount }),
-			choice: transferChoice,
-			impact: [
-				{
-					tone: 'warning',
-					n: membersCount,
-					text: t('impactStaffChangeRole'),
-				},
-				{
-					tone: 'neutral',
-					n: PERMISSIONS_TOTAL,
-					text: t('impactPermissionsRemoved'),
-				},
-			],
-			confirmText: t('deleteRole'),
-			pendingText: t('deleting'),
-			successText: t('roleDeletedReassigned'),
-			onConfirm: () => mockRequest().then(() => router.push(ROUTES.roles)),
-		})
-
-	return {
-		form,
-		isEdit,
-		title,
-		breadcrumbLabel,
-		fallbackName,
-		colors,
-		presets,
-		onPresetChange,
-		members,
-		membersCount,
-		dirtyText,
-		saving,
-		onSubmit,
-		onDelete,
-	}
+	return { form, isEdit, title, breadcrumbLabel, colors, saving, onSubmit }
 }
 
 export type TRoleFormModel = ReturnType<typeof useRoleForm>

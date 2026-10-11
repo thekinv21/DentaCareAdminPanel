@@ -1,20 +1,24 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useFormContext } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
-import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
-import { LOCALE_META, LOCALES } from '@/shared/lib/i18n'
 import { AffixInput } from '@/shared/ui/affix-input'
-import { ChoiceChipsField } from '@/shared/ui/choice-chips'
-import { Field, FormField, formGrid3, inputClass } from '@/shared/ui/field'
+import { ChoiceChips } from '@/shared/ui/choice-chips'
+import { Field, FormField, formGrid2, inputClass } from '@/shared/ui/field'
 import { FormSection } from '@/shared/ui/form-section'
 import { Select } from '@/shared/ui/select'
 
 import type { TUserFormValues } from '../model/UserFormSchema'
+import type { TUserFormModel } from '../model/useUserForm'
 
-export function BasicSection() {
+type TBasicSectionProps = {
+	types: TUserFormModel['types']
+	onTypeChange: TUserFormModel['onTypeChange']
+}
+
+export function BasicSection({ types, onTypeChange }: TBasicSectionProps) {
 	const t = useTranslations('UserForm')
 
 	const { control } = useFormContext<TUserFormValues>()
@@ -23,7 +27,21 @@ export function BasicSection() {
 
 	return (
 		<FormSection title={t('basicDetails')}>
-			<div className={formGrid3}>
+			<div className={formGrid2}>
+				<Field as='div' label={t('userType')} className='col-span-full'>
+					<Controller
+						control={control}
+						name='type'
+						render={({ field }) => (
+							<ChoiceChips
+								aria-label={t('userType')}
+								options={types}
+								value={field.value}
+								onChange={onTypeChange}
+							/>
+						)}
+					/>
+				</Field>
 				<FormField name='lastName' label={t('lastName')} required>
 					<input
 						className={inputClass}
@@ -38,13 +56,6 @@ export function BasicSection() {
 						{...inputProps('firstName')}
 					/>
 				</FormField>
-				<Field label={t('middleName')}>
-					<input
-						className={inputClass}
-						placeholder={t('optional')}
-						{...inputProps('middleName')}
-					/>
-				</Field>
 				<FormField
 					name='phone'
 					label={t('mobilePhone')}
@@ -67,40 +78,11 @@ export function BasicSection() {
 						{...inputProps('email')}
 					/>
 				</FormField>
-				<Field label={t('birthDate')}>
-					<input
-						className={cn(inputClass, 'font-mono')}
-						placeholder={t('datePlaceholder')}
-						{...inputProps('birthDate')}
-					/>
-				</Field>
 				<Field label={t('branch')} required>
 					<Select {...inputProps('branch')}>
 						<option value='alaToo'>{t('branchAlaToo')}</option>
 						<option value='jal'>{t('branchJal')}</option>
 					</Select>
-				</Field>
-				<Field as='div' label={t('interfaceLanguage')}>
-					<ChoiceChipsField
-						control={control}
-						name='language'
-						aria-label={t('interfaceLanguage')}
-						options={LOCALES.map(locale => ({
-							id: locale,
-							label: LOCALE_META[locale].code,
-						}))}
-					/>
-				</Field>
-				<Field as='div' label={t('gender')}>
-					<ChoiceChipsField
-						control={control}
-						name='gender'
-						aria-label={t('gender')}
-						options={[
-							{ id: 'm' as const, label: t('male') },
-							{ id: 'f' as const, label: t('female') },
-						]}
-					/>
 				</Field>
 			</div>
 		</FormSection>

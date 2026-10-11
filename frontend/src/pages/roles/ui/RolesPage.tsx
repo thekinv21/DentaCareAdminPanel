@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl'
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
 import { ROUTES } from '@/shared/routes'
-import { Badge } from '@/shared/ui/badge'
 import { buttonClass } from '@/shared/ui/button'
 import { Card, CardHeader } from '@/shared/ui/card'
 
@@ -18,7 +17,7 @@ import { RoleCard } from './RoleCard'
 export function RolesPage() {
 	const t = useTranslations('Roles')
 
-	const { cards, countText } = useRoleCards()
+	const { cards } = useRoleCards()
 
 	return (
 		<>
@@ -40,7 +39,6 @@ export function RolesPage() {
 					<CardHeader
 						title={t('rolesDefineAccess')}
 						description={t('rolesDefineAccessHint')}
-						actions={<Badge>{countText}</Badge>}
 					/>
 					<div className='grid grid-cols-3 gap-3.5 pb-1.5 max-laptop:grid-cols-2 max-mobile:grid-cols-1'>
 						{cards.map(role => (

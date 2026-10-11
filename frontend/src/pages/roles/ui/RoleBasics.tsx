@@ -5,7 +5,6 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
-import { ChoiceChips } from '@/shared/ui/choice-chips'
 import { ColorSwatches } from '@/shared/ui/color-swatches'
 import {
 	Field,
@@ -19,16 +18,9 @@ import { FormSection } from '@/shared/ui/form-section'
 import type { TRoleFormValues } from '../model/RoleFormSchema'
 import type { TRoleFormModel } from '../model/useRoleForm'
 
-type TRoleBasicsProps = {
-	isEdit: boolean
-	colors: TRoleFormModel['colors']
-	presets: TRoleFormModel['presets']
-	onPresetChange: TRoleFormModel['onPresetChange']
-}
+type TRoleBasicsProps = { colors: TRoleFormModel['colors'] }
 
-export function RoleBasics(props: TRoleBasicsProps) {
-	const { isEdit, colors, presets, onPresetChange } = props
-
+export function RoleBasics({ colors }: TRoleBasicsProps) {
 	const t = useTranslations('RoleForm')
 
 	const { control } = useFormContext<TRoleFormValues>()
@@ -66,26 +58,6 @@ export function RoleBasics(props: TRoleBasicsProps) {
 						{...inputProps('description')}
 					/>
 				</Field>
-				{!isEdit && (
-					<Field
-						as='div'
-						label={t('startFromPreset')}
-						className='col-span-full'
-					>
-						<Controller
-							control={control}
-							name='preset'
-							render={({ field }) => (
-								<ChoiceChips
-									aria-label={t('preset')}
-									options={presets}
-									value={field.value}
-									onChange={onPresetChange}
-								/>
-							)}
-						/>
-					</Field>
-				)}
 			</div>
 		</FormSection>
 	)

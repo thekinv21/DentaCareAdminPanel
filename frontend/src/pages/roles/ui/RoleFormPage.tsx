@@ -15,9 +15,7 @@ import { Card } from '@/shared/ui/card'
 import { useRoleForm } from '../model/useRoleForm'
 import { PermissionMatrix } from './PermissionMatrix'
 import { RoleBasics } from './RoleBasics'
-import { RoleDangerZone } from './RoleDangerZone'
 import { RoleFormFooter } from './RoleFormFooter'
-import { RoleSummary } from './RoleSummary'
 
 type TRoleFormPageProps = { params?: Promise<{ id: string }> }
 
@@ -26,22 +24,8 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 
 	const t = useTranslations('RoleForm')
 
-	const {
-		form,
-		isEdit,
-		title,
-		breadcrumbLabel,
-		fallbackName,
-		colors,
-		presets,
-		onPresetChange,
-		members,
-		membersCount,
-		dirtyText,
-		saving,
-		onSubmit,
-		onDelete,
-	} = useRoleForm(roleId)
+	const { form, isEdit, title, breadcrumbLabel, colors, saving, onSubmit } =
+		useRoleForm(roleId)
 
 	return (
 		<>
@@ -64,36 +48,15 @@ export function RoleFormPage({ params }: TRoleFormPageProps) {
 					<form
 						noValidate
 						onSubmit={onSubmit}
-						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
+						className='flex min-h-0 flex-auto animate-rise'
 					>
-						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
-							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
-								<RoleBasics
-									isEdit={isEdit}
-									colors={colors}
-									presets={presets}
-									onPresetChange={onPresetChange}
-								/>
+						<Card as='section' className='min-h-0 flex-auto'>
+							<div className='-mx-4.5 flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-4.5 pt-1 pb-2 scrollbar-thin'>
+								<RoleBasics colors={colors} />
 								<PermissionMatrix />
-								{isEdit && (
-									<RoleDangerZone
-										roleName={fallbackName}
-										membersCount={membersCount}
-										onDelete={onDelete}
-									/>
-								)}
 							</div>
-							<RoleFormFooter
-								isEdit={isEdit}
-								saving={saving}
-								statusText={dirtyText}
-							/>
+							<RoleFormFooter isEdit={isEdit} saving={saving} />
 						</Card>
-						<RoleSummary
-							fallbackName={fallbackName}
-							members={members}
-							membersCount={membersCount}
-						/>
 					</form>
 				</FormProvider>
 			</PageContent>

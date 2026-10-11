@@ -17,7 +17,7 @@ import { UsersTable } from './UsersTable'
 export function UsersPage() {
 	const t = useTranslations('Users')
 
-	const { form, types, statuses, table, crumb } = useUsersTable(USER_COLUMNS)
+	const { form, types, table, crumb } = useUsersTable(USER_COLUMNS)
 
 	return (
 		<>
@@ -35,12 +35,7 @@ export function UsersPage() {
 				}
 			/>
 			<PageContent>
-				<UsersTable
-					form={form}
-					types={types}
-					statuses={statuses}
-					table={table}
-				/>
+				<UsersTable form={form} types={types} table={table} />
 			</PageContent>
 		</>
 	)

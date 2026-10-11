@@ -32,21 +32,12 @@ export const USER_COLUMNS = column.columns([
 		header: () => <UsersColumnHeader label='role' />,
 		cell: ({ row }) => <UserRoleLabel role={row.original.role} />,
 	}),
-	column.accessor('branch', {
-		header: () => <UsersColumnHeader label='branch' />,
-		meta: { nowrap: true },
-	}),
 	column.accessor('phone', {
 		header: () => <UsersColumnHeader label='phone' />,
 		meta: { mono: true, nowrap: true, className: 'text-ink-muted' },
 	}),
-	column.accessor('lastSeen', {
-		header: () => <UsersColumnHeader label='lastLogin' />,
-		meta: { nowrap: true, className: 'text-ink-muted' },
-	}),
 	column.accessor('isActive', {
 		id: 'active',
-		filterFn: 'equals',
 		header: () => <UsersColumnHeader label='active' />,
 		meta: { control: true },
 		cell: ({ row }) => <UserActiveSwitch row={row.original} />,

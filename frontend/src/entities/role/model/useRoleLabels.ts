@@ -14,11 +14,9 @@ export function useRoleLabels() {
 
 	const moduleName = (key: string) => t(key)
 
-	const access = (key: string) => t(key === 'none' ? 'noAccess' : key)
-
 	const action = (key: string) => t(key)
 
 	const color = (key: string) => t(key)
 
-	return { text, moduleName, access, action, color }
+	return { text, moduleName, action, color }
 }

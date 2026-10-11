@@ -11,8 +11,6 @@ export type TUserRow = {
 	phone: string
 	type: { id: TUserType; label: string; tone: TTone }
 	role: { label: string; color?: string }
-	branch: string
-	lastSeen: string
 	isActive: boolean
 	/**
 	 * Raw name, phone and email the search box matches against

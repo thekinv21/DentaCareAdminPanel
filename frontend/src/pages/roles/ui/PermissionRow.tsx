@@ -3,23 +3,16 @@
 import { useTranslations } from 'next-intl'
 
 import { TriCheckbox } from '@/shared/ui/checkbox'
-import { Segmented } from '@/shared/ui/segmented'
 import { Td } from '@/shared/ui/table'
 
-import type {
-	TPermissionMatrixModel,
-	TPermissionRow,
-} from '../model/usePermissionMatrix'
+import type { TPermissionRow } from '../model/usePermissionMatrix'
 
-type TPermissionRowProps = {
-	row: TPermissionRow
-	scopes: TPermissionMatrixModel['scopes']
-}
+type TPermissionRowProps = { row: TPermissionRow }
 
 /**
- * One module of the permission matrix: its actions, data scope and "all" toggle
+ * One module of the permission matrix: its actions and the "all" toggle
  */
-export function PermissionRow({ row, scopes }: TPermissionRowProps) {
+export function PermissionRow({ row }: TPermissionRowProps) {
 	const t = useTranslations('RoleForm')
 
 	return (
@@ -41,22 +34,6 @@ export function PermissionRow({ row, scopes }: TPermissionRowProps) {
 					)}
 				</Td>
 			))}
-			<Td align='center'>
-				{row.isScoped ? (
-					<Segmented
-						aria-label={`${t('data')}: ${row.name}`}
-						size='sm'
-						options={scopes}
-						value={row.scope}
-						onChange={row.onScopeChange}
-						className='mx-auto w-max'
-					/>
-				) : (
-					<span className='text-[12.5px] text-ink-muted'>
-						{t('wholeClinic')}
-					</span>
-				)}
-			</Td>
 			<Td align='center'>
 				<TriCheckbox
 					checked={row.state}

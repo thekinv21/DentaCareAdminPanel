@@ -4,13 +4,11 @@ import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-import { type TUser, USERS, useUserLabels } from '@/entities/user'
+import { type TUser, USERS } from '@/entities/user'
 
 import { mockRequest } from '@/shared/api'
 import { useFormat } from '@/shared/lib/i18n'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
-
-import { useDeactivateConfirm } from './useDeactivateConfirm'
 
 /**
  * The user list (mock edits stay in memory) with activation and deletion
@@ -19,13 +17,9 @@ import { useDeactivateConfirm } from './useDeactivateConfirm'
 export function useUserActions() {
 	const t = useTranslations('Users')
 
-	const labels = useUserLabels()
-
 	const format = useFormat()
 
 	const confirm = useConfirm()
-
-	const { confirmDeactivate } = useDeactivateConfirm()
 
 	const [currentUsers, setCurrentUsers] = useState<TUser[]>(USERS)
 
@@ -34,36 +28,27 @@ export function useUserActions() {
 			list.map(user => (user.id === id ? { ...user, ...change } : user)),
 		)
 
-	const toConfirmSubject = (user: TUser) => ({
+	const toSubject = (user: TUser) => ({
 		title: format.name(user.fullName),
+		subtitle: user.email,
 		tone: user.tone,
 	})
 
 	const onToggleActive = (user: TUser) => {
-		const subject = {
-			...toConfirmSubject(user),
-			subtitle: `${labels.type(user.type)} · ${labels.branch(user.branch)}`,
-		}
+		const isActive = !user.active
 
-		if (!user.active) {
-			confirm({
-				tone: 'success',
-				title: t('restoreAccessQuestion'),
-				description: t('restoreAccessDescription'),
-				subject,
-				confirmText: t('activate'),
-				pendingText: t('enabling'),
-				successText: t('accessRestored'),
-				onConfirm: () =>
-					mockRequest().then(() => updateUser(user.id, { active: true })),
-			})
-			return
-		}
-
-		confirmDeactivate({
-			subject,
-			description: t('deactivateDescription'),
-			onDeactivated: () => updateUser(user.id, { active: false }),
+		confirm({
+			tone: isActive ? 'success' : 'warning',
+			title: isActive ? t('restoreAccessQuestion') : t('deactivateQuestion'),
+			description: isActive
+				? t('restoreAccessDescription')
+				: t('deactivateDescription'),
+			subject: toSubject(user),
+			confirmText: isActive ? t('activate') : t('deactivate'),
+			pendingText: isActive ? t('enabling') : t('disabling'),
+			successText: isActive ? t('accessRestored') : t('userDeactivated'),
+			onConfirm: () =>
+				mockRequest().then(() => updateUser(user.id, { active: isActive })),
 		})
 	}
 
@@ -72,7 +57,7 @@ export function useUserActions() {
 			tone: 'danger',
 			title: t('deleteUserQuestion'),
 			description: t('deleteUserDescription'),
-			subject: { ...toConfirmSubject(user), subtitle: user.email },
+			subject: toSubject(user),
 			confirmText: t('delete'),
 			pendingText: t('deleting'),
 			successText: t('userDeleted'),

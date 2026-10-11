@@ -1,5 +1,3 @@
-import type { TTone } from '@/shared/ui/badge'
-
 export type TSystemRoleId =
 	'owner' | 'chief' | 'doctor' | 'assistant' | 'reception' | 'finance' | 'store'
 
@@ -13,15 +11,9 @@ export type TPermissionModule = {
 	name: string
 	hint: string
 	actions: TPermissionAction[]
-	/**
-	 * Can be limited to the employee's own records
-	 */
-	scoped?: boolean
 }
 
 export type TPermissions = Record<string, TPermissionAction[]>
-
-type TRoleMember = { initials: string; tone: TTone }
 
 export type TRole = {
 	id: string
@@ -32,11 +24,11 @@ export type TRole = {
 	description: string
 	color: string
 	users: number
-	permissionCount: number
 	system: boolean
-	/**
-	 * Module message keys shown as chips on the role card
-	 */
-	modules: string[]
-	members: TRoleMember[]
+	permissions: TPermissions
 }
+
+/**
+ * Role choice as the backend sends it: ready-to-show label, no translation
+ */
+export type TRoleOption = { id: string; label: string }

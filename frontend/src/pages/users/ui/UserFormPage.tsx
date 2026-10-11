@@ -14,16 +14,10 @@ import { Card } from '@/shared/ui/card'
 
 import { useUserForm } from '../model/useUserForm'
 import { AccessSection } from './AccessSection'
-import { AccountantSection } from './AccountantSection'
-import { AdminSection } from './AdminSection'
 import { AssistantSection } from './AssistantSection'
 import { BasicSection } from './BasicSection'
 import { MedicSection } from './MedicSection'
-import { ScheduleSection } from './ScheduleSection'
-import { UserDangerZone } from './UserDangerZone'
 import { UserFormFooter } from './UserFormFooter'
-import { UserPreview } from './UserPreview'
-import { UserTypePicker } from './UserTypePicker'
 
 type TUserFormPageProps = { params?: Promise<{ id: string }> }
 
@@ -37,14 +31,13 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 		isEdit,
 		title,
 		breadcrumbLabel,
+		types,
+		roles,
 		onTypeChange,
-		visibleSections: sections,
-		preview,
+		showMedic,
+		showAssistant,
 		saving,
 		onSubmit,
-		onResetPassword,
-		onDeactivate,
-		onDelete,
 	} = useUserForm(userId)
 
 	return (
@@ -68,31 +61,17 @@ export function UserFormPage({ params }: TUserFormPageProps) {
 					<form
 						noValidate
 						onSubmit={onSubmit}
-						className='flex min-h-0 flex-auto animate-rise gap-4 max-laptop:flex-col'
+						className='flex min-h-0 flex-auto animate-rise'
 					>
-						<Card as='section' className='min-h-0 min-w-0 flex-auto gap-0 p-0'>
-							<div className='flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-5.5 py-5 scrollbar-thin'>
-								<UserTypePicker onChange={onTypeChange} />
-								<BasicSection />
-								<AccessSection
-									isEdit={isEdit}
-									onResetPassword={onResetPassword}
-								/>
-								{sections.medic && <MedicSection isChief={sections.chief} />}
-								{sections.assistant && <AssistantSection />}
-								{sections.admin && <AdminSection />}
-								{sections.accountant && <AccountantSection />}
-								{sections.schedule && <ScheduleSection />}
-								{isEdit && (
-									<UserDangerZone
-										onDeactivate={onDeactivate}
-										onDelete={onDelete}
-									/>
-								)}
+						<Card as='section' className='min-h-0 flex-auto'>
+							<div className='-mx-4.5 flex min-h-0 flex-auto flex-col gap-5.5 overflow-auto px-4.5 pt-1 pb-2 scrollbar-thin'>
+								<BasicSection types={types} onTypeChange={onTypeChange} />
+								<AccessSection roles={roles} />
+								{showMedic && <MedicSection />}
+								{showAssistant && <AssistantSection />}
 							</div>
 							<UserFormFooter isEdit={isEdit} saving={saving} />
 						</Card>
-						<UserPreview preview={preview} />
 					</form>
 				</FormProvider>
 			</PageContent>
