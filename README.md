@@ -134,7 +134,6 @@ The screenshots are taken from the artboards of the **DentaCare Admin Panel** de
 Requirements: [Bun](https://bun.sh) 1.4+.
 
 ```bash
-cd frontend
 bun install
 echo "NEXT_PUBLIC_API_URL=http://localhost:4200/api" > .env.local
 bun run dev
@@ -193,7 +192,7 @@ Open <http://localhost:3000>. The app runs on mock data, so the backend does not
 ## Project structure
 
 ```
-frontend/
+DentaCare/
 ├── app/                  # Next.js routing only: (admin) and (auth) route groups
 ├── pages/                # Empty on purpose: stops Next.js from treating src/pages as the Pages Router
 ├── public/images/        # README screenshots (desktop, auth, crud)

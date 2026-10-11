@@ -40,7 +40,7 @@ Commit message format: `type:[branchName][developerName]: description` (e.g. `fe
 ### Folder layout
 
 ```
-frontend/
+DentaCare/
 ├── app/                 # Next.js routing ONLY (page.tsx, layout.tsx, route.ts, loading/error/not-found)
 ├── pages/               # Empty on purpose: stops Next.js from treating src/pages as Pages Router. Do not delete.
 └── src/
