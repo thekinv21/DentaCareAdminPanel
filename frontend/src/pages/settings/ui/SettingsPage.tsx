@@ -51,7 +51,7 @@ export function SettingsPage() {
 
 	return (
 		<>
-			<PageHeader crumb={t('clinicBishkekAlaToo')} title={t('settings')} />
+			<PageHeader title={t('settings')} />
 			<PageContent>
 				<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>
 					<SettingsNav

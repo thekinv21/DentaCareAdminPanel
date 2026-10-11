@@ -2,15 +2,12 @@
 
 import { use } from 'react'
 
-import Link from 'next/link'
-
 import { Play } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { DentalChart } from '@/widgets/dental-chart'
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { ROUTES } from '@/shared/routes'
 import { Button } from '@/shared/ui/button'
 
 import { safeDecode } from '../lib/SafeDecode'
@@ -38,20 +35,6 @@ export function PatientProfilePage({ params }: TPatientProfilePageProps) {
 	return (
 		<>
 			<PageHeader
-				crumb={
-					<nav aria-label='Breadcrumb'>
-						<Link
-							href={ROUTES.patients}
-							className='text-inherit no-underline hover:text-ink'
-						>
-							{t('patients')}
-						</Link>
-						<span aria-hidden='true' className='px-1.5'>
-							/
-						</span>
-						<span className='font-mono'>{patientId}</span>
-					</nav>
-				}
 				title={t('patientRecord')}
 				actions={
 					// starting a visit comes with the realtime queue

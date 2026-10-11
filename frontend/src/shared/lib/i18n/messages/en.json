@@ -128,8 +128,7 @@
 		"today": "Today",
 		"totalAppointments": "Total appointments: {n}",
 		"view": "View",
-		"week": "Week",
-		"pageCrumb": "Week {week} · today is {date}"
+		"week": "Week"
 	},
 	"AuthPanel": {
 		"aboutDenta": "About Denta",
@@ -191,7 +190,6 @@
 		"voided": "Voided",
 		"patientsCount": "{n, plural, one {# patient} other {# patients}}",
 		"invoicesOlderThan30Days": "{n, plural, one {# invoice} other {# invoices}} older than 30 days",
-		"pageCrumb": "October 2026 · accepted via Visa, MBANK, Kompanion, Optima Bank",
 		"qrValidFor": "QR valid for {time}",
 		"receivedThisMonth": "Received in October",
 		"revenueThisMonth": "October revenue",
@@ -452,7 +450,6 @@
 		"edit": "Edit",
 		"delete": "Delete",
 		"hygiene": "Hygiene",
-		"pageCrumb": "{count} items · stock count {date}",
 		"alreadyOrdered": "{n} already ordered",
 		"categoriesCount": "{n, plural, one {# category} other {# categories}}",
 		"totaling": "Totaling {amount}"
@@ -666,7 +663,6 @@
 		"optimaBankTransfer": "Optima Bank · transfer",
 		"paid": "Paid",
 		"patientRecord": "Patient record",
-		"patients": "Patients",
 		"procedure": "Procedure",
 		"rootCanalTreatment": "Root canal treatment",
 		"startVisit": "Start visit",
@@ -731,8 +727,7 @@
 		"patientsDeleted": "Patients deleted",
 		"deleteNPatientsQuestion": "{n, plural, one {Delete # patient?} other {Delete # patients?}}",
 		"deleteN": "Delete {n}",
-		"hasOpenInvoice": "has an open invoice",
-		"pageCrumb": "{total} records · {newCount} new this month"
+		"hasOpenInvoice": "has an open invoice"
 	},
 	"PlanForm": {
 		"addStage": "Add stage",
@@ -779,7 +774,6 @@
 		"installmentLine": "{months} mo × {amount} via Optima Bank"
 	},
 	"Profile": {
-		"account": "Account",
 		"activeSessions": "Active sessions",
 		"administrator": "Administrator",
 		"appointmentCancellationOrReschedule": "Appointment cancellation or reschedule",
@@ -792,7 +786,6 @@
 		"changesTheMenuAnd": "Changes the menu and interface language for you. Patient documents follow clinic settings.",
 		"chiefDentist": "Chief dentist",
 		"currentPassword": "Current password",
-		"dark": "Dark",
 		"day": "Day",
 		"daySummary": "Day summary",
 		"default": "Default",
@@ -814,7 +807,6 @@
 		"international": "International",
 		"lastName": "Last name",
 		"lastSignInToday": "Last sign-in: today, 08:24 · Chrome, Windows",
-		"light": "Light",
 		"lowStockInInventory": "Low stock in inventory",
 		"materialsYouUse": "Materials you use",
 		"messagesFromColleagues": "Messages from colleagues",
@@ -843,8 +835,6 @@
 		"smsAndEmailRight": "SMS and email right after sign-in",
 		"specialty": "Specialty",
 		"stateLanguage": "State language",
-		"systemDefault": "System default",
-		"theme": "Theme",
 		"thisSession": "This session",
 		"treatmentPlanComments": "Treatment plan comments",
 		"twoStepVerification": "Two-step verification",
@@ -1047,14 +1037,12 @@
 		"clear": "Clear",
 		"color": "Color",
 		"createRole": "Create role",
-		"creating": "Creating",
 		"dangerZone": "Danger zone",
 		"data": "Data",
 		"deleteRole": "Delete role",
 		"deleting": "Deleting…",
 		"description": "Description",
 		"descriptionPlaceholder": "Who the role is for and what it allows",
-		"editing": "Editing",
 		"everything": "All",
 		"impactPermissionsRemoved": "permissions will be removed",
 		"newRole": "New role",
@@ -1069,7 +1057,6 @@
 		"roleName": "Role name",
 		"roleNamePlaceholder": "For example, Senior administrator",
 		"rolePermissionsUpdated": "Role permissions updated",
-		"rolesAndAccess": "Roles & access",
 		"saveChanges": "Save changes",
 		"scopeAll": "All",
 		"scopeOwn": "Own",
@@ -1090,7 +1077,6 @@
 		"impactStaffChangeRole": "staff will change role"
 	},
 	"Roles": {
-		"adminStaffPermissions": "Management · staff permissions",
 		"copy": "Copy",
 		"copyDescription": "Copy of a role, not assigned to staff",
 		"createCopyColon": "Create a copy:",
@@ -1169,7 +1155,6 @@
 		"change": "Change:",
 		"changesSaved": "✓ Changes saved",
 		"clinic": "Clinic",
-		"clinicBishkekAlaToo": "Clinic · Bishkek, Ala-Too",
 		"clinicName": "Clinic name",
 		"code": "Code",
 		"companyDetailsAddressChairs": "Company details, address, chairs",
@@ -1346,7 +1331,6 @@
 		"status": "Status",
 		"team": "Team",
 		"today": "Today",
-		"pageCrumb": "{total} staff · {onShift} on shift now",
 		"weekRange": "Week {week} · {from} – {to}"
 	},
 	"StockForm": {
@@ -1444,7 +1428,6 @@
 		"patientOrTooth": "Patient or tooth",
 		"periodontalTreatment": "Periodontal treatment",
 		"plan": "Plan",
-		"planApprovalAndCompletion": "Plan approval and completion",
 		"startedInOctober": "started in October",
 		"status": "Status",
 		"summary": "Summary",
@@ -1523,7 +1506,6 @@
 		"closeTillShiftHint": "Cash and card reconciliation",
 		"configureRoles": "Configure roles",
 		"createUser": "Create user",
-		"creating": "Creating",
 		"dangerZone": "Danger zone",
 		"datePlaceholder": "DD.MM.YYYY",
 		"deactivate": "Deactivate",
@@ -1540,7 +1522,6 @@
 		"discountWithoutApproval": "Discount without approval, up to",
 		"doctorFields": "Dentist fields",
 		"doctorHint": "Own appointments, patients and treatment plans",
-		"editing": "Editing",
 		"employeeSetsPassword": "The staff member will set a password via the link",
 		"end": "End",
 		"experienceYears": "Experience, years",
@@ -1624,7 +1605,6 @@
 		"usedForLoginAndSms": "Used for sign-in and SMS codes",
 		"user": "User",
 		"userCreatedInviteSent": "User created, invitation sent",
-		"users": "Users",
 		"userType": "User type",
 		"visitDuration": "Visit duration",
 		"wed": "Wed",
@@ -1697,7 +1677,6 @@
 		"users": "Users",
 		"userType": "User type",
 		"addUser": "Add user",
-		"usersBranches": "{n} users · 2 branches",
 		"nameEmailOrPhone": "Name, email or phone",
 		"deactivatedNote": "Deactivated users can't sign in, but their records and history are kept",
 		"shownOf": "Showing {shown} of {total}"

@@ -20,7 +20,6 @@ export function UsersPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={table.crumb}
 				title={t('users')}
 				actions={
 					<Link

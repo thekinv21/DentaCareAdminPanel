@@ -1,14 +1,6 @@
 @import 'tailwindcss';
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-/**
- * Denta design tokens (light). Values come from the Denta design system.
- * `.theme-light` keeps a block light inside the dark theme (e.g. the auth brand panel).
- */
-
-:root,
-.theme-light {
+:root {
 	--canvas: #edf2f1;
 	--surface: #ffffff;
 	--raised: #f6f9f8;
@@ -60,56 +52,6 @@
 	color-scheme: light;
 }
 
-.dark {
-	--canvas: #081619;
-	--surface: #0f2226;
-	--raised: #152d32;
-	--sunken: #06110f;
-	--line: #24403f;
-	--line-strong: #5f807f;
-	--ink: #e7f2f0;
-	--ink-muted: #a3b9b8;
-	--ink-subtle: #8ca6a5;
-	--brand: #3fd0c3;
-	--brand-strong: #7fe3d9;
-	--brand-soft: #0e3b39;
-	--on-brand: #03201e;
-	--accent: #ff8c63;
-	--accent-soft: #3d1a0e;
-	--success: #4fd38e;
-	--success-soft: #0e3322;
-	--warning: #f2b544;
-	--warning-soft: #3a2a06;
-	--danger: #ff7a6e;
-	--danger-strong: #ff9a90;
-	--danger-soft: #3d1210;
-	--info: #73aef2;
-	--info-soft: #0f2742;
-	--focus: #7fe3d9;
-	--enamel: #f1eee4;
-	--enamel-shade: #b9b09c;
-	--enamel-deep: #8e8570;
-	--caries: #e0a21a;
-
-	--clay-sm:
-		inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4),
-		0 4px 10px -4px rgba(0, 0, 0, 0.5);
-	--clay-md:
-		inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 0 rgba(0, 0, 0, 0.25),
-		0 2px 4px rgba(0, 0, 0, 0.3), 0 14px 30px -12px rgba(0, 0, 0, 0.6);
-	--float:
-		0 6px 12px -4px rgba(0, 0, 0, 0.4), 0 28px 48px -20px rgba(0, 0, 0, 0.75);
-	--press:
-		inset 0 2px 4px rgba(0, 0, 0, 0.55),
-		inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-	--brand-sh:
-		inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.2),
-		0 8px 20px -8px rgba(63, 208, 195, 0.45);
-	--danger-sh: 0 8px 18px -8px rgba(255, 122, 110, 0.45);
-
-	color-scheme: dark;
-}
-
 @theme inline {
 	--color-canvas: var(--canvas);
 	--color-surface: var(--surface);
@@ -155,7 +97,6 @@
 }
 
 @theme {
-	/* layout breakpoints, used as max-mobile:, max-tablet:, max-laptop: */
 	--breakpoint-mobile: 720px;
 	--breakpoint-tablet: 900px;
 	--breakpoint-laptop: 1100px;

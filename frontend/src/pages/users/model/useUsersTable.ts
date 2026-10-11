@@ -119,7 +119,6 @@ export function useUsersTable() {
 		],
 		rows,
 		countText: t('shownOf', { shown: rows.length, total: users.length }),
-		crumb: t('usersBranches', { n: users.length }),
 	}
 }
 

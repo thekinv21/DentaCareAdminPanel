@@ -35,7 +35,6 @@ export const PATIENT_TABS: {
 	{ id: 'debt', label: 'withBalanceDue', count: 23 },
 ]
 
-export const NEW_PATIENTS_THIS_MONTH = 46
 export const PAGE_SIZE = 10
 
 function matchesTab(patient: TPatient, tab: TPatientsTab) {

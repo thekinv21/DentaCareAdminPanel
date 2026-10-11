@@ -29,7 +29,6 @@ export function TreatmentPlansPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('planApprovalAndCompletion')}
 				title={t('treatmentPlans')}
 				actions={
 					<Button variant='primary' onClick={form.openCreate}>

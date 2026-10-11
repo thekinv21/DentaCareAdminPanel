@@ -11,7 +11,6 @@ import {
 	useChangeLocale,
 	useFormat,
 } from '@/shared/lib/i18n'
-import { type TThemePreference, useTheme } from '@/shared/lib/theme'
 
 import {
 	CURRENT_SESSION_ID,
@@ -31,11 +30,6 @@ const LANGUAGE_NOTE = {
 	ky: 'stateLanguage',
 	en: 'international',
 }
-const THEMES: { id: TThemePreference; label: string }[] = [
-	{ id: 'system', label: 'systemDefault' },
-	{ id: 'light', label: 'light' },
-	{ id: 'dark', label: 'dark' },
-]
 
 const OTHER_SESSION_IDS = SESSIONS.filter(
 	session => session.id !== CURRENT_SESSION_ID,
@@ -47,14 +41,13 @@ const SESSION_DATE_FORMAT: Intl.DateTimeFormatOptions = {
 }
 
 /**
- * Profile tabs, preference rows and sessions; language and theme apply immediately
+ * Profile tabs, preference rows and sessions; language applies immediately
  */
 export function useProfileSettings() {
 	const t = useTranslations('Profile')
 	const format = useFormat()
 	const locale = useLocale()
 	const setLocale = useChangeLocale()
-	const { theme, setTheme } = useTheme()
 	const [tab, setTab] = useState<TProfileTab>('profile')
 	const [endedSessionIds, setEndedSessionIds] = useState<string[]>([])
 
@@ -82,8 +75,6 @@ export function useProfileSettings() {
 		isChecked: id === locale,
 		select: () => setLocale(id),
 	}))
-
-	const themes = THEMES.map(item => ({ ...item, label: t(item.label) }))
 
 	const passwordHint = t('passwordAgeHint', {
 		days: PROFILE_FACTS.passwordAgeDays,
@@ -135,9 +126,6 @@ export function useProfileSettings() {
 		tabs,
 		selectTab: setTab,
 		languages,
-		theme,
-		themes,
-		setTheme,
 		passwordHint,
 		dailyScheduleLabel,
 		security,

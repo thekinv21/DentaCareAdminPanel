@@ -74,7 +74,6 @@ export function useRoleForm(roleId?: string) {
 		methods,
 		isEdit,
 		title: isEdit ? t('roleNamed', { name: roleName }) : t('newRole'),
-		breadcrumbLabel: isEdit ? t('editing') : t('creating'),
 		fallbackName: isEdit ? roleName : t('newRole'),
 		colors: ROLE_COLORS.map(swatch => ({
 			color: swatch.color,

@@ -15,7 +15,7 @@ export function AuthBrandPanel() {
 	return (
 		<section
 			aria-label={t('aboutDenta')}
-			className="theme-light relative flex w-[46%] max-w-165 shrink-0 flex-col justify-between gap-8 overflow-hidden bg-brand-strong px-12 py-10 text-white before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,rgba(255,255,255,0.13)_1.5px,transparent_2px)] before:bg-size-[28px_28px] before:content-[''] max-tablet:hidden"
+			className="relative flex w-[46%] max-w-165 shrink-0 flex-col justify-between gap-8 overflow-hidden bg-brand-strong px-12 py-10 text-white before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,rgba(255,255,255,0.13)_1.5px,transparent_2px)] before:bg-size-[28px_28px] before:content-[''] max-tablet:hidden"
 		>
 			<BrandRings />
 			<BrandLogo />

@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react'
 
-import { ThemeProvider } from '@/shared/lib/theme'
 import { ConfirmProvider } from '@/shared/ui/confirm-dialog'
 import { ToastProvider } from '@/shared/ui/toast'
 
@@ -13,11 +12,9 @@ type TProvidersProps = { children: ReactNode }
 export function Providers({ children }: TProvidersProps) {
 	return (
 		<TanStackQueryProvider>
-			<ThemeProvider>
-				<ToastProvider>
-					<ConfirmProvider>{children}</ConfirmProvider>
-				</ToastProvider>
-			</ThemeProvider>
+			<ToastProvider>
+				<ConfirmProvider>{children}</ConfirmProvider>
+			</ToastProvider>
 		</TanStackQueryProvider>
 	)
 }

@@ -34,7 +34,6 @@ export function BillingPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('pageCrumb')}
 				title={t('billing')}
 				actions={
 					<Button variant='primary' onClick={form.openCreate}>

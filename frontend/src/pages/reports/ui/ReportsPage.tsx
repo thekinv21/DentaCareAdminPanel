@@ -21,7 +21,6 @@ export function ReportsPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={report.rangeLabel}
 				title={t('reports')}
 				search={false}
 				tools={

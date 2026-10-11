@@ -5,8 +5,6 @@ import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { useCurrentUser } from '@/entities/employee'
-
 import { Card } from '@/shared/ui/card'
 import { FormFooter } from '@/shared/ui/form-footer'
 import { Segmented } from '@/shared/ui/segmented'
@@ -20,16 +18,12 @@ import { SecurityTab } from './SecurityTab'
 
 export function ProfilePage() {
 	const t = useTranslations('Profile')
-	const user = useCurrentUser()
 	const settings = useProfileSettings()
 	const form = useProfileForm()
 
 	return (
 		<>
-			<PageHeader
-				crumb={`${t('account')} · ${user.fullName}`}
-				title={t('myProfile')}
-			/>
+			<PageHeader title={t('myProfile')} />
 			<PageContent>
 				<FormProvider {...form.methods}>
 					<div className='flex min-h-0 flex-auto animate-rise gap-4 max-mobile:flex-col'>

@@ -22,7 +22,6 @@ export function RolesPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={t('adminStaffPermissions')}
 				title={t('rolesAndAccess')}
 				actions={
 					<Link

@@ -10,8 +10,6 @@ import { STOCK_CATEGORIES } from './Stock'
  * Mock totals until the backend exposes /inventory/summary
  */
 const INVENTORY_SUMMARY = {
-	itemCount: 186,
-	lastStockCount: '01.10.2026',
 	belowMinimum: 7,
 	alreadyOrdered: 3,
 	expiringSoon: 4,
@@ -20,17 +18,13 @@ const INVENTORY_SUMMARY = {
 }
 
 /**
- * Page subtitle and KPI cards of the inventory
+ * KPI cards of the inventory
  */
 export function useInventorySummary() {
 	const t = useTranslations('Inventory')
 	const format = useFormat()
 
 	return {
-		crumb: t('pageCrumb', {
-			count: INVENTORY_SUMMARY.itemCount,
-			date: INVENTORY_SUMMARY.lastStockCount,
-		}),
 		belowMinimum: String(INVENTORY_SUMMARY.belowMinimum),
 		alreadyOrdered: t('alreadyOrdered', {
 			n: INVENTORY_SUMMARY.alreadyOrdered,

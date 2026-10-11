@@ -128,8 +128,7 @@
 		"today": "Бүгүн",
 		"totalAppointments": "Бардык жазылуулар: {n}",
 		"view": "Көрүнүш",
-		"week": "Апта",
-		"pageCrumb": "{week}-апта · бүгүн {date}"
+		"week": "Апта"
 	},
 	"AuthPanel": {
 		"aboutDenta": "Denta жөнүндө",
@@ -191,7 +190,6 @@
 		"voided": "Жокко чыгарылды",
 		"patientsCount": "{n} бейтап",
 		"invoicesOlderThan30Days": "30 күндөн эски {n} эсеп",
-		"pageCrumb": "Октябрь 2026 · Visa, MBANK, Компаньон, Optima Bank аркылуу кабыл алуу",
 		"qrValidFor": "QR {time} жарактуу",
 		"receivedThisMonth": "Октябрда алынды",
 		"revenueThisMonth": "Октябрдагы түшүүлөр",
@@ -452,7 +450,6 @@
 		"edit": "Өзгөртүү",
 		"delete": "Өчүрүү",
 		"hygiene": "Гигиена",
-		"pageCrumb": "{count} позиция · инвентаризация {date}",
 		"alreadyOrdered": "{n} буга чейин заказ кылынган",
 		"categoriesCount": "{n} категория",
 		"totaling": "{amount} суммасына"
@@ -666,7 +663,6 @@
 		"optimaBankTransfer": "Optima Bank · которуу",
 		"paid": "Төлөндү",
 		"patientRecord": "Бейтаптын картасы",
-		"patients": "Бейтаптар",
 		"procedure": "Процедура",
 		"rootCanalTreatment": "Каналдарды дарылоо",
 		"startVisit": "Кабыл алууну баштоо",
@@ -731,8 +727,7 @@
 		"patientsDeleted": "Пациенттер өчүрүлдү",
 		"deleteNPatientsQuestion": "{n} бейтапты өчүрөсүзбү?",
 		"deleteN": "{n} өчүрүү",
-		"hasOpenInvoice": "ачык эсеп бар",
-		"pageCrumb": "{total} карта · бул айда {newCount} жаңы"
+		"hasOpenInvoice": "ачык эсеп бар"
 	},
 	"PlanForm": {
 		"addStage": "Этап кошуу",
@@ -779,7 +774,6 @@
 		"installmentLine": "{months} ай × {amount} Optima Bank аркылуу"
 	},
 	"Profile": {
-		"account": "Каттоо эсеби",
 		"activeSessions": "Активдүү сеанстар",
 		"administrator": "Администратор",
 		"appointmentCancellationOrReschedule": "Жазылууну жокко чыгаруу же которуу",
@@ -792,7 +786,6 @@
 		"changesTheMenuAnd": "Сиз үчүн меню жана интерфейс тилин өзгөртөт. Бейтаптарга документтер — клиниканын жөндөөлөрү боюнча.",
 		"chiefDentist": "Башкы дарыгер",
 		"currentPassword": "Учурдагы сырсөз",
-		"dark": "Караңгы",
 		"day": "Күн",
 		"daySummary": "Күндүн жыйынтыгы",
 		"default": "Демейки",
@@ -814,7 +807,6 @@
 		"international": "Эл аралык",
 		"lastName": "Фамилиясы",
 		"lastSignInToday": "Акыркы кирүү: бүгүн, 08:24 · Chrome, Windows",
-		"light": "Ачык",
 		"lowStockInInventory": "Кампада калдык аз",
 		"materialsYouUse": "Сиз колдонгон материалдар",
 		"messagesFromColleagues": "Кесиптештерден билдирүүлөр",
@@ -843,8 +835,6 @@
 		"smsAndEmailRight": "Киргенден кийин дароо SMS жана email",
 		"specialty": "Адистиги",
 		"stateLanguage": "Мамлекеттик тил",
-		"systemDefault": "Системадагыдай",
-		"theme": "Тема",
 		"thisSession": "Ушул сеанс",
 		"treatmentPlanComments": "Дарылоо пландарына комментарийлер",
 		"twoStepVerification": "Эки баскычтуу текшерүү",
@@ -1047,14 +1037,12 @@
 		"clear": "Тазалоо",
 		"color": "Түс",
 		"createRole": "Роль түзүү",
-		"creating": "Түзүү",
 		"dangerZone": "Коркунучтуу аймак",
 		"data": "Маалыматтар",
 		"deleteRole": "Ролду өчүрүү",
 		"deleting": "Өчүрүлүүдө…",
 		"description": "Сүрөттөмө",
 		"descriptionPlaceholder": "Роль кимге ылайыктуу жана эмнеге уруксат берет",
-		"editing": "Түзөтүү",
 		"everything": "Баары",
 		"impactPermissionsRemoved": "укук өчүрүлөт",
 		"newRole": "Жаңы роль",
@@ -1069,7 +1057,6 @@
 		"roleName": "Ролдун аталышы",
 		"roleNamePlaceholder": "Мисалы, Улук администратор",
 		"rolePermissionsUpdated": "Ролдун укуктары жаңыртылды",
-		"rolesAndAccess": "Ролдор жана мүмкүнчүлүк",
 		"saveChanges": "Өзгөртүүлөрдү сактоо",
 		"scopeAll": "Баары",
 		"scopeOwn": "Өзүнүкү",
@@ -1090,7 +1077,6 @@
 		"impactStaffChangeRole": "кызматкердин ролу өзгөрөт"
 	},
 	"Roles": {
-		"adminStaffPermissions": "Башкаруу · кызматкерлердин укуктары",
 		"copy": "Көчүрмө",
 		"copyDescription": "Ролдун көчүрмөсү, кызматкерлерге дайындалган эмес",
 		"createCopyColon": "Көчүрмөсүн түзүү:",
@@ -1169,7 +1155,6 @@
 		"change": "Өзгөртүү:",
 		"changesSaved": "✓ Өзгөртүүлөр сакталды",
 		"clinic": "Клиника",
-		"clinicBishkekAlaToo": "Клиника · Бишкек, Ала-Тоо",
 		"clinicName": "Клиниканын аталышы",
 		"code": "Код",
 		"companyDetailsAddressChairs": "Реквизиттер, дарек, креслолор",
@@ -1346,7 +1331,6 @@
 		"status": "Абалы",
 		"team": "Команда",
 		"today": "Бүгүн",
-		"pageCrumb": "{total} кызматкер · азыр {onShift} сменада",
 		"weekRange": "{week}-апта · {from} – {to}"
 	},
 	"StockForm": {
@@ -1444,7 +1428,6 @@
 		"patientOrTooth": "Бейтап же тиш",
 		"periodontalTreatment": "Пародонтту дарылоо",
 		"plan": "План",
-		"planApprovalAndCompletion": "Пландарды макулдашуу жана аткаруу",
 		"startedInOctober": "октябрда башталган",
 		"status": "Абалы",
 		"summary": "Жыйынтык",
@@ -1523,7 +1506,6 @@
 		"closeTillShiftHint": "Накталай жана накталай эмес төлөмдөрдү салыштыруу",
 		"configureRoles": "Ролдорду ырастоо",
 		"createUser": "Колдонуучу түзүү",
-		"creating": "Түзүү",
 		"dangerZone": "Коркунучтуу аймак",
 		"datePlaceholder": "КК.АА.ЖЖЖЖ",
 		"deactivate": "Иштен чыгаруу",
@@ -1540,7 +1522,6 @@
 		"discountWithoutApproval": "Макулдашуусуз арзандатуу, чейин",
 		"doctorFields": "Дарыгердин талаалары",
 		"doctorHint": "Өз жазылуулары, бейтаптары жана дарылоо пландары",
-		"editing": "Түзөтүү",
 		"employeeSetsPassword": "Кызматкер сырсөздү шилтеме аркылуу өзү коёт",
 		"end": "Аягы",
 		"experienceYears": "Иш стажы, жыл",
@@ -1624,7 +1605,6 @@
 		"usedForLoginAndSms": "Кирүү жана SMS-код үчүн колдонулат",
 		"user": "Колдонуучу",
 		"userCreatedInviteSent": "Колдонуучу түзүлдү, чакыруу жөнөтүлдү",
-		"users": "Колдонуучулар",
 		"userType": "Колдонуучунун түрү",
 		"visitDuration": "Кабыл алуунун узактыгы",
 		"wed": "Шр",
@@ -1697,7 +1677,6 @@
 		"users": "Колдонуучулар",
 		"userType": "Колдонуучунун түрү",
 		"addUser": "Колдонуучу кошуу",
-		"usersBranches": "{n} колдонуучу · 2 филиал",
 		"nameEmailOrPhone": "Аты, email же телефон",
 		"deactivatedNote": "Өчүрүлгөн колдонуучулар кире алышпайт, бирок алардын жазуулары жана тарыхы сакталат",
 		"shownOf": "{total} ичинен {shown} көрсөтүлдү"

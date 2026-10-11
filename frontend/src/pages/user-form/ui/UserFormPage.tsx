@@ -2,14 +2,10 @@
 
 import { use } from 'react'
 
-import Link from 'next/link'
-
-import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { ROUTES } from '@/shared/routes'
 import { Card } from '@/shared/ui/card'
 
 import { useUserForm } from '../model/useUserForm'
@@ -29,26 +25,12 @@ type TUserFormPageProps = { params?: Promise<{ id: string }> }
 
 export function UserFormPage({ params }: TUserFormPageProps) {
 	const userId = params ? use(params).id : undefined
-	const t = useTranslations('UserForm')
 	const form = useUserForm(userId)
 	const sections = form.visibleSections
 
 	return (
 		<>
-			<PageHeader
-				crumb={
-					<>
-						<Link
-							href={ROUTES.users}
-							className='text-inherit no-underline hover:underline'
-						>
-							{t('users')}
-						</Link>{' '}
-						/ {form.breadcrumbLabel}
-					</>
-				}
-				title={form.title}
-			/>
+			<PageHeader title={form.title} />
 			<PageContent>
 				<FormProvider {...form.methods}>
 					<form

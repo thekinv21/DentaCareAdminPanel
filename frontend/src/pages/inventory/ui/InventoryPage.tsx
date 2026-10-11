@@ -33,7 +33,6 @@ export function InventoryPage() {
 	return (
 		<>
 			<PageHeader
-				crumb={summary.crumb}
 				title={t('inventory')}
 				actions={
 					<>

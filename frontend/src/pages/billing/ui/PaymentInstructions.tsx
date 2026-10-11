@@ -28,7 +28,7 @@ export function PaymentInstructions({ details }: TPaymentInstructionsProps) {
 					viewBox='0 0 25 25'
 					role='img'
 					aria-label={t('paymentQrCode')}
-					className='theme-light shrink-0 rounded-lg bg-surface p-1 text-ink'
+					className='shrink-0 rounded-lg bg-surface p-1 text-ink'
 				>
 					<path d={details.qrPath} fill='currentColor' />
 				</svg>

@@ -75,9 +75,3 @@ export const ROSTER: { name: string; tone: TTone; days: TRosterShift[] }[] = [
 		days: [MORNING, MORNING, MORNING, MORNING, MORNING, COVER],
 	},
 ]
-
-/**
- * Mock team totals for the page subtitle
- */
-export const TEAM_SIZE = 12
-export const ON_SHIFT_NOW = 9

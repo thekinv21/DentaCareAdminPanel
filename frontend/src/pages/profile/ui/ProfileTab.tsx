@@ -6,7 +6,6 @@ import { useFormContext } from 'react-hook-form'
 import { cn } from '@/shared/lib/cn'
 import { useFieldProps } from '@/shared/lib/form'
 import { translateOptional } from '@/shared/lib/i18n'
-import type { TThemePreference } from '@/shared/lib/theme'
 import {
 	Field,
 	FormField,
@@ -79,21 +78,6 @@ export function ProfileTab({ settings }: TProfileTabProps) {
 			</div>
 
 			<div className={formGrid2}>
-				<Field label={t('theme')}>
-					<select
-						className={inputClass}
-						value={settings.theme}
-						onChange={event =>
-							settings.setTheme(event.target.value as TThemePreference)
-						}
-					>
-						{settings.themes.map(item => (
-							<option key={item.id} value={item.id}>
-								{item.label}
-							</option>
-						))}
-					</select>
-				</Field>
 				<Field label={t('defaultScheduleView')}>
 					<select className={inputClass} {...register('scheduleView')}>
 						<option value='week'>{t('week')}</option>

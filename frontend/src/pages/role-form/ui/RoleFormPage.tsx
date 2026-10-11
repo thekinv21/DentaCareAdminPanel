@@ -2,14 +2,10 @@
 
 import { use } from 'react'
 
-import Link from 'next/link'
-
-import { useTranslations } from 'next-intl'
 import { FormProvider } from 'react-hook-form'
 
 import { PageContent, PageHeader } from '@/widgets/page-header'
 
-import { ROUTES } from '@/shared/routes'
 import { Card } from '@/shared/ui/card'
 
 import { useRoleForm } from '../model/useRoleForm'
@@ -23,25 +19,11 @@ type TRoleFormPageProps = { params?: Promise<{ id: string }> }
 
 export function RoleFormPage({ params }: TRoleFormPageProps) {
 	const roleId = params ? use(params).id : undefined
-	const t = useTranslations('RoleForm')
 	const form = useRoleForm(roleId)
 
 	return (
 		<>
-			<PageHeader
-				crumb={
-					<>
-						<Link
-							href={ROUTES.roles}
-							className='text-inherit no-underline hover:underline'
-						>
-							{t('rolesAndAccess')}
-						</Link>{' '}
-						/ {form.breadcrumbLabel}
-					</>
-				}
-				title={form.title}
-			/>
+			<PageHeader title={form.title} />
 			<PageContent>
 				<FormProvider {...form.methods}>
 					<form

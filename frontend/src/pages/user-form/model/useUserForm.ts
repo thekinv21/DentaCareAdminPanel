@@ -64,7 +64,6 @@ export function useUserForm(userId?: string) {
 		methods,
 		isEdit,
 		title: isEdit ? fullName : t('newUser'),
-		breadcrumbLabel: isEdit ? t('editing') : t('creating'),
 		changeType: (next: TUserType) => {
 			methods.setValue('type', next)
 			methods.setValue(

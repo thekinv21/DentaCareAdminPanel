@@ -128,8 +128,7 @@
 		"today": "Сегодня",
 		"totalAppointments": "Всего записей: {n}",
 		"view": "Вид",
-		"week": "Неделя",
-		"pageCrumb": "Неделя {week} · сегодня {date}"
+		"week": "Неделя"
 	},
 	"AuthPanel": {
 		"aboutDenta": "О Denta",
@@ -191,7 +190,6 @@
 		"voided": "Аннулирован",
 		"patientsCount": "{n, plural, one {# пациент} few {# пациента} other {# пациентов}}",
 		"invoicesOlderThan30Days": "{n, plural, one {# счёт} few {# счёта} other {# счетов}} старше 30 дней",
-		"pageCrumb": "Октябрь 2026 · приём через Visa, MBANK, Компаньон, Optima Bank",
 		"qrValidFor": "QR действителен {time}",
 		"receivedThisMonth": "Получено в октябре",
 		"revenueThisMonth": "Поступления за октябрь",
@@ -452,7 +450,6 @@
 		"edit": "Изменить",
 		"delete": "Удалить",
 		"hygiene": "Гигиена",
-		"pageCrumb": "{count} позиций · инвентаризация {date}",
 		"alreadyOrdered": "{n} уже заказаны",
 		"categoriesCount": "{n, plural, one {# категория} few {# категории} other {# категорий}}",
 		"totaling": "На сумму {amount}"
@@ -666,7 +663,6 @@
 		"optimaBankTransfer": "Optima Bank · перевод",
 		"paid": "Оплачено",
 		"patientRecord": "Карта пациента",
-		"patients": "Пациенты",
 		"procedure": "Процедура",
 		"rootCanalTreatment": "Лечение каналов",
 		"startVisit": "Начать приём",
@@ -731,8 +727,7 @@
 		"patientsDeleted": "Пациенты удалены",
 		"deleteNPatientsQuestion": "{n, plural, one {Удалить # пациента?} few {Удалить # пациентов?} many {Удалить # пациентов?} other {Удалить # пациента?}}",
 		"deleteN": "Удалить {n}",
-		"hasOpenInvoice": "есть открытый счёт",
-		"pageCrumb": "{total} карты · {newCount} новых в этом месяце"
+		"hasOpenInvoice": "есть открытый счёт"
 	},
 	"PlanForm": {
 		"addStage": "Добавить этап",
@@ -779,7 +774,6 @@
 		"installmentLine": "{months} мес. × {amount} через Optima Bank"
 	},
 	"Profile": {
-		"account": "Учётная запись",
 		"activeSessions": "Активные сеансы",
 		"administrator": "Администратор",
 		"appointmentCancellationOrReschedule": "Отмена или перенос записи",
@@ -792,7 +786,6 @@
 		"changesTheMenuAnd": "Меняет язык меню и интерфейса для вас. Документы пациентам — по настройкам клиники.",
 		"chiefDentist": "Главный врач",
 		"currentPassword": "Текущий пароль",
-		"dark": "Тёмная",
 		"day": "День",
 		"daySummary": "Сводка дня",
 		"default": "По умолчанию",
@@ -814,7 +807,6 @@
 		"international": "Международный",
 		"lastName": "Фамилия",
 		"lastSignInToday": "Последний вход: сегодня, 08:24 · Chrome, Windows",
-		"light": "Светлая",
 		"lowStockInInventory": "Низкий остаток на складе",
 		"materialsYouUse": "Материалы, которые вы используете",
 		"messagesFromColleagues": "Сообщения от коллег",
@@ -843,8 +835,6 @@
 		"smsAndEmailRight": "SMS и email сразу после входа",
 		"specialty": "Специализация",
 		"stateLanguage": "Государственный язык",
-		"systemDefault": "Как в системе",
-		"theme": "Тема",
 		"thisSession": "Этот сеанс",
 		"treatmentPlanComments": "Комментарии к планам лечения",
 		"twoStepVerification": "Двухэтапная проверка",
@@ -1047,14 +1037,12 @@
 		"clear": "Очистить",
 		"color": "Цвет",
 		"createRole": "Создать роль",
-		"creating": "Создание",
 		"dangerZone": "Опасная зона",
 		"data": "Данные",
 		"deleteRole": "Удалить роль",
 		"deleting": "Удаляем…",
 		"description": "Описание",
 		"descriptionPlaceholder": "Кому подходит роль и что она позволяет",
-		"editing": "Редактирование",
 		"everything": "Всё",
 		"impactPermissionsRemoved": "прав будет удалено",
 		"newRole": "Новая роль",
@@ -1069,7 +1057,6 @@
 		"roleName": "Название роли",
 		"roleNamePlaceholder": "Например, Старший администратор",
 		"rolePermissionsUpdated": "Права роли обновлены",
-		"rolesAndAccess": "Роли и доступ",
 		"saveChanges": "Сохранить изменения",
 		"scopeAll": "Все",
 		"scopeOwn": "Свои",
@@ -1090,7 +1077,6 @@
 		"impactStaffChangeRole": "сотрудников сменят роль"
 	},
 	"Roles": {
-		"adminStaffPermissions": "Управление · права сотрудников",
 		"copy": "Копия",
 		"copyDescription": "Копия роли, не назначена сотрудникам",
 		"createCopyColon": "Создать копию:",
@@ -1169,7 +1155,6 @@
 		"change": "Изменить:",
 		"changesSaved": "✓ Изменения сохранены",
 		"clinic": "Клиника",
-		"clinicBishkekAlaToo": "Клиника · Бишкек, Ала-Тоо",
 		"clinicName": "Название клиники",
 		"code": "Код",
 		"companyDetailsAddressChairs": "Реквизиты, адрес, кресла",
@@ -1346,7 +1331,6 @@
 		"status": "Статус",
 		"team": "Команда",
 		"today": "Сегодня",
-		"pageCrumb": "{total} сотрудников · {onShift} на смене сейчас",
 		"weekRange": "Неделя {week} · {from} – {to}"
 	},
 	"StockForm": {
@@ -1444,7 +1428,6 @@
 		"patientOrTooth": "Пациент или зуб",
 		"periodontalTreatment": "Лечение пародонта",
 		"plan": "План",
-		"planApprovalAndCompletion": "Согласование и выполнение планов",
 		"startedInOctober": "начато в октябре",
 		"status": "Статус",
 		"summary": "Сводка",
@@ -1523,7 +1506,6 @@
 		"closeTillShiftHint": "Сверка наличных и безнала",
 		"configureRoles": "Настроить роли",
 		"createUser": "Создать пользователя",
-		"creating": "Создание",
 		"dangerZone": "Опасная зона",
 		"datePlaceholder": "ДД.ММ.ГГГГ",
 		"deactivate": "Деактивировать",
@@ -1540,7 +1522,6 @@
 		"discountWithoutApproval": "Скидка без согласования, до",
 		"doctorFields": "Поля врача",
 		"doctorHint": "Свои записи, пациенты и планы лечения",
-		"editing": "Редактирование",
 		"employeeSetsPassword": "Сотрудник сам задаст пароль по ссылке",
 		"end": "Конец",
 		"experienceYears": "Стаж, лет",
@@ -1624,7 +1605,6 @@
 		"usedForLoginAndSms": "Используется для входа и SMS-кода",
 		"user": "Пользователь",
 		"userCreatedInviteSent": "Пользователь создан, приглашение отправлено",
-		"users": "Пользователи",
 		"userType": "Тип пользователя",
 		"visitDuration": "Длительность приёма",
 		"wed": "Ср",
@@ -1697,7 +1677,6 @@
 		"users": "Пользователи",
 		"userType": "Тип пользователя",
 		"addUser": "Добавить пользователя",
-		"usersBranches": "{n} пользователей · 2 филиала",
 		"nameEmailOrPhone": "Имя, email или телефон",
 		"deactivatedNote": "Деактивированные пользователи не могут войти, но их записи и история сохраняются",
 		"shownOf": "Показано {shown} из {total}"
