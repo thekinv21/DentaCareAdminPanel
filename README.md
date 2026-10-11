@@ -4,7 +4,7 @@ Admin panel for dental clinics: patient records, dental chart (odontogram), appo
 
 The UI is available in three languages, **Russian (ru)**, **Kyrgyz (ky)** and **English (en)**, with light and dark themes.
 
-> **Status:** every screen from the design is implemented and runs on mock data. Wiring to the NestJS backend (`../backend`) is the next step.
+> **Status:** every screen from the design is implemented and runs on mock data
 
 ---
 
@@ -20,7 +20,6 @@ The UI is available in three languages, **Russian (ru)**, **Kyrgyz (ky)** and **
 - [Internationalization](#internationalization)
 - [Forms and validation](#forms-and-validation)
 - [Conventions](#conventions)
-- [Design system](#design-system)
 
 ---
 
@@ -281,13 +280,3 @@ Everything the user fills in, or that becomes a request or query, goes through R
 - Commit messages follow `type:[branchName][developerName]: description`, for example `feat:[master][Vadim]: add auth`.
 
 ---
-
-## Design system
-
-The UI is built on the **Denta** design system, which uses soft "clay" surfaces.
-
-- **Colors:** teal brand `#0A7570` (`#3FD0C3` in dark mode) and coral accent `#AD3D17`. There are success, warning, danger and info status colors, plus dedicated dental chart tokens for healthy, caries, treated, planned and missing teeth.
-- **Typography:** Manrope for headings, Golos Text for body text, JetBrains Mono for numbers and IDs.
-- **Radius:** 6 / 10 / 14 / 20 / 28 px, plus pill.
-- **Shadows:** `clay-sm`, `clay-md`, `float`, `press`, `brand`.
-- **Motion:** all animations respect `prefers-reduced-motion`.
